@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Resources;
+using System.Reflection;
 
 namespace Centipede
 {
     public partial class MainWindow : Form
     {
+        private ResourceManager resourceManager;
         public MainWindow()
         {
+            ResourceSet resourceSet = new ResXResourceSet("Resources/Resources.resx");
+            resourceManager = new ResourceManager("Resources/Resources", null );
             InitializeComponent();
+
+            ActionsTab.Text = resourceManager.GetString("Action_name");
 
             if (Program.JobFileName == "")
             {
