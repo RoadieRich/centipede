@@ -29,9 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.jobActionListBox = new Centipede.JobActionListBox();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListBox();
@@ -47,6 +49,15 @@
             this.OtherActListBox = new System.Windows.Forms.ListBox();
             this.VarsTab = new System.Windows.Forms.TabPage();
             this.VarDataGridView = new System.Windows.Forms.DataGridView();
+            this.VarsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.VarMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.VarMenuCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.VarMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.VarMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,16 +74,6 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.VarsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.VarMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.VarMenuCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.jobActionListBox = new Centipede.JobActionListBox();
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -88,8 +89,8 @@
             this.OtherActTab.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
-            this.ActionContextMenu.SuspendLayout();
             this.VarsContextMenu.SuspendLayout();
+            this.ActionContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // ActionsVarsTabControl
@@ -135,6 +136,14 @@
             this.splitContainer1.Size = new System.Drawing.Size(447, 445);
             this.splitContainer1.SplitterDistance = 285;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // jobActionListBox
+            // 
+            this.jobActionListBox.FormattingEnabled = true;
+            this.jobActionListBox.Location = new System.Drawing.Point(7, 7);
+            this.jobActionListBox.Name = "jobActionListBox";
+            this.jobActionListBox.Size = new System.Drawing.Size(434, 277);
+            this.jobActionListBox.TabIndex = 0;
             // 
             // AddActionTabs
             // 
@@ -313,6 +322,75 @@
             this.VarDataGridView.VirtualMode = true;
             this.VarDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.VarDataGridView_UserAddedRow);
             // 
+            // VarsContextMenu
+            // 
+            this.VarsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.VarMenuUndo,
+            this.toolStripSeparator5,
+            this.VarMenuCut,
+            this.VarMenuCopy,
+            this.VarMenuPaste,
+            this.VarMenuDelete,
+            this.toolStripSeparator6,
+            this.VarMenuSelectAll});
+            this.VarsContextMenu.Name = "ActionContextMenu";
+            this.VarsContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.VarsContextMenu.ShowImageMargin = false;
+            this.VarsContextMenu.Size = new System.Drawing.Size(143, 148);
+            // 
+            // VarMenuUndo
+            // 
+            this.VarMenuUndo.Enabled = false;
+            this.VarMenuUndo.Name = "VarMenuUndo";
+            this.VarMenuUndo.ShortcutKeyDisplayString = "Ctrl+Z";
+            this.VarMenuUndo.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuUndo.Text = "&Undo";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
+            // 
+            // VarMenuCut
+            // 
+            this.VarMenuCut.Name = "VarMenuCut";
+            this.VarMenuCut.ShortcutKeyDisplayString = "Ctrl+X";
+            this.VarMenuCut.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuCut.Text = "Cu&t";
+            // 
+            // VarMenuCopy
+            // 
+            this.VarMenuCopy.Name = "VarMenuCopy";
+            this.VarMenuCopy.ShortcutKeyDisplayString = "Ctrl+C";
+            this.VarMenuCopy.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuCopy.Text = "&Copy";
+            // 
+            // VarMenuPaste
+            // 
+            this.VarMenuPaste.Name = "VarMenuPaste";
+            this.VarMenuPaste.ShortcutKeyDisplayString = "Ctrl+V";
+            this.VarMenuPaste.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuPaste.Text = "&Paste";
+            // 
+            // VarMenuDelete
+            // 
+            this.VarMenuDelete.Name = "VarMenuDelete";
+            this.VarMenuDelete.ShortcutKeyDisplayString = "Del";
+            this.VarMenuDelete.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuDelete.Text = "&Delete";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(139, 6);
+            // 
+            // VarMenuSelectAll
+            // 
+            this.VarMenuSelectAll.Name = "VarMenuSelectAll";
+            this.VarMenuSelectAll.ShortcutKeyDisplayString = "Ctrl+A";
+            this.VarMenuSelectAll.Size = new System.Drawing.Size(142, 22);
+            this.VarMenuSelectAll.Text = "Select &All";
+            // 
             // ActionContextMenu
             // 
             this.ActionContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -443,83 +521,6 @@
             this.button2.Text = "&Save";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // VarsContextMenu
-            // 
-            this.VarsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VarMenuUndo,
-            this.toolStripSeparator5,
-            this.VarMenuCut,
-            this.VarMenuCopy,
-            this.VarMenuPaste,
-            this.VarMenuDelete,
-            this.toolStripSeparator6,
-            this.VarMenuSelectAll});
-            this.VarsContextMenu.Name = "ActionContextMenu";
-            this.VarsContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.VarsContextMenu.ShowImageMargin = false;
-            this.VarsContextMenu.Size = new System.Drawing.Size(143, 148);
-            // 
-            // VarMenuUndo
-            // 
-            this.VarMenuUndo.Enabled = false;
-            this.VarMenuUndo.Name = "VarMenuUndo";
-            this.VarMenuUndo.ShortcutKeyDisplayString = "Ctrl+Z";
-            this.VarMenuUndo.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuUndo.Text = "&Undo";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(139, 6);
-            // 
-            // VarMenuCut
-            // 
-            this.VarMenuCut.Name = "VarMenuCut";
-            this.VarMenuCut.ShortcutKeyDisplayString = "Ctrl+X";
-            this.VarMenuCut.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuCut.Text = "Cu&t";
-            // 
-            // VarMenuCopy
-            // 
-            this.VarMenuCopy.Name = "VarMenuCopy";
-            this.VarMenuCopy.ShortcutKeyDisplayString = "Ctrl+C";
-            this.VarMenuCopy.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuCopy.Text = "&Copy";
-            // 
-            // VarMenuPaste
-            // 
-            this.VarMenuPaste.Name = "VarMenuPaste";
-            this.VarMenuPaste.ShortcutKeyDisplayString = "Ctrl+V";
-            this.VarMenuPaste.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuPaste.Text = "&Paste";
-            // 
-            // VarMenuDelete
-            // 
-            this.VarMenuDelete.Name = "VarMenuDelete";
-            this.VarMenuDelete.ShortcutKeyDisplayString = "Del";
-            this.VarMenuDelete.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuDelete.Text = "&Delete";
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(139, 6);
-            // 
-            // VarMenuSelectAll
-            // 
-            this.VarMenuSelectAll.Name = "VarMenuSelectAll";
-            this.VarMenuSelectAll.ShortcutKeyDisplayString = "Ctrl+A";
-            this.VarMenuSelectAll.Size = new System.Drawing.Size(142, 22);
-            this.VarMenuSelectAll.Text = "Select &All";
-            // 
-            // jobActionListBox
-            // 
-            this.jobActionListBox.FormattingEnabled = true;
-            this.jobActionListBox.Location = new System.Drawing.Point(7, 7);
-            this.jobActionListBox.Name = "jobActionListBox";
-            this.jobActionListBox.Size = new System.Drawing.Size(434, 277);
-            this.jobActionListBox.TabIndex = 0;
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -531,6 +532,7 @@
             this.Controls.Add(this.LoadBtn);
             this.Controls.Add(this.ActionsVarsTabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
             this.Text = "Centipede";
             this.Load += new System.EventHandler(this.MainWindow_Load);
@@ -549,8 +551,8 @@
             this.OtherActTab.ResumeLayout(false);
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
-            this.ActionContextMenu.ResumeLayout(false);
             this.VarsContextMenu.ResumeLayout(false);
+            this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
