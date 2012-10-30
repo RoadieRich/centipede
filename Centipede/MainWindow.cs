@@ -202,6 +202,8 @@ namespace Centipede
             column.ReadOnly = false;
             VarDataGridView.Columns.Add(column);
 
+            //random useless change
+
             column = new DataGridViewTextBoxColumn();
             column.DataPropertyName = "Value";
             column.HeaderText = "Value";
