@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centipede", "Centipede\Centipede.csproj", "{3985334B-E51C-4F9A-A80A-B419E1AEF523}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "units_library", "units_library\units_library.vcxproj", "{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -25,15 +23,6 @@ Global
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|Win32.ActiveCfg = Release|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|x86.ActiveCfg = Release|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|x86.Build.0 = Release|x86
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Debug|Win32.Build.0 = Debug|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Debug|x86.ActiveCfg = Debug|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Release|Win32.ActiveCfg = Release|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Release|Win32.Build.0 = Release|Win32
-		{71F4C65D-A8D5-4C9F-9535-3ABFBE98EE5F}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
