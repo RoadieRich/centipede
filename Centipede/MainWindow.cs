@@ -2,9 +2,17 @@
 using System.Windows.Forms;
 using System.Resources;
 using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+
+
 
 namespace Centipede
 {
+    using Variable = Program.Variable;
+
     public partial class MainWindow : Form
     {
 
@@ -35,7 +43,7 @@ namespace Centipede
                 startWindow.Dispose();
             }
             this.Text = "Centipede 0.1 " + Program.JobName;
-            Program.Variables["console"] = new GuiConsole();
+            Program.Variables.Add("console", new Program.Variable("console", new GuiConsole()));
 
             Control pyAct = new Control();
             pyAct.Text = "Python Action";
@@ -48,11 +56,11 @@ namespace Centipede
             pyBranch.Tag = new BranchActionFactory();
             FlowContListBox.Items.Add(pyBranch);
 
-            
+
         }
 
 
-        //#region Here be ugle, avert thine eyes
+        #region Here be ugle, avert thine eyes
         //private void AddVarButton_Click(object sender, EventArgs e) //XXX: This is ugly
         //{
         //    //Vars.ListBox.Controls.Add(new Button());
@@ -106,7 +114,7 @@ namespace Centipede
         //    control.Init(varToAdd);
         //    VarsListBox.Controls.Add(control);
         //}
-        //#endregion
+        #endregion
 
         private void button1_Click(object sender, EventArgs eventArgs)
         {
@@ -175,7 +183,7 @@ namespace Centipede
                 message = "Job did not finish.";
                 icon = MessageBoxIcon.Error;
             }
-            MessageBox.Show(message,"Finished",MessageBoxButtons.OK,icon);
+            MessageBox.Show(message, "Finished", MessageBoxButtons.OK, icon);
         }
 
         private void ActListBox_Dbl_Click(object sender, MouseEventArgs e)
@@ -184,34 +192,50 @@ namespace Centipede
 
             Control sendingControl = (Control)sendingListBox.Items[0];
 
-           jobActionListBox.Add(((ActionFactory)(sendingControl.Tag)).generate("new action"));
+            jobActionListBox.Add(((ActionFactory)(sendingControl.Tag)).generate("new action"));
         }
 
-        private BindingSource _varBindingSource = new BindingSource();
+        private VariableBindingList VariablesList;
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+
+
+
+            //_varBindingSource.DataSource = Program.Variables;
+            //_varBindingSource.RaiseListChangedEvents = true;
+
+            VariablesList = new VariableBindingList(Program.Variables);
+
+            VariablesList.ListChanged += new ListChangedEventHandler(
+                (target, evnt) => Program.Variables = (from KeyValuePair<String, Object> kv in VariablesList
+                                                       where kv.Key != null && kv.Value != null
+                                                       select kv).ToDictionary(kv => kv.Key,
+                                                                               kv => kv.Value)
+                                                                     );
+
             //Program.Variables.
-            Program.Variables.Add("Test", "Hello World");
-            Program.Variables.Add("Foo", "Bar");
 
-            _varBindingSource.AllowNew = true;
-            _varBindingSource.DataSource = Program.Variables;
-            MessageBox.Show(_varBindingSource.AllowNew.ToString());
-            
-            DataGridViewColumn column = new DataGridViewTextBoxColumn();
-            column.HeaderText = "Name";
-            column.DataPropertyName = "Key";
-            column.ReadOnly = false;
-            VarDataGridView.Columns.Add(column);
 
-            //random useless change
+            VariablesList.Add(new KeyValuePair<String, Object>("Test", "Hello World"));
+            VariablesList.Add(new KeyValuePair<String, Object>("Foo", "Bar"));
 
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Value";
-            column.HeaderText = "Value";
-            column.ReadOnly = false;
-            VarDataGridView.Columns.Add(column);
+
+            //DataGridViewColumn column = new DataGridViewTextBoxColumn();
+            ////column.DataPropertyName = "Item1";
+            ////column.HeaderText = "";
+            ////VarDataGridView.Columns.Add(column); 
+
+            ////column = new DataGridViewTextBoxColumn();
+            //column.HeaderText = "Name";
+            //column.DataPropertyName = "Name";
+            //VarDataGridView.Columns.Add(column);
+
+
+            //column = new DataGridViewTextBoxColumn();
+            //column.DataPropertyName = "Value";
+            //column.HeaderText = "Value";
+            //VarDataGridView.Columns.Add(column);
 
             //DataGridViewComboBoxColumn comboColumn = new DataGridViewComboBoxColumn();
             //comboColumn.DataSource = Enum.GetValues(typeof(VarTypes));
@@ -219,25 +243,221 @@ namespace Centipede
             //comboColumn.HeaderText = "Type";
             //VarDataGridView.Columns.Add(comboColumn);
 
-            VarDataGridView.DataSource = Program.Variables.Values;
-            
-            Program.Variables.Add("final", "42");
+            //VarDataGridView.AutoGenerateColumns = true;
+
+            //IEnumerable<int> counter = (() => yield return i++)();
+
+            //var ds = Program.Variables.Zip<Program.Variable, int, Tuple<int, String, Object>>(counter(), (v, i) => Tuple.Create(i, v.Name, v.Value));
+            foreach (DataGridViewColumn col in VarDataGridView.Columns)
+            {
+                col.ReadOnly = false;
+            }
+            VarDataGridView.DataSource = VariablesList;
+
+            VariablesList.Add(new KeyValuePair<String, Object>("final", "42"));
         }
 
         private void VarDataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
         {
-            Program.Variables.Add((string)e.Row.Cells[0].Value, e.Row.Cells[1].Value);
+            //Program.Variables.Add((string)e.Row.Cells[0].Value, e.Row.Cells[1].Value);
         }
 
-        
-        
+        private int _i;
+        private IEnumerable<int> counter()
+        {
+            _i = 0;
+            while (true)
+            {
+                yield return _i++;
+
+            }
+        }
     }
+
+
 
     class GuiConsole
     {
         public void write(string message)
         {
             MessageBox.Show(message, "Python Output");
-        }   
+        }
+    }
+
+    
+
+    class VariableBindingList : IBindingList
+    {
+        private Dictionary<String, Object> _varDict;
+        public VariableBindingList(Dictionary<String, Object> varDictionary)
+        {
+            _varDict = varDictionary;
+        }
+
+        public void AddIndex(PropertyDescriptor property)
+        { }
+
+        public object AddNew()
+        {
+            return new Program.Variable();
+        }
+
+        public bool AllowEdit
+        {
+            get { return true; }
+        }
+
+        public bool AllowNew
+        {
+            get { return true; }
+        }
+
+        public bool AllowRemove
+        {
+            get { return true; }
+        }
+
+        public void ApplySort(PropertyDescriptor property, ListSortDirection direction)
+        {
+            throw new NotSupportedException();
+        }
+
+        public int Find(PropertyDescriptor property, object key)
+        {
+            throw new NotSupportedException();
+        }
+
+        public bool IsSorted
+        {
+            get { return false; }
+        }
+
+        public event ListChangedEventHandler ListChanged;
+
+        public void RemoveIndex(PropertyDescriptor property)
+        { }
+
+        public void RemoveSort()
+        {
+            throw new NotSupportedException();
+        }
+
+        public ListSortDirection SortDirection
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        public PropertyDescriptor SortProperty
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        public bool SupportsChangeNotification
+        {
+            get { return true; }
+        }
+
+        public bool SupportsSearching
+        {
+            get { return false; }
+        }
+
+        public bool SupportsSorting
+        {
+            get { return false; }
+        }
+
+        public int Add(object value)
+        {
+            Program.Variable var = (Program.Variable) value;
+            _varDict.Add(var.Name, var.Value);
+            return -1;
+        }
+
+        public void Clear()
+        {
+            _varDict.Clear();
+        }
+
+        public bool Contains(object value)
+        {
+            return _varDict.ContainsValue(value);
+        }
+
+        public int IndexOf(object value)
+        {
+            return -1;
+        }
+
+        public void Insert(int index, object value)
+        {
+            Variable var = (Variable)value;
+            _varDict.Add(var.Name, var.Value);
+        }
+
+        public bool IsFixedSize
+        {
+            get { return false; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public void Remove(object key)
+        {
+            _varDict.Remove((String)key);
+        }
+
+        public void RemoveAt(int index)
+        { }
+
+        public object this[int index]
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+            set
+            {
+                throw new NotSupportedException();
+            }
+        }
+        public object this[String index]
+        {
+            get
+            {
+                return _varDict[index];
+            }
+            set
+            {
+                _varDict[index] = value;
+            }
+        }
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { return _varDict.Count; }
+        }
+
+        public bool IsSynchronized
+        {
+            get { return false; }
+        }
+
+        public object SyncRoot
+        {
+            get { return null; }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _varDict.GetEnumerator();
+        }
     }
 }

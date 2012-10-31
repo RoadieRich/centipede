@@ -74,6 +74,7 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -91,6 +92,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
             this.VarsContextMenu.SuspendLayout();
             this.ActionContextMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ActionsVarsTabControl
@@ -521,6 +523,10 @@
             this.button2.Text = "&Save";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // programBindingSource
+            // 
+            this.programBindingSource.DataSource = typeof(Centipede.Program);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -553,6 +559,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.VarsContextMenu.ResumeLayout(false);
             this.ActionContextMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -603,6 +610,7 @@
         private System.Windows.Forms.ToolStripMenuItem VarMenuSelectAll;
         private JobActionListBox jobActionListBox;
         private System.Windows.Forms.DataGridView VarDataGridView;
+        private System.Windows.Forms.BindingSource programBindingSource;
     }
 }
 

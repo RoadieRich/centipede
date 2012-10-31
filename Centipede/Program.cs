@@ -5,6 +5,8 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
+    
+
     static class Program
     {
         /// <summary>
@@ -28,7 +30,25 @@ namespace Centipede
             throw new NotImplementedException();
         }
 
-        public static Dictionary<String, Object> Variables = new Dictionary<string,object>();
+        public class Variable
+        {
+            public String Name;
+            public Object Value;
+        
+            public Variable(String name, Object value)
+            {
+                Name = name;
+                Value = value;
+            }
+
+            public Variable()
+            {
+                Name = "(Name)";
+                Value = "(Value)";
+            }
+        }
+
+        public static System.Collections.Generic.Dictionary<String, Object> Variables = new Dictionary<String, Object>();
         public static List<Action> Actions = new List<Action>();
         public static string JobFileName = "testing.100p";
         public static string JobName = "Testing";
@@ -121,13 +141,7 @@ namespace Centipede
     }
 
 
-    public enum VarTypes
-    {
-        Integer,
-        Float,
-        String,
-        Other
-    }
+    
 
     //class VarsList
     //{
