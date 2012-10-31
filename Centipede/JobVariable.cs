@@ -6,44 +6,68 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
-    public class JobVarBase { } 
-    public class JobVariable<T> : JobVarBase
+    public class JobVarBase { }
+
+    public class JobVariable
     {
-        public readonly String Name;
-        public T Value;
-        public readonly String TypeName;
-        public String Unit = "";
-        public String[] Units;
-
-
-        protected JobVariable(String name, String typename)
+        private Types Type;
+        public JobVariable(JobVariable.Types type)
         {
-            Name = name;
-            TypeName = typename;
+            this.Type = type;
         }
 
-        public JobVariable(String name, T value)
-        {
-            Name = name;
-            Value = value;
-            TypeName = typeof(T).ToString();
-        }
 
-        public JobVariable(String name, String typename, T value, String unit)
+        public enum Types
         {
-            Name = name;
-            TypeName = typename;
-            Value = value;
-            Unit = unit;
+            Integer,
+            Float,
+            String,
+            Other
         }
+    }
 
-        public string getValueAsString()
+    namespace broken.old.stuff
+    {
+
+
+        public class JobVariable<T> : JobVarBase
         {
-            return Value.ToString();
-        }
-        public T getValue()
-        {
-            return Value;
+            public readonly String Name;
+            public T Value;
+            public readonly String TypeName;
+            public String Unit = "";
+            public String[] Units;
+
+
+            protected JobVariable(String name, String typename)
+            {
+                Name = name;
+                TypeName = typename;
+            }
+
+            public JobVariable(String name, T value)
+            {
+                Name = name;
+                Value = value;
+                TypeName = typeof(T).ToString();
+            }
+
+            public JobVariable(String name, String typename, T value, String unit)
+            {
+                Name = name;
+                TypeName = typename;
+                Value = value;
+                Unit = unit;
+            }
+
+            public string getValueAsString()
+            {
+                return Value.ToString();
+            }
+            public T getValue()
+            {
+                return Value;
+            }
         }
     }
 }
