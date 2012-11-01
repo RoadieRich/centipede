@@ -6,7 +6,7 @@ using System.Data;
 namespace Centipede {
     using Variable = Program.Variable;
     
-    public partial class DataSet1 {
+    public partial class VarDataSet {
         partial class VariablesDataTable
         {
             

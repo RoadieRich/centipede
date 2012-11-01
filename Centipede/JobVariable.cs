@@ -6,14 +6,20 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
-    public class JobVarBase { }
-
     public class JobVariable
     {
-        private Types Type;
+        public readonly JobVariable.Types Type;
+        public Object Value;
+
         public JobVariable(JobVariable.Types type)
         {
             this.Type = type;
+        }
+
+        public JobVariable(JobVariable.Types type, Object value)
+        {
+            this.Type = type;
+            this.Value = value;
         }
 
 
@@ -28,8 +34,9 @@ namespace Centipede
 
     namespace broken.old.stuff
     {
-
-
+        public class JobVarBase
+        { }
+        
         public class JobVariable<T> : JobVarBase
         {
             public readonly String Name;
