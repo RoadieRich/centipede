@@ -75,6 +75,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -322,7 +323,7 @@
             this.VarDataGridView.Size = new System.Drawing.Size(441, 439);
             this.VarDataGridView.TabIndex = 7;
             this.VarDataGridView.VirtualMode = true;
-            this.VarDataGridView.UserAddedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.VarDataGridView_UserAddedRow);
+            
             // 
             // VarsContextMenu
             // 
@@ -527,6 +528,11 @@
             // 
             this.programBindingSource.DataSource = typeof(Centipede.Program);
             // 
+            // updateTimer
+            // 
+            this.updateTimer.Enabled = true;
+            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -611,6 +617,7 @@
         private JobActionListBox jobActionListBox;
         private System.Windows.Forms.DataGridView VarDataGridView;
         private System.Windows.Forms.BindingSource programBindingSource;
+        private System.Windows.Forms.Timer updateTimer;
     }
 }
 
