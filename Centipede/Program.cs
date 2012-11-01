@@ -7,7 +7,7 @@ namespace Centipede
 {
     
 
-    static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -45,6 +45,15 @@ namespace Centipede
             {
                 Name = "(Name)";
                 Value = "(Value)";
+            }
+
+            public static explicit operator Variable(KeyValuePair<String, Object> kvp)
+            {
+                return new Variable(kvp.Key, kvp.Value);
+            }
+            public static implicit operator KeyValuePair<String, Object>(Variable v)
+            {
+                return new KeyValuePair<string, object>(v.Name, v.Value);
             }
         }
 

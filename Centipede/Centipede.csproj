@@ -60,6 +60,15 @@
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\BranchAction.cs" />
     <Compile Include="CentiUnit.cs" />
+    <Compile Include="DataSet1.cs">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="JobActionListBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -113,6 +122,17 @@
     <EmbeddedResource Include="VariableDisplayControl.resx">
       <DependentUpon>VariableDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="DataSet1.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
     <None Include="Properties\DataSources\MainWindow.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\Settings.settings">
