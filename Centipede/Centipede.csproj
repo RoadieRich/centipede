@@ -60,14 +60,14 @@
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\BranchAction.cs" />
     <Compile Include="CentiUnit.cs" />
-    <Compile Include="DataSet1.cs">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <Compile Include="VarDataSet.cs">
+      <DependentUpon>VarDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataSet1.Designer.cs">
+    <Compile Include="VarDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+      <DependentUpon>VarDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="JobActionListBox.cs">
       <SubType>Component</SubType>
@@ -122,16 +122,16 @@
     <EmbeddedResource Include="VariableDisplayControl.resx">
       <DependentUpon>VariableDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="DataSet1.xsc">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Include="VarDataSet.xsc">
+      <DependentUpon>VarDataSet.xsd</DependentUpon>
     </None>
-    <None Include="DataSet1.xsd">
+    <None Include="VarDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <LastGenOutput>VarDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="DataSet1.xss">
-      <DependentUpon>DataSet1.xsd</DependentUpon>
+    <None Include="VarDataSet.xss">
+      <DependentUpon>VarDataSet.xsd</DependentUpon>
     </None>
     <None Include="Properties\DataSources\MainWindow.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />

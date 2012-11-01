@@ -217,12 +217,12 @@ namespace Centipede
             column.HeaderText = "Value";
             VarDataGridView.Columns.Add(column);
 
-            VarDataGridView.DataSource = new DataSet1().Variables;
+            VarDataGridView.DataSource = new VarDataSet().Variables;
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
-            ((DataSet1.VariablesDataTable)VarDataGridView.DataSource).Update();
+            ((VarDataSet.VariablesDataTable)VarDataGridView.DataSource).Update();
         }
     }
 
