@@ -14,6 +14,8 @@ namespace Centipede
 {
     
     using Variable = Program.Variable;
+    using System.Threading;
+    using System.Data;
 
     public partial class MainWindow : Form
     {
@@ -45,8 +47,8 @@ namespace Centipede
                 startWindow.Dispose();
             }
             this.Text = "Centipede 0.1 " + Program.JobName;
-            Program.Variables.Add("console", new Program.Variable("console", new GuiConsole()));
-
+            Program.Variables.Add("console", new Program.Variable(0, "console", new GuiConsole()));
+                
             Control pyAct = new Control();
             pyAct.Text = "Python Action";
             pyAct.Tag = new PythonActionFactory();
@@ -60,63 +62,6 @@ namespace Centipede
 
 
         }
-
-
-        #region Here be ugle, avert thine eyes
-        //private void AddVarButton_Click(object sender, EventArgs e) //XXX: This is ugly
-        //{
-        //    //Vars.ListBox.Controls.Add(new Button());
-        //    //return;
-        //    switch (TypeComboBox.Text)
-        //    {
-        //        case "Int":
-        //            AddInt();
-        //            break;
-        //        case "Float":
-        //            AddFloat();
-        //            break;
-        //        case "String":
-        //            AddString();
-        //            break;
-        //        default:
-        //            AddMisc();
-        //            break;
-        //    }
-        //}
-
-        //private void AddInt()
-        //{
-        //    JobVariable<Int32> varToAdd = new JobVariable<Int32>(NameTextBox.Text, Int32.Parse(ValueTextBox.Text));
-        //    Program.Variables.Add(NameTextBox.Text, varToAdd);
-        //    VariableDisplayControl control = new VariableDisplayControl();
-        //    control.Init(varToAdd);
-        //    VarsListBox.Controls.Add(control);
-        //}
-        //private void AddFloat()
-        //{
-        //    JobVariable<Double> varToAdd = new JobVariable<Double>(NameTextBox.Text, Double.Parse(ValueTextBox.Text));
-        //    Program.Variables.Add(NameTextBox.Text, varToAdd);
-        //    VariableDisplayControl control = new VariableDisplayControl();
-        //    control.Init(varToAdd);
-        //    VarsListBox.Controls.Add(control);
-        //}
-        //private void AddString()
-        //{
-        //    JobVariable<String> varToAdd = new JobVariable<String>(NameTextBox.Text, ValueTextBox.Text);
-        //    Program.Variables.Add(NameTextBox.Text, varToAdd);
-        //    VariableDisplayControl control = new VariableDisplayControl();
-        //    control.Init(varToAdd);
-        //    VarsListBox.Controls.Add(control);
-        //}
-        //private void AddMisc()
-        //{
-        //    JobVariable<Object> varToAdd = new JobVariable<Object>(NameTextBox.Text, "Misc", ValueTextBox.Text, UnitComboBox.SelectedText);
-        //    Program.Variables.Add(NameTextBox.Text, varToAdd);
-        //    VariableDisplayControl control = new VariableDisplayControl();
-        //    control.Init(varToAdd);
-        //    VarsListBox.Controls.Add(control);
-        //}
-        #endregion
 
         private void button1_Click(object sender, EventArgs eventArgs)
         {
@@ -197,32 +142,47 @@ namespace Centipede
             jobActionListBox.Add(((ActionFactory)(sendingControl.Tag)).generate("new action"));
         }
 
-        //private VariableBindingList VariablesList;
-        private BindingSource _varBindingSource = new BindingSource();
+        private VarDataSet _dataSet = new VarDataSet();
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-
-            _varBindingSource.DataSource = Program.Variables;
-            _varBindingSource.RaiseListChangedEvents = true;
-
-            DataGridViewColumn column = new DataGridViewTextBoxColumn();
-            column.HeaderText = "Name";
-            column.DataPropertyName = "Name";
-            VarDataGridView.Columns.Add(column);
-
-
-            column = new DataGridViewTextBoxColumn();
-            column.DataPropertyName = "Value";
-            column.HeaderText = "Value";
-            VarDataGridView.Columns.Add(column);
-
-            VarDataGridView.DataSource = new VarDataSet().Variables;
+            VarDataGridView.DataSource = _dataSet.Variables;
+            _dataSet.Variables.Update();
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
         {
             ((VarDataSet.VariablesDataTable)VarDataGridView.DataSource).Update();
+        }
+
+        private void VarDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            //((VarDataSet.VariablesDataTable)VarDataGridView.DataSource).Update();
+        }
+
+        private void VarMenuDelete_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
+            {
+
+                _dataSet.Variables.RemoveVariablesRow((VarDataSet.VariablesRow)((DataRowView)r.DataBoundItem).Row);
+            }
+        }
+
+        private void VarDataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                Thread.Sleep(1);  
+            }
+        }
+
+        private void VarDataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        {
+            ((DataGridView)sender).ClearSelection();
+            ((DataGridView)sender).Rows[e.RowIndex].Selected = true;
+            e.ContextMenuStrip = VarsContextMenu;
+            e.ContextMenuStrip.Show();
         }
     }
 

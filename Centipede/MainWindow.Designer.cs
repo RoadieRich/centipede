@@ -74,8 +74,8 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -322,8 +322,9 @@
             this.VarDataGridView.Name = "VarDataGridView";
             this.VarDataGridView.Size = new System.Drawing.Size(441, 439);
             this.VarDataGridView.TabIndex = 7;
-            this.VarDataGridView.VirtualMode = true;
-            
+            this.VarDataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.VarDataGridView_CellContextMenuStripNeeded);
+            this.VarDataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.VarDataGridView_CellMouseClick);
+            this.VarDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.VarDataGridView_RowsAdded);
             // 
             // VarsContextMenu
             // 
@@ -381,6 +382,7 @@
             this.VarMenuDelete.ShortcutKeyDisplayString = "Del";
             this.VarMenuDelete.Size = new System.Drawing.Size(142, 22);
             this.VarMenuDelete.Text = "&Delete";
+            this.VarMenuDelete.Click += new System.EventHandler(this.VarMenuDelete_Click);
             // 
             // toolStripSeparator6
             // 
@@ -524,14 +526,14 @@
             this.button2.Text = "&Save";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // programBindingSource
-            // 
-            this.programBindingSource.DataSource = typeof(Centipede.Program);
-            // 
             // updateTimer
             // 
             this.updateTimer.Enabled = true;
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
+            // programBindingSource
+            // 
+            this.programBindingSource.DataSource = typeof(Centipede.Program);
             // 
             // MainWindow
             // 

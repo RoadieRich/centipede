@@ -32,11 +32,13 @@ namespace Centipede
 
         public class Variable
         {
+            public Int32 Index;
             public String Name;
             public Object Value;
         
-            public Variable(String name, Object value)
+            public Variable(Int32 index, String name, Object value)
             {
+                Index = index;
                 Name = name;
                 Value = value;
             }
@@ -49,7 +51,7 @@ namespace Centipede
 
             public static explicit operator Variable(KeyValuePair<String, Object> kvp)
             {
-                return new Variable(kvp.Key, kvp.Value);
+                return new Variable(-1, kvp.Key, kvp.Value);
             }
             public static implicit operator KeyValuePair<String, Object>(Variable v)
             {
@@ -57,7 +59,7 @@ namespace Centipede
             }
         }
 
-        public static System.Collections.Generic.Dictionary<String, Object> Variables = new Dictionary<String, Object>();
+        public static Dictionary<String, Variable> Variables = new Dictionary<String, Variable>();
         public static List<Action> Actions = new List<Action>();
         public static string JobFileName = "testing.100p";
         public static string JobName = "Testing";

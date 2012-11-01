@@ -392,13 +392,6 @@ namespace Centipede {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public VariablesRow FindByName(string Name) {
-                return ((VariablesRow)(this.Rows.Find(new object[] {
-                            Name})));
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public override global::System.Data.DataTable Clone() {
                 VariablesDataTable cln = ((VariablesDataTable)(base.Clone()));
                 cln.InitVars();
@@ -428,10 +421,7 @@ namespace Centipede {
                 base.Columns.Add(this.columnValue);
                 this.columnType = new global::System.Data.DataColumn("Type", typeof(byte), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnType);
-                this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnName}, true));
                 this.columnName.AllowDBNull = false;
-                this.columnName.Unique = true;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

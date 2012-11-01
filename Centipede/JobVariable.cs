@@ -23,7 +23,7 @@ namespace Centipede
         }
 
 
-        public enum Types
+        public enum Types : byte
         {
             Integer,
             Float,
