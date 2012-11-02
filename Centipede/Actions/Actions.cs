@@ -1,8 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Centipede
 {
+    public abstract class ActionFactory : ListViewItem
+    {
+        public ActionFactory()
+            : base()
+        { }
+
+
+        public abstract Action generate(String name);
+
+        public override String ToString()
+        {
+            return this.Text;
+        }
+    }
+
+    
     /// <summary>
     /// Base Action class: all actions will subclass this
     /// </summary>
@@ -30,8 +47,4 @@ namespace Centipede
         }
     }
 
-    public abstract class ActionFactory
-    {
-        public abstract Action generate(String name);
-    }
 }

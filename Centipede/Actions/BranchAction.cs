@@ -8,6 +8,30 @@ using IronPython.Runtime;
 
 namespace Centipede
 {
+    public class BranchActionFactory : ActionFactory
+    {
+        public BranchActionFactory() : base()
+        {
+            Text = "Branch Action";
+        }
+        public override Action generate(string name)
+        {
+            return new BranchAction(name, new BranchCondition());
+        }
+    }
+
+    public class PythonBranchActionFactory : ActionFactory
+    {
+        public PythonBranchActionFactory()
+        {
+            Text="Python Branch";
+        }
+        public override Action generate(string name)
+        {
+            return new BranchAction(name, new PythonCondition(""));
+        }
+    }
+    
     public class BranchAction : Action
     {
         /// <summary>
@@ -31,7 +55,7 @@ namespace Centipede
         private Boolean Result;
         public override void DoAction()
         {
-            Result = Condition.Test();
+            Result = Condition.Test(this);
         }
 
         public override Action GetNext()
@@ -47,43 +71,39 @@ namespace Centipede
         }
     }
 
-    public class BranchActionFactory : ActionFactory
+
+
+    public class BranchCondition
     {
 
-        public override Action generate(string name)
+        public BranchCondition()
         {
-            return new BranchAction(name, null);
+            
         }
-    }
-
-
-    public abstract class BranchCondition
-    {
-        protected BranchAction _branchAction;
-        public BranchCondition(BranchAction action)
+        public virtual Boolean Test(Action act)
         {
-            _branchAction = action;
-            _branchAction.Attributes.Add("condition", this);
+            return true;
         }
-        public abstract Boolean Test();
     }
 
     class PythonCondition : BranchCondition
     {
-        
-        public PythonCondition(BranchAction action, String source) : base(action)
+        public PythonCondition(String source) : base()
         {
-            
             Source = source;
-            _branchAction.Attributes.Add("source", source);
         }
 
-        public override Boolean Test()
+        public override Boolean Test(Action act)
         {
             PythonEngine engine = PythonEngine.GetInstance();
             return engine.Evaluate<Boolean>(Source);
         }
 
         public string Source;
+
+        public String ToString()
+        {
+            return "";
+        }
     }
 }

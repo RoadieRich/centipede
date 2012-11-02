@@ -16,9 +16,12 @@ namespace Centipede
     using Variable = Program.Variable;
     using System.Threading;
     using System.Data;
+    using System.Drawing;
 
     public partial class MainWindow : Form
     {
+
+        private List<ActionFactory> _ActionFactories = new List<ActionFactory>();
 
         public MainWindow()
         {
@@ -49,23 +52,38 @@ namespace Centipede
             this.Text = "Centipede 0.1 " + Program.JobName;
             Program.Variables.Add("console", new Program.Variable(0, "console", new GuiConsole()));
                 
-            Control pyAct = new Control();
-            pyAct.Text = "Python Action";
-            pyAct.Tag = new PythonActionFactory();
+            //PythonActionFactory pyAct = new PythonActionFactory();
+            //pyAct.Text = "Python Action";
+            //pyAct.Tag = new 
 
+            //_ActionFactories.Add(pyAct);
+
+            ListViewItem pyAct = new PythonActionFactory();            
             OtherActListBox.Items.Add(pyAct);
+            OtherActListBox.LargeImageList.Images.Add(new Icon("Resources/pycon.ico"));
+            pyAct.ImageIndex = 0;
 
-            Control pyBranch = new Control();
-            pyBranch.Text = "Python Branch";
-            pyBranch.Tag = new BranchActionFactory();
+            PythonBranchActionFactory pyBranch = new PythonBranchActionFactory();
+
+            _ActionFactories.Add(pyBranch);
             FlowContListBox.Items.Add(pyBranch);
+            pyBranch.ImageIndex = 0;
+            FlowContListBox.LargeImageList.Images.Add(new Icon("Resources/pycon.ico"));
 
 
         }
 
         private void button1_Click(object sender, EventArgs eventArgs)
         {
+            notifyIcon.Visible = true;
             //Program.RunJob(SetSelectedAction, CompletedHandler, ErrorHandler);
+            for (int i = 0; i < 10; i++)
+            {
+                progressBar1.PerformStep();
+                
+                Thread.Sleep(500);
+            }
+                notifyIcon.Visible = false;
         }
 
         private Boolean ErrorHandler(ActionException e, out Action nextAction)
@@ -135,11 +153,11 @@ namespace Centipede
 
         private void ActListBox_Dbl_Click(object sender, MouseEventArgs e)
         {
-            ListBox sendingListBox = (ListBox)sender;
+            ListView sendingListView = (ListView)sender;
 
-            Control sendingControl = (Control)sendingListBox.Items[0];
+            ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
 
-            jobActionListBox.Add(((ActionFactory)(sendingControl.Tag)).generate("new action"));
+            jobActionListBox.Add(sendingActionFactory.generate("new action"));
         }
 
         private VarDataSet _dataSet = new VarDataSet();
@@ -183,6 +201,18 @@ namespace Centipede
             ((DataGridView)sender).Rows[e.RowIndex].Selected = true;
             e.ContextMenuStrip = VarsContextMenu;
             e.ContextMenuStrip.Show();
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.PerformStep();
+        }
+
+        
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
         }
     }
 
