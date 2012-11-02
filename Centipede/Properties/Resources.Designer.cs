@@ -75,5 +75,12 @@ namespace Centipede.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        internal static System.Drawing.Icon pycon {
+            get {
+                object obj = ResourceManager.GetObject("pycon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
