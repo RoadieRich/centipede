@@ -1,8 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Centipede
 {
+    class PythonActionFactory : ActionFactory
+    {
+        public PythonActionFactory() : base()
+        {
+            Text = "Python Action";
+            //this.ImageList.Images.Add(new Icon("Resources/pycon.ico"));
+        }
+        public override Action generate(String name)
+        {
+            return new PythonAction(name);
+        }
+    }
+    
     class PythonAction : Action
     {
 
@@ -36,14 +50,6 @@ namespace Centipede
             {
                 throw new ActionException(e, this);
             }
-        }
-    }
-
-    class PythonActionFactory : ActionFactory
-    {
-        public override Action generate(String name)
-        {
-            return new PythonAction(name);
         }
     }
 }
