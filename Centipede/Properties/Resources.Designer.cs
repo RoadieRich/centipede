@@ -60,18 +60,16 @@ namespace Centipede.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Actions.
-        /// </summary>
-        internal static string Action_name {
-            get {
-                return ResourceManager.GetString("Action_name", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Icon Centipede {
             get {
                 object obj = ResourceManager.GetObject("Centipede", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon If {
+            get {
+                object obj = ResourceManager.GetObject("If", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

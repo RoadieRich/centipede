@@ -6,11 +6,9 @@ namespace Centipede
 {
     class PythonActionFactory : ActionFactory
     {
-        public PythonActionFactory() : base()
-        {
-            Text = "Python Action";
-            //this.ImageList.Images.Add(new Icon("Resources/pycon.ico"));
-        }
+        public PythonActionFactory() : base("Python")
+        { }
+
         public override Action generate(String name)
         {
             return new PythonAction(name);
