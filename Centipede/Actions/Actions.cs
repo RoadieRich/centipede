@@ -6,8 +6,8 @@ namespace Centipede
 {
     public abstract class ActionFactory : ListViewItem
     {
-        public ActionFactory()
-            : base()
+        public ActionFactory(String name)
+            : base(name)
         { }
 
 
