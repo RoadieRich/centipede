@@ -6,7 +6,7 @@
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.AutoScaleMode AutoScaleMode;
+
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -30,7 +30,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
 
         #endregion

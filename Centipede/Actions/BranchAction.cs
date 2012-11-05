@@ -99,7 +99,7 @@ namespace Centipede
 
         public string Source;
 
-        public String ToString()
+        public override String ToString()
         {
             return "";
         }

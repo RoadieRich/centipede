@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 
 namespace Centipede {
-    using Variable = Program.Variable;
+    //using Variable = Program.Variable;
     
     public partial class VarDataSet {
         partial class VariablesDataTable
