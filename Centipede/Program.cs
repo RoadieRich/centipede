@@ -90,6 +90,7 @@ namespace Centipede
             {
                 try
                 {
+                    updateCallback(currentAction);
                     currentAction.DoAction();
                     currentAction = currentAction.GetNext();
                 }
@@ -118,6 +119,17 @@ namespace Centipede
         static void SetupTestAction()
         {
             Actions.Add(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
+
+        }
+
+        public static void AddAction(Action action)
+        {
+            if (Actions.Count > 0)
+            {
+                Action last = Actions[Actions.Count - 1];
+                last.Next = action;
+            }
+            Actions.Add(action);
         }
 
     }
