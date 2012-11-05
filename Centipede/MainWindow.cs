@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
-using Variable = Centipede.Program.Variable;
+//using Variable = Centipede.Program.Variable;
 using System.Threading;
 using System.Data;
 using System.Drawing;
@@ -49,7 +49,7 @@ namespace Centipede
 
             this.Text = "Centipede 0.1 " + Program.JobName;
 
-            Program.Variables.Add("console", new Program.Variable(0, "console", new GuiConsole()));
+            Program.Variables.Add("console", new GuiConsole());
             
             ActionFactory fact = new PythonActionFactory();            
             fact.ImageIndex = 0;
@@ -63,7 +63,7 @@ namespace Centipede
             fact.ImageIndex = 1;
             FlowContListBox.Items.Add(fact);
 
-            Program.AddAction(new PythonAction("pyact", @"i = int(variables['a']); variables['a'] = i+1"));
+            
             
 
         }
@@ -121,17 +121,31 @@ namespace Centipede
             //ActionsVarsTabControl.SelectTab(ActionsTab);
             jobActionListBox.SelectedItem = currentAction.Tag;
 
-            var it = from VarDataSet.VariablesRow r in _dataSet.Variables.Rows
-                     join KeyValuePair<String, Object> v in Program.Variables
-                     on r.Name equals v.Key
-                     where r.Value != v.Value
-                     select v;
-
-            foreach (var v in it)
+            foreach (KeyValuePair<String,Object> v in Program.Variables.ToArray())
             {
-                var r = _dataSet.Variables.FindByName(v.Key);
-                r.SetField("Value", v.Value);
+                VarDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
+                if (v.Key!="console" && row.Value != v.Value)
+                {
+                    row.Value = v.Value;
+                    //row.SetModified();
+                }
             }
+            VarDataGridView.Refresh();
+            
+            //var it = from KeyValuePair<String, Object> v in Program.Variables
+            //         join VarDataSet.VariablesRow r in _dataSet.Variables.Rows
+            //         on v.Key equals r.Name
+            //         where r.Value != v.Value
+            //         select v;
+
+            //foreach (var v in it)
+            //{
+            //    var r = _dataSet.Variables.FindByName(v.Key);
+            //    r.SetField("Value", v.Value);
+            //    //r.AcceptChanges();
+            //    VarDataGridView.Refresh();
+            //}
+            
             
             
 
