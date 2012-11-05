@@ -539,6 +539,7 @@
             this.LoadBtn.TabIndex = 1;
             this.LoadBtn.Text = "&Load";
             this.LoadBtn.UseVisualStyleBackColor = true;
+            this.LoadBtn.Click += new System.EventHandler(this.LoadBtn_Click);
             // 
             // progressBar1
             // 

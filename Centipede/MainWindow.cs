@@ -62,13 +62,16 @@ namespace Centipede
             fact = new BranchActionFactory();
             fact.ImageIndex = 1;
             FlowContListBox.Items.Add(fact);
+
+            Program.AddAction(new PythonAction("pyact", @"i = int(variables['a']); variables['a'] = i+1"));
             
 
         }
 
         private void button1_Click(object sender, EventArgs eventArgs)
         {
-            Program.Variables.ToArray();
+            Program.RunJob(UpdateHandler, CompletedHandler, ErrorHandler);
+
         }
 
         private Boolean ErrorHandler(ActionException e, out Action nextAction)
@@ -76,7 +79,7 @@ namespace Centipede
             String message;
             if (e.ErrorAction != null)
             {
-                SetSelectedAction(e.ErrorAction);
+                UpdateHandler(e.ErrorAction);
 
                 message = "Error occurred in " + e.ErrorAction.Name + "\r\n\r\nMessage was:\r\n" + e.Message;
             }
@@ -113,10 +116,25 @@ namespace Centipede
             }
         }
 
-        private void SetSelectedAction(Action currentAction)
+        private void UpdateHandler(Action currentAction)
         {
-            ActionsVarsTabControl.SelectTab(ActionsTab);
+            //ActionsVarsTabControl.SelectTab(ActionsTab);
             jobActionListBox.SelectedItem = currentAction.Tag;
+
+            var it = from VarDataSet.VariablesRow r in _dataSet.Variables.Rows
+                     join KeyValuePair<String, Object> v in Program.Variables
+                     on r.Name equals v.Key
+                     where r.Value != v.Value
+                     select v;
+
+            foreach (var v in it)
+            {
+                var r = _dataSet.Variables.FindByName(v.Key);
+                r.SetField("Value", v.Value);
+            }
+            
+            
+
         }
 
         private void CompletedHandler(Boolean success)
@@ -221,6 +239,11 @@ namespace Centipede
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
+        }
+
+        private void LoadBtn_Click(object sender, EventArgs e)
+        {
+            Program.Variables.ToString();
         }
     }
 
