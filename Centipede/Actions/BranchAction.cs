@@ -10,8 +10,10 @@ namespace Centipede
 {
     public class BranchActionFactory : ActionFactory
     {
-        public BranchActionFactory() : base("Branch")
-        { }
+        public BranchActionFactory() : base()
+        {
+            Text = "Branch Action";
+        }
         public override Action generate(string name)
         {
             return new BranchAction(name, new BranchCondition());
@@ -20,7 +22,7 @@ namespace Centipede
 
     public class PythonBranchActionFactory : ActionFactory
     {
-        public PythonBranchActionFactory() : base ("Python Branch")
+        public PythonBranchActionFactory()
         {
             Text="Python Branch";
         }
