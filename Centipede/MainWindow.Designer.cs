@@ -368,8 +368,6 @@
             this.VarDataGridView.Size = new System.Drawing.Size(441, 439);
             this.VarDataGridView.TabIndex = 7;
             this.VarDataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.VarDataGridView_CellContextMenuStripNeeded);
-            this.VarDataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.VarDataGridView_CellMouseClick);
-            this.VarDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.VarDataGridView_RowsAdded);
             // 
             // VarsContextMenu
             // 
@@ -576,7 +574,6 @@
             // updateTimer
             // 
             this.updateTimer.Enabled = true;
-            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
             // 
             // notifyIcon
             // 

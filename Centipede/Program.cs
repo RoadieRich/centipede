@@ -59,7 +59,7 @@ namespace Centipede
             }
         }
 
-        public static Dictionary<String, Variable> Variables = new Dictionary<String, Variable>();
+        public static Dictionary<String, Object> Variables = new Dictionary<String, Object>();
         public static List<Action> Actions = new List<Action>();
         public static string JobFileName = "testing.100p";
         public static string JobName = "Testing";

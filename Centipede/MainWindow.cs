@@ -6,6 +6,10 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 using System.ComponentModel;
+using Variable = Centipede.Program.Variable;
+using System.Threading;
+using System.Data;
+using System.Drawing;
 
 
 
@@ -13,10 +17,6 @@ using System.ComponentModel;
 namespace Centipede
 {
     
-    using Variable = Program.Variable;
-    using System.Threading;
-    using System.Data;
-    using System.Drawing;
 
     public partial class MainWindow : Form
     {
@@ -68,15 +68,7 @@ namespace Centipede
 
         private void button1_Click(object sender, EventArgs eventArgs)
         {
-            notifyIcon.Visible = true;
-            //Program.RunJob(SetSelectedAction, CompletedHandler, ErrorHandler);
-            for (int i = 0; i < 10; i++)
-            {
-                progressBar1.PerformStep();
-                
-                Thread.Sleep(500);
-            }
-                notifyIcon.Visible = false;
+            Program.Variables.ToArray();
         }
 
         private Boolean ErrorHandler(ActionException e, out Action nextAction)
@@ -146,11 +138,11 @@ namespace Centipede
 
         private void ActListBox_Dbl_Click(object sender, MouseEventArgs e)
         {
-            ListView sendingListView = (ListView)sender;
+            //ListView sendingListView = (ListView)sender;
 
-            ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
+            //ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
 
-            jobActionListBox.Add(sendingActionFactory.generate("new action"));
+            //jobActionListBox.Add(sendingActionFactory.generate("new action"));
         }
 
         private VarDataSet _dataSet = new VarDataSet();
@@ -158,33 +150,56 @@ namespace Centipede
         private void MainWindow_Load(object sender, EventArgs e)
         {
             VarDataGridView.DataSource = _dataSet.Variables;
-            _dataSet.Variables.Update();
+            _dataSet.Variables.VariablesRowChanged += new VarDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
+            _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
         }
 
-        private void updateTimer_Tick(object sender, EventArgs e)
+        void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            ((VarDataSet.VariablesDataTable)VarDataGridView.DataSource).Update();
+            foreach (String key in (from kvp in Program.Variables
+                                    where _dataSet.Variables.Rows.Contains(kvp.Key)
+                                    select kvp.Key))
+            {
+                if (key != "console")
+                {
+                    Program.Variables.Remove(key);
+                    break;
+                }
+            }
+
         }
 
-        private void VarDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        void Variables_VariablesRowChanged(object sender, VarDataSet.VariablesRowChangeEvent e)
         {
-            //((VarDataSet.VariablesDataTable)VarDataGridView.DataSource).Update();
+            VarDataSet.VariablesDataTable table = (VarDataSet.VariablesDataTable)sender;
+            VarDataSet.VariablesRow row = (VarDataSet.VariablesRow)e.Row;
+
+            if (!Program.Variables.ContainsKey(row.Name))
+            {
+                var it = from kvp in Program.Variables
+                         where !_dataSet.Variables.Rows.Contains(kvp.Key)
+                         select kvp.Key;
+
+                foreach (String key in it)
+                {
+                    if (key != "console")
+                    {
+                        Program.Variables.Remove(key);
+                        break;
+                    }
+                }
+
+            }
+
+            Program.Variables[row.Name] = row.Value;
+
         }
 
         private void VarMenuDelete_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
             {
-
                 _dataSet.Variables.RemoveVariablesRow((VarDataSet.VariablesRow)((DataRowView)r.DataBoundItem).Row);
-            }
-        }
-
-        private void VarDataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                Thread.Sleep(1);  
             }
         }
 
@@ -209,8 +224,6 @@ namespace Centipede
         }
     }
 
-
-
     class GuiConsole
     {
         public void write(string message)
@@ -218,199 +231,4 @@ namespace Centipede
             MessageBox.Show(message, "Python Output");
         }
     }
-
-
-
-    //class VariableBindingList : IBindingList
-    //{
-    //    private SortedDictionary<String, Object> _varDict;
-    //    private List<String> Keys;
-    //    public VariableBindingList(Dictionary<String, Object> varDictionary)
-    //    {
-    //        _varDict = new SortedDictionary<string, object>(varDictionary);
-
-    //        Keys = _varDict.Keys.ToList();
-
-    //    }
-
-    //    public void AddIndex(PropertyDescriptor property)
-    //    { }
-
-    //    public object AddNew()
-    //    {
-    //        Variable newVar = new Program.Variable();
-    //        _varDict.Add(newVar.Name, newVar.Value);
-
-    //        return newVar;
-    //    }
-
-    //    public bool AllowEdit
-    //    {
-    //        get { return true; }
-    //    }
-
-    //    public bool AllowNew
-    //    {
-    //        get { return true; }
-    //    }
-
-    //    public bool AllowRemove
-    //    {
-    //        get { return true; }
-    //    }
-
-    //    public void ApplySort(PropertyDescriptor property, ListSortDirection direction)
-    //    { }
-
-    //    public int Find(PropertyDescriptor property, object key)
-    //    {
-    //        return Keys.IndexOf((String)key);
-    //    }
-
-    //    public bool IsSorted
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public event ListChangedEventHandler ListChanged;
-
-    //    public void RemoveIndex(PropertyDescriptor property)
-    //    { }
-
-    //    public void RemoveSort()
-    //    {
-    //        throw new NotSupportedException();
-    //    }
-
-    //    public ListSortDirection SortDirection
-    //    {
-    //        get { throw new NotSupportedException(); }
-    //    }
-
-    //    public PropertyDescriptor SortProperty
-    //    {
-    //        get { throw new NotSupportedException(); }
-    //    }
-
-    //    public bool SupportsChangeNotification
-    //    {
-    //        get { return true; }
-    //    }
-
-    //    public bool SupportsSearching
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public bool SupportsSorting
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public int Add(object value)
-    //    {
-    //        Variable var = (Variable)(KeyValuePair<String, Object>)value;
-
-    //        _varDict.Add(var.Name, var.Value);
-    //        return -1;
-    //    }
-
-    //    public void Clear()
-    //    {
-    //        _varDict.Clear();
-    //    }
-
-    //    public bool Contains(object value)
-    //    {
-    //        return _varDict.ContainsValue(value);
-    //    }
-
-    //    public int IndexOf(object value)
-    //    {
-    //        return -1;
-    //    }
-
-    //    public void Insert(int index, object value)
-    //    {
-    //        Variable var = (Variable)value;
-    //        _varDict.Add(var.Name, var.Value);
-    //    }
-
-    //    public bool IsFixedSize
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public bool IsReadOnly
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public void Remove(object key)
-    //    {
-    //        _varDict.Remove((String)key);
-    //    }
-
-    //    public void RemoveAt(int index)
-    //    {
-
-    //        _varDict.Remove(Keys[index]);
-    //    }
-
-    //    public object this[int index]
-    //    {
-    //        get
-    //        {
-    //            return _varDict[Keys[index]];
-    //        }
-    //        set
-    //        {
-    //            _varDict[Keys[index]] = value;
-    //        }
-    //    }
-    //    public object this[String index]
-    //    {
-    //        get
-    //        {
-    //            return _varDict[index];
-    //        }
-    //        set
-    //        {
-    //            _varDict[index] = value;
-    //        }
-    //    }
-    //    public void CopyTo(Array array, int index)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public int Count
-    //    {
-    //        get { return _varDict.Count; }
-    //    }
-
-    //    public bool IsSynchronized
-    //    {
-    //        get { return false; }
-    //    }
-
-    //    public object SyncRoot
-    //    {
-    //        get { return null; }
-    //    }
-
-    //    public IEnumerator GetEnumerator()
-    //    {
-    //        return _varDict.GetEnumerator();
-    //    }
-    //}
-
-    //public static class Extensions
-    //{
-    //    public static void Add(this Dictionary<String, Object> dict, Variable var)
-    //    {
-    //        dict.Add(var.Name, var.Value);
-    //    }
-
-    //}
 }
