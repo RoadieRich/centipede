@@ -20,6 +20,9 @@ namespace Centipede
 
     public partial class MainWindow : Form
     {
+
+        private List<ActionFactory> _ActionFactories = new List<ActionFactory>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,23 +49,27 @@ namespace Centipede
 
                 startWindow.Dispose();
             }
-
             this.Text = "Centipede 0.1 " + Program.JobName;
-
             Program.Variables.Add("console", new Program.Variable(0, "console", new GuiConsole()));
-            
-            ActionFactory fact = new PythonActionFactory();            
-            fact.ImageIndex = 0;
-            OtherActListBox.Items.Add(fact);
-            
-            fact = new PythonBranchActionFactory();
-            fact.ImageIndex = 0;
-            FlowContListBox.Items.Add(fact);
-            
-            fact = new BranchActionFactory();
-            fact.ImageIndex = 1;
-            FlowContListBox.Items.Add(fact);
-            
+                
+            //PythonActionFactory pyAct = new PythonActionFactory();
+            //pyAct.Text = "Python Action";
+            //pyAct.Tag = new 
+
+            //_ActionFactories.Add(pyAct);
+
+            ListViewItem pyAct = new PythonActionFactory();            
+            OtherActListBox.Items.Add(pyAct);
+            OtherActListBox.LargeImageList.Images.Add(new Icon("Resources/pycon.ico"));
+            pyAct.ImageIndex = 0;
+
+            PythonBranchActionFactory pyBranch = new PythonBranchActionFactory();
+
+            _ActionFactories.Add(pyBranch);
+            FlowContListBox.Items.Add(pyBranch);
+            pyBranch.ImageIndex = 0;
+            FlowContListBox.LargeImageList.Images.Add(new Icon("Resources/pycon.ico"));
+
 
         }
 

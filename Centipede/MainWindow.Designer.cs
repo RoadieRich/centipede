@@ -66,7 +66,6 @@
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.jobActionListBox = new Centipede.JobActionListBox();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListView();
@@ -111,6 +110,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.jobActionListBox = new Centipede.JobActionListBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
@@ -176,15 +176,6 @@
             this.splitContainer1.SplitterDistance = 281;
             this.splitContainer1.TabIndex = 0;
             // 
-            // jobActionListBox
-            // 
-            this.jobActionListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobActionListBox.FormattingEnabled = true;
-            this.jobActionListBox.Location = new System.Drawing.Point(3, 3);
-            this.jobActionListBox.Name = "jobActionListBox";
-            this.jobActionListBox.Size = new System.Drawing.Size(435, 275);
-            this.jobActionListBox.TabIndex = 0;
-            // 
             // AddActionTabs
             // 
             this.AddActionTabs.Controls.Add(this.UIActTab);
@@ -249,10 +240,9 @@
             // 
             // FlowControlActIcons
             // 
-            this.FlowControlActIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("FlowControlActIcons.ImageStream")));
+            this.FlowControlActIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.FlowControlActIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.FlowControlActIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.FlowControlActIcons.Images.SetKeyName(0, "pycon.ico");
-            this.FlowControlActIcons.Images.SetKeyName(1, "If.ico");
             // 
             // ExcelActTab
             // 
@@ -342,9 +332,9 @@
             // 
             // OtherActIcons
             // 
-            this.OtherActIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("OtherActIcons.ImageStream")));
+            this.OtherActIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.OtherActIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.OtherActIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.OtherActIcons.Images.SetKeyName(0, "pycon.ico");
             // 
             // VarsTab
             // 
@@ -584,6 +574,15 @@
             this.notifyIcon.BalloonTipTitle = "Centipede is Running";
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Centipede";
+            // 
+            // jobActionListBox
+            // 
+            this.jobActionListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jobActionListBox.FormattingEnabled = true;
+            this.jobActionListBox.Location = new System.Drawing.Point(3, 3);
+            this.jobActionListBox.Name = "jobActionListBox";
+            this.jobActionListBox.Size = new System.Drawing.Size(435, 275);
+            this.jobActionListBox.TabIndex = 0;
             // 
             // backgroundWorker1
             // 
