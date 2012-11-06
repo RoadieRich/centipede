@@ -12,7 +12,7 @@ namespace Centipede
     {
         public BranchActionFactory() : base("Branch")
         { }
-        public override Action generate(string name)
+        public override Action Generate(string name)
         {
             return new BranchAction(name, new BranchCondition());
         }
@@ -24,7 +24,7 @@ namespace Centipede
         {
             Text="Python Branch";
         }
-        public override Action generate(string name)
+        public override Action Generate(string name)
         {
             return new BranchAction(name, new PythonCondition(""));
         }

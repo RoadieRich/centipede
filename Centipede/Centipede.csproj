@@ -56,14 +56,15 @@
   <ItemGroup>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\BranchAction.cs" />
-    <Compile Include="VarDataSet.cs">
-      <DependentUpon>VarDataSet.xsd</DependentUpon>
+    <Compile Include="Actions\DemoAction.cs" />
+    <Compile Include="JobDataSet.cs">
+      <DependentUpon>JobDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="VarDataSet.Designer.cs">
+    <Compile Include="JobDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>VarDataSet.xsd</DependentUpon>
+      <DependentUpon>JobDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="JobActionListBox.cs">
       <SubType>Component</SubType>
@@ -87,6 +88,12 @@
     </Compile>
     <Compile Include="PyEngine.cs" />
     <Compile Include="Actions\PythonAction.cs" />
+    <Compile Include="ActionDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionDisplayControl.Designer.cs">
+      <DependentUpon>ActionDisplayControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -103,17 +110,21 @@
     <EmbeddedResource Include="GetJob.resx">
       <DependentUpon>GetJob.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="VarDataSet.xsc">
-      <DependentUpon>VarDataSet.xsd</DependentUpon>
+    <EmbeddedResource Include="ActionDisplayControl.resx">
+      <DependentUpon>ActionDisplayControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="JobDataSet.xsc">
+      <DependentUpon>JobDataSet.xsd</DependentUpon>
     </None>
-    <None Include="VarDataSet.xsd">
+    <None Include="JobDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>VarDataSet.Designer.cs</LastGenOutput>
+      <LastGenOutput>JobDataSet.Designer.cs</LastGenOutput>
     </None>
-    <None Include="VarDataSet.xss">
-      <DependentUpon>VarDataSet.xsd</DependentUpon>
+    <None Include="JobDataSet.xss">
+      <DependentUpon>JobDataSet.xsd</DependentUpon>
     </None>
+    <None Include="Properties\DataSources\JobDataSet.datasource" />
     <None Include="Properties\DataSources\MainWindow.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\Settings.settings">

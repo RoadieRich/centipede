@@ -11,7 +11,7 @@ namespace Centipede
         { }
 
 
-        public abstract Action generate(String name);
+        public abstract Action Generate(String name);
 
         public override String ToString()
         {
@@ -31,7 +31,7 @@ namespace Centipede
             Tag = tag;
         }
 
-        public Dictionary<String, Object> Attributes;
+        public Dictionary<String, Object> Attributes = new Dictionary<string,object>();
 
         public readonly String Name;
         public String Comment = "";
@@ -46,5 +46,7 @@ namespace Centipede
             return Next;
         }
     }
+
+
 
 }

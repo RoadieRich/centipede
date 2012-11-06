@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
+
 namespace Centipede
 {
     class PythonActionFactory : ActionFactory
@@ -9,7 +10,7 @@ namespace Centipede
         public PythonActionFactory() : base("Python")
         { }
 
-        public override Action generate(String name)
+        public override Action Generate(String name)
         {
             return new PythonAction(name);
         }
