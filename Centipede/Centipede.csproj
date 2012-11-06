@@ -54,12 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionList.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\BranchAction.cs" />
-    <Compile Include="CentiUnit.cs" />
     <Compile Include="VarDataSet.cs">
       <DependentUpon>VarDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -75,9 +71,6 @@
     <Compile Include="JobActionListBox.Designer.cs">
       <DependentUpon>JobActionListBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="JobFile.cs" />
-    <Compile Include="JobVarBase.cs" />
-    <Compile Include="JobVariable.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,15 +87,6 @@
     </Compile>
     <Compile Include="PyEngine.cs" />
     <Compile Include="Actions\PythonAction.cs" />
-    <Compile Include="VariableDisplayControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="VariableDisplayControl.Designer.cs">
-      <DependentUpon>VariableDisplayControl.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="ActionList.resx">
-      <DependentUpon>ActionList.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -118,9 +102,6 @@
     </Compile>
     <EmbeddedResource Include="GetJob.resx">
       <DependentUpon>GetJob.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VariableDisplayControl.resx">
-      <DependentUpon>VariableDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="VarDataSet.xsc">
       <DependentUpon>VarDataSet.xsd</DependentUpon>
