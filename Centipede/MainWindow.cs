@@ -65,12 +65,6 @@ namespace Centipede
 
         }
 
-        private void button1_Click(object sender, EventArgs eventArgs)
-        {
-            Program.RunJob(UpdateHandler, CompletedHandler, ErrorHandler);
-
-        }
-
         private Boolean ErrorHandler(ActionException e, out Action nextAction)
         {
             String message;
@@ -255,29 +249,24 @@ namespace Centipede
             e.ContextMenuStrip.Show();
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void LoadBtn_Click(object sender, EventArgs e)
         {
-            progressBar1.PerformStep();
+            Program.Variables.ToArray();
+        }
+
+        private void RunButton_Click(object sender, EventArgs e)
+        {
+            Program.RunJob(UpdateHandler, CompletedHandler, ErrorHandler);
         }
 
         
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        private void LoadBtn_Click(object sender, EventArgs e)
-        {
-            Program.Variables.ToString();
-        }
     }
 
     class GuiConsole
     {
         public void write(string message)
         {
-            MessageBox.Show(message, "Python Output");
+            MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }
 }
