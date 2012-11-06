@@ -1,15 +1,16 @@
 ﻿using System;
-
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
 namespace Centipede
 {
+    /// <summary>
+    /// The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
+    /// </summary>
     class PythonEngine
     {
         private ScriptEngine PyEngine = null;
-        //private ScriptRuntime PyRuntime = null;
         private ScriptScope PyScope = null;
 
         private PythonEngine()
@@ -24,21 +25,30 @@ namespace Centipede
             }
         }
 
+        /// <summary>
+        /// Execute code internally
+        /// </summary>
+        /// <param name="code">The code to execute</param>
         public void Execute(String code)
-        {
+        {   
             ScriptSource source = PyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
             CompiledCode compiled = source.Compile();
             try
             {
                 compiled.Execute(PyScope);
             }
-
             catch (Exception e)
             {
                 throw new PythonException(e);
             }
         }
 
+        /// <summary>
+        /// Evaluate the expression
+        /// </summary>
+        /// <typeparam name="T">(C#) Type to coerce the value of the expression to</typeparam>
+        /// <param name="expression">Expression to evaluate</param>
+        /// <returns>The result of the expression, coerced to type T</returns>
         public T Evaluate<T>(String expression)
         {
             ScriptSource source = PyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
@@ -46,16 +56,32 @@ namespace Centipede
             return compiled.Execute<T>(PyScope);
         }
         
+        /// <summary>
+        /// Set a python variable, inside the Engine.
+        /// </summary>
+        /// <param name="name">Name of the variable to set</param>
+        /// <param name="value">Value to set it to</param>
         public void SetVariable(String name, Object value)
         {
             PyScope.SetVariable(name, value);
         }
 
+        /// <summary>
+        /// Get the value of a variable inside the python engine.
+        /// </summary>
+        /// <param name="name">Variable name to get</param>
+        /// <returns>The variable's value.  Will need casting to the correct type.</returns>
         public Object GetVariable(String name)
         {
             return PyScope.GetVariable(name);
         }
 
+        /// <summary>
+        /// Get a python variable, with a known type
+        /// </summary>
+        /// <typeparam name="T">The (c#) type to get the variable as</typeparam>
+        /// <param name="name">Name of the variable to fetch</param>
+        /// <returns>The value of the variable, cast to the appropriate C# type</returns>
         public T GetVariable<T>(String name)
         {
             return PyScope.GetVariable<T>(name);
@@ -66,6 +92,10 @@ namespace Centipede
         
         static private PythonEngine _instance = null;
 
+        /// <summary>
+        /// Gets the PyEngine Singleton
+        /// </summary>
+        /// <returns>The PyEngine instance</returns>
         public static PythonEngine GetInstance()
         {
             if (_instance == null)

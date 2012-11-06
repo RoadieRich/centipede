@@ -21,7 +21,11 @@ namespace Centipede
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
         }
-
+        
+        /// <summary>
+        /// Load a job with a given name
+        /// </summary>
+        /// <param name="jobName">Name of the job to load</param>
         public static void LoadJob(string jobName)
         {
             throw new NotImplementedException();
@@ -148,6 +152,10 @@ namespace Centipede
             //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
         }
 
+        /// <summary>
+        /// Add action to the job queue.  By default, it is added as the last action in the job.
+        /// </summary>
+        /// <param name="action">Action to add</param>
         public static void AddAction(Action action)
         {
             if (Actions.Count > 0)
