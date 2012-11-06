@@ -15,8 +15,10 @@ namespace Centipede
         {
             InitializeComponent();
             NameLabel.Text = action.Name;
-            //this.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            this.Dock = DockStyle.Right;
+            this.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            //this.Dock = DockStyle.Fill;
+            this.BackColor = SystemColors.Control;
+
             Action = action;
             Label attrLabel;
             TextBox attrValue;

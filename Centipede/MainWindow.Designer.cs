@@ -10,15 +10,19 @@
         private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.TabPage FlowContActTab;
         private System.Windows.Forms.ListView FlowContListBox;
+        private System.Windows.Forms.ImageList FlowControlActIcons;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.TabPage ExcelActTab;
         private System.Windows.Forms.ListView ExcelActListBox;
         private System.Windows.Forms.TabPage MathCadActTab;
+        private System.Windows.Forms.ListView MathCadListBox;
         private System.Windows.Forms.TabPage SolidWorksActTab;
         private System.Windows.Forms.ListView SolidWorksListBox;
         private System.Windows.Forms.TabPage OtherActTab;
         private System.Windows.Forms.ListView OtherActListBox;
+        private System.Windows.Forms.ImageList OtherActIcons;
         private System.Windows.Forms.TabPage VarsTab;
+        private System.Windows.Forms.DataGridView VarDataGridView;
         private System.Windows.Forms.ContextMenuStrip VarsContextMenu;
         private System.Windows.Forms.ToolStripMenuItem VarMenuUndo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -42,22 +46,13 @@
         private System.Windows.Forms.ToolStripMenuItem ActMenuSelectAll;
         private System.Windows.Forms.Button LoadBtn;
         private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-
-        #region Windows Form Designer generated code
-
-
-        #endregion
-
-        private System.Windows.Forms.DataGridView VarDataGridView;
+        private System.Windows.Forms.Button RunButton;
+        private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Timer updateTimer;
-        private System.Windows.Forms.ImageList FlowControlActIcons;
-        private System.Windows.Forms.ImageList OtherActIcons;
-        private System.Windows.Forms.ListView MathCadListBox;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
 
+        #region Windows Form Designer generated code
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -65,7 +60,7 @@
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ActionContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListView();
@@ -106,8 +101,8 @@
             this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.RunButton = new System.Windows.Forms.Button();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -179,11 +174,15 @@
             // 
             // ActionContainer
             // 
-            this.ActionContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ActionContainer.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
+            this.ActionContainer.ColumnCount = 1;
+            this.ActionContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.ActionContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ActionContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ActionContainer.Location = new System.Drawing.Point(3, 3);
             this.ActionContainer.Name = "ActionContainer";
+            this.ActionContainer.RowCount = 1;
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 275F));
             this.ActionContainer.Size = new System.Drawing.Size(435, 275);
             this.ActionContainer.TabIndex = 0;
             // 
@@ -553,26 +552,26 @@
             this.progressBar1.Size = new System.Drawing.Size(455, 23);
             this.progressBar1.TabIndex = 2;
             // 
-            // button1
+            // RunButton
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(473, 489);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "&Run";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.RunButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.RunButton.Location = new System.Drawing.Point(473, 489);
+            this.RunButton.Name = "RunButton";
+            this.RunButton.Size = new System.Drawing.Size(75, 23);
+            this.RunButton.TabIndex = 3;
+            this.RunButton.Text = "&Run";
+            this.RunButton.UseVisualStyleBackColor = true;
+            this.RunButton.Click += new System.EventHandler(this.RunButton_Click);
             // 
-            // button2
+            // SaveButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(473, 42);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "&Save";
-            this.button2.UseVisualStyleBackColor = true;
+            this.SaveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SaveButton.Location = new System.Drawing.Point(473, 42);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(75, 23);
+            this.SaveButton.TabIndex = 4;
+            this.SaveButton.Text = "&Save";
+            this.SaveButton.UseVisualStyleBackColor = true;
             // 
             // updateTimer
             // 
@@ -589,8 +588,6 @@
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
             // jobDataSet1
             // 
@@ -603,8 +600,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(560, 524);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.SaveButton);
+            this.Controls.Add(this.RunButton);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.LoadBtn);
             this.Controls.Add(this.ActionsVarsTabControl);
@@ -634,8 +631,11 @@
             this.ResumeLayout(false);
 
         }
+
+        #endregion
+
         private JobDataSet jobDataSet1;
-        private System.Windows.Forms.FlowLayoutPanel ActionContainer;
+        private System.Windows.Forms.TableLayoutPanel ActionContainer;
     }
 }
 

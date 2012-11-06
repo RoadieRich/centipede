@@ -14,11 +14,14 @@ namespace Centipede
         {
             //XXX:Testing only
             JobFileName = "Test File";
-            SetupTestAction();
+            //SetupTestAction();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+
+            mainForm = new MainWindow();
+            
+            Application.Run(mainForm);
         }
         
         /// <summary>
@@ -71,6 +74,7 @@ namespace Centipede
         public static string JobName = "Testing";
 
         private static List<Action> Actions = new List<Action>();
+        public static MainWindow mainForm;
         //private static JobFile File = null;
 
         /// <summary>
@@ -156,18 +160,35 @@ variables[""a""] = i+1"));
             //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
         }
 
+        public delegate void AddActionCallback(Action action, Int32 index);
+        public event AddActionCallback ActionAdded = new AddActionCallback((a,b) => {});
+
         /// <summary>
         /// Add action to the job queue.  By default, it is added as the last action in the job.
         /// </summary>
         /// <param name="action">Action to add</param>
-        public static void AddAction(Action action)
+        public static void AddAction(Action action, Int32 index = -1)
         {
-            if (Actions.Count > 0)
+            if (index == -1)
             {
-                Action last = Actions[Actions.Count - 1];
-                last.Next = action;
+                if (Actions.Count > 0)
+                {
+                    Action last = Actions[Actions.Count - 1];
+                    last.Next = action;
+                }
+
+                Actions.Add(action);
+                ActionAdded()
             }
-            Actions.Add(action);
+            else
+            {
+                Action prev = Actions[index];
+                Action next = prev.Next;
+                prev.Next = action;
+                action.Next = next;
+                Actions.Insert(index, action);
+            }
+            
         }
 
     }
