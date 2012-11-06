@@ -11,9 +11,6 @@ using System.Threading;
 using System.Data;
 using System.Drawing;
 
-
-
-
 namespace Centipede
 {
     
@@ -87,11 +84,13 @@ namespace Centipede
             {
                 message = "Error: " + "\r\n\r\n" + e.Message;
             }
-
-            DialogResult result = MessageBox.Show(message,
+            //CbRFtCiDVis506ZJ0xsnslwj5Et8ECVZCR6y48yd76REzIGL3N4d9F94ET9KsxyE
+            DialogResult result = MessageBox.Show(
+                message,
                 "Error",
                 MessageBoxButtons.AbortRetryIgnore,
-                MessageBoxIcon.Exclamation);
+                MessageBoxIcon.Exclamation
+            );
 
             if (e.ErrorAction == null)
             {
@@ -119,15 +118,26 @@ namespace Centipede
         private void UpdateHandler(Action currentAction)
         {
             //ActionsVarsTabControl.SelectTab(ActionsTab);
-            jobActionListBox.SelectedItem = currentAction.Tag;
+            //jobActionListBox.SelectedItem = currentAction.Tag;
 
             foreach (KeyValuePair<String,Object> v in Program.Variables.ToArray())
             {
-                VarDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
-                if (v.Key!="console" && row.Value != v.Value)
+                if (v.Key == "console")
                 {
-                    row.Value = v.Value;
-                    //row.SetModified();
+                    continue;
+                }
+                JobDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
+                if (row != null)
+                {
+                    if (row.Value != v.Value )
+                    {
+                        row.Value = v.Value;
+                        //row.SetModified();
+                    }
+                }
+                else
+                {
+                    _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
             }
             VarDataGridView.Refresh();
@@ -177,13 +187,15 @@ namespace Centipede
             //jobActionListBox.Add(sendingActionFactory.generate("new action"));
         }
 
-        private VarDataSet _dataSet = new VarDataSet();
+        private JobDataSet _dataSet = new JobDataSet();
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             VarDataGridView.DataSource = _dataSet.Variables;
-            _dataSet.Variables.VariablesRowChanged += new VarDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
+            _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
+
+            ActionContainer.Controls.Add(new ActionDisplayControl(new DemoAction()));
         }
 
         void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
@@ -201,10 +213,10 @@ namespace Centipede
 
         }
 
-        void Variables_VariablesRowChanged(object sender, VarDataSet.VariablesRowChangeEvent e)
+        void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
         {
-            VarDataSet.VariablesDataTable table = (VarDataSet.VariablesDataTable)sender;
-            VarDataSet.VariablesRow row = (VarDataSet.VariablesRow)e.Row;
+            JobDataSet.VariablesDataTable table = (JobDataSet.VariablesDataTable)sender;
+            JobDataSet.VariablesRow row = (JobDataSet.VariablesRow)e.Row;
 
             if (!Program.Variables.ContainsKey(row.Name))
             {
@@ -231,7 +243,7 @@ namespace Centipede
         {
             foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
             {
-                _dataSet.Variables.RemoveVariablesRow((VarDataSet.VariablesRow)((DataRowView)r.DataBoundItem).Row);
+                _dataSet.Variables.RemoveVariablesRow((JobDataSet.VariablesRow)((DataRowView)r.DataBoundItem).Row);
             }
         }
 

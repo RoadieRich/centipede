@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-
 namespace Centipede
 {
     public static class Program
@@ -148,7 +147,12 @@ namespace Centipede
 
         static void SetupTestAction()
         {
-            Program.AddAction(new PythonAction("pyact", "i = int(variables['a']); variables['a'] = i+1"));
+            Program.AddAction(new PythonAction("pyact", 
+@"try:
+    i = int(variables[""a""])
+except: 
+    i = 0
+variables[""a""] = i+1"));
             //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
         }
 

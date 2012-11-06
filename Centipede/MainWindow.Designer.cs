@@ -50,7 +50,6 @@
 
         #endregion
 
-        private JobActionListBox jobActionListBox;
         private System.Windows.Forms.DataGridView VarDataGridView;
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.ImageList FlowControlActIcons;
@@ -66,7 +65,7 @@
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.jobActionListBox = new Centipede.JobActionListBox();
+            this.ActionContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListView();
@@ -112,6 +111,7 @@
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.jobDataSet1 = new Centipede.JobDataSet();
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -129,6 +129,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
             this.VarsContextMenu.SuspendLayout();
             this.ActionContextMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // ActionsVarsTabControl
@@ -165,7 +166,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.jobActionListBox);
+            this.splitContainer1.Panel1.Controls.Add(this.ActionContainer);
             this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(3);
             // 
             // splitContainer1.Panel2
@@ -176,14 +177,15 @@
             this.splitContainer1.SplitterDistance = 281;
             this.splitContainer1.TabIndex = 0;
             // 
-            // jobActionListBox
+            // ActionContainer
             // 
-            this.jobActionListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobActionListBox.FormattingEnabled = true;
-            this.jobActionListBox.Location = new System.Drawing.Point(3, 3);
-            this.jobActionListBox.Name = "jobActionListBox";
-            this.jobActionListBox.Size = new System.Drawing.Size(435, 275);
-            this.jobActionListBox.TabIndex = 0;
+            this.ActionContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ActionContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ActionContainer.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ActionContainer.Location = new System.Drawing.Point(3, 3);
+            this.ActionContainer.Name = "ActionContainer";
+            this.ActionContainer.Size = new System.Drawing.Size(435, 275);
+            this.ActionContainer.TabIndex = 0;
             // 
             // AddActionTabs
             // 
@@ -590,6 +592,11 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // jobDataSet1
+            // 
+            this.jobDataSet1.DataSetName = "VarDataSet";
+            this.jobDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -623,9 +630,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.VarsContextMenu.ResumeLayout(false);
             this.ActionContextMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).EndInit();
             this.ResumeLayout(false);
 
         }
+        private JobDataSet jobDataSet1;
+        private System.Windows.Forms.FlowLayoutPanel ActionContainer;
     }
 }
 
