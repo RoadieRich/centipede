@@ -8,6 +8,7 @@ namespace Centipede
     /// <summary>
     /// The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
     /// </summary>
+    
     class PythonEngine
     {
         private ScriptEngine PyEngine = null;
@@ -87,24 +88,32 @@ namespace Centipede
             return PyScope.GetVariable<T>(name);
         }
 
-        
         #region Singleton handling code
+
+        private volatile static PythonEngine _instance;
+        private static Object _syncRoot = new Object();
         
-        static private PythonEngine _instance = null;
-
         /// <summary>
-        /// Gets the PyEngine Singleton
+        /// The PyEngine Singleton.  <seealso href="http://msdn.microsoft.com/en-us/library/ff650316.aspx"/>
         /// </summary>
-        /// <returns>The PyEngine instance</returns>
-        public static PythonEngine GetInstance()
+        public static PythonEngine Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = new PythonEngine();
+                if (_instance == null)
+                {
+                    lock (_syncRoot)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new PythonEngine();
+                        }
+                    }
+                }
+                return _instance;
             }
-
-            return _instance;
         }
+
         #endregion
     }
 

@@ -67,6 +67,20 @@ namespace Centipede.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Completed_PNG {
+            get {
+                object obj = ResourceManager.GetObject("Completed_PNG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Error_PNG {
+            get {
+                object obj = ResourceManager.GetObject("Error_PNG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Icon If {
             get {
                 object obj = ResourceManager.GetObject("If", resourceCulture);
@@ -78,6 +92,13 @@ namespace Centipede.Properties {
             get {
                 object obj = ResourceManager.GetObject("pycon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Running_PNG {
+            get {
+                object obj = ResourceManager.GetObject("Running_PNG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

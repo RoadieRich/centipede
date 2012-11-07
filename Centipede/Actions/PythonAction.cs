@@ -40,7 +40,7 @@ namespace Centipede
         }
         public override void DoAction()
         {
-            PythonEngine engine = PythonEngine.GetInstance();
+            PythonEngine engine = PythonEngine.Instance;
             try
             {
                 engine.Execute((String)Attributes["source"]);
