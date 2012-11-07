@@ -65,7 +65,7 @@ namespace Centipede
 
         }
 
-        private Boolean ErrorHandler(ActionException e, out Action nextAction)
+        private Boolean ErrorHandler(ActionException e, ref Action nextAction)
         {
             String message;
             if (e.ErrorAction != null)
@@ -189,7 +189,17 @@ namespace Centipede
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
-            ActionContainer.Controls.Add(new ActionDisplayControl(new DemoAction()));
+            Program.ActionCompleted += new Program.ActionUpdateCallback(UpdateHandler);
+            Program.JobCompleted += new Program.CompletedHandler(CompletedHandler);
+            Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
+
+
+            adc = new ActionDisplayControl(new DemoAction());
+            ActionContainer.Controls.Add(adc);
+
+
+            backgroundWorker1.RunWorkerAsync();
+            
         }
 
         void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
@@ -254,9 +264,40 @@ namespace Centipede
             Program.Variables.ToArray();
         }
 
+        private Boolean _eventHandlersAdded = false;
+        private ActionDisplayControl adc;
+
         private void RunButton_Click(object sender, EventArgs e)
         {
-            Program.RunJob(UpdateHandler, CompletedHandler, ErrorHandler);
+            if (!_eventHandlersAdded)
+            {
+                
+            }
+            Program.RunJob();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                try
+                {
+                    adc.Selected = !adc.Selected;
+                    adc.State = ActionState.Running;
+                    Thread.Sleep(500);
+                    adc.State = ActionState.Error;
+                    Thread.Sleep(500);
+                    adc.State = ActionState.Completed;
+                    Thread.Sleep(500);
+                    adc.State = ActionState.None;
+                    Thread.Sleep(500);
+                }
+
+                catch
+                {
+                    ; ;
+                }
+            }
         }
 
         

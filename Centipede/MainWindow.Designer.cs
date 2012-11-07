@@ -182,7 +182,7 @@
             this.ActionContainer.Location = new System.Drawing.Point(3, 3);
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.RowCount = 1;
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 275F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 277F));
             this.ActionContainer.Size = new System.Drawing.Size(435, 275);
             this.ActionContainer.TabIndex = 0;
             // 
@@ -588,6 +588,7 @@
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // jobDataSet1
             // 

@@ -28,9 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionDisplayControl));
             this.NameLabel = new System.Windows.Forms.Label();
             this.ExpandButton = new System.Windows.Forms.Button();
             this.AttributeTable = new System.Windows.Forms.TableLayoutPanel();
+            this.StatusIcons = new System.Windows.Forms.ImageList(this.components);
+            this.StatusIconBox = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.SuspendLayout();
             // 
             // NameLabel
@@ -73,6 +78,24 @@
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
+            // StatusIcons
+            // 
+            this.StatusIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("StatusIcons.ImageStream")));
+            this.StatusIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.StatusIcons.Images.SetKeyName(0, "Running_PNG.png");
+            this.StatusIcons.Images.SetKeyName(1, "Completed_PNG.png");
+            this.StatusIcons.Images.SetKeyName(2, "Error_PNG.png");
+            // 
+            // StatusIconBox
+            // 
+            this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.StatusIconBox.Location = new System.Drawing.Point(190, 3);
+            this.StatusIconBox.Name = "StatusIconBox";
+            this.StatusIconBox.Size = new System.Drawing.Size(20, 20);
+            this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.StatusIconBox.TabIndex = 3;
+            this.StatusIconBox.TabStop = false;
+            // 
             // ActionDisplayControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -80,11 +103,13 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.StatusIconBox);
             this.Controls.Add(this.AttributeTable);
             this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(63, 49);
+            this.Size = new System.Drawing.Size(213, 54);
+            ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -95,6 +120,8 @@
         private System.Windows.Forms.Label NameLabel;
         private System.Windows.Forms.Button ExpandButton;
         private System.Windows.Forms.TableLayoutPanel AttributeTable;
+        private System.Windows.Forms.ImageList StatusIcons;
+        private System.Windows.Forms.PictureBox StatusIconBox;
 
 
     }

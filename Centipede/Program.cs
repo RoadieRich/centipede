@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
+    delegate T id<T>(T arg);
+
     public static class Program
     {
         /// <summary>
@@ -74,51 +76,49 @@ namespace Centipede
         public static string JobName = "Testing";
 
         private static List<Action> Actions = new List<Action>();
-        public static MainWindow mainForm;
+        internal static MainWindow mainForm;
         //private static JobFile File = null;
 
         /// <summary>
         /// Run the job, starting with the first action added.
         /// </summary>
-        /// <param name="updateCallback"><see cref="UpdateCallback"/></param>
+        /// <param name="updateCallback"><see cref="ActionUpdateCallback"/></param>
         /// <param name="completedHandler"><see cref="CompletedHandler"/></param>
         /// <param name="errorHandler"><see cref="ErrorHandler"/></param>
-        internal static void RunJob(UpdateCallback updateCallback = null, CompletedHandler completedHandler = null, ErrorHandler errorHandler = null)
+        public static void RunJob()
         {
-            Action currentAction;
+            Action currentAction = null;
 
             if (Actions.Count < 1)
             {
-                errorHandler(new ActionException("No Actions Added"), out currentAction);
+                ActionErrorOccurred(new ActionException("No Actions Added"), ref currentAction);
                 return;
             }
 
             currentAction = Actions[0];
-
-            if (updateCallback == null)
-            {
-                updateCallback = (a) => { };
-            }
 
             Boolean completed = true;
 
             while (currentAction != null)
             {
                 try
-                {   currentAction.DoAction();
-                    updateCallback(currentAction);
+                {
+                    BeforeAction(currentAction);
+                    currentAction.DoAction();
+                    ActionCompleted(currentAction);
                     currentAction = currentAction.GetNext();
                 }
                 catch (ActionException e)
                 {
-                    if (!errorHandler(e, out currentAction))
+                    if (!ActionErrorOccurred(e, ref currentAction))
                     {
                         completed = false;
                         break;
                     }
                 }
             }
-            completedHandler(completed);
+
+            JobCompleted(completed);
         }
 
 
@@ -126,13 +126,16 @@ namespace Centipede
         /// Called after executing an action
         /// </summary>
         /// <param name="action">The action that has just been executed.</param>
-        internal delegate void UpdateCallback(Action action);
+        public delegate void ActionUpdateCallback(Action action);
+        public static event ActionUpdateCallback ActionCompleted;
+        public static event ActionUpdateCallback BeforeAction;
 
         /// <summary>
         /// Handler for job completion
         /// </summary>
         /// <param name="succeeded">True if all actions completed successfully.</param>
-        internal delegate void CompletedHandler(Boolean succeeded);
+        public delegate void CompletedHandler(Boolean succeeded);
+        public static event CompletedHandler JobCompleted;
 
         /// <summary>
         /// Handler delegate for errors occuring in actions
@@ -140,9 +143,10 @@ namespace Centipede
         /// <param name="e">The exception that caused the error</param>
         /// <param name="nextAction">Set to the next action - useful for repeating actions</param>
         /// <returns>True if execution of Job should continue, false to halt</returns>
-        internal delegate Boolean ErrorHandler(ActionException e, out Action nextAction);
+        public delegate Boolean ErrorHandler(ActionException e, ref Action nextAction);
+        public static event ErrorHandler ActionErrorOccurred;
 
-        internal static void LoadJob()
+        public static void LoadJob()
         {
             throw new NotImplementedException();
 
@@ -161,7 +165,7 @@ variables[""a""] = i+1"));
         }
 
         public delegate void AddActionCallback(Action action, Int32 index);
-        public event AddActionCallback ActionAdded = new AddActionCallback((a,b) => {});
+        public static event AddActionCallback ActionAdded = new AddActionCallback((a,b) => {});
 
         /// <summary>
         /// Add action to the job queue.  By default, it is added as the last action in the job.
@@ -174,11 +178,13 @@ variables[""a""] = i+1"));
                 if (Actions.Count > 0)
                 {
                     Action last = Actions[Actions.Count - 1];
+
                     last.Next = action;
                 }
 
                 Actions.Add(action);
-                ActionAdded()
+
+                ActionAdded(action, Actions.Count - 1);
             }
             else
             {
@@ -187,6 +193,7 @@ variables[""a""] = i+1"));
                 prev.Next = action;
                 action.Next = next;
                 Actions.Insert(index, action);
+                ActionAdded(action, index);
             }
             
         }

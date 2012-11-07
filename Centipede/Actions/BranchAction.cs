@@ -93,7 +93,7 @@ namespace Centipede
 
         public override Boolean Test(Action act)
         {
-            PythonEngine engine = PythonEngine.GetInstance();
+            PythonEngine engine = PythonEngine.Instance;
             return engine.Evaluate<Boolean>(Source);
         }
 

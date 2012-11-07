@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>docs\Centipede.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -32,6 +33,22 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>AE3C2CDADAE35C4A93C195B893E38AEA9C6350F5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Centipede_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
@@ -113,6 +130,7 @@
     <EmbeddedResource Include="ActionDisplayControl.resx">
       <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="JobDataSet.xsc">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
     </None>
@@ -152,6 +170,42 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Completed.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Completed1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Completed.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Completed_PNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running_PNG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error_PNG.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

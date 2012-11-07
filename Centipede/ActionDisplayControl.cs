@@ -41,6 +41,61 @@ namespace Centipede
             }
         }
 
+        private Boolean _selected = false;
+        private Color _unselectedColour = SystemColors.Control;
+
+        ///
+        /// <summary>
+        /// Gets or sets the background color for the control.
+        /// </summary>
+        /// <value>
+        /// A System.Drawing.Color that represents the background color of the control.
+        /// The default is the value of the System.Windows.Forms.Control.DefaultBackColor
+        /// property.
+        /// </value>
+        public new Color BackColor
+        {
+            get
+            {
+                return base.BackColor;
+            }
+            set
+            {
+                if (!Selected)
+                {
+                    base.BackColor = value;
+                }
+                else
+                {
+                    _unselectedColour = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Boolean Selected
+        {
+            get
+            {
+                return _selected;
+            }
+            set
+            {
+                if (value)
+                {
+                    _unselectedColour = BackColor;
+                    base.BackColor = SystemColors.Highlight;
+                }
+                else
+                {
+                    base.BackColor = _unselectedColour;
+                }
+                _selected = value;
+            }
+        }
+
         private void ExpandButton_Click(object sender, EventArgs e)
         {
             if (!AttributeTable.Visible)
@@ -55,28 +110,50 @@ namespace Centipede
             }
         }
 
-        private Boolean _selected = false;
-        public Boolean Selected
+        private ActionState _state = ActionState.None;
+        /// <summary>
+        /// Sets the displayed state of the action.
+        /// <see cref="ActionState"/>
+        /// </summary>
+        public ActionState State
         {
             get
             {
-                return _selected;
+                return _state;
             }
             set
             {
-                if (value)
+                switch (value)
                 {
-                    this.BackColor = SystemColors.MenuHighlight;
-                    _selected = true;
+                    case ActionState.None:
+                        StatusIconBox.Image = null;
+                        BackColor = SystemColors.Control;
+                        break;
+                    case ActionState.Running:
+                        StatusIconBox.Image=StatusIcons.Images["Running_PNG.png"];
+                        BackColor = Color.DarkGray;
+                        break;
+                    case ActionState.Error:
+                        StatusIconBox.Image = StatusIcons.Images["Error_PNG.png"];
+                        BackColor = Color.DarkRed;
+                        break;
+                    case ActionState.Completed:
+                        StatusIconBox.Image = StatusIcons.Images["Completed_PNG.png"];
+                        BackColor = Color.DarkGreen;
+                        break;
                 }
-                else
-                {
-                    this.BackColor = SystemColors.Control;
-                    _selected = false;
-                }
+                _state = value;
             }
         }
 
         public readonly Action Action;
+    }
+
+    public enum ActionState
+    {
+        None = -1,
+        Running = 0,
+        Completed = 1,
+        Error = 2
     }
 }
