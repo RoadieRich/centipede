@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Centipede
 {
@@ -91,7 +92,10 @@ namespace Centipede
 
             if (Actions.Count < 1)
             {
-                ActionErrorOccurred(new ActionException("No Actions Added"), ref currentAction);
+                if (ActionErrorOccurred != null)
+                {
+                    ActionErrorOccurred(new ActionException("No Actions Added"), ref currentAction);
+                }
                 return;
             }
 
@@ -103,17 +107,26 @@ namespace Centipede
             {
                 try
                 {
-                    BeforeAction(currentAction);
+                    if (BeforeAction != null)
+                    {
+                        BeforeAction(currentAction);
+                    }
                     currentAction.DoAction();
-                    ActionCompleted(currentAction);
+                    if (ActionCompleted != null)
+                    {
+                        ActionCompleted(currentAction);
+                    }
                     currentAction = currentAction.GetNext();
                 }
                 catch (ActionException e)
                 {
-                    if (!ActionErrorOccurred(e, ref currentAction))
+                    if (ActionErrorOccurred != null)
                     {
-                        completed = false;
-                        break;
+                        if (!ActionErrorOccurred(e, ref currentAction))
+                        {
+                            completed = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -148,12 +161,13 @@ namespace Centipede
 
         public static void LoadJob()
         {
+            
             throw new NotImplementedException();
 
             //JobName = File.getName();
         }
 
-        static void SetupTestAction()
+        internal static void SetupTestAction()
         {
             Program.AddAction(new PythonAction("pyact", 
 @"try:
@@ -161,6 +175,7 @@ namespace Centipede
 except: 
     i = 0
 variables[""a""] = i+1"));
+            Program.AddAction(new DemoAction());
             //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
         }
 
@@ -183,8 +198,7 @@ variables[""a""] = i+1"));
                 }
 
                 Actions.Add(action);
-
-                ActionAdded(action, Actions.Count - 1);
+                index = Actions.Count - 1;
             }
             else
             {
@@ -193,11 +207,29 @@ variables[""a""] = i+1"));
                 prev.Next = action;
                 action.Next = next;
                 Actions.Insert(index, action);
+            }
+            if (ActionAdded != null)
+            {
                 ActionAdded(action, index);
             }
-            
         }
 
+
+        internal static void RemoveAction(Action action)
+        {
+            Action prevAction = (from Action a in Actions
+                                    where a.Next == action
+                                    select a).SingleOrDefault();
+
+            Action nextAction = action.Next;
+
+            if (prevAction != null)
+            {
+                prevAction.Next = nextAction;
+            }
+            Actions.Remove(action);
+
+        }
     }
      
     public class ActionException : Exception

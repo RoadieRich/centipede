@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.Resources;
-using System.Reflection;
-using System.Linq;
 using System.Collections.Generic;
-using System.Collections;
 using System.ComponentModel;
-//using Variable = Centipede.Program.Variable;
-using System.Threading;
 using System.Data;
-using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Centipede
 {
@@ -111,9 +105,6 @@ namespace Centipede
 
         private void UpdateHandler(Action currentAction)
         {
-            //ActionsVarsTabControl.SelectTab(ActionsTab);
-            //jobActionListBox.SelectedItem = currentAction.Tag;
-
             foreach (KeyValuePair<String,Object> v in Program.Variables.ToArray())
             {
                 if (v.Key == "console")
@@ -133,27 +124,14 @@ namespace Centipede
                 {
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
+
+                _progress += 10;
+
+                backgroundWorker1.ReportProgress(_progress);
             }
-            VarDataGridView.Refresh();
-            
-            //var it = from KeyValuePair<String, Object> v in Program.Variables
-            //         join VarDataSet.VariablesRow r in _dataSet.Variables.Rows
-            //         on v.Key equals r.Name
-            //         where r.Value != v.Value
-            //         select v;
-
-            //foreach (var v in it)
-            //{
-            //    var r = _dataSet.Variables.FindByName(v.Key);
-            //    r.SetField("Value", v.Value);
-            //    //r.AcceptChanges();
-            //    VarDataGridView.Refresh();
-            //}
-            
-            
-            
-
         }
+
+        private Int32 _progress = 0;
 
         private void CompletedHandler(Boolean success)
         {
@@ -172,13 +150,13 @@ namespace Centipede
             MessageBox.Show(message, "Finished", MessageBoxButtons.OK, icon);
         }
 
-        private void ActListBox_Dbl_Click(object sender, MouseEventArgs e)
+        private void ListBox_Dbl_Click(object sender, MouseEventArgs e)
         {
-            //ListView sendingListView = (ListView)sender;
+            ListView sendingListView = (ListView)sender;
 
-            //ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
+            ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
 
-            //jobActionListBox.Add(sendingActionFactory.generate("new action"));
+            Program.AddAction(sendingActionFactory.Generate());
         }
 
         private JobDataSet _dataSet = new JobDataSet();
@@ -189,17 +167,29 @@ namespace Centipede
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
+            foreach (RowStyle s in ActionContainer.RowStyles)
+            {
+                s.Height = 20f;
+                s.SizeType = SizeType.AutoSize;
+            }
+
             Program.ActionCompleted += new Program.ActionUpdateCallback(UpdateHandler);
             Program.JobCompleted += new Program.CompletedHandler(CompletedHandler);
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
+            Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
+
+            //Program.SetupTestAction();
 
 
-            adc = new ActionDisplayControl(new DemoAction());
-            ActionContainer.Controls.Add(adc);
-
-
-            backgroundWorker1.RunWorkerAsync();
+            //backgroundWorker1.RunWorkerAsync();
             
+        }
+
+        void Program_ActionAdded(Action action, int index)
+        {
+            ActionDisplayControl adc = new ActionDisplayControl(action);
+            ActionContainer.Controls.Add(adc);
+            ActionContainer.SetRow(adc, index);
         }
 
         void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
@@ -263,50 +253,41 @@ namespace Centipede
         {
             Program.Variables.ToArray();
         }
-
-        private Boolean _eventHandlersAdded = false;
-        private ActionDisplayControl adc;
-
+        
         private void RunButton_Click(object sender, EventArgs e)
         {
-            if (!_eventHandlersAdded)
-            {
-                
-            }
-            Program.RunJob();
+            backgroundWorker1.RunWorkerAsync();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (true)
-            {
-                try
-                {
-                    adc.Selected = !adc.Selected;
-                    adc.State = ActionState.Running;
-                    Thread.Sleep(500);
-                    adc.State = ActionState.Error;
-                    Thread.Sleep(500);
-                    adc.State = ActionState.Completed;
-                    Thread.Sleep(500);
-                    adc.State = ActionState.None;
-                    Thread.Sleep(500);
-                }
-
-                catch
-                {
-                    ; ;
-                }
-            }
+            Program.RunJob();
         }
 
-        
+        private void FlowControlToolbar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void copyToolStripButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton btn = (ToolStripButton)sender;
+            
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = Math.Min(e.ProgressPercentage,100);
+        }
+
     }
 
     class GuiConsole
     {
         public void write(string message)
         {
+            
+            
             MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }

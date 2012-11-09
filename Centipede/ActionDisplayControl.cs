@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
-    public partial class ActionDisplayControl : UserControl
+    internal partial class ActionDisplayControl : UserControl
     {
-        public ActionDisplayControl(Action action)
+        internal ActionDisplayControl(Action action)
         {
             InitializeComponent();
             NameLabel.Text = action.Name;
-            this.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            //this.Dock = DockStyle.Fill;
+
+            this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             this.BackColor = SystemColors.Control;
 
             Action = action;
@@ -27,18 +27,34 @@ namespace Centipede
                 attrLabel = new Label();
                 attrLabel.Text = attr.Key;
                 attrLabel.Dock = DockStyle.Fill;
+                
                 AttributeTable.Controls.Add(attrLabel);
 
                 attrValue = new TextBox();
+                attrValue.Width = 250;
                 if (attr.Key == "source")
                 {
                     attrValue.Multiline = true;
-                    attrValue.Font = new Font(FontFamily.GenericMonospace, 12);
+                    attrValue.Height = 5000;
+                    attrValue.Dock = DockStyle.Fill;
+                    attrValue.ScrollBars = ScrollBars.Both;
+                    attrValue.Font = new Font(FontFamily.GenericMonospace, 10);
+                    attrValue.WordWrap = false;
                 }
                 attrValue.Text = attr.Value.ToString();
-                attrValue.Dock = DockStyle.Fill;
+                attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                //attrValue.Dock = DockStyle.Fill;
+                
                 AttributeTable.Controls.Add(attrValue);
+                attrValue.Tag = attr.Key;
+                attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
             }
+        }
+
+        void attrValue_TextChanged(object sender, EventArgs e)
+        {
+            TextBox attrValue = (TextBox)sender;
+            Action.Attributes[(string)attrValue.Tag] = attrValue.Text;
         }
 
         private Boolean _selected = false;
@@ -130,16 +146,16 @@ namespace Centipede
                         BackColor = SystemColors.Control;
                         break;
                     case ActionState.Running:
-                        StatusIconBox.Image=StatusIcons.Images["Running_PNG.png"];
+                        StatusIconBox.Image = StatusIcons.Images["Run.png"];
                         BackColor = Color.DarkGray;
                         break;
                     case ActionState.Error:
-                        StatusIconBox.Image = StatusIcons.Images["Error_PNG.png"];
+                        StatusIconBox.Image = StatusIcons.Images["Error.png"];
                         BackColor = Color.DarkRed;
                         break;
                     case ActionState.Completed:
-                        StatusIconBox.Image = StatusIcons.Images["Completed_PNG.png"];
-                        BackColor = Color.DarkGreen;
+                        StatusIconBox.Image = StatusIcons.Images["OK.png"];
+                        BackColor = SystemColors.Control;
                         break;
                 }
                 _state = value;
@@ -147,9 +163,19 @@ namespace Centipede
         }
 
         public readonly Action Action;
+
+        private void ActMenuDelete_Click(object sender, EventArgs e)
+        {
+            
+            ToolStripDropDownItem i = (ToolStripDropDownItem)sender;
+            ContextMenuStrip cm = (ContextMenuStrip)i.Owner;
+            ActionDisplayControl adc = (ActionDisplayControl)cm.SourceControl;
+            Program.RemoveAction(adc.Action);
+            ((TableLayoutPanel)adc.Parent).Controls.Remove(adc);
+        }
     }
 
-    public enum ActionState
+    internal enum ActionState
     {
         None = -1,
         Running = 0,

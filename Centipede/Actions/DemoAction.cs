@@ -18,10 +18,9 @@ namespace Centipede
         public override void DoAction()
         {
             MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
-                                          Attributes.ToArray().Select(
-                                              kvp=>kvp.Value.ToString()
-                                          )
-                           ),
+                                          Attributes["Test 1"], Attributes["Test 2"]
+                           )
+                           ,
                            "Demo Action executed"
             );
         }
@@ -32,7 +31,7 @@ namespace Centipede
         DemoActionFactory()
             : base("Demo Action")
         { }
-        public override Action Generate(string name)
+        public override Action Generate()
         {
             return new DemoAction();
         }

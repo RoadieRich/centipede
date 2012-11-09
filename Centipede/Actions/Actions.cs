@@ -4,19 +4,21 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
-    public abstract class ActionFactory : ListViewItem
+    public abstract class ActionFactory: ListViewItem
     {
         public ActionFactory(String name)
             : base(name)
         { }
 
 
-        public abstract Action Generate(String name);
+        public abstract Action Generate();
 
-        public override String ToString()
-        {
-            return this.Text;
-        }
+        
+
+        //public override String ToString()
+        //{
+        //    return this.Text;
+        //}
     }
 
     

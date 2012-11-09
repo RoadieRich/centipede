@@ -2,6 +2,7 @@
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
+using System.Windows.Forms;
 
 namespace Centipede
 {
@@ -23,6 +24,25 @@ namespace Centipede
                 PyScope.ImportModule("sys");
                 PyScope.SetVariable("sys.stdout", Program.Variables["console"]);
                 PyScope.SetVariable("variables", Program.Variables);
+
+                MyMessageBox mbx = new MyMessageBox();
+
+                PyScope.SetVariable("msgBox", mbx);
+            }
+        }
+
+        public class MyMessageBox
+        {
+            //public D_t show = new D_t(F);
+            public void Show(object text)
+            {
+                Program.mainForm.Invoke(new D_t(F), text.ToString());
+            }
+
+            public delegate void D_t(String text);
+            static private void F(String text)
+            {
+                System.Windows.Forms.MessageBox.Show(text, "Message from Python");
             }
         }
 

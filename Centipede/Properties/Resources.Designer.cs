@@ -67,16 +67,16 @@ namespace Centipede.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Completed_PNG {
+        internal static System.Drawing.Bitmap Complete_OK {
             get {
-                object obj = ResourceManager.GetObject("Completed_PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("Complete_OK", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap Error_PNG {
+        internal static System.Drawing.Bitmap CriticalError {
             get {
-                object obj = ResourceManager.GetObject("Error_PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("CriticalError", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -95,9 +95,16 @@ namespace Centipede.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap Running_PNG {
+        internal static System.Drawing.Bitmap StatusAnnotation_Run {
             get {
-                object obj = ResourceManager.GetObject("Running_PNG", resourceCulture);
+                object obj = ResourceManager.GetObject("StatusAnnotation_Run", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ThumbnailView {
+            get {
+                object obj = ResourceManager.GetObject("ThumbnailView", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

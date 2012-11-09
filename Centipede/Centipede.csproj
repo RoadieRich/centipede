@@ -23,7 +23,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>docs\Centipede.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -33,6 +34,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Centipede.XML</DocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>true</SignManifests>
@@ -49,6 +52,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Centipede_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Centipede.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
@@ -83,12 +89,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>JobDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="JobActionListBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="JobActionListBox.Designer.cs">
-      <DependentUpon>JobActionListBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +111,7 @@
     <Compile Include="ActionDisplayControl.Designer.cs">
       <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,40 +173,16 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Running.ico" />
+    <None Include="Resources\Complete_OK.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Completed.ico" />
+    <None Include="Resources\CriticalError.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Error.ico" />
+    <None Include="Resources\StatusAnnotation_Run.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Running1.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Completed1.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Error1.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Completed.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Error.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Running.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Completed_PNG.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Running_PNG.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Error_PNG.png" />
+    <None Include="Resources\ThumbnailView.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
