@@ -7,12 +7,12 @@ namespace Centipede
 {
     class PythonActionFactory : ActionFactory
     {
-        public PythonActionFactory() : base("Python")
+        public PythonActionFactory() : base("Python Action")
         { }
 
-        public override Action Generate(String name)
+        public override Action Generate()
         {
-            return new PythonAction(name);
+            return new PythonAction(Text);
         }
     }
     

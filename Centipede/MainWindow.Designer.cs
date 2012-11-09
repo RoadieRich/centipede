@@ -32,18 +32,6 @@
         private System.Windows.Forms.ToolStripMenuItem VarMenuDelete;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem VarMenuSelectAll;
-        private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuUndo;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuCut;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuCopy;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuPaste;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuSelectAll;
         private System.Windows.Forms.Button LoadBtn;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button RunButton;
@@ -66,6 +54,8 @@
             this.UIActListBox = new System.Windows.Forms.ListView();
             this.FlowContActTab = new System.Windows.Forms.TabPage();
             this.FlowContListBox = new System.Windows.Forms.ListView();
+            this.ActionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.DescriptionColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FlowControlActIcons = new System.Windows.Forms.ImageList(this.components);
             this.ExcelActTab = new System.Windows.Forms.TabPage();
             this.ExcelActListBox = new System.Windows.Forms.ListView();
@@ -87,18 +77,6 @@
             this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.RunButton = new System.Windows.Forms.Button();
@@ -123,7 +101,6 @@
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
             this.VarsContextMenu.SuspendLayout();
-            this.ActionContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,14 +143,15 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Panel2.Controls.Add(this.AddActionTabs);
             this.splitContainer1.Size = new System.Drawing.Size(441, 439);
-            this.splitContainer1.SplitterDistance = 281;
+            this.splitContainer1.SplitterDistance = 239;
             this.splitContainer1.TabIndex = 0;
             // 
             // ActionContainer
             // 
+            this.ActionContainer.AutoScroll = true;
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ActionContainer.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
             this.ActionContainer.ColumnCount = 1;
@@ -182,8 +160,21 @@
             this.ActionContainer.Location = new System.Drawing.Point(3, 3);
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.RowCount = 1;
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 277F));
-            this.ActionContainer.Size = new System.Drawing.Size(435, 275);
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.Size = new System.Drawing.Size(435, 233);
             this.ActionContainer.TabIndex = 0;
             // 
             // AddActionTabs
@@ -200,7 +191,7 @@
             this.AddActionTabs.Multiline = true;
             this.AddActionTabs.Name = "AddActionTabs";
             this.AddActionTabs.SelectedIndex = 0;
-            this.AddActionTabs.Size = new System.Drawing.Size(441, 154);
+            this.AddActionTabs.Size = new System.Drawing.Size(441, 196);
             this.AddActionTabs.TabIndex = 3;
             // 
             // UIActTab
@@ -210,7 +201,7 @@
             this.UIActTab.Location = new System.Drawing.Point(4, 22);
             this.UIActTab.Name = "UIActTab";
             this.UIActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.UIActTab.Size = new System.Drawing.Size(433, 128);
+            this.UIActTab.Size = new System.Drawing.Size(433, 170);
             this.UIActTab.TabIndex = 0;
             this.UIActTab.Text = "UI";
             // 
@@ -219,10 +210,10 @@
             this.UIActListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.UIActListBox.Location = new System.Drawing.Point(3, 3);
             this.UIActListBox.Name = "UIActListBox";
-            this.UIActListBox.Size = new System.Drawing.Size(427, 122);
+            this.UIActListBox.Size = new System.Drawing.Size(427, 164);
             this.UIActListBox.TabIndex = 0;
             this.UIActListBox.UseCompatibleStateImageBehavior = false;
-            this.UIActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.UIActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // FlowContActTab
             // 
@@ -232,21 +223,32 @@
             this.FlowContActTab.Location = new System.Drawing.Point(4, 22);
             this.FlowContActTab.Name = "FlowContActTab";
             this.FlowContActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.FlowContActTab.Size = new System.Drawing.Size(433, 128);
+            this.FlowContActTab.Size = new System.Drawing.Size(433, 170);
             this.FlowContActTab.TabIndex = 1;
             this.FlowContActTab.Text = "Flow Control & Variables";
             // 
             // FlowContListBox
             // 
+            this.FlowContListBox.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ActionColumn,
+            this.DescriptionColumn});
             this.FlowContListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FlowContListBox.LargeImageList = this.FlowControlActIcons;
             this.FlowContListBox.Location = new System.Drawing.Point(3, 3);
             this.FlowContListBox.Name = "FlowContListBox";
-            this.FlowContListBox.Size = new System.Drawing.Size(427, 122);
+            this.FlowContListBox.Size = new System.Drawing.Size(427, 164);
             this.FlowContListBox.SmallImageList = this.FlowControlActIcons;
             this.FlowContListBox.TabIndex = 1;
             this.FlowContListBox.UseCompatibleStateImageBehavior = false;
-            this.FlowContListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.FlowContListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
+            // 
+            // ActionColumn
+            // 
+            this.ActionColumn.Text = "Action";
+            // 
+            // DescriptionColumn
+            // 
+            this.DescriptionColumn.Text = "Description";
             // 
             // FlowControlActIcons
             // 
@@ -262,7 +264,7 @@
             this.ExcelActTab.Location = new System.Drawing.Point(4, 22);
             this.ExcelActTab.Name = "ExcelActTab";
             this.ExcelActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ExcelActTab.Size = new System.Drawing.Size(433, 128);
+            this.ExcelActTab.Size = new System.Drawing.Size(433, 170);
             this.ExcelActTab.TabIndex = 2;
             this.ExcelActTab.Text = "Excel";
             // 
@@ -271,10 +273,10 @@
             this.ExcelActListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExcelActListBox.Location = new System.Drawing.Point(3, 3);
             this.ExcelActListBox.Name = "ExcelActListBox";
-            this.ExcelActListBox.Size = new System.Drawing.Size(427, 122);
+            this.ExcelActListBox.Size = new System.Drawing.Size(427, 164);
             this.ExcelActListBox.TabIndex = 1;
             this.ExcelActListBox.UseCompatibleStateImageBehavior = false;
-            this.ExcelActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.ExcelActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // MathCadActTab
             // 
@@ -283,7 +285,7 @@
             this.MathCadActTab.Location = new System.Drawing.Point(4, 22);
             this.MathCadActTab.Name = "MathCadActTab";
             this.MathCadActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.MathCadActTab.Size = new System.Drawing.Size(433, 128);
+            this.MathCadActTab.Size = new System.Drawing.Size(433, 170);
             this.MathCadActTab.TabIndex = 3;
             this.MathCadActTab.Text = "MathCAD";
             // 
@@ -292,10 +294,10 @@
             this.MathCadListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MathCadListBox.Location = new System.Drawing.Point(3, 3);
             this.MathCadListBox.Name = "MathCadListBox";
-            this.MathCadListBox.Size = new System.Drawing.Size(427, 122);
+            this.MathCadListBox.Size = new System.Drawing.Size(427, 164);
             this.MathCadListBox.TabIndex = 2;
             this.MathCadListBox.UseCompatibleStateImageBehavior = false;
-            this.MathCadListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.MathCadListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // SolidWorksActTab
             // 
@@ -304,7 +306,7 @@
             this.SolidWorksActTab.Location = new System.Drawing.Point(4, 22);
             this.SolidWorksActTab.Name = "SolidWorksActTab";
             this.SolidWorksActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.SolidWorksActTab.Size = new System.Drawing.Size(433, 128);
+            this.SolidWorksActTab.Size = new System.Drawing.Size(433, 170);
             this.SolidWorksActTab.TabIndex = 4;
             this.SolidWorksActTab.Text = "SolidWorks";
             // 
@@ -313,10 +315,10 @@
             this.SolidWorksListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SolidWorksListBox.Location = new System.Drawing.Point(3, 3);
             this.SolidWorksListBox.Name = "SolidWorksListBox";
-            this.SolidWorksListBox.Size = new System.Drawing.Size(427, 122);
+            this.SolidWorksListBox.Size = new System.Drawing.Size(427, 164);
             this.SolidWorksListBox.TabIndex = 3;
             this.SolidWorksListBox.UseCompatibleStateImageBehavior = false;
-            this.SolidWorksListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.SolidWorksListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // OtherActTab
             // 
@@ -325,7 +327,7 @@
             this.OtherActTab.Location = new System.Drawing.Point(4, 22);
             this.OtherActTab.Name = "OtherActTab";
             this.OtherActTab.Padding = new System.Windows.Forms.Padding(3);
-            this.OtherActTab.Size = new System.Drawing.Size(433, 128);
+            this.OtherActTab.Size = new System.Drawing.Size(433, 170);
             this.OtherActTab.TabIndex = 5;
             this.OtherActTab.Text = "Other Actions";
             // 
@@ -335,11 +337,11 @@
             this.OtherActListBox.LargeImageList = this.OtherActIcons;
             this.OtherActListBox.Location = new System.Drawing.Point(3, 3);
             this.OtherActListBox.Name = "OtherActListBox";
-            this.OtherActListBox.Size = new System.Drawing.Size(427, 122);
+            this.OtherActListBox.Size = new System.Drawing.Size(427, 164);
             this.OtherActListBox.SmallImageList = this.OtherActIcons;
             this.OtherActListBox.TabIndex = 3;
             this.OtherActListBox.UseCompatibleStateImageBehavior = false;
-            this.OtherActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ActListBox_Dbl_Click);
+            this.OtherActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // OtherActIcons
             // 
@@ -440,97 +442,6 @@
             this.VarMenuSelectAll.Size = new System.Drawing.Size(142, 22);
             this.VarMenuSelectAll.Text = "Select &All";
             // 
-            // ActionContextMenu
-            // 
-            this.ActionContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ActMenuMoveUp,
-            this.ActMenuMoveDown,
-            this.toolStripSeparator3,
-            this.ActMenuUndo,
-            this.toolStripSeparator1,
-            this.ActMenuCut,
-            this.ActMenuCopy,
-            this.ActMenuPaste,
-            this.ActMenuDelete,
-            this.toolStripSeparator2,
-            this.ActMenuSelectAll});
-            this.ActionContextMenu.Name = "ActionContextMenu";
-            this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(143, 198);
-            // 
-            // ActMenuMoveUp
-            // 
-            this.ActMenuMoveUp.Name = "ActMenuMoveUp";
-            this.ActMenuMoveUp.ShortcutKeyDisplayString = "[";
-            this.ActMenuMoveUp.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuMoveUp.Text = "Move Up";
-            // 
-            // ActMenuMoveDown
-            // 
-            this.ActMenuMoveDown.Name = "ActMenuMoveDown";
-            this.ActMenuMoveDown.ShortcutKeyDisplayString = "]";
-            this.ActMenuMoveDown.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuMoveDown.Text = "Move Down";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuUndo
-            // 
-            this.ActMenuUndo.Enabled = false;
-            this.ActMenuUndo.Name = "ActMenuUndo";
-            this.ActMenuUndo.ShortcutKeyDisplayString = "Ctrl+Z";
-            this.ActMenuUndo.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuUndo.Text = "&Undo";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuCut
-            // 
-            this.ActMenuCut.Name = "ActMenuCut";
-            this.ActMenuCut.ShortcutKeyDisplayString = "Ctrl+X";
-            this.ActMenuCut.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuCut.Text = "Cu&t";
-            // 
-            // ActMenuCopy
-            // 
-            this.ActMenuCopy.BackColor = System.Drawing.Color.Transparent;
-            this.ActMenuCopy.Name = "ActMenuCopy";
-            this.ActMenuCopy.ShortcutKeyDisplayString = "Ctrl+C";
-            this.ActMenuCopy.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuCopy.Text = "&Copy";
-            // 
-            // ActMenuPaste
-            // 
-            this.ActMenuPaste.Name = "ActMenuPaste";
-            this.ActMenuPaste.ShortcutKeyDisplayString = "Ctrl+V";
-            this.ActMenuPaste.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuPaste.Text = "&Paste";
-            // 
-            // ActMenuDelete
-            // 
-            this.ActMenuDelete.Name = "ActMenuDelete";
-            this.ActMenuDelete.ShortcutKeyDisplayString = "Del";
-            this.ActMenuDelete.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuDelete.Text = "&Delete";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuSelectAll
-            // 
-            this.ActMenuSelectAll.Name = "ActMenuSelectAll";
-            this.ActMenuSelectAll.ShortcutKeyDisplayString = "Ctrl+A";
-            this.ActMenuSelectAll.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuSelectAll.Text = "Select &All";
-            // 
             // LoadBtn
             // 
             this.LoadBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -589,6 +500,7 @@
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             // 
             // jobDataSet1
             // 
@@ -609,6 +521,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Centipede";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.ActionsVarsTabControl.ResumeLayout(false);
@@ -627,7 +540,6 @@
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.VarsContextMenu.ResumeLayout(false);
-            this.ActionContextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).EndInit();
             this.ResumeLayout(false);
 
@@ -637,6 +549,8 @@
 
         private JobDataSet jobDataSet1;
         private System.Windows.Forms.TableLayoutPanel ActionContainer;
+        private System.Windows.Forms.ColumnHeader ActionColumn;
+        private System.Windows.Forms.ColumnHeader DescriptionColumn;
     }
 }
 
