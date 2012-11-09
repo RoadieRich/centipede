@@ -173,6 +173,11 @@ namespace Centipede
             Program.RemoveAction(adc.Action);
             ((TableLayoutPanel)adc.Parent).Controls.Remove(adc);
         }
+
+        private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.ToString();
+        }
     }
 
     internal enum ActionState

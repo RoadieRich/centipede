@@ -518,12 +518,13 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.LoadBtn);
             this.Controls.Add(this.ActionsVarsTabControl);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "MainWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Centipede";
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainWindow_PreviewKeyDown);
             this.ActionsVarsTabControl.ResumeLayout(false);
             this.ActionsTab.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);

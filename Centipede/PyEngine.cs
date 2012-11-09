@@ -3,6 +3,7 @@ using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Centipede
 {
@@ -33,6 +34,7 @@ namespace Centipede
 
         public class MyMessageBox
         {
+            Dictionary<Object, Object> __dict__ = new Dictionary<object, object>();
             //public D_t show = new D_t(F);
             public void Show(object text)
             {
