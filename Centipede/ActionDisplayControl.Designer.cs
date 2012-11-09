@@ -129,10 +129,11 @@
             this.ActMenuSelectAll});
             this.ActionContextMenu.Name = "ActionContextMenu";
             this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(143, 220);
+            this.ActionContextMenu.Size = new System.Drawing.Size(143, 198);
             // 
             // ActMenuMoveUp
             // 
+            this.ActMenuMoveUp.Enabled = false;
             this.ActMenuMoveUp.Name = "ActMenuMoveUp";
             this.ActMenuMoveUp.ShortcutKeyDisplayString = "[";
             this.ActMenuMoveUp.Size = new System.Drawing.Size(142, 22);
@@ -140,8 +141,8 @@
             // 
             // ActMenuMoveDown
             // 
+            this.ActMenuMoveDown.Enabled = false;
             this.ActMenuMoveDown.Name = "ActMenuMoveDown";
-            this.ActMenuMoveDown.ShortcutKeyDisplayString = "]";
             this.ActMenuMoveDown.Size = new System.Drawing.Size(142, 22);
             this.ActMenuMoveDown.Text = "Move Down";
             // 
@@ -154,7 +155,7 @@
             // 
             this.ActMenuUndo.Enabled = false;
             this.ActMenuUndo.Name = "ActMenuUndo";
-            this.ActMenuUndo.ShortcutKeyDisplayString = "Ctrl+Z";
+            this.ActMenuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.ActMenuUndo.Size = new System.Drawing.Size(142, 22);
             this.ActMenuUndo.Text = "&Undo";
             // 
@@ -165,30 +166,34 @@
             // 
             // ActMenuCut
             // 
+            this.ActMenuCut.Enabled = false;
             this.ActMenuCut.Name = "ActMenuCut";
-            this.ActMenuCut.ShortcutKeyDisplayString = "Ctrl+X";
+            this.ActMenuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.ActMenuCut.Size = new System.Drawing.Size(142, 22);
             this.ActMenuCut.Text = "Cu&t";
             // 
             // ActMenuCopy
             // 
             this.ActMenuCopy.BackColor = System.Drawing.Color.Transparent;
+            this.ActMenuCopy.Enabled = false;
             this.ActMenuCopy.Name = "ActMenuCopy";
-            this.ActMenuCopy.ShortcutKeyDisplayString = "Ctrl+C";
+            this.ActMenuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.ActMenuCopy.Size = new System.Drawing.Size(142, 22);
             this.ActMenuCopy.Text = "&Copy";
             // 
             // ActMenuPaste
             // 
+            this.ActMenuPaste.Enabled = false;
             this.ActMenuPaste.Name = "ActMenuPaste";
-            this.ActMenuPaste.ShortcutKeyDisplayString = "Ctrl+V";
+            this.ActMenuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.ActMenuPaste.Size = new System.Drawing.Size(142, 22);
             this.ActMenuPaste.Text = "&Paste";
             // 
             // ActMenuDelete
             // 
             this.ActMenuDelete.Name = "ActMenuDelete";
-            this.ActMenuDelete.ShortcutKeyDisplayString = "Del";
+            this.ActMenuDelete.ShortcutKeyDisplayString = "";
+            this.ActMenuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.ActMenuDelete.Size = new System.Drawing.Size(142, 22);
             this.ActMenuDelete.Text = "&Delete";
             this.ActMenuDelete.Click += new System.EventHandler(this.ActMenuDelete_Click);
@@ -200,8 +205,9 @@
             // 
             // ActMenuSelectAll
             // 
+            this.ActMenuSelectAll.Enabled = false;
             this.ActMenuSelectAll.Name = "ActMenuSelectAll";
-            this.ActMenuSelectAll.ShortcutKeyDisplayString = "Ctrl+A";
+            this.ActMenuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.ActMenuSelectAll.Size = new System.Drawing.Size(142, 22);
             this.ActMenuSelectAll.Text = "Select &All";
             // 
@@ -220,6 +226,7 @@
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
             this.Size = new System.Drawing.Size(222, 32);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ActionDisplayControl_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);

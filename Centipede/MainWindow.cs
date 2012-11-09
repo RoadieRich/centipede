@@ -167,6 +167,8 @@ namespace Centipede
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
+            
+
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
                 s.Height = 20f;
@@ -278,6 +280,19 @@ namespace Centipede
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = Math.Min(e.ProgressPercentage,100);
+        }
+
+        private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyData == Keys.F5)
+            {
+                RunButton.PerformClick();
+            }
         }
 
     }
