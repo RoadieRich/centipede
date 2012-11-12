@@ -19,8 +19,8 @@ namespace Centipede
     class PythonAction : Action
     {
 
-        public PythonAction(String name, String source="")
-            : base(name)
+        public PythonAction(String source="")
+            : base("Python Action")
         {
             Attributes = new Dictionary<string,object>();
             Attributes.Add("source", source);

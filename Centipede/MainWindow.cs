@@ -54,6 +54,9 @@ namespace Centipede
             fact.ImageIndex = 1;
             FlowContListBox.Items.Add(fact);
 
+            fact = new DemoActionFactory();
+            OtherActListBox.Items.Add(fact);
+
             
             
 
@@ -64,7 +67,17 @@ namespace Centipede
             String message;
             if (e.ErrorAction != null)
             {
-                UpdateHandler(e.ErrorAction);
+                UpdateHandlerDone(e.ErrorAction);
+                ActionDisplayControl adc = e.ErrorAction.Tag as ActionDisplayControl;
+                if (adc.InvokeRequired)
+                {
+                    adc.Invoke(SetActionDisplayState, adc, ActionState.Error);
+                }
+                else
+                {
+                    adc.State = ActionState.Error;
+                }
+                    
 
                 message = "Error occurred in " + e.ErrorAction.Name + "\r\n\r\nMessage was:\r\n" + e.Message;
             }
@@ -103,7 +116,7 @@ namespace Centipede
             }
         }
 
-        private void UpdateHandler(Action currentAction)
+        private void UpdateHandlerDone(Action currentAction)
         {
             foreach (KeyValuePair<String,Object> v in Program.Variables.ToArray())
             {
@@ -123,6 +136,16 @@ namespace Centipede
                 else
                 {
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
+                }
+
+                ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
+                if (adc.InvokeRequired)
+                {
+                    adc.Invoke(SetActionDisplayState, adc, ActionState.Completed);
+                }
+                else
+                {
+                    (adc).State = ActionState.Completed;
                 }
 
                 _progress += 10;
@@ -160,6 +183,18 @@ namespace Centipede
         }
 
         private JobDataSet _dataSet = new JobDataSet();
+        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state);
+        
+        private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state)
+        {
+            lock (adc)
+            {
+                adc.State = state;
+            }
+        }
+        
+        private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
+        
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -167,7 +202,13 @@ namespace Centipede
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
-            
+            SetActionDisplayState = new SetStateDeligate((adc, state) => adc.State = state);
+                
+            //    void SetState(ActionDisplayControl adc, ActionState state)
+            //{
+            //    adc.State = state;
+            //}
+        
 
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
@@ -175,16 +216,30 @@ namespace Centipede
                 s.SizeType = SizeType.AutoSize;
             }
 
-            Program.ActionCompleted += new Program.ActionUpdateCallback(UpdateHandler);
+            Program.ActionCompleted += new Program.ActionUpdateCallback(UpdateHandlerDone);
+            Program.BeforeAction += new Program.ActionUpdateCallback(Program_BeforeAction);
             Program.JobCompleted += new Program.CompletedHandler(CompletedHandler);
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
 
-            //Program.SetupTestAction();
+            Program.SetupTestActions();
 
 
             //backgroundWorker1.RunWorkerAsync();
             
+        }
+
+        void Program_BeforeAction(Action action)
+        {
+            ActionDisplayControl adc = action.Tag as ActionDisplayControl;
+            if (adc.InvokeRequired)
+            {
+                adc.Invoke(SetActionDisplayState, adc, ActionState.Running);
+            }
+            else
+            {
+                adc.State = ActionState.Running;
+            }
         }
 
         void Program_ActionAdded(Action action, int index)
@@ -259,6 +314,11 @@ namespace Centipede
         
         private void RunButton_Click(object sender, EventArgs e)
         {
+            foreach (ActionDisplayControl adc in ActionContainer.Controls)
+            {
+                adc.State = ActionState.None;
+            }
+
             backgroundWorker1.RunWorkerAsync();
         }
 
