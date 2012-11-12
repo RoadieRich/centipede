@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Text;
 
 namespace Centipede
 {
@@ -64,6 +65,7 @@ namespace Centipede
 
         private Boolean ErrorHandler(ActionException e, ref Action nextAction)
         {
+            StringBuilder messageBuilder = new StringBuilder();
             String message;
             if (e.ErrorAction != null)
             {
@@ -77,17 +79,24 @@ namespace Centipede
                 {
                     adc.State = ActionState.Error;
                 }
-                    
 
-                message = "Error occurred in " + e.ErrorAction.Name + "\r\n\r\nMessage was:\r\n" + e.Message;
+                messageBuilder.AppendLine("Error occurred in ");
+                messageBuilder.Append(e.ErrorAction.Name).Append(" (");
+                messageBuilder.Append(e.ErrorAction.Comment).AppendLine(")");
+                messageBuilder.AppendLine();
+                messageBuilder.AppendLine("Message was:");
+                messageBuilder.AppendLine(e.Message);
+                
             }
             else
             {
-                message = "Error: " + "\r\n\r\n" + e.Message;
+                messageBuilder.AppendLine("Error:");
+                messageBuilder.AppendLine();
+                messageBuilder.AppendLine(e.Message);
             }
             //CbRFtCiDVis506ZJ0xsnslwj5Et8ECVZCR6y48yd76REzIGL3N4d9F94ET9KsxyE
             DialogResult result = MessageBox.Show(
-                message,
+                messageBuilder.ToString(),
                 "Error",
                 MessageBoxButtons.AbortRetryIgnore,
                 MessageBoxIcon.Exclamation
@@ -202,7 +211,7 @@ namespace Centipede
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
-            SetActionDisplayState = new SetStateDeligate((adc, state) => adc.State = state);
+            //SetActionDisplayState = new SetStateDeligate((adc, state) => adc.State = state);
                 
             //    void SetState(ActionDisplayControl adc, ActionState state)
             //{
@@ -222,7 +231,7 @@ namespace Centipede
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
 
-            Program.SetupTestActions();
+            Program.SetupTestActions(Program.ActionsToTest.ErrorAction);
 
 
             //backgroundWorker1.RunWorkerAsync();
