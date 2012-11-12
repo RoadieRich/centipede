@@ -165,33 +165,53 @@ namespace Centipede
             //JobName = File.getName();
         }
 
+
+        [Flags]
+        internal enum ActionsToTest
+        {
+            PythonAction = 1,
+            DemoAction = 2,
+            ErrorAction = 4,
+            All = 1 | 2 | 4
+        }
+
         /// <summary>
         /// Add some test actions to the queue.
         /// </summary>
-        internal static void SetupTestActions()
+        internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
         {
-            PythonAction testPythonAction = new PythonAction();
-            testPythonAction.Source = 
+            if (actions.HasFlag(ActionsToTest.PythonAction))
+            {
+                PythonAction testPythonAction = new PythonAction();
+                testPythonAction.Source =
 
-@"try:
+    @"try:
     i = int(variables[""a""])
 except: 
     i = 0
 variables[""a""] = i+1";
 
-            testPythonAction.Comment = "Increase Variable i by one";
+                testPythonAction.Comment = "Increase Variable i by one";
 
-            Program.AddAction(testPythonAction);
+                Program.AddAction(testPythonAction);
+            }
+            
+            if (actions.HasFlag(ActionsToTest.DemoAction))
+            {
+                DemoAction testDemoAction = new DemoAction();
+                testDemoAction.Comment = "Display a text box showing attirbute values";
+                Program.AddAction(testDemoAction);
+            }
 
-            DemoAction testDemoAction = new DemoAction();
-            testDemoAction.Comment = "Display a text box showing attirbute values";
-            Program.AddAction(testDemoAction);
-            //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
+            if (actions.HasFlag(ActionsToTest.ErrorAction))
+            {
+                PythonAction testErrorAction = new PythonAction("raise Exception()");
+                testErrorAction.Comment = "Throw an error!";
 
-            PythonAction testErrorAction = new PythonAction("raise Exception()");
-            testErrorAction.Comment = "Throw an error!";
+                Program.AddAction(testErrorAction);
+            }
         }
-
+        
         public delegate void AddActionCallback(Action action, Int32 index);
         public static event AddActionCallback ActionAdded = new AddActionCallback((a,b) => {});
 
