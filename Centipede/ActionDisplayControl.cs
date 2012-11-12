@@ -32,18 +32,19 @@ namespace Centipede
 
                 attrValue = new TextBox();
                 attrValue.Width = 250;
+                
+                attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 if (attr.Key == "source")
                 {
                     attrValue.Multiline = true;
-                    attrValue.Height = 5000;
-                    attrValue.Dock = DockStyle.Fill;
+                    attrValue.Height = 175;
+                    //attrValue.Dock = DockStyle.Fill;
                     attrValue.ScrollBars = ScrollBars.Both;
                     attrValue.Font = new Font(FontFamily.GenericMonospace, 10);
                     attrValue.WordWrap = false;
                 }
                 attrValue.Text = attr.Value.ToString();
-                attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                //attrValue.Dock = DockStyle.Fill;
+                //attrValue.Dock = DockStyle.Top;
                 
                 AttributeTable.Controls.Add(attrValue);
                 attrValue.Tag = attr.Key;
@@ -51,6 +52,8 @@ namespace Centipede
             }
 
             CommentTextBox.Text = action.Comment;
+
+            action.Tag = this;
         }
 
         void attrValue_TextChanged(object sender, EventArgs e)
@@ -168,12 +171,15 @@ namespace Centipede
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
-
+           
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-            ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
-            Program.RemoveAction(adc.Action);
-            (adc.Parent as TableLayoutPanel).Controls.Remove(adc);
+            if (cm.Visible)
+            {
+                ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
+                Program.RemoveAction(adc.Action);
+                (adc.Parent as TableLayoutPanel).Controls.Remove(adc);
+            }
         }
 
         private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)

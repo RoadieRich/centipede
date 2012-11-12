@@ -5,8 +5,6 @@ using System.Linq;
 
 namespace Centipede
 {
-    delegate T id<T>(T arg);
-
     public static class Program
     {
         /// <summary>
@@ -167,16 +165,31 @@ namespace Centipede
             //JobName = File.getName();
         }
 
-        internal static void SetupTestAction()
+        /// <summary>
+        /// Add some test actions to the queue.
+        /// </summary>
+        internal static void SetupTestActions()
         {
-            Program.AddAction(new PythonAction("pyact", 
+            PythonAction testPythonAction = new PythonAction();
+            testPythonAction.Source = 
+
 @"try:
     i = int(variables[""a""])
 except: 
     i = 0
-variables[""a""] = i+1"));
-            Program.AddAction(new DemoAction());
+variables[""a""] = i+1";
+
+            testPythonAction.Comment = "Increase Variable i by one";
+
+            Program.AddAction(testPythonAction);
+
+            DemoAction testDemoAction = new DemoAction();
+            testDemoAction.Comment = "Display a text box showing attirbute values";
+            Program.AddAction(testDemoAction);
             //Program.AddAction(new PythonAction("Test Action", @"sys.stdout.write(""Hello World!"")"));
+
+            PythonAction testErrorAction = new PythonAction("raise Exception()");
+            testErrorAction.Comment = "Throw an error!";
         }
 
         public delegate void AddActionCallback(Action action, Int32 index);

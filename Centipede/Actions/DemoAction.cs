@@ -28,7 +28,7 @@ namespace Centipede
 
     class DemoActionFactory : ActionFactory
     {
-        DemoActionFactory()
+        public DemoActionFactory()
             : base("Demo Action")
         { }
         public override Action Generate()

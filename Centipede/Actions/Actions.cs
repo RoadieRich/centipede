@@ -10,15 +10,17 @@ namespace Centipede
             : base(name)
         { }
 
-
+        /// <summary>
+        /// Generate a new action of the given type
+        /// </summary>
+        /// <returns>The new action, with default attributes set</returns>
         public abstract Action Generate();
 
+        /// <summary>
+        /// A user-definable comment, e.g. to document the purpose of the action.
+        /// </summary>
         public String Comment = "";
 
-        //public override String ToString()
-        //{
-        //    return this.Text;
-        //}
     }
 
     

@@ -56,7 +56,7 @@
             // 
             this.NameLabel.AutoSize = true;
             this.NameLabel.BackColor = System.Drawing.Color.Transparent;
-            this.NameLabel.Location = new System.Drawing.Point(25, 5);
+            this.NameLabel.Location = new System.Drawing.Point(32, 10);
             this.NameLabel.Name = "NameLabel";
             this.NameLabel.Size = new System.Drawing.Size(35, 13);
             this.NameLabel.TabIndex = 0;
@@ -64,12 +64,11 @@
             // 
             // ExpandButton
             // 
-            this.ExpandButton.AutoSize = true;
             this.ExpandButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ExpandButton.Location = new System.Drawing.Point(-1, 0);
+            this.ExpandButton.Location = new System.Drawing.Point(3, 3);
             this.ExpandButton.Margin = new System.Windows.Forms.Padding(0);
             this.ExpandButton.Name = "ExpandButton";
-            this.ExpandButton.Size = new System.Drawing.Size(23, 23);
+            this.ExpandButton.Size = new System.Drawing.Size(26, 26);
             this.ExpandButton.TabIndex = 1;
             this.ExpandButton.Text = "+";
             this.ExpandButton.UseVisualStyleBackColor = true;
@@ -77,20 +76,20 @@
             // 
             // AttributeTable
             // 
-            this.AttributeTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.AttributeTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.AttributeTable.AutoScroll = true;
             this.AttributeTable.AutoSize = true;
-            this.AttributeTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.AttributeTable.BackColor = System.Drawing.Color.Transparent;
             this.AttributeTable.ColumnCount = 2;
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.AttributeTable.Location = new System.Drawing.Point(3, 26);
+            this.AttributeTable.Location = new System.Drawing.Point(4, 34);
+            this.AttributeTable.MinimumSize = new System.Drawing.Size(0, 28);
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(0, 0);
+            this.AttributeTable.Size = new System.Drawing.Size(132, 28);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -107,7 +106,7 @@
             this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusIconBox.BackColor = System.Drawing.Color.Transparent;
             this.StatusIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.StatusIconBox.Location = new System.Drawing.Point(193, 3);
+            this.StatusIconBox.Location = new System.Drawing.Point(110, 3);
             this.StatusIconBox.Name = "StatusIconBox";
             this.StatusIconBox.Size = new System.Drawing.Size(26, 26);
             this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -214,10 +213,11 @@
             // 
             // CommentTextBox
             // 
-            this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommentTextBox.Location = new System.Drawing.Point(87, 4);
+            this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.CommentTextBox.Location = new System.Drawing.Point(104, 7);
             this.CommentTextBox.Name = "CommentTextBox";
-            this.CommentTextBox.Size = new System.Drawing.Size(100, 20);
+            this.CommentTextBox.Size = new System.Drawing.Size(0, 20);
             this.CommentTextBox.TabIndex = 4;
             this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
             // 
@@ -225,18 +225,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
-            this.Controls.Add(this.CommentTextBox);
             this.Controls.Add(this.StatusIconBox);
+            this.Controls.Add(this.CommentTextBox);
             this.Controls.Add(this.AttributeTable);
             this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(222, 32);
+            this.Size = new System.Drawing.Size(139, 65);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ActionDisplayControl_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
