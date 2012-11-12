@@ -152,9 +152,9 @@ namespace Centipede
 
         private void ListBox_Dbl_Click(object sender, MouseEventArgs e)
         {
-            ListView sendingListView = (ListView)sender;
+            ListView sendingListView = sender as ListView;
 
-            ActionFactory sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
+            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
 
             Program.AddAction(sendingActionFactory.Generate());
         }
@@ -211,8 +211,8 @@ namespace Centipede
 
         void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
         {
-            JobDataSet.VariablesDataTable table = (JobDataSet.VariablesDataTable)sender;
-            JobDataSet.VariablesRow row = (JobDataSet.VariablesRow)e.Row;
+            JobDataSet.VariablesDataTable table = sender as JobDataSet.VariablesDataTable;
+            JobDataSet.VariablesRow row = e.Row as JobDataSet.VariablesRow;
 
             if (!Program.Variables.ContainsKey(row.Name))
             {
@@ -239,14 +239,15 @@ namespace Centipede
         {
             foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
             {
-                _dataSet.Variables.RemoveVariablesRow((JobDataSet.VariablesRow)((DataRowView)r.DataBoundItem).Row);
+                _dataSet.Variables.RemoveVariablesRow((r.DataBoundItem as DataRowView).Row as JobDataSet.VariablesRow);
             }
         }
 
         private void VarDataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
         {
-            ((DataGridView)sender).ClearSelection();
-            ((DataGridView)sender).Rows[e.RowIndex].Selected = true;
+            DataGridView view = sender as DataGridView;
+            view.ClearSelection();
+            view.Rows[e.RowIndex].Selected = true;
             e.ContextMenuStrip = VarsContextMenu;
             e.ContextMenuStrip.Show();
         }
@@ -273,7 +274,7 @@ namespace Centipede
 
         private void copyToolStripButton_Click(object sender, EventArgs e)
         {
-            ToolStripButton btn = (ToolStripButton)sender;
+            ToolStripButton btn = sender as ToolStripButton;
             
         }
 

@@ -43,7 +43,7 @@ namespace Centipede
             PythonEngine engine = PythonEngine.Instance;
             try
             {
-                engine.Execute((String)Attributes["source"]);
+                engine.Execute(Attributes["source"] as String);
             }
             catch (PythonException e)
             {

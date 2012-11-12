@@ -47,6 +47,7 @@
             this.ActMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.CommentTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.ActionContextMenu.SuspendLayout();
             this.SuspendLayout();
@@ -211,6 +212,15 @@
             this.ActMenuSelectAll.Size = new System.Drawing.Size(142, 22);
             this.ActMenuSelectAll.Text = "Select &All";
             // 
+            // CommentTextBox
+            // 
+            this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CommentTextBox.Location = new System.Drawing.Point(87, 4);
+            this.CommentTextBox.Name = "CommentTextBox";
+            this.CommentTextBox.Size = new System.Drawing.Size(100, 20);
+            this.CommentTextBox.TabIndex = 4;
+            this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
+            // 
             // ActionDisplayControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -220,6 +230,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
+            this.Controls.Add(this.CommentTextBox);
             this.Controls.Add(this.StatusIconBox);
             this.Controls.Add(this.AttributeTable);
             this.Controls.Add(this.ExpandButton);
@@ -253,6 +264,7 @@
         private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem ActMenuSelectAll;
+        private System.Windows.Forms.TextBox CommentTextBox;
 
 
     }

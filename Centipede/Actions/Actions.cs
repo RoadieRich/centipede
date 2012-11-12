@@ -13,7 +13,7 @@ namespace Centipede
 
         public abstract Action Generate();
 
-        
+        public String Comment = "";
 
         //public override String ToString()
         //{

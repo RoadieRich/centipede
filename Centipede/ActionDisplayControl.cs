@@ -49,12 +49,14 @@ namespace Centipede
                 attrValue.Tag = attr.Key;
                 attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
             }
+
+            CommentTextBox.Text = action.Comment;
         }
 
         void attrValue_TextChanged(object sender, EventArgs e)
         {
-            TextBox attrValue = (TextBox)sender;
-            Action.Attributes[(string)attrValue.Tag] = attrValue.Text;
+            TextBox attrValue = sender as TextBox;
+            Action.Attributes[attrValue.Tag as String] = attrValue.Text;
         }
 
         private Boolean _selected = false;
@@ -166,17 +168,22 @@ namespace Centipede
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
-            
-            ToolStripDropDownItem i = (ToolStripDropDownItem)sender;
-            ContextMenuStrip cm = (ContextMenuStrip)i.Owner;
-            ActionDisplayControl adc = (ActionDisplayControl)cm.SourceControl;
+
+            ToolStripDropDownItem i = sender as ToolStripDropDownItem;
+            ContextMenuStrip cm = i.Owner as ContextMenuStrip;
+            ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
             Program.RemoveAction(adc.Action);
-            ((TableLayoutPanel)adc.Parent).Controls.Remove(adc);
+            (adc.Parent as TableLayoutPanel).Controls.Remove(adc);
         }
 
         private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.ToString();
+        }
+
+        private void CommentTextBox_TextChanged(object sender, EventArgs e)
+        {
+            Action.Comment = (sender as TextBox).Text;
         }
     }
 
