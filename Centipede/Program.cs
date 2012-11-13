@@ -183,13 +183,12 @@ namespace Centipede
             if (actions.HasFlag(ActionsToTest.PythonAction))
             {
                 PythonAction testPythonAction = new PythonAction();
-                testPythonAction.Source =
-
-    @"try:
-    i = int(variables[""a""])
-except: 
-    i = 0
-variables[""a""] = i+1";
+                testPythonAction.Source = String.Join("\r\n",
+                                        new String[] {@"try:",
+                                                      @"    i = int(variables[""a""])",
+                                                      @"except: ",
+                                                      @"    i = 0",
+                                                      @"variables[""a""] = i+1"});
 
                 testPythonAction.Comment = "Increase Variable i by one";
 

@@ -27,12 +27,12 @@ namespace Centipede
                 attrLabel = new Label();
                 attrLabel.Text = attr.Key;
                 attrLabel.Dock = DockStyle.Fill;
-                
+
                 AttributeTable.Controls.Add(attrLabel);
 
                 attrValue = new TextBox();
                 attrValue.Width = 250;
-                
+
                 attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                 if (attr.Key == "source")
                 {
@@ -45,7 +45,7 @@ namespace Centipede
                 }
                 attrValue.Text = attr.Value.ToString();
                 //attrValue.Dock = DockStyle.Top;
-                
+
                 AttributeTable.Controls.Add(attrValue);
                 attrValue.Tag = attr.Key;
                 attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
@@ -171,7 +171,7 @@ namespace Centipede
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
-           
+
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
             if (cm.Visible)

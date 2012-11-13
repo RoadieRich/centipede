@@ -80,6 +80,7 @@
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\BranchAction.cs" />
     <Compile Include="Actions\DemoAction.cs" />
+    <Compile Include="Actions\TextFileActions.cs" />
     <Compile Include="JobDataSet.cs">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Centipede
 {
-    
+
 
     public partial class MainWindow : Form
     {
@@ -42,15 +42,15 @@ namespace Centipede
             this.Text = "Centipede 0.1 " + Program.JobName;
 
             Program.Variables.Add("console", new GuiConsole());
-            
-            ActionFactory fact = new PythonActionFactory();            
+
+            ActionFactory fact = new PythonActionFactory();
             fact.ImageIndex = 0;
             OtherActListBox.Items.Add(fact);
-            
+
             fact = new PythonBranchActionFactory();
             fact.ImageIndex = 0;
             FlowContListBox.Items.Add(fact);
-            
+
             fact = new BranchActionFactory();
             fact.ImageIndex = 1;
             FlowContListBox.Items.Add(fact);
@@ -58,8 +58,8 @@ namespace Centipede
             fact = new DemoActionFactory();
             OtherActListBox.Items.Add(fact);
 
-            
-            
+
+
 
         }
 
@@ -86,7 +86,7 @@ namespace Centipede
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine("Message was:");
                 messageBuilder.AppendLine(e.Message);
-                
+
             }
             else
             {
@@ -127,7 +127,7 @@ namespace Centipede
 
         private void UpdateHandlerDone(Action currentAction)
         {
-            foreach (KeyValuePair<String,Object> v in Program.Variables.ToArray())
+            foreach (KeyValuePair<String, Object> v in Program.Variables.ToArray())
             {
                 if (v.Key == "console")
                 {
@@ -136,7 +136,7 @@ namespace Centipede
                 JobDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
                 if (row != null)
                 {
-                    if (row.Value != v.Value )
+                    if (row.Value != v.Value)
                     {
                         row.Value = v.Value;
                         //row.SetModified();
@@ -193,7 +193,7 @@ namespace Centipede
 
         private JobDataSet _dataSet = new JobDataSet();
         private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state);
-        
+
         private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state)
         {
             lock (adc)
@@ -201,9 +201,9 @@ namespace Centipede
                 adc.State = state;
             }
         }
-        
+
         private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
-        
+
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -212,12 +212,12 @@ namespace Centipede
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
 
             //SetActionDisplayState = new SetStateDeligate((adc, state) => adc.State = state);
-                
+
             //    void SetState(ActionDisplayControl adc, ActionState state)
             //{
             //    adc.State = state;
             //}
-        
+
 
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
@@ -231,11 +231,11 @@ namespace Centipede
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
 
-            Program.SetupTestActions(Program.ActionsToTest.ErrorAction);
+            Program.SetupTestActions(Program.ActionsToTest.All);
 
 
             //backgroundWorker1.RunWorkerAsync();
-            
+
         }
 
         void Program_BeforeAction(Action action)
@@ -320,7 +320,7 @@ namespace Centipede
         {
             Program.Variables.ToArray();
         }
-        
+
         private void RunButton_Click(object sender, EventArgs e)
         {
             foreach (ActionDisplayControl adc in ActionContainer.Controls)
@@ -344,12 +344,12 @@ namespace Centipede
         private void copyToolStripButton_Click(object sender, EventArgs e)
         {
             ToolStripButton btn = sender as ToolStripButton;
-            
+
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = Math.Min(e.ProgressPercentage,100);
+            progressBar1.Value = Math.Min(e.ProgressPercentage, 100);
         }
 
         private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
@@ -371,8 +371,8 @@ namespace Centipede
     {
         public void write(string message)
         {
-            
-            
+
+
             MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }
