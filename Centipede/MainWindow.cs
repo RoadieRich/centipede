@@ -43,20 +43,20 @@ namespace Centipede
 
             Program.Variables.Add("console", new GuiConsole());
 
-            ActionFactory fact = new PythonActionFactory();
-            fact.ImageIndex = 0;
-            OtherActListBox.Items.Add(fact);
+            //ActionFactory fact = new PythonActionFactory();
+            //fact.ImageIndex = 0;
+            //OtherActListBox.Items.Add(fact);
 
-            fact = new PythonBranchActionFactory();
-            fact.ImageIndex = 0;
-            FlowContListBox.Items.Add(fact);
+            //fact = new PythonBranchActionFactory();
+            //fact.ImageIndex = 0;
+            //FlowContListBox.Items.Add(fact);
 
-            fact = new BranchActionFactory();
-            fact.ImageIndex = 1;
-            FlowContListBox.Items.Add(fact);
+            //fact = new BranchActionFactory();
+            //fact.ImageIndex = 1;
+            //FlowContListBox.Items.Add(fact);
 
-            fact = new DemoActionFactory();
-            OtherActListBox.Items.Add(fact);
+            //fact = new DemoActionFactory();
+            //OtherActListBox.Items.Add(fact);
 
 
 
@@ -371,8 +371,6 @@ namespace Centipede
     {
         public void write(string message)
         {
-
-
             MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }

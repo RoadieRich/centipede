@@ -38,7 +38,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>AE3C2CDADAE35C4A93C195B893E38AEA9C6350F5</ManifestCertificateThumbprint>
@@ -48,7 +48,7 @@
     </ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Centipede_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
@@ -105,7 +105,6 @@
       <DependentUpon>GetJob.cs</DependentUpon>
     </Compile>
     <Compile Include="PyEngine.cs" />
-    <Compile Include="Actions\PythonAction.cs" />
     <Compile Include="ActionDisplayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -171,9 +170,6 @@
     <None Include="Resources\If.ico" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Complete_OK.png" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +180,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ThumbnailView.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Action\Action.csproj">
+      <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
+      <Name>Action</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PythonAction\PythonAction.csproj">
+      <Project>{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}</Project>
+      <Name>PythonAction</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

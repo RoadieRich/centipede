@@ -6,9 +6,12 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Reflection.Cache;
 
 namespace Centipede
 {
+    
     internal partial class ActionDisplayControl : UserControl
     {
         internal ActionDisplayControl(Action action)
@@ -20,12 +23,24 @@ namespace Centipede
             this.BackColor = SystemColors.Control;
 
             Action = action;
+            Assembly actionAssembly = Assembly.GetAssembly(action.GetType());
             Label attrLabel;
             TextBox attrValue;
-            foreach (KeyValuePair<String, Object> attr in action.Attributes)
+
+            
+
+            Type actionType = action.GetType();
+
+            List<FieldInfo> arguments = new List<FieldInfo>(from FieldInfo fi in actionType.GetFields()
+                               where (fi.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0)
+                               select fi);
+            //arguments.AddRange(from PropertyInfo pi in actionType.GetProperties()
+            //                   where pi.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0
+            //                   select pi);
+            foreach (FieldInfo arg in arguments)
             {
                 attrLabel = new Label();
-                attrLabel.Text = attr.Key;
+                attrLabel.Text = GetArgumentName(arg);
                 attrLabel.Dock = DockStyle.Fill;
 
                 AttributeTable.Controls.Add(attrLabel);
@@ -34,7 +49,7 @@ namespace Centipede
                 attrValue.Width = 250;
 
                 attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                if (attr.Key == "source")
+                if (arg.Name == "Source")
                 {
                     attrValue.Multiline = true;
                     attrValue.Height = 175;
@@ -43,11 +58,11 @@ namespace Centipede
                     attrValue.Font = new Font(FontFamily.GenericMonospace, 10);
                     attrValue.WordWrap = false;
                 }
-                attrValue.Text = attr.Value.ToString();
+                attrValue.Text = arg.GetValue(action) as String;
                 //attrValue.Dock = DockStyle.Top;
 
                 AttributeTable.Controls.Add(attrValue);
-                attrValue.Tag = attr.Key;
+                attrValue.Tag = Tuple.Create(action, arg);
                 attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
             }
 
@@ -56,10 +71,36 @@ namespace Centipede
             action.Tag = this;
         }
 
+        private String GetArgumentName(MemberInfo argument)
+        {
+            ActionArgumentAttribute argAttr = argument.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Single() as ActionArgumentAttribute;
+            if (argAttr.displayName != null)
+            {
+                return argAttr.displayName;
+            }
+            else
+            {
+                return argument.Name;
+            }
+        }
+
         void attrValue_TextChanged(object sender, EventArgs e)
         {
             TextBox attrValue = sender as TextBox;
-            Action.Attributes[attrValue.Tag as String] = attrValue.Text;
+            Tuple<Action, FieldInfo> t = attrValue.Tag as Tuple<Action, FieldInfo>;
+            Action action = t.Item1;
+            FieldInfo f = t.Item2;
+            ActionArgumentAttribute argInfo = f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Single() as ActionArgumentAttribute;
+            if (argInfo.setterMethodName != null)
+            {
+                Type type = action.GetType();
+                MethodInfo setterMethod = type.GetMethod(argInfo.setterMethodName);
+                setterMethod.Invoke(action, new object[] { attrValue.Text });
+            }
+            else
+            {
+                f.SetValue(action, attrValue.Text);
+            }
         }
 
         private Boolean _selected = false;

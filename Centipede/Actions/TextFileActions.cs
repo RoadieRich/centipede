@@ -8,21 +8,36 @@ namespace Centipede
 {
     abstract class BaseTextFileAction : Action
     {
-        protected BaseTextFileAction(String name)
-            : base(name)
+        protected BaseTextFileAction(String name, Dictionary<String, Object> variables)
+            : base(name, variables)
         { }
     }
 
     class OpenTextFileAction : BaseTextFileAction
     {
-        public OpenTextFileAction()
-            : base("Open Text File")
+        public OpenTextFileAction(Dictionary<String, Object> variables)
+            : base("Open Text File", variables)
         {
             Attributes["Filename"] = "";
             Attributes["Read"] = "1";
             Attributes["Write"] = "1";
             Attributes["Destination Var"] = "Text File";
         }
+
+        [ActionArgument(usage="Filename to open")]
+        public String Filename = "";
+
+        [ActionArgument(usage="Allow read access")]
+        public Boolean Read = true;
+
+        [ActionArgument(usage="Allow write access to file")]
+        public Boolean Write = true;
+
+        [ActionArgument(
+            usage = "Variable to store the opened file in",
+            displayName = "File Variable"
+        )]
+        public String FileVar = "Text File";
 
         public override void DoAction()
         {
