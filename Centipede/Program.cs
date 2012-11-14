@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using Centipede.PyAction;
 
 namespace Centipede
 {
@@ -182,7 +183,7 @@ namespace Centipede
         {
             if (actions.HasFlag(ActionsToTest.PythonAction))
             {
-                PythonAction testPythonAction = new PythonAction();
+                PythonAction testPythonAction = new PythonAction(Program.Variables);
                 testPythonAction.Source = String.Join("\r\n",
                                         new String[] {@"try:",
                                                       @"    i = int(variables[""a""])",
@@ -197,14 +198,14 @@ namespace Centipede
             
             if (actions.HasFlag(ActionsToTest.DemoAction))
             {
-                DemoAction testDemoAction = new DemoAction();
+                DemoAction testDemoAction = new DemoAction(Program.Variables);
                 testDemoAction.Comment = "Display a text box showing attirbute values";
                 Program.AddAction(testDemoAction);
             }
 
             if (actions.HasFlag(ActionsToTest.ErrorAction))
             {
-                PythonAction testErrorAction = new PythonAction("raise Exception()");
+                PythonAction testErrorAction = new PythonAction(Program.Variables, "raise Exception()");
                 testErrorAction.Comment = "Throw an error!";
 
                 Program.AddAction(testErrorAction);
@@ -264,32 +265,5 @@ namespace Centipede
         }
     }
      
-    public class ActionException : Exception
-    {
-        public ActionException(String message, Action action) : base(message)
-        {
-            ErrorAction = action;
-        }
-        
-        public ActionException(Action action)
-        {
-            ErrorAction = action;
-        }
-
-        public ActionException(string message, Exception exception, Action action) 
-            : base(message, exception)
-        {
-            ErrorAction = action;
-        }
-
-        public ActionException(string message)
-            : base(message) { }
-
-        public ActionException(Exception e, Action action) : base(e.Message, e)
-        {
-            ErrorAction = action;
-        }
-
-        public readonly Action ErrorAction = null;
-    }
+    
 }

@@ -14,7 +14,7 @@ namespace Centipede
         { }
         public override Action Generate()
         {
-            return new BranchAction(Text, new BranchCondition());
+            return new BranchAction(Text, Program.Variables, new BranchCondition());
         }
     }
 
@@ -26,7 +26,7 @@ namespace Centipede
         }
         public override Action Generate()
         {
-            return new BranchAction(Text, new PythonCondition(""));
+            return new BranchAction(Text, Program.Variables, new PythonCondition(""));
         }
     }
     
@@ -38,16 +38,20 @@ namespace Centipede
         /// </summary>
         /// <param name="name"></param>
         /// <param name="condition"></param>
-        public BranchAction(String name, BranchCondition condition)
-            : base(name)
+        public BranchAction(String name, Dictionary<String,Object> variables, BranchCondition condition)
+            : base(name, variables)
         {
             Condition = condition;
             Attributes = new Dictionary<string, object>();
         }
 
-
+        [ActionArgument]
         public BranchCondition Condition;
 
+        [ActionArgument(
+            usage = "Next action if condition returns false", 
+            displayName="Next Action if False"
+        )]
         public Action NextIfFalse;
 
         private Boolean Result;
@@ -93,15 +97,14 @@ namespace Centipede
 
         public override Boolean Test(Action act)
         {
-            PythonEngine engine = PythonEngine.Instance;
-            return engine.Evaluate<Boolean>(Source);
+            return PythonEngine.Instance.Evaluate<Boolean>(Source);
         }
 
         public string Source;
 
         public override String ToString()
         {
-            return "";
+            return "(Python condition)";
         }
     }
 }
