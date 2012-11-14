@@ -76,7 +76,7 @@ namespace Centipede
 
     }
 
-    [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [System.AttributeUsage(AttributeTargets.Field)]
     public sealed class ActionArgumentAttribute : System.Attribute
     {
         public String displayName;

@@ -22,7 +22,7 @@ namespace Centipede
             this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             this.BackColor = SystemColors.Control;
 
-            Action = action;
+            ThisAction = action;
             Assembly actionAssembly = Assembly.GetAssembly(action.GetType());
             Label attrLabel;
             TextBox attrValue;
@@ -34,9 +34,7 @@ namespace Centipede
             List<FieldInfo> arguments = new List<FieldInfo>(from FieldInfo fi in actionType.GetFields()
                                where (fi.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0)
                                select fi);
-            //arguments.AddRange(from PropertyInfo pi in actionType.GetProperties()
-            //                   where pi.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0
-            //                   select pi);
+            
             foreach (FieldInfo arg in arguments)
             {
                 attrLabel = new Label();
@@ -58,11 +56,11 @@ namespace Centipede
                     attrValue.Font = new Font(FontFamily.GenericMonospace, 10);
                     attrValue.WordWrap = false;
                 }
-                attrValue.Text = arg.GetValue(action) as String;
+                attrValue.Text = arg.GetValue(action).ToString();
                 //attrValue.Dock = DockStyle.Top;
 
                 AttributeTable.Controls.Add(attrValue);
-                attrValue.Tag = Tuple.Create(action, arg);
+                attrValue.Tag = arg;
                 attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
             }
 
@@ -87,19 +85,22 @@ namespace Centipede
         void attrValue_TextChanged(object sender, EventArgs e)
         {
             TextBox attrValue = sender as TextBox;
-            Tuple<Action, FieldInfo> t = attrValue.Tag as Tuple<Action, FieldInfo>;
-            Action action = t.Item1;
-            FieldInfo f = t.Item2;
+            String oldVal = attrValue.Text;  
+            FieldInfo f = attrValue.Tag as FieldInfo;
             ActionArgumentAttribute argInfo = f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Single() as ActionArgumentAttribute;
             if (argInfo.setterMethodName != null)
             {
-                Type type = action.GetType();
+                Type type = this.ThisAction.GetType();
                 MethodInfo setterMethod = type.GetMethod(argInfo.setterMethodName);
-                setterMethod.Invoke(action, new object[] { attrValue.Text });
+
+                if (!(Boolean)setterMethod.Invoke(this.ThisAction, new object[] { attrValue.Text }))
+                {
+                    MessageBox.Show(String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text));
+                }
             }
             else
             {
-                f.SetValue(action, attrValue.Text);
+                f.SetValue(this.ThisAction, attrValue.Text);
             }
         }
 
@@ -208,18 +209,18 @@ namespace Centipede
             }
         }
 
-        public readonly Action Action;
+        public readonly Action ThisAction;
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
 
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-            if (cm.Visible)
+            //if (cm.Visible)
             {
-                ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
-                Program.RemoveAction(adc.Action);
-                (adc.Parent as TableLayoutPanel).Controls.Remove(adc);
+                //ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
+                Program.RemoveAction(ThisAction);
+                (Parent as TableLayoutPanel).Controls.Remove(this);
             }
         }
 
@@ -230,7 +231,7 @@ namespace Centipede
 
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
-            Action.Comment = (sender as TextBox).Text;
+            ThisAction.Comment = (sender as TextBox).Text;
         }
     }
 

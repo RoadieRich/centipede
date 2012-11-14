@@ -129,7 +129,7 @@
             this.ActMenuSelectAll});
             this.ActionContextMenu.Name = "ActionContextMenu";
             this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(143, 198);
+            this.ActionContextMenu.Size = new System.Drawing.Size(143, 220);
             // 
             // ActMenuMoveUp
             // 
@@ -193,7 +193,6 @@
             // 
             this.ActMenuDelete.Name = "ActMenuDelete";
             this.ActMenuDelete.ShortcutKeyDisplayString = "";
-            this.ActMenuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
             this.ActMenuDelete.Size = new System.Drawing.Size(142, 22);
             this.ActMenuDelete.Text = "&Delete";
             this.ActMenuDelete.Click += new System.EventHandler(this.ActMenuDelete_Click);

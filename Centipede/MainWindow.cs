@@ -127,7 +127,7 @@ namespace Centipede
 
         private void UpdateHandlerDone(Action currentAction)
         {
-            foreach (KeyValuePair<String, Object> v in Program.Variables)//.ToArray())
+            foreach (KeyValuePair<String, Object> v in Program.Variables.ToArray())
             {
                 if (v.Key.StartsWith("_"))
                 {

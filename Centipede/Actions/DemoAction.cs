@@ -30,9 +30,19 @@ namespace Centipede
         )]
         public Int32 Test1 = 1;
 
-        public Boolean Test1Set(String s)
+        public Boolean Test1Set(ref String s)
         {
-            return Int32.TryParse(s, out Test1);
+            Int32 oldVal = Test1;
+            if (Int32.TryParse(s, out Test1))
+            {
+                return true;
+            }
+            else
+            {
+                s = oldVal.ToString();
+                Test1 = oldVal;
+                return false;
+            }
         }
 
         [ActionArgument(
