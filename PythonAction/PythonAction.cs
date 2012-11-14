@@ -39,7 +39,7 @@ namespace Centipede.PyAction
             }
             try
             {
-                engine.Execute(Source);
+                engine.Execute(ParseStringForVariable(Source));
             }
             catch (PythonException e)
             {
