@@ -41,7 +41,7 @@ namespace Centipede
 
             this.Text = "Centipede 0.1 " + Program.JobName;
 
-            Program.Variables.Add("console", new GuiConsole());
+            Program.Variables.Add("_console", new GuiConsole());
 
             //ActionFactory fact = new PythonActionFactory();
             //fact.ImageIndex = 0;
@@ -66,7 +66,7 @@ namespace Centipede
         private Boolean ErrorHandler(ActionException e, ref Action nextAction)
         {
             StringBuilder messageBuilder = new StringBuilder();
-            String message;
+            
             if (e.ErrorAction != null)
             {
                 UpdateHandlerDone(e.ErrorAction);
@@ -127,9 +127,9 @@ namespace Centipede
 
         private void UpdateHandlerDone(Action currentAction)
         {
-            foreach (KeyValuePair<String, Object> v in Program.Variables.ToArray())
+            foreach (KeyValuePair<String, Object> v in Program.Variables)//.ToArray())
             {
-                if (v.Key == "console")
+                if (v.Key.StartsWith("_"))
                 {
                     continue;
                 }

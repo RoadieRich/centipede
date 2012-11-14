@@ -30,7 +30,7 @@ namespace Centipede.TextFile
         {
             FileAccess access = Read ? FileAccess.Read : 0;
             access |= Write ? FileAccess.Write : 0;
-            Variables[ParseStringForVariables(FileVarName)] = File.Open(ParseStringForVariables(Filename),FileMode.OpenOrCreate, access);
+            Variables[ParseStringForVariable(FileVarName)] = File.Open(ParseStringForVariable(Filename),FileMode.OpenOrCreate, access);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Centipede.TextFile
 
         public override void DoAction()
         {
-            FileStream fs = Variables[ParseStringForVariables(FileVarName)] as FileStream;
+            FileStream fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
             
             fs.Flush();
 
@@ -81,7 +81,7 @@ namespace Centipede.TextFile
 
         public override void DoAction()
         {
-            FileStream fs = Variables[ParseStringForVariables(FileVarName)] as FileStream;
+            FileStream fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
             EasyFileStream sr = new EasyFileStream(fs);
 
             if (!Sequential)
@@ -91,7 +91,7 @@ namespace Centipede.TextFile
 
 
 
-            Variables[ParseStringForVariables(DestinationVariable)] = sr.ReadLine();
+            Variables[ParseStringForVariable(DestinationVariable)] = sr.ReadLine();
 
         }
     } 
