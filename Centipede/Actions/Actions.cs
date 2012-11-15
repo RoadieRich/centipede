@@ -33,17 +33,29 @@ namespace Centipede
         public T ParseAttribute<T>(String attributeName)
         {
             String attrText = Attributes[attributeName] as String;
-            if (attrText != null && attrText.StartsWith("%"))
+            Object o;
+            if (attrText != null
+                &&
+                attrText.StartsWith("%")
+                &&
+                Program.Variables.TryGetValue(attrText.Substring(1), out o))
             {
-                return (T)Program.Variables[attrText.Substring(1)];
+                return (T)o;
             }
             else
             {
-                return (T)Attributes[attributeName];
+                try
+                {
+                    return (T)Attributes[attributeName];
+                }
+                catch (InvalidCastException e)
+                {
+                    throw new ActionException(String.Format(@"Cannot convert ""{0}"" to type {1} in argument {2}", Attributes[attributeName], typeof(T).Name, attributeName), this);
+                }
             }
         }
 
-        public static HashSet<String> TrueValues = new HashSet<string>(new String[]{
+        private static HashSet<String> TrueValues = new HashSet<string>(new String[]{
                                          "yes",
                                          "true",
                                          "1"
