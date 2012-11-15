@@ -33,7 +33,7 @@ namespace Centipede
         public T ParseAttribute<T>(String attributeName)
         {
             String attrText = Attributes[attributeName] as String;
-            if (attrText.StartsWith("%"))
+            if (attrText != null && attrText.StartsWith("%"))
             {
                 return (T)Program.Variables[attrText.Substring(1)];
             }

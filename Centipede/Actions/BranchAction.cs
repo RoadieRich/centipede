@@ -14,7 +14,9 @@ namespace Centipede
         { }
         public override Action Generate()
         {
-            return new BranchAction(Text, new BranchCondition());
+            BranchAction branchAct = new BranchAction(Text);
+            branchAct.Condition = new BranchCondition(branchAct);
+            return branchAct;
         }
     }
 
@@ -26,7 +28,9 @@ namespace Centipede
         }
         public override Action Generate()
         {
-            return new BranchAction(Text, new PythonCondition(""));
+            BranchAction branchAct = new BranchAction(Text);
+            branchAct.Condition = new PythonCondition(branchAct);
+            return branchAct;
         }
     }
     
@@ -38,10 +42,9 @@ namespace Centipede
         /// </summary>
         /// <param name="name"></param>
         /// <param name="condition"></param>
-        public BranchAction(String name, BranchCondition condition)
+        public BranchAction(String name)
             : base(name)
         {
-            Condition = condition;
             Attributes = new Dictionary<string, object>();
         }
 
@@ -73,9 +76,11 @@ namespace Centipede
 
     public class BranchCondition
     {
+        protected Action Action;
 
-        public BranchCondition()
+        public BranchCondition(Action act)
         {
+            this.Action = act;
             
         }
         public virtual Boolean Test(Action act)
@@ -86,9 +91,9 @@ namespace Centipede
 
     class PythonCondition : BranchCondition
     {
-        public PythonCondition(String source) : base()
+        public PythonCondition(Action act) : base(act)
         {
-            Source = source;
+            act.Attributes.Add("Source", "");
         }
 
         public override Boolean Test(Action act)
@@ -97,7 +102,18 @@ namespace Centipede
             return engine.Evaluate<Boolean>(Source);
         }
 
-        public string Source;
+        public string Source
+        {
+            get
+            {
+                return this.Action.Attributes["Source"] as String;
+            }
+            set
+            {
+                this.Action.Attributes["Source"] = value;
+            }
+
+        }
 
         public override String ToString()
         {

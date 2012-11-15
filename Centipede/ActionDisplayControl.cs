@@ -174,12 +174,10 @@ namespace Centipede
 
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-            if (cm.Visible)
-            {
-                ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
-                Program.RemoveAction(adc.Action);
-                (adc.Parent as TableLayoutPanel).Controls.Remove(adc);
-            }
+           
+            Program.RemoveAction(this.Action);
+            (this.Parent as TableLayoutPanel).Controls.Remove(this);
+            
         }
 
         private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)
