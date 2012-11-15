@@ -18,7 +18,7 @@ namespace Centipede
         public override void DoAction()
         {
             MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
-                                          Attributes["Test 1"], Attributes["Test 2"]
+                                          ParseAttribute<Int32>("Test 1"), ParseAttribute<String>("Test 2")
                            )
                            ,
                            "Demo Action executed"
