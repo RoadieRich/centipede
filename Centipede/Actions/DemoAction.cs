@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Centipede
 {
-    [ActionCategory("Other")]
+    [ActionCategory("UI")]
     public class DemoAction : Action
     {
         public DemoAction(Dictionary<String, Object> variables)
