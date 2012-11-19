@@ -189,6 +189,20 @@ namespace Centipede
         {
             Action.Comment = (sender as TextBox).Text;
         }
+
+        private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void ActionDisplayControl_DragDrop(object sender, DragEventArgs e)
+        {
+            
+            var data = e.Data.GetData("WindowsForms10PersistentObject");
+            int index = Program.GetIndexOf(this.Action);
+            Program.AddAction((data as ActionFactory).Generate(), index);
+        }
+
     }
 
     internal enum ActionState
