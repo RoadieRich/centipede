@@ -48,7 +48,7 @@ namespace Centipede
                 {
                     return (T)Attributes[attributeName];
                 }
-                catch (InvalidCastException e)
+                catch (InvalidCastException)
                 {
                     throw new ActionException(String.Format(@"Cannot convert ""{0}"" to type {1} in argument {2}", Attributes[attributeName], typeof(T).Name, attributeName), this);
                 }
@@ -68,12 +68,7 @@ namespace Centipede
 
     }
 
-    class AttributeWithDescription
-    {
-        public Object Attribute;
-        public String Description;
-    }
-
+    
     [System.ComponentModel.DesignerCategory("")]
     public abstract class ActionFactory : ListViewItem
     {

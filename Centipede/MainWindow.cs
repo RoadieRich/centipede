@@ -66,7 +66,7 @@ namespace Centipede
         private Boolean ErrorHandler(ActionException e, ref Action nextAction)
         {
             StringBuilder messageBuilder = new StringBuilder();
-            String message;
+            
             if (e.ErrorAction != null)
             {
                 UpdateHandlerDone(e.ErrorAction);
