@@ -73,11 +73,11 @@ namespace Centipede
                 ActionDisplayControl adc = e.ErrorAction.Tag as ActionDisplayControl;
                 if (adc.InvokeRequired)
                 {
-                    adc.Invoke(SetActionDisplayState, adc, ActionState.Error);
+                    adc.Invoke(SetActionDisplayState, adc, ActionState.Error, e.Message);
                 }
                 else
                 {
-                    adc.State = ActionState.Error;
+                    SetActionDisplayState(adc, ActionState.Error, e.Message);
                 }
 
                 messageBuilder.AppendLine("Error occurred in ");
@@ -150,7 +150,7 @@ namespace Centipede
                 ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
                 if (adc.InvokeRequired)
                 {
-                    adc.Invoke(SetActionDisplayState, adc, ActionState.Completed);
+                    adc.Invoke(SetActionDisplayState, adc, ActionState.Completed, "Completed");
                 }
                 else
                 {
@@ -192,13 +192,17 @@ namespace Centipede
         }
 
         private JobDataSet _dataSet = new JobDataSet();
-        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state);
+        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state, String message);
 
-        private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state)
+        private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
         {
             lock (adc)
             {
                 adc.State = state;
+                if (message != "")
+                {
+                    adc.StatusMessage = message;
+                }
             }
         }
 
@@ -243,7 +247,7 @@ namespace Centipede
             ActionDisplayControl adc = action.Tag as ActionDisplayControl;
             if (adc.InvokeRequired)
             {
-                adc.Invoke(SetActionDisplayState, adc, ActionState.Running);
+                adc.Invoke(SetActionDisplayState, adc, ActionState.Running, "Running");
             }
             else
             {
@@ -254,7 +258,7 @@ namespace Centipede
         void Program_ActionAdded(Action action, int index)
         {
             ActionDisplayControl adc = new ActionDisplayControl(action);
-            ActionContainer.Controls.Add(adc);
+            ActionContainer.Controls.Add(adc,0,index);
             ActionContainer.SetRow(adc, index);
         }
 
@@ -365,6 +369,54 @@ namespace Centipede
             }
         }
 
+        private void ActionContainer_DragDrop(object sender, DragEventArgs e)
+        {
+            TableLayoutPanel table = sender as TableLayoutPanel;
+            Control droppedOn = table.GetChildAtPoint(new System.Drawing.Point(e.X, e.Y));
+            
+            Int32 index = -1;
+
+            if (droppedOn != null)
+            {
+                //index = Program.GetIndexOf(droppedOn.Action);
+            }
+            index.ToString();
+            var s = e.Data.GetFormats();
+            var data = e.Data.GetData("WindowsForms10PersistentObject");
+            Program.AddAction((data as ActionFactory).Generate());
+
+        }
+
+        private void BeginDrag(object sender, ItemDragEventArgs e)
+        {
+            
+            DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void FlowContListBox_DragLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ActionContainer_DragEnter(object sender, DragEventArgs e)
+        {
+        //    MessageBox.Show(e.Data.ToString());
+        //    if (e.Data.GetDataPresent(typeof(ListViewItem).ToString(), true))
+        //    {
+        //    
+        //    }
+            //TODO: Check type in here?
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void FlowContListBox_ItemActivate(object sender, EventArgs e)
+        {
+            ListView sendingListView = sender as ListView;
+
+            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
+
+            Program.AddAction(sendingActionFactory.Generate());
+        }
     }
 
     class GuiConsole

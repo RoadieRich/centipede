@@ -1,15 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Data;
 using System.Linq;
+using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
 
 namespace Centipede
 {
-    
     internal partial class ActionDisplayControl : UserControl
     {
+        List<ToolTip> StatusToolTips = new List<ToolTip>();
+
+        public String StatusMessage
+        {
+            get
+            {
+                return _statusMessage;
+            }
+            set
+            {
+                _statusMessage = value;
+                StatusTooltip.SetToolTip(StatusIconBox, value);
+            }
+        }
+        
         internal ActionDisplayControl(Action action)
         {
             InitializeComponent();
@@ -23,7 +39,16 @@ namespace Centipede
             Label attrLabel;
             TextBox attrValue;
 
+            foreach (ActionState state in Enum.GetValues(typeof(ActionState)))
+            {
+                StatusToolTips.Add(new ToolTip());
+            }
+
+            _statusToolTip = new ToolTip();
+            _statusToolTip.SetToolTip(StatusIconBox, "");
+
             
+
 
             Type actionType = action.GetType();
 
@@ -170,6 +195,7 @@ namespace Centipede
         }
 
         private ActionState _state = ActionState.None;
+
         /// <summary>
         /// Sets the displayed state of the action.
         /// <see cref="ActionState"/>
@@ -206,18 +232,18 @@ namespace Centipede
         }
 
         public readonly Action ThisAction;
+        private ToolTip _statusToolTip;
+        private string _statusMessage;
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
 
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-            //if (cm.Visible)
-            {
-                //ActionDisplayControl adc = cm.SourceControl as ActionDisplayControl;
-                Program.RemoveAction(ThisAction);
-                (Parent as TableLayoutPanel).Controls.Remove(this);
-            }
+           
+            Program.RemoveAction(ThisAction);
+            (this.Parent as TableLayoutPanel).Controls.Remove(this);
+            
         }
 
         private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)
@@ -228,6 +254,19 @@ namespace Centipede
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
             ThisAction.Comment = (sender as TextBox).Text;
+        }
+
+        private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void ActionDisplayControl_DragDrop(object sender, DragEventArgs e)
+        {
+            
+            var data = e.Data.GetData("WindowsForms10PersistentObject");
+            int index = Program.GetIndexOf(ThisAction);
+            Program.AddAction((data as ActionFactory).Generate(), index);
         }
     }
 
