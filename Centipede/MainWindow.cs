@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Text;
+using System.IO;
+using System.Reflection;
 
 namespace Centipede
 {
@@ -211,6 +213,34 @@ namespace Centipede
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+
+            foreach (FileInfo fi in new DirectoryInfo(Properties.Settings.Default.PluginFolder).EnumerateFiles("*.dll", SearchOption.AllDirectories))
+            {
+                Assembly asm = Assembly.LoadFile(fi.FullName);
+                Type[] pluginsInFile = asm.GetExportedTypes();
+                foreach (Type pluginType in pluginsInFile)
+                {
+                    Object[] customAttributes = pluginType.GetCustomAttributes(typeof(Centipede.ActionCategoryAttribute), true);
+                    if (customAttributes.Count() > 0)
+                    {
+                        ActionCategoryAttribute catAttribute = customAttributes[0] as ActionCategoryAttribute;
+                        
+                        ListView catListView;
+                        if (AddActionTabs.TabPages.ContainsKey(catAttribute.category))
+                        {
+                            catListView = AddActionTabs.TabPages[catAttribute.category].Tag as ListView;
+                        }
+                        else
+                        {
+                            catListView = GenerateNewTabPage(catAttribute.category);
+
+                        }
+                    }
+                }
+
+            }
+
+
             VarDataGridView.DataSource = _dataSet.Variables;
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
@@ -240,6 +270,18 @@ namespace Centipede
 
             //backgroundWorker1.RunWorkerAsync();
 
+        }
+
+        private ListView GenerateNewTabPage(String category)
+        {
+            ListView lv = new ListView();
+            ImageList il = new ImageList(lv.Container);
+            TabPage tabPage = new TabPage(category);
+            tabPage.Controls.Add(lv);
+            lv.Dock = DockStyle.Fill;
+            tabPage.Tag = lv;
+
+            return lv;
         }
 
         void Program_BeforeAction(Action action)
