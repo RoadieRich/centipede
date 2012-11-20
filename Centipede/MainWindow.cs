@@ -275,7 +275,9 @@ namespace Centipede
         private ListView GenerateNewTabPage(String category)
         {
             ListView lv = new ListView();
-            ImageList il = new ImageList(lv.Container);
+            ImageList il = new ImageList();
+            lv.LargeImageList = il;
+            lv.SmallImageList = il;
             TabPage tabPage = new TabPage(category);
             tabPage.Controls.Add(lv);
             lv.Dock = DockStyle.Fill;
