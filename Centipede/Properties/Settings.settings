@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="PluginFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">actions</Value>
+      <Value Profile="(Default)">plugins</Value>
     </Setting>
   </Settings>
 </SettingsFile>
