@@ -77,7 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\Actions.cs" />
+    <Compile Include="ActionFactory.cs" />
     <Compile Include="Actions\BranchAction.cs" />
     <Compile Include="Actions\DemoAction.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
@@ -131,6 +131,7 @@
     <EmbeddedResource Include="ActionDisplayControl.resx">
       <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="JobDataSet.xsc">
       <DependentUpon>JobDataSet.xsd</DependentUpon>

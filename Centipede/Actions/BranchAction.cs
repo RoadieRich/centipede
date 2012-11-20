@@ -8,28 +8,7 @@ using IronPython.Runtime;
 
 namespace Centipede
 {
-    public class BranchActionFactory : ActionFactory
-    {
-        public BranchActionFactory() : base("Branch")
-        { }
-        public override Action Generate()
-        {
-            return new BranchAction(Text, Program.Variables, new BranchCondition());
-        }
-    }
-
-    public class PythonBranchActionFactory : ActionFactory
-    {
-        public PythonBranchActionFactory() : base ("Python Branch")
-        {
-            Text="Python Branch";
-        }
-        public override Action Generate()
-        {
-            return new BranchAction(Text, Program.Variables, new PythonCondition(""));
-        }
-    }
-    
+       
     public class BranchAction : Action
     {
         /// <summary>

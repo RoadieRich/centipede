@@ -14,7 +14,8 @@ namespace Centipede
         public override void DoAction()
         {
             MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
-                                          Test1, ParseStringForVariable(Test2)
+                                          Test1, 
+                                          ParseStringForVariable(Test2)
                            )
                            ,
                            "Demo Action executed"
@@ -49,14 +50,5 @@ namespace Centipede
         public String Test2 = "attr 2";
     }
 
-    class DemoActionFactory : ActionFactory
-    {
-        public DemoActionFactory()
-            : base("Demo Action")
-        { }
-        public override Action Generate()
-        {
-            return new DemoAction(Program.Variables);
-        }
-    }
+    
 }
