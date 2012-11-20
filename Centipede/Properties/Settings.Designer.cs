@@ -25,7 +25,7 @@ namespace Centipede.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("actions")]
+        [global::System.Configuration.DefaultSettingValueAttribute("plugins")]
         public string PluginFolder {
             get {
                 return ((string)(this["PluginFolder"]));
