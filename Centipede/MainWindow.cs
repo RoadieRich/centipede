@@ -184,7 +184,11 @@ namespace Centipede
 
         private void ListBox_Dbl_Click(object sender, MouseEventArgs e)
         {
-            
+            ListView sendingListView = sender as ListView;
+
+            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
+
+            Program.AddAction(sendingActionFactory.Generate());
         }
 
         private JobDataSet _dataSet = new JobDataSet();
@@ -250,7 +254,7 @@ namespace Centipede
         void Program_ActionAdded(Action action, int index)
         {
             ActionDisplayControl adc = new ActionDisplayControl(action);
-            ActionContainer.Controls.Add(adc,0,index);
+            ActionContainer.Controls.Add(adc);
             ActionContainer.SetRow(adc, index);
         }
 
@@ -359,55 +363,6 @@ namespace Centipede
             {
                 RunButton.PerformClick();
             }
-        }
-
-        private void ActionContainer_DragDrop(object sender, DragEventArgs e)
-        {
-            TableLayoutPanel table = sender as TableLayoutPanel;
-            Control droppedOn = table.GetChildAtPoint(new System.Drawing.Point(e.X, e.Y));
-            
-            Int32 index = -1;
-
-            if (droppedOn != null)
-            {
-                //index = Program.GetIndexOf(droppedOn.Action);
-            }
-            index.ToString();
-            var s = e.Data.GetFormats();
-            var data = e.Data.GetData("WindowsForms10PersistentObject");
-            Program.AddAction((data as ActionFactory).Generate());
-
-        }
-
-        private void BeginDrag(object sender, ItemDragEventArgs e)
-        {
-            
-            DoDragDrop(e.Item, DragDropEffects.Move);
-        }
-
-        private void FlowContListBox_DragLeave(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ActionContainer_DragEnter(object sender, DragEventArgs e)
-        {
-        //    MessageBox.Show(e.Data.ToString());
-        //    if (e.Data.GetDataPresent(typeof(ListViewItem).ToString(), true))
-        //    {
-        //    
-        //    }
-            //TODO: Check type in here?
-            e.Effect = DragDropEffects.Move;
-        }
-
-        private void FlowContListBox_ItemActivate(object sender, EventArgs e)
-        {
-            ListView sendingListView = sender as ListView;
-
-            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
-
-            Program.AddAction(sendingActionFactory.Generate());
         }
 
     }
