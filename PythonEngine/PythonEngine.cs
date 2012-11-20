@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System;
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
-using System.Collections.Generic;
+
 
 namespace Centipede.PyEngine
 {
@@ -37,10 +32,10 @@ namespace Centipede.PyEngine
         /// <param name="code">The code to execute</param>
         public void Execute(String code)
         {
-            ScriptSource source = PyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
-            CompiledCode compiled = source.Compile();
+            ScriptSource source = PyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);;
             try
             {
+                CompiledCode compiled = source.Compile();
                 compiled.Execute(PyScope);
             }
             catch (Exception e)
@@ -130,7 +125,7 @@ namespace Centipede.PyEngine
     public class PythonException : Exception
     {
         public PythonException(Exception e)
-            : base("Python Error: " + e.Message, e)
+            : base(String.Format("{0}: {1}", e.GetType().Name, e.Message), e)
         { }
     }
 }
