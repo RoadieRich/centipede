@@ -235,11 +235,21 @@ namespace Centipede
             }
             else
             {
-                Action prev = Actions[index];
-                Action next = prev.Next;
-                prev.Next = action;
-                action.Next = next;
-                Actions.Insert(index, action);
+                if (index == 0) //add at start of list
+                {
+                    Action oldFirst = Actions[0];
+                    Actions.Insert(0, action);
+                    action.Next = oldFirst;
+                }
+                else
+                {
+                    Action prevAction = Actions[index-1];
+                    Action nextAction = Actions[index];
+                    prevAction.Next = action;
+                    action.Next = nextAction;
+                    Actions.Insert(index, action);
+                }
+                
             }
             if (ActionAdded != null)
             {
@@ -262,6 +272,11 @@ namespace Centipede
             }
             Actions.Remove(action);
 
+        }
+
+        internal static int GetIndexOf(Action action)
+        {
+            return Actions.IndexOf(action);
         }
     }
      
