@@ -76,7 +76,14 @@ namespace Centipede
         {
             ScriptSource source = PyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
             CompiledCode compiled = source.Compile();
-            return compiled.Execute<T>(PyScope);
+            try
+            {
+                return compiled.Execute<T>(PyScope);
+            }
+            catch (Exception e)
+            {
+                throw new PythonException(e);
+            }
         }
         
         /// <summary>
