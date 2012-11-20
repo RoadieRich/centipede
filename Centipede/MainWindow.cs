@@ -41,7 +41,7 @@ namespace Centipede
 
             this.Text = "Centipede 0.1 " + Program.JobName;
 
-            Program.Variables.Add("console", new GuiConsole());
+            Program.Variables.Add("_console", new GuiConsole());
 
             ActionFactory fact = new PythonActionFactory();
             fact.ImageIndex = 0;
@@ -129,7 +129,7 @@ namespace Centipede
         {
             foreach (KeyValuePair<String, Object> v in Program.Variables.ToArray())
             {
-                if (v.Key == "console")
+                if (v.Key.StartsWith("_"))
                 {
                     continue;
                 }
@@ -146,21 +146,20 @@ namespace Centipede
                 {
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
-
-                ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
-                if (adc.InvokeRequired)
-                {
-                    adc.Invoke(SetActionDisplayState, adc, ActionState.Completed);
-                }
-                else
-                {
-                    (adc).State = ActionState.Completed;
-                }
-
-                _progress += 10;
-
-                backgroundWorker1.ReportProgress(_progress);
             }
+            ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
+            if (adc.InvokeRequired)
+            {
+                adc.Invoke(SetActionDisplayState, adc, ActionState.Completed);
+            }
+            else
+            {
+                (adc).State = ActionState.Completed;
+            }
+
+            _progress += 10;
+
+            backgroundWorker1.ReportProgress(_progress);
         }
 
         private Int32 _progress = 0;
@@ -260,7 +259,7 @@ namespace Centipede
                                     where _dataSet.Variables.Rows.Contains(kvp.Key)
                                     select kvp.Key))
             {
-                if (key != "console")
+                if (!key.StartsWith("_"))
                 {
                     Program.Variables.Remove(key);
                     break;
@@ -282,7 +281,7 @@ namespace Centipede
 
                 foreach (String key in it)
                 {
-                    if (key != "console")
+                    if (!key.StartsWith("_"))
                     {
                         Program.Variables.Remove(key);
                         break;

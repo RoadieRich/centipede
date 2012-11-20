@@ -23,7 +23,7 @@ namespace Centipede
                 PyEngine = Python.CreateEngine();
                 PyScope = PyEngine.CreateScope();
                 PyScope.ImportModule("sys");
-                PyScope.SetVariable("sys.stdout", Program.Variables["console"]);
+                PyScope.SetVariable("sys.stdout", Program.Variables["_console"]);
                 PyScope.SetVariable("variables", Program.Variables);
 
                 MyMessageBox mbx = new MyMessageBox();
