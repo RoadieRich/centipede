@@ -222,6 +222,7 @@
             // 
             // ActionDisplayControl
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
@@ -235,7 +236,8 @@
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
             this.Size = new System.Drawing.Size(139, 65);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ActionDisplayControl_KeyPress);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionDisplayControl_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionDisplayControl_DragEnter);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
