@@ -151,7 +151,6 @@
             // 
             // ActionContainer
             // 
-            this.ActionContainer.AllowDrop = true;
             this.ActionContainer.AutoScroll = true;
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ActionContainer.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Inset;
@@ -161,24 +160,22 @@
             this.ActionContainer.Location = new System.Drawing.Point(3, 3);
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.RowCount = 1;
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
-            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 239F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
+            this.ActionContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 233F));
             this.ActionContainer.Size = new System.Drawing.Size(435, 233);
             this.ActionContainer.TabIndex = 0;
-            this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
-            this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
             // 
             // AddActionTabs
             // 
@@ -216,7 +213,6 @@
             this.UIActListBox.Size = new System.Drawing.Size(427, 164);
             this.UIActListBox.TabIndex = 0;
             this.UIActListBox.UseCompatibleStateImageBehavior = false;
-            this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             this.UIActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // FlowContActTab
@@ -237,19 +233,14 @@
             this.ActionColumn,
             this.DescriptionColumn});
             this.FlowContListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FlowContListBox.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.FlowContListBox.HideSelection = false;
             this.FlowContListBox.LargeImageList = this.FlowControlActIcons;
             this.FlowContListBox.Location = new System.Drawing.Point(3, 3);
-            this.FlowContListBox.MultiSelect = false;
             this.FlowContListBox.Name = "FlowContListBox";
             this.FlowContListBox.Size = new System.Drawing.Size(427, 164);
             this.FlowContListBox.SmallImageList = this.FlowControlActIcons;
             this.FlowContListBox.TabIndex = 1;
             this.FlowContListBox.UseCompatibleStateImageBehavior = false;
-            this.FlowContListBox.ItemActivate += new System.EventHandler(this.FlowContListBox_ItemActivate);
-            this.FlowContListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
-            this.FlowContListBox.DragLeave += new System.EventHandler(this.FlowContListBox_DragLeave);
+            this.FlowContListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // ActionColumn
             // 
@@ -285,7 +276,6 @@
             this.ExcelActListBox.Size = new System.Drawing.Size(427, 164);
             this.ExcelActListBox.TabIndex = 1;
             this.ExcelActListBox.UseCompatibleStateImageBehavior = false;
-            this.ExcelActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             this.ExcelActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // MathCadActTab
@@ -307,7 +297,6 @@
             this.MathCadListBox.Size = new System.Drawing.Size(427, 164);
             this.MathCadListBox.TabIndex = 2;
             this.MathCadListBox.UseCompatibleStateImageBehavior = false;
-            this.MathCadListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             this.MathCadListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // SolidWorksActTab
@@ -329,7 +318,6 @@
             this.SolidWorksListBox.Size = new System.Drawing.Size(427, 164);
             this.SolidWorksListBox.TabIndex = 3;
             this.SolidWorksListBox.UseCompatibleStateImageBehavior = false;
-            this.SolidWorksListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             this.SolidWorksListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // OtherActTab
@@ -353,7 +341,6 @@
             this.OtherActListBox.SmallImageList = this.OtherActIcons;
             this.OtherActListBox.TabIndex = 3;
             this.OtherActListBox.UseCompatibleStateImageBehavior = false;
-            this.OtherActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             this.OtherActListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBox_Dbl_Click);
             // 
             // OtherActIcons
