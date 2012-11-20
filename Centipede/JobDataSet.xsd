@@ -21,23 +21,11 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Actions" msprop:Generator_TableClassName="ActionsDataTable" msprop:Generator_TableVarName="tableActions" msprop:Generator_TablePropName="Actions" msprop:Generator_RowDeletingName="ActionsRowDeleting" msprop:Generator_UserTableName="Actions" msprop:Generator_RowChangingName="ActionsRowChanging" msprop:Generator_RowEvHandlerName="ActionsRowChangeEventHandler" msprop:Generator_RowDeletedName="ActionsRowDeleted" msprop:Generator_RowEvArgName="ActionsRowChangeEvent" msprop:Generator_RowChangedName="ActionsRowChanged" msprop:Generator_RowClassName="ActionsRow">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="Index" msprop:Generator_ColumnVarNameInTable="columnIndex" msprop:Generator_ColumnPropNameInRow="Index" msprop:Generator_ColumnPropNameInTable="IndexColumn" msprop:Generator_UserColumnName="Index" type="xs:int" />
-              <xs:element name="Action" msdata:DataType="Centipede.Action, Centipede, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" msprop:Generator_ColumnVarNameInTable="columnAction" msprop:Generator_ColumnPropNameInRow="Action" msprop:Generator_ColumnPropNameInTable="ActionColumn" msprop:Generator_UserColumnName="Action" type="xs:anyType" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:Variables" />
       <xs:field xpath="mstns:Name" />
-    </xs:unique>
-    <xs:unique name="Actions_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
-      <xs:selector xpath=".//mstns:Actions" />
-      <xs:field xpath="mstns:Index" />
     </xs:unique>
   </xs:element>
 </xs:schema>
