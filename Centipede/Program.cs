@@ -12,17 +12,13 @@ namespace Centipede
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(String[] args)
         {
-            //XXX:Testing only
-            JobFileName = "Test File";
-            //SetupTestAction();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             mainForm = new MainWindow();
-            
             Application.Run(mainForm);
         }
         
@@ -72,8 +68,8 @@ namespace Centipede
         public static Dictionary<String, Object> Variables = new Dictionary<String, Object>();
 
         
-        public static string JobFileName = "testing.100p";
-        public static string JobName = "Testing";
+        public static string JobFileName = "";
+        public static string JobName = "";
 
         private static List<Action> Actions = new List<Action>();
         internal static MainWindow mainForm;
@@ -179,8 +175,12 @@ namespace Centipede
         /// <summary>
         /// Add some test actions to the queue.
         /// </summary>
+        [System.Diagnostics.Conditional("DEBUG")]
         internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
         {
+
+            JobFileName = "Test File";
+
             if (actions.HasFlag(ActionsToTest.PythonAction))
             {
                 PythonAction testPythonAction = new PythonAction(Program.Variables);
@@ -205,8 +205,9 @@ namespace Centipede
 
             if (actions.HasFlag(ActionsToTest.ErrorAction))
             {
-                PythonAction testErrorAction = new PythonAction(Program.Variables, "raise Exception()");
+                PythonAction testErrorAction = new PythonAction(Program.Variables);
                 testErrorAction.Comment = "Throw an error!";
+                testErrorAction.Source = "raise Exception()";
 
                 Program.AddAction(testErrorAction);
             }

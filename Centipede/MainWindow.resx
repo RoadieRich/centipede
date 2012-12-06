@@ -117,110 +117,129 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="FlowControlActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>270, 17</value>
-  </metadata>
-  <data name="FlowControlActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABk
-        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
-        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA4oB+AT/A4oB+ANf
-        Ac0DMwFQBAbgAANbAbgBswH1Av8BeQHjAv8BZAHZAv8BZQHTAv8BoAHmAv8DYgHPAxYBHOAAA3kB9gGB
-        Ae0C/wF4AegC/wFtAeAC/wHVAfYC/wFbAdAC/wOPAfkDHgEo1AAEBgMUBBkBIQT/AX4B7QL/AX0B7QL/
-        AXYB5wL/AWsB3gL/AWAB1gb/AygBOwMZASADEgEXBAUIAAMcAf8DHAH/AxwB/wMcAf8DHAH/AxwB/wwA
-        AxwB/wMcAf+QAAMaASMDXQHCA4oB+Aj/AX4B7QL/AX4B7QL/Ab4B9xL/A4oB+ANfAc0DMwFQBAYQAAMc
-        Af8UAAMcAf8DHAH/kAADWgG5AcwBugGlAf8BiAGBAWIB/wGBAYABYQX/AX8B7QL/AX4B7QL/AX4B7QL/
-        AXwB6wL/AXIB4wL/AWcB2wL/AVwB0gL/AVUBywL/AZ0B5AL/A2IBzwMXAR0QAAMcAf8UAAMcAf8DHAH/
-        kAADeQH2AaEBgQFnAf8BjwGBAV0B/wGEAYEBXwH/AfEB7gHqAf8BmwH0Av8BfwHtAv8BfgHtAv8BfgHt
-        Av8BegHqAv8BcAHiAv8BZQHZAv8BWgHRAv8BXAHMAv8DjwH5Ax4BKRAAAxwB/xQAAxwB/wMcAf+QAAT/
-        AaQBgQFZAf8BmQGBAVsB/wGNAYEBXgH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wFuAeAC/wFj
-        AdgC/wFYAc8G/wMfASoQAAMcAf8UAAMcAf8DHAH/kAADdAH1AbIBggFjAf8BogGBAVkB/wGWAYEBXAH/
-        AYsBgQFeAf8CgQFgAf8BgQF/AWEB/wGBAX8BYQH/AYEBgAFiAf8BrAGcAYkB/wHtAf0C/wF3AecC/wFr
-        Ad8C/wFsAdkC/wOKAfgDGQEhBAADHAH/AxwB/wMcAf8DHAH/DAADHAH/AxwB/wMcAf8DHAH/AxwB/wMc
-        Af+IAANZAbYB3AHCAaIB/wGtAYEBWwH/AaABgQFaAf8BlAGBAVwB/wGJAYEBXgH/AYEBgAFhAf8BgQF/
-        AWEB/wGBAX8BYQH/AoEBYwX/AX0B7AL/AXgB5gL/AawB7wL/A10BxAMKAQsoAAMcAf8DHAH/lAADWwG4
-        A4kB9xD/AckBvgGxAf8BgQF/AWEB/wGBAX8BYQn/A3QB9QNbAbgDHAElFAADHAH/FAADHAH/AxwB/6AA
-        BP8BmwGBAVsB/wGQAYEBXQH/AYUBgQFfAf8BgQF/AWEB/wGBAX8BYQX/Ax4BKSAAAxwB/xgAAxwB/wMc
-        Af8DHAH/AxwB/5QAA3QB9QGmAYEBXAH/AegB3wHTAf8BjgGBAV0B/wGCAYEBYAH/AoEBZQH/A4oB+AMZ
-        ASHgAANZAbYB2AHAAaMB/wGoAYEBZQH/AZcBgQFcAf8BkwGBAWkB/wHEAbcBqAH/A10BxAMKAQvkAANb
-        AbgDiQH3BP8DdAH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEoAwABQAMAARADAAEBAQABAQUAAYAXAAP/
-        AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGAAQEBgQHPBgAB9wHPBgAB9wHPBgAB9wHP
-        BgAB9wHPBgABhwEDBgAB/wHPBAABgAEBAfcBzwQAAfABDwH3AeEEAAHwAQ8C/wQAAfABDwL/BAAB+AEf
-        Av8EAAs=
-</value>
-  </data>
-  <metadata name="OtherActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>423, 17</value>
-  </metadata>
-  <data name="OtherActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABi
-        BAAAAk1TRnQBSQFMAwEBAAEEAQABBAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
-        ARADAAEBAQABIAYAARAmAAQGAxQBGgMZASEDGQEhAxMBGAQF5AADGgEjA18BwwOKAfgE/wOKAfgDXwHN
-        AzMBUAQG4AADWwG4AbMB9QL/AXkB4wL/AWQB2QL/AWUB0wL/AaAB5gL/A2IBzwMWARzgAAN5AfYBgQHt
-        Av8BeAHoAv8BbQHgAv8B1QH2Av8BWwHQAv8DjwH5Ax4BKNQABAYDFAQZASEE/wF+Ae0C/wF9Ae0C/wF2
-        AecC/wFrAd4C/wFgAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgOKAfgI/wF+Ae0C/wF+Ae0C/wG+
-        AfcS/wOKAfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAWIB/wGBAYABYQX/AX8B7QL/AX4B7QL/
-        AX4B7QL/AXwB6wL/AXIB4wL/AWcB2wL/AVwB0gL/AVUBywL/AZ0B5AL/A2IBzwMXAR3AAAN5AfYBoQGB
-        AWcB/wGPAYEBXQH/AYQBgQFfAf8B8QHuAeoB/wGbAfQC/wF/Ae0C/wF+Ae0C/wF+Ae0C/wF6AeoC/wFw
-        AeIC/wFlAdkC/wFaAdEC/wFcAcwC/wOPAfkDHgEpwAAE/wGkAYEBWQH/AZkBgQFbAf8BjQGBAV4B/wGj
-        AY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BbgHgAv8BYwHYAv8BWAHPBv8DHwEqwAADdAH1AbIBggFj
-        Af8BogGBAVkB/wGWAYEBXAH/AYsBgQFeAf8CgQFgAf8BgQF/AWEB/wGBAX8BYQH/AYEBgAFiAf8BrAGc
-        AYkB/wHtAf0C/wF3AecC/wFrAd8C/wFsAdkC/wOKAfgDGQEhwAADWQG2AdwBwgGiAf8BrQGBAVsB/wGg
-        AYEBWgH/AZQBgQFcAf8BiQGBAV4B/wGBAYABYQH/AYEBfwFhAf8BgQF/AWEB/wKBAWMF/wF9AewC/wF4
-        AeYC/wGsAe8C/wNdAcQDCgELxAADWwG4A4kB9xD/AckBvgGxAf8BgQF/AWEB/wGBAX8BYQn/A3QB9QNb
-        AbgDHAEl1AAE/wGbAYEBWwH/AZABgQFdAf8BhQGBAV8B/wGBAX8BYQH/AYEBfwFhBf8DHgEp4AADdAH1
-        AaYBgQFcAf8B6AHfAdMB/wGOAYEBXQH/AYIBgQFgAf8CgQFlAf8DigH4AxkBIeAAA1kBtgHYAcABowH/
-        AagBgQFlAf8BlwGBAVwB/wGTAYEBaQH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuAOJAfcE/wN0AfUDWgG5
-        AxwBJdQAAUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8GAAHwAQ8GAAHw
-        AQ8GAAHwAQ8GAAGAAQE2AAGAAQEGAAHwAQ8GAAHwAQ8GAAHwAQ8GAAH4AR8GAAs=
-</value>
-  </data>
-  <metadata name="VarsContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="updateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>156, 17</value>
-  </metadata>
-  <metadata name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>545, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAIAEBAQAAAABAAoAQAAJgAAACAgEAAAAAQA6AIAAE4BAAAoAAAAEAAAACAAAAABAAQAAAAAAIAA
-        AAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
-        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAQAAAAAAAAABEQAAAAAAAAkRAAAAAAAAAAERAAAA
-        AAAACREAAAAAAAAAAREAAAAAAAAJEQEAAAAAAAABEQAAAAAAAAEREAAAAAAAABERAAAAAAAAAREBAAAA
-        AAAJkAAQAAAAAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAA7+AAAN/gAAA94AAEO+AABgfgAAQP4AADge
-        AABwDgAAbAYAAFwGAAB+AgAAfwwAAH/eAAB/3gAAAAAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAA
-        AAAAAAAAEAAAABAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD/
-        /wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAgRAAAAAAAAAAAAAAAAAAABgQAAAAAAAAAA
-        AAAAAAAACZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAAAAAAAAAAAAmRgQAA
-        AAAAAAAAAAAAAAAAmZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAAAAAAAAAA
-        AAmRgQAAAAAAAAAAAAAAAAAAmZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAA
-        AAAAAAAAAAmRgQAREAAAAAAAAAAAAAAAmZAREQAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgR
-        EP8AAAAAAAAAAAAAABERgREAEAAAAAAAAAAAAACRERERERAAAAAAAAAAAAAAkAEREREQAAAAAAAAAAAA
-        AAAAEREREBAAAAAAAAAAAAAAAAEREQAREAAAAAAAAAAAAP8JkREAAREQAAAAAAAAAAAAmZkAAAABEAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAABEAAA
-        AAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABu///gHd
-        //4Au//+AHd//kBu//5ADd/+IAO//nAHd/5sBu/+XADf/jgAP/52AH/+bsBH/l3AAf57gAD+d2AAfn7s
-        AH592AA+f7gAPn94AD5//AAef/wABn/+AGB//wD4f//D/n//8/5///n+f//5/n///P5///z+AAAAAA==
-</value>
+  <data name="ActionsVarsTabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>455, 471</value>
   </data>
-  <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 49</value>
-  </metadata>
-  <metadata name="jobDataSet1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>169, 49</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>74</value>
-  </metadata>
+  <data name="&gt;&gt;FlowControlActIcons.Name" xml:space="preserve">
+    <value>FlowControlActIcons</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ActionsVarsTabControl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 6</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="RunButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>473, 489</value>
+  </data>
+  <data name="&gt;&gt;VarMenuUndo.Name" xml:space="preserve">
+    <value>VarMenuUndo</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VarMenuDelete.Name" xml:space="preserve">
+    <value>VarMenuDelete</value>
+  </data>
+  <data name="&gt;&gt;ActionContainer.Name" xml:space="preserve">
+    <value>ActionContainer</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainWindow</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="progressBar1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="VarMenuSelectAll.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+A</value>
+  </data>
+  <data name="VarMenuUndo.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+Z</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
+    <value>toolStripSeparator6</value>
+  </data>
+  <data name="&gt;&gt;LoadBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Parent" xml:space="preserve">
+    <value>AddActionTabs</value>
+  </data>
+  <data name="UIActTab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
+    <value>toolStripSeparator5</value>
+  </data>
+  <data name="&gt;&gt;VarMenuPaste.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarDataGridView.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;VarMenuSelectAll.Name" xml:space="preserve">
+    <value>VarMenuSelectAll</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SaveButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="UIActTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Centipede</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;jobDataSet1.Name" xml:space="preserve">
+    <value>jobDataSet1</value>
+  </data>
+  <data name="&gt;&gt;VarMenuCut.Name" xml:space="preserve">
+    <value>VarMenuCut</value>
+  </data>
+  <data name="ActionsTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>447, 445</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Parent" xml:space="preserve">
+    <value>UIActTab</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Parent" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="VarMenuCopy.Text" xml:space="preserve">
+    <value>&amp;Copy</value>
+  </data>
+  <data name="&gt;&gt;ActionContainer.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="VarsTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>447, 445</value>
+  </data>
+  <data name="LoadBtn.Text" xml:space="preserve">
+    <value>&amp;Load</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Parent" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAEBAQAAAABAAoAQAAJgAAACAgEAAAAAQA6AIAAE4BAAAoAAAAEAAAACAAAAABAAQAAAAAAIAA
@@ -243,4 +262,544 @@
         AH592AA+f7gAPn94AD5//AAef/wABn/+AGB//wD4f//D/n//8/5///n+f//5/n///P5///z+AAAAAA==
 </value>
   </data>
+  <data name="&gt;&gt;OtherActIcons.Name" xml:space="preserve">
+    <value>OtherActIcons</value>
+  </data>
+  <data name="AddActionTabs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionContainer.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Name" xml:space="preserve">
+    <value>ActionsTab</value>
+  </data>
+  <data name="progressBar1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 489</value>
+  </data>
+  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>441, 439</value>
+  </data>
+  <data name="ActionContainer.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="AddActionTabs.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Name" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="ActionsTab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+    <value>239</value>
+  </data>
+  <data name="ActionContainer.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="SaveButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>473, 42</value>
+  </data>
+  <data name="UIActListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="VarMenuCut.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="VarDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarMenuCopy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="VarMenuDelete.Text" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="VarMenuCopy.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+C</value>
+  </data>
+  <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="UIActListBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="&gt;&gt;VarMenuSelectAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AddActionTabs.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="AddActionTabs.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="VarMenuCut.Text" xml:space="preserve">
+    <value>Cu&amp;t</value>
+  </data>
+  <data name="VarDataGridView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="LoadBtn.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="progressBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>455, 23</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="FlowControlActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
+        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA4IB+AT/A4IB+ANf
+        Ac0DMwFQBAbgAANbAbgBswH1Av8BfQHjAv8BaAHZAv8BaQHTAv8BoAHmAv8DYgHPAxYBHOAAA3UB9gGB
+        Ae0C/wF8AegC/wFxAeAC/wHVAfYC/wFfAdAC/wOLAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
+        AXoB5wL/AW8B3gL/AWQB1gb/AygBOwMZASADEgEXBAUIAAMgAf8DIAH/AyAB/wMgAf8DIAH/AyAB/wwA
+        AyAB/wMgAf+QAAMaASMDXQHCA4IB+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A4IB+ANfAc0DMwFQBAYQAAMg
+        Af8UAAMgAf8DIAH/kAADWgG5AcwBugGlAf8BiAGBAWYB/wKBAWUF/wGBAe0C/wGBAe0C/wGBAe0C/wGA
+        AesC/wF2AeMC/wFrAdsC/wFgAdIC/wFZAcsC/wGdAeQC/wNiAc8DFwEdEAADIAH/FAADIAH/AyAB/5AA
+        A3UB9gGhAYEBawH/AY8BgQFhAf8BhAGBAWMB/wHxAe4B6gH/AZsB9AL/AYEB7QL/AYEB7QL/AYEB7QL/
+        AX4B6gL/AXQB4gL/AWkB2QL/AV4B0QL/AWABzAL/A4sB+QMeASkQAAMgAf8UAAMgAf8DIAH/kAAE/wGk
+        AYEBXQH/AZkBgQFfAf8BjQGBAWIB/wGjAY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BcgHgAv8BZwHY
+        Av8BXAHPBv8DHwEqEAADIAH/FAADIAH/AyAB/5AAA3IB9QGyAYIBZwH/AaIBgQFdAf8BlgGBAWAB/wGL
+        AYEBYgH/AoEBZAH/AoEBZQH/AoEBZQH/AoEBZgH/AawBnAGJAf8B7QH9Av8BewHnAv8BbwHfAv8BcAHZ
+        Av8DggH4AxkBIQQAAyAB/wMgAf8DIAH/AyAB/wwAAyAB/wMgAf8DIAH/AyAB/wMgAf8DIAH/iAADWQG2
+        AdwBwgGiAf8BrQGBAV8B/wGgAYEBXgH/AZQBgQFgAf8BiQGBAWIB/wKBAWUB/wKBAWUB/wKBAWUB/wKB
+        AWcF/wGBAewC/wF8AeYC/wGsAe8C/wNdAcQDCgELKAADIAH/AyAB/5QAA1sBuAOFAfcQ/wHJAb4BsQH/
+        AoEBZQH/AoEBZQn/A3IB9QNbAbgDHAElFAADIAH/FAADIAH/AyAB/6AABP8BmwGBAV8B/wGQAYEBYQH/
+        AYUBgQFjAf8CgQFlAf8CgQFlBf8DHgEpIAADIAH/GAADIAH/AyAB/wMgAf8DIAH/lAADcgH1AaYBgQFg
+        Af8B6AHfAdMB/wGOAYEBYQH/AYIBgQFkAf8CgQFpAf8DggH4AxkBIeAAA1kBtgHYAcABowH/AagBgQFp
+        Af8BlwGBAWAB/wGTAYEBbQH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuAOFAfcE/wNyAfUDWgG5AxwBJdQA
+        AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
+        Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
+        AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
+</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
+    <value>ActionsTab</value>
+  </data>
+  <data name="notifyIcon.BalloonTipTitle" xml:space="preserve">
+    <value>Centipede is Running</value>
+  </data>
+  <data name="&gt;&gt;RunButton.Name" xml:space="preserve">
+    <value>RunButton</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;VarMenuCopy.Name" xml:space="preserve">
+    <value>VarMenuCopy</value>
+  </data>
+  <data name="VarMenuDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="&gt;&gt;RunButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarsTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;VarMenuCopy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Name" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="splitContainer1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
+    <value>splitContainer1</value>
+  </data>
+  <data name="&gt;&gt;VarMenuUndo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SaveButton.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;VarMenuDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ActionsTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="VarsTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="ActionsVarsTabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="VarMenuSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="&gt;&gt;LoadBtn.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;LoadBtn.Name" xml:space="preserve">
+    <value>LoadBtn</value>
+  </data>
+  <data name="&gt;&gt;updateTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;updateTimer.Name" xml:space="preserve">
+    <value>updateTimer</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Name" xml:space="preserve">
+    <value>VarDataGridView</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="VarMenuPaste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="RunButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="&gt;&gt;RunButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;ActionContainer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ActionContainer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="RunButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="OtherActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
+        BAAAAk1TRnQBSQFMAwEBAAEEAQABBAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
+        ARADAAEBAQABIAYAARAmAAQGAxQBGgMZASEDGQEhAxMBGAQF5AADGgEjA18BwwOCAfgE/wOCAfgDXwHN
+        AzMBUAQG4AADWwG4AbMB9QL/AX0B4wL/AWgB2QL/AWkB0wL/AaAB5gL/A2IBzwMWARzgAAN1AfYBgQHt
+        Av8BfAHoAv8BcQHgAv8B1QH2Av8BXwHQAv8DiwH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wF6
+        AecC/wFvAd4C/wFkAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgOCAfgI/wGBAe0C/wGBAe0C/wG+
+        AfcS/wOCAfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAWYB/wKBAWUF/wGBAe0C/wGBAe0C/wGB
+        Ae0C/wGAAesC/wF2AeMC/wFrAdsC/wFgAdIC/wFZAcsC/wGdAeQC/wNiAc8DFwEdwAADdQH2AaEBgQFr
+        Af8BjwGBAWEB/wGEAYEBYwH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BfgHqAv8BdAHi
+        Av8BaQHZAv8BXgHRAv8BYAHMAv8DiwH5Ax4BKcAABP8BpAGBAV0B/wGZAYEBXwH/AY0BgQFiAf8BowGO
+        AYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AXIB4AL/AWcB2AL/AVwBzwb/Ax8BKsAAA3IB9QGyAYIBZwH/
+        AaIBgQFdAf8BlgGBAWAB/wGLAYEBYgH/AoEBZAH/AoEBZQH/AoEBZQH/AoEBZgH/AawBnAGJAf8B7QH9
+        Av8BewHnAv8BbwHfAv8BcAHZAv8DggH4AxkBIcAAA1kBtgHcAcIBogH/Aa0BgQFfAf8BoAGBAV4B/wGU
+        AYEBYAH/AYkBgQFiAf8CgQFlAf8CgQFlAf8CgQFlAf8CgQFnBf8BgQHsAv8BfAHmAv8BrAHvAv8DXQHE
+        AwoBC8QAA1sBuAOFAfcQ/wHJAb4BsQH/AoEBZQH/AoEBZQn/A3IB9QNbAbgDHAEl1AAE/wGbAYEBXwH/
+        AZABgQFhAf8BhQGBAWMB/wKBAWUB/wKBAWUF/wMeASngAANyAfUBpgGBAWAB/wHoAd8B0wH/AY4BgQFh
+        Af8BggGBAWQB/wKBAWkB/wOCAfgDGQEh4AADWQG2AdgBwAGjAf8BqAGBAWkB/wGXAYEBYAH/AZMBgQFt
+        Af8BxAG3AagB/wNdAcQDCgEL5AADWwG4A4UB9wT/A3IB9QNaAbkDHAEl1AABQgFNAT4HAAE+AwABKAMA
+        AUADAAEQAwABAQEAAQEFAAGAFwAD/wEAAfgBHwYAAfABDwYAAfABDwYAAfABDwYAAYABATYAAYABAQYA
+        AfABDwYAAfABDwYAAfABDwYAAfgBHwYACw==
+</value>
+  </data>
+  <data name="VarsTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="ActionsVarsTabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarMenuCut.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+X</value>
+  </data>
+  <data name="SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="LoadBtn.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;VarMenuPaste.Name" xml:space="preserve">
+    <value>VarMenuPaste</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Name" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="VarMenuPaste.Text" xml:space="preserve">
+    <value>&amp;Paste</value>
+  </data>
+  <data name="UIActTab.Text" xml:space="preserve">
+    <value>UI</value>
+  </data>
+  <data name="LoadBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>473, 12</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AddActionTabs.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ActionContainer.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;LoadBtn.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="notifyIcon.Text" xml:space="preserve">
+    <value>Centipede</value>
+  </data>
+  <data name="notifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        AAABAAIAEBAQAAAABAAoAQAAJgAAACAgEAAAAAQA6AIAAE4BAAAoAAAAEAAAACAAAAABAAQAAAAAAIAA
+        AAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
+        AAAA//8A/wAAAP8A/wD//wAA////AAAAAAAAAAAAAQAAAAAAAAABEQAAAAAAAAkRAAAAAAAAAAERAAAA
+        AAAACREAAAAAAAAAAREAAAAAAAAJEQEAAAAAAAABEQAAAAAAAAEREAAAAAAAABERAAAAAAAAAREBAAAA
+        AAAJkAAQAAAAAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAA7+AAAN/gAAA94AAEO+AABgfgAAQP4AADge
+        AABwDgAAbAYAAFwGAAB+AgAAfwwAAH/eAAB/3gAAAAAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAA
+        AAAAAAAAEAAAABAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD/
+        /wD/AAAA/wD/AP//AAD///8AAAAAAAAAAAAAAAAAAAAAAAgRAAAAAAAAAAAAAAAAAAABgQAAAAAAAAAA
+        AAAAAAAACZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAAAAAAAAAAAAmRgQAA
+        AAAAAAAAAAAAAAAAmZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAAAAAAAAAA
+        AAmRgQAAAAAAAAAAAAAAAAAAmZAREAAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgRAAAAAAAA
+        AAAAAAAAAAmRgQAREAAAAAAAAAAAAAAAmZAREQAAAAAAAAAAAAAAAAABgREAAAAAAAAAAAAAAAAAARgR
+        EP8AAAAAAAAAAAAAABERgREAEAAAAAAAAAAAAACRERERERAAAAAAAAAAAAAAkAEREREQAAAAAAAAAAAA
+        AAAAEREREBAAAAAAAAAAAAAAAAEREQAREAAAAAAAAAAAAP8JkREAAREQAAAAAAAAAAAAmZkAAAABEAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAAAAAAAAAAAABEAAA
+        AAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABu///gHd
+        //4Au//+AHd//kBu//5ADd/+IAO//nAHd/5sBu/+XADf/jgAP/52AH/+bsBH/l3AAf57gAD+d2AAfn7s
+        AH592AA+f7gAPn94AD5//AAef/wABn/+AGB//wD4f//D/n//8/5///n+f//5/n///P5///z+AAAAAA==
+</value>
+  </data>
+  <data name="VarMenuSelectAll.Text" xml:space="preserve">
+    <value>Select &amp;All</value>
+  </data>
+  <data name="progressBar1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Parent" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ActionsTab.Text" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="SaveButton.Text" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="ActionContainer.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;AddActionTabs.Name" xml:space="preserve">
+    <value>AddActionTabs</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="AddActionTabs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>441, 196</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Name" xml:space="preserve">
+    <value>SaveButton</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="LoadBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="VarMenuUndo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 22</value>
+  </data>
+  <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249,Absolute,249" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;backgroundWorker1.Name" xml:space="preserve">
+    <value>backgroundWorker1</value>
+  </data>
+  <data name="VarsTab.Text" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="&gt;&gt;VarsContextMenu.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Name" xml:space="preserve">
+    <value>UIActListBox</value>
+  </data>
+  <data name="splitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="RunButton.Text" xml:space="preserve">
+    <value>&amp;Run</value>
+  </data>
+  <data name="VarsContextMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 148</value>
+  </data>
+  <data name="UIActListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>427, 164</value>
+  </data>
+  <data name="&gt;&gt;OtherActIcons.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarMenuPaste.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Ctrl+V</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>560, 524</value>
+  </data>
+  <data name="&gt;&gt;progressBar1.Name" xml:space="preserve">
+    <value>progressBar1</value>
+  </data>
+  <data name="ActionContainer.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
+    <value>Horizontal</value>
+  </data>
+  <data name="VarMenuUndo.Text" xml:space="preserve">
+    <value>&amp;Undo</value>
+  </data>
+  <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;jobDataSet1.Type" xml:space="preserve">
+    <value>Centipede.JobDataSet, JobDataSet.Designer.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;SaveButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="VarDataGridView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>441, 439</value>
+  </data>
+  <data name="UIActTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>433, 170</value>
+  </data>
+  <data name="UIActTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;RunButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="ActionContainer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>435, 233</value>
+  </data>
+  <data name="ActionContainer.CellBorderStyle" type="System.Windows.Forms.TableLayoutPanelCellBorderStyle, System.Windows.Forms">
+    <value>Inset</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Name" xml:space="preserve">
+    <value>UIActTab</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Name" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="&gt;&gt;VarMenuCut.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="splitContainer1.Panel1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="VarMenuUndo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="RunButton.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;notifyIcon.Name" xml:space="preserve">
+    <value>notifyIcon</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;AddActionTabs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>139, 6</value>
+  </data>
+  <data name="&gt;&gt;VarsContextMenu.Name" xml:space="preserve">
+    <value>VarsContextMenu</value>
+  </data>
+  <data name="ActionsTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="UIActListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActIcons.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarMenuDelete.ShortcutKeyDisplayString" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <metadata name="OtherActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>423, 17</value>
+  </metadata>
+  <metadata name="FlowControlActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>270, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>545, 17</value>
+  </metadata>
+  <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 49</value>
+  </metadata>
+  <metadata name="updateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>156, 17</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>74</value>
+  </metadata>
+  <metadata name="VarsContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="jobDataSet1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>169, 49</value>
+  </metadata>
 </root>

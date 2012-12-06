@@ -68,7 +68,7 @@ namespace Centipede
         private Boolean ErrorHandler(ActionException e, ref Action nextAction)
         {
             StringBuilder messageBuilder = new StringBuilder();
-            
+
             if (e.ErrorAction != null)
             {
                 UpdateHandlerDone(e.ErrorAction);
@@ -96,7 +96,7 @@ namespace Centipede
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine(e.Message);
             }
-            //CbRFtCiDVis506ZJ0xsnslwj5Et8ECVZCR6y48yd76REzIGL3N4d9F94ET9KsxyE
+
             DialogResult result = MessageBox.Show(
                 messageBuilder.ToString(),
                 "Error",
@@ -184,7 +184,7 @@ namespace Centipede
             MessageBox.Show(message, "Finished", MessageBoxButtons.OK, icon);
         }
 
-        private void ListBox_Dbl_Click(object sender, MouseEventArgs e)
+        private void ItemActivate(object sender, EventArgs e)
         {
             ListView sendingListView = sender as ListView;
 
@@ -214,7 +214,11 @@ namespace Centipede
         private void MainWindow_Load(object sender, EventArgs e)
         {
 
-            foreach (FileInfo fi in new DirectoryInfo(Properties.Settings.Default.PluginFolder).EnumerateFiles("*.dll", SearchOption.AllDirectories))
+            DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, Properties.Settings.Default.PluginFolder));
+
+            var dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);
+
+            foreach (FileInfo fi in dlls)
             {
                 Assembly asm = Assembly.LoadFile(fi.FullName);
                 Type[] pluginsInFile = asm.GetExportedTypes();
@@ -224,17 +228,29 @@ namespace Centipede
                     if (customAttributes.Count() > 0)
                     {
                         ActionCategoryAttribute catAttribute = customAttributes[0] as ActionCategoryAttribute;
-                        
-                        ListView catListView;
-                        if (AddActionTabs.TabPages.ContainsKey(catAttribute.category))
+
+                        TabPage tabPage = null;
+                        foreach (TabPage _tabPage in AddActionTabs.TabPages)
                         {
-                            catListView = AddActionTabs.TabPages[catAttribute.category].Tag as ListView;
+                            if (_tabPage.Text == catAttribute.category)
+                            {
+                                tabPage = _tabPage;
+                                break;
+                            }
+                        }
+
+                        ListView catListView;
+                        if (tabPage != null)
+                        {
+                            catListView = tabPage.Tag as ListView;
                         }
                         else
                         {
                             catListView = GenerateNewTabPage(catAttribute.category);
-
                         }
+
+
+                        catListView.Items.Add(new ActionFactory(catAttribute, pluginType));
                     }
                 }
 
@@ -267,9 +283,13 @@ namespace Centipede
 
             Program.SetupTestActions(Program.ActionsToTest.All);
 
-
             //backgroundWorker1.RunWorkerAsync();
 
+        }
+
+        void AddActionTabs_DoubleClick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private ListView GenerateNewTabPage(String category)
@@ -282,8 +302,17 @@ namespace Centipede
             tabPage.Controls.Add(lv);
             lv.Dock = DockStyle.Fill;
             tabPage.Tag = lv;
+            lv.ItemDrag += new ItemDragEventHandler(BeginDrag);
+            lv.ItemActivate += new EventHandler(ItemActivate);
+            AddActionTabs.TabPages.Add(tabPage);
+
 
             return lv;
+        }
+
+        void tabPage_MouseDoubleClick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         void Program_BeforeAction(Action action)
@@ -302,7 +331,7 @@ namespace Centipede
         void Program_ActionAdded(Action action, int index)
         {
             ActionDisplayControl adc = new ActionDisplayControl(action);
-            ActionContainer.Controls.Add(adc,0,index);
+            ActionContainer.Controls.Add(adc, 0, index);
             ActionContainer.SetRow(adc, index);
         }
 
@@ -392,17 +421,11 @@ namespace Centipede
         private void copyToolStripButton_Click(object sender, EventArgs e)
         {
             ToolStripButton btn = sender as ToolStripButton;
-
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = Math.Min(e.ProgressPercentage, 100);
-        }
-
-        private void MainWindow_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -417,7 +440,7 @@ namespace Centipede
         {
             TableLayoutPanel table = sender as TableLayoutPanel;
             Control droppedOn = table.GetChildAtPoint(new System.Drawing.Point(e.X, e.Y));
-            
+
             Int32 index = -1;
 
             if (droppedOn != null)
@@ -433,34 +456,16 @@ namespace Centipede
 
         private void BeginDrag(object sender, ItemDragEventArgs e)
         {
-            
+
             DoDragDrop(e.Item, DragDropEffects.Move);
         }
 
-        private void FlowContListBox_DragLeave(object sender, EventArgs e)
-        {
-
-        }
-
         private void ActionContainer_DragEnter(object sender, DragEventArgs e)
-        {
-        //    MessageBox.Show(e.Data.ToString());
-        //    if (e.Data.GetDataPresent(typeof(ListViewItem).ToString(), true))
-        //    {
-        //    
-        //    }
+        {   
             //TODO: Check type in here?
             e.Effect = DragDropEffects.Move;
         }
 
-        private void FlowContListBox_ItemActivate(object sender, EventArgs e)
-        {
-            ListView sendingListView = sender as ListView;
-
-            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
-
-            Program.AddAction(sendingActionFactory.Generate());
-        }
     }
 
     class GuiConsole
