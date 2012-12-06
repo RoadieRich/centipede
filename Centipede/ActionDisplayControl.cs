@@ -82,7 +82,8 @@ namespace Centipede
 
                 AttributeTable.Controls.Add(attrValue);
                 attrValue.Tag = arg;
-                attrValue.TextChanged += new EventHandler(attrValue_TextChanged);
+                //attrValue.TextChanged += ;
+                attrValue.Leave += new EventHandler(attrValue_TextChanged);
             }
 
             CommentTextBox.Text = action.Comment;
@@ -121,7 +122,7 @@ namespace Centipede
             }
             else
             {
-                f.SetValue(this.ThisAction, attrValue.Text);
+                f.SetValue(this.ThisAction, f.FieldType.GetMethod("Parse").Invoke(f, new object[] {attrValue.Text}));
             }
         }
 

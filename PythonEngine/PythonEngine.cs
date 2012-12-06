@@ -9,7 +9,6 @@ namespace Centipede.PyEngine
     /// <summary>
     /// The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
     /// </summary>
-
     public class PythonEngine
     {
         private ScriptEngine PyEngine = null;
@@ -27,7 +26,7 @@ namespace Centipede.PyEngine
         }
 
         /// <summary>
-        /// Execute code internally
+        /// Execute python code
         /// </summary>
         /// <param name="code">The code to execute</param>
         public void Execute(String code)
@@ -45,16 +44,23 @@ namespace Centipede.PyEngine
         }
 
         /// <summary>
-        /// Evaluate the expression
+        /// Evaluate an expression, and return the result
         /// </summary>
-        /// <typeparam name="T">(C#) Type to coerce the value of the expression to</typeparam>
+        /// <typeparam name="T">The (C#) Type to coerce the value of the expression to</typeparam>
         /// <param name="expression">Expression to evaluate</param>
         /// <returns>The result of the expression, coerced to type T</returns>
         public T Evaluate<T>(String expression)
         {
-            ScriptSource source = PyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
-            CompiledCode compiled = source.Compile();
-            return compiled.Execute<T>(PyScope);
+            try
+            {
+                ScriptSource source = PyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
+                CompiledCode compiled = source.Compile();
+                return compiled.Execute<T>(PyScope);
+            }
+            catch (Exception e)
+            {
+                throw new PythonException(e);
+            }
         }
 
         /// <summary>
@@ -86,6 +92,11 @@ namespace Centipede.PyEngine
         public T GetVariable<T>(String name)
         {
             return PyScope.GetVariable<T>(name);
+        }
+
+        public CompiledCode Compile(String code, SourceCodeKind kind)
+        {
+            return PyEngine.CreateScriptSourceFromString(code, kind).Compile();
         }
 
         public Boolean VariableExists(String name)
@@ -120,7 +131,22 @@ namespace Centipede.PyEngine
         }
 
         #endregion
+
+        /// <summary>
+        /// unused
+        /// </summary>
+        /// <param name="pyEngine"></param>
+        /// <returns></returns>
+        [Obsolete]
+        public static implicit operator ScriptScope (PythonEngine pyEngine)
+        {
+            return pyEngine.PyScope;
+        }
+        
     }
+
+    
+
 
     public class PythonException : Exception
     {

@@ -8,18 +8,16 @@ using Centipede.PyEngine;
 
 namespace Centipede.PyAction
 {
-    [Centipede.ActionCategory("Other")]
+    [Centipede.ActionCategory("Other Actions")]
     public class PythonAction : Centipede.Action
     {
 
-        public PythonAction(Dictionary<String, Object> variables, String source = "")
+        public PythonAction(Dictionary<String, Object> variables)
             : base("Python Action", variables)
-        {
-            Source = source;
-        }
+        { }
 
         [ActionArgument(usage = "Source code to be executed")]
-        public String Source;
+        public String Source = "";
         //{
         //    get
         //    {

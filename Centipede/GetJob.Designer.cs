@@ -28,67 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GetJob));
             this.FavouritesListbox = new System.Windows.Forms.ListBox();
             this.LoadButton = new System.Windows.Forms.Button();
             this.BrowseButton = new System.Windows.Forms.Button();
             this.NewButton = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // FavouritesListbox
             // 
-            this.FavouritesListbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.FavouritesListbox.FormattingEnabled = true;
-            this.FavouritesListbox.Location = new System.Drawing.Point(13, 13);
+            resources.ApplyResources(this.FavouritesListbox, "FavouritesListbox");
+            this.FavouritesListbox.DisplayMember = "Text";
             this.FavouritesListbox.Name = "FavouritesListbox";
-            this.FavouritesListbox.Size = new System.Drawing.Size(535, 342);
-            this.FavouritesListbox.TabIndex = 0;
+            this.FavouritesListbox.DoubleClick += new System.EventHandler(this.FavouritesListbox_DoubleClick);
             // 
             // LoadButton
             // 
-            this.LoadButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            resources.ApplyResources(this.LoadButton, "LoadButton");
             this.LoadButton.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.LoadButton.Location = new System.Drawing.Point(12, 359);
             this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(75, 23);
-            this.LoadButton.TabIndex = 1;
-            this.LoadButton.Text = "&Load";
             this.LoadButton.UseVisualStyleBackColor = true;
             // 
             // BrowseButton
             // 
-            this.BrowseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BrowseButton.Enabled = false;
-            this.BrowseButton.Location = new System.Drawing.Point(93, 359);
+            resources.ApplyResources(this.BrowseButton, "BrowseButton");
             this.BrowseButton.Name = "BrowseButton";
-            this.BrowseButton.Size = new System.Drawing.Size(75, 23);
-            this.BrowseButton.TabIndex = 2;
-            this.BrowseButton.Text = "&Browse...";
             this.BrowseButton.UseVisualStyleBackColor = true;
+            this.BrowseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // NewButton
             // 
-            this.NewButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.NewButton, "NewButton");
             this.NewButton.DialogResult = System.Windows.Forms.DialogResult.No;
-            this.NewButton.Location = new System.Drawing.Point(473, 359);
             this.NewButton.Name = "NewButton";
-            this.NewButton.Size = new System.Drawing.Size(75, 23);
-            this.NewButton.TabIndex = 3;
-            this.NewButton.Text = "&New";
             this.NewButton.UseVisualStyleBackColor = true;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.DefaultExt = "100p";
+            this.openFileDialog1.FileName = "openFileDialog1";
+            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
             // 
             // GetJob
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 394);
             this.Controls.Add(this.NewButton);
             this.Controls.Add(this.BrowseButton);
             this.Controls.Add(this.LoadButton);
             this.Controls.Add(this.FavouritesListbox);
             this.Name = "GetJob";
-            this.Text = "Centipede";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.TopMost = true;
             this.ResumeLayout(false);
 
         }
@@ -99,5 +92,6 @@
         private System.Windows.Forms.Button LoadButton;
         private System.Windows.Forms.Button BrowseButton;
         private System.Windows.Forms.Button NewButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

@@ -8,11 +8,10 @@ namespace Centipede
     /// </summary>
     public abstract class Action
     {
-        public Action(String name, Dictionary<String,Object> variables, Object tag = null)
+        public Action(String name, Dictionary<String,Object> variables)
         {
             Name = name;
             Variables = variables;
-            Tag = tag;
         }
 
         public delegate void Setter(String s);
@@ -91,7 +90,8 @@ namespace Centipede
         }
 
         public readonly String category;
-        public String helpText;
+        public String helpText = "";
+        public String displayName = "";
     }
 
     public class ActionException : Exception
