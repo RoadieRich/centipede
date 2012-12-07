@@ -82,19 +82,18 @@
             // 
             // splitContainer1.Panel1
             // 
-            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
             this.splitContainer1.Panel1.Controls.Add(this.ActionContainer);
+            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
             // 
             // splitContainer1.Panel2
             // 
-            resources.ApplyResources(this.splitContainer1.Panel2, "splitContainer1.Panel2");
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Panel2.Controls.Add(this.AddActionTabs);
             // 
             // ActionContainer
             // 
-            resources.ApplyResources(this.ActionContainer, "ActionContainer");
             this.ActionContainer.AllowDrop = true;
+            resources.ApplyResources(this.ActionContainer, "ActionContainer");
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
@@ -102,8 +101,8 @@
             // 
             // AddActionTabs
             // 
-            resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
             this.AddActionTabs.Controls.Add(this.UIActTab);
+            resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
             this.AddActionTabs.HotTrack = true;
             this.AddActionTabs.Multiline = true;
             this.AddActionTabs.Name = "AddActionTabs";
@@ -111,9 +110,9 @@
             // 
             // UIActTab
             // 
-            resources.ApplyResources(this.UIActTab, "UIActTab");
             this.UIActTab.BackColor = System.Drawing.SystemColors.Window;
             this.UIActTab.Controls.Add(this.UIActListBox);
+            resources.ApplyResources(this.UIActTab, "UIActTab");
             this.UIActTab.Name = "UIActTab";
             // 
             // UIActListBox
@@ -135,30 +134,29 @@
             // 
             // ActionsTab
             // 
-            resources.ApplyResources(this.ActionsTab, "ActionsTab");
             this.ActionsTab.BackColor = System.Drawing.SystemColors.Window;
             this.ActionsTab.Controls.Add(this.splitContainer1);
+            resources.ApplyResources(this.ActionsTab, "ActionsTab");
             this.ActionsTab.Name = "ActionsTab";
             // 
             // VarsTab
             // 
-            resources.ApplyResources(this.VarsTab, "VarsTab");
             this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
             this.VarsTab.Controls.Add(this.VarDataGridView);
+            resources.ApplyResources(this.VarsTab, "VarsTab");
             this.VarsTab.Name = "VarsTab";
             // 
             // VarDataGridView
             // 
-            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
             this.VarDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VarDataGridView.ContextMenuStrip = this.VarsContextMenu;
+            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
             this.VarDataGridView.Name = "VarDataGridView";
             this.VarDataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.VarDataGridView_CellContextMenuStripNeeded);
             // 
             // VarsContextMenu
             // 
-            resources.ApplyResources(this.VarsContextMenu, "VarsContextMenu");
             this.VarsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.VarMenuUndo,
             this.toolStripSeparator5,
@@ -171,6 +169,7 @@
             this.VarsContextMenu.Name = "ActionContextMenu";
             this.VarsContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.VarsContextMenu.ShowImageMargin = false;
+            resources.ApplyResources(this.VarsContextMenu, "VarsContextMenu");
             // 
             // VarMenuUndo
             // 
@@ -179,39 +178,39 @@
             // 
             // toolStripSeparator5
             // 
-            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             this.toolStripSeparator5.Name = "toolStripSeparator5";
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
             // VarMenuCut
             // 
-            resources.ApplyResources(this.VarMenuCut, "VarMenuCut");
             this.VarMenuCut.Name = "VarMenuCut";
+            resources.ApplyResources(this.VarMenuCut, "VarMenuCut");
             // 
             // VarMenuCopy
             // 
-            resources.ApplyResources(this.VarMenuCopy, "VarMenuCopy");
             this.VarMenuCopy.Name = "VarMenuCopy";
+            resources.ApplyResources(this.VarMenuCopy, "VarMenuCopy");
             // 
             // VarMenuPaste
             // 
-            resources.ApplyResources(this.VarMenuPaste, "VarMenuPaste");
             this.VarMenuPaste.Name = "VarMenuPaste";
+            resources.ApplyResources(this.VarMenuPaste, "VarMenuPaste");
             // 
             // VarMenuDelete
             // 
-            resources.ApplyResources(this.VarMenuDelete, "VarMenuDelete");
             this.VarMenuDelete.Name = "VarMenuDelete";
+            resources.ApplyResources(this.VarMenuDelete, "VarMenuDelete");
             this.VarMenuDelete.Click += new System.EventHandler(this.VarMenuDelete_Click);
             // 
             // toolStripSeparator6
             // 
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             // 
             // VarMenuSelectAll
             // 
-            resources.ApplyResources(this.VarMenuSelectAll, "VarMenuSelectAll");
             this.VarMenuSelectAll.Name = "VarMenuSelectAll";
+            resources.ApplyResources(this.VarMenuSelectAll, "VarMenuSelectAll");
             // 
             // FlowControlActIcons
             // 
@@ -251,6 +250,7 @@
             resources.ApplyResources(this.SaveButton, "SaveButton");
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // updateTimer
             // 

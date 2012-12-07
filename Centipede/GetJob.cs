@@ -37,7 +37,8 @@ namespace Centipede
             }
             else
             {
-                FavouritesListbox.Items.Add(new JobControl(openFileDialog1.FileName));
+                int index = FavouritesListbox.Items.Add(new JobControl(openFileDialog1.FileName));
+                FavouritesListbox.SelectedIndex = index;
             }
         }
 
@@ -60,10 +61,6 @@ namespace Centipede
         private string GetJobName()
         {
             return Path.GetFileNameWithoutExtension(Filename);
-        }
-        public override String ToString()
-        {
-            return Text;
         }
     }
 }

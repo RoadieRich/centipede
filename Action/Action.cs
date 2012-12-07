@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Xml;
+using System.Reflection;
+using System.Linq;
+using System.IO;
 namespace Centipede
 {
     /// <summary>
@@ -70,6 +73,75 @@ namespace Centipede
             return TrueValues.Contains(ParseAttribute<String>(attributeName));
         }
 
+        public void AddToXMLDoc(XmlDocument doc)
+        {
+
+            XmlNode root = doc.FirstChild;
+            Type thisType = this.GetType();
+
+            XmlElement element = doc.CreateElement(String.Format("Centipede:{0}", thisType.FullName));
+
+            
+            foreach (FieldInfo field in thisType.GetFields().Where(f=>f.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Count()>0))
+            {
+                element.SetAttribute(field.Name, field.GetValue(this).ToString());
+            }
+            String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
+
+            element.SetAttribute("Comment", this.Comment);
+
+            element.SetAttribute("_Assembly", pluginFilePath);
+
+            root.AppendChild(element);
+
+        }
+
+        static private Type[] _constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
+        
+
+        static public Action FromXML(XmlElement element, Dictionary<String, Object> variables)
+        {
+            Assembly asm;
+
+            //if action is not a plugin:
+            if (element.LocalName.Count(c => c != '.') <= 1)
+            {
+                asm = Assembly.GetEntryAssembly();
+            }
+            else
+            {
+                String asmPath = Path.Combine(
+                                            Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+                                            Properties.Settings.Default.PluginFolder,
+                                            element.GetAttribute("_Assembly"));
+                asm = Assembly.LoadFile(asmPath);
+            }
+            
+            Type t = asm.GetType(element.LocalName);
+
+            
+
+            Object instance = t.GetConstructor(_constructorArgumentTypes).Invoke(new object[] {variables});
+
+            element.Attributes.RemoveNamedItem("_Assembly");
+
+            foreach (XmlAttribute attribute in element.Attributes)
+            {
+                FieldInfo field = t.GetField(attribute.Name);
+                MethodInfo parseMethod = field.FieldType.GetMethod("Parse", new Type[] {typeof(String)});
+                Object parsedValue = attribute.Value;
+                if (parseMethod != null)
+                {
+                    field.SetValue(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
+                }
+                else
+                {
+                    field.SetValue(instance, attribute.Value);
+                }
+            }
+
+            return instance as Action;
+        }
     }
 
     [System.AttributeUsage(AttributeTargets.Field)]
@@ -92,6 +164,7 @@ namespace Centipede
         public readonly String category;
         public String helpText = "";
         public String displayName = "";
+        public String DisplayControl = "";
     }
 
     public class ActionException : Exception
