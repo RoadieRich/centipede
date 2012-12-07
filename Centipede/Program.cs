@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using Centipede.PyAction;
+using System.Xml;
 
 namespace Centipede
 {
@@ -19,7 +20,8 @@ namespace Centipede
             Application.SetCompatibleTextRenderingDefault(false);
 
             mainForm = new MainWindow();
-            Application.Run(mainForm);
+            if (!mainForm.IsDisposed)
+                Application.Run(mainForm);
         }
         
         /// <summary>
@@ -278,6 +280,22 @@ namespace Centipede
         internal static int GetIndexOf(Action action)
         {
             return Actions.IndexOf(action);
+        }
+
+        internal static void SaveJob()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.AppendChild(xmlDoc.CreateElement("CentipedeJob"));
+
+            foreach (Action action in Actions)
+            {
+                action.AddToXMLDoc(xmlDoc);
+            }
+
+            foreach (XmlElement ele in xmlDoc.FirstChild)
+            {
+                AddAction(Action.FromXML(ele, Variables));
+            }
         }
     }
      

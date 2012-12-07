@@ -192,10 +192,13 @@
     <ProjectReference Include="..\Action\Action.csproj">
       <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
       <Name>Action</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\PythonAction\PythonAction.csproj">
       <Project>{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}</Project>
       <Name>PythonAction</Name>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

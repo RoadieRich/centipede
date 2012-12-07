@@ -18,31 +18,6 @@ namespace Centipede
         {
             InitializeComponent();
 
-            if (Program.JobFileName == "")
-            {
-                GetJob startWindow = new GetJob();
-                DialogResult loadJob = startWindow.ShowDialog();
-
-                switch (loadJob)
-                {
-                    case DialogResult.Yes:
-                        Program.JobFileName = startWindow.getJobFileName();
-                        Program.LoadJob();
-                        break;
-                    case DialogResult.No:
-                        Program.JobFileName = "new";
-                        Program.JobName = "New";
-                        break;
-                    default:
-                        Close();
-                        break;
-                }
-
-                startWindow.Dispose();
-            }
-
-            this.Text = "Centipede 0.1 " + Program.JobName;
-
             Program.Variables.Add("_console", new GuiConsole());
 
             //ActionFactory fact = new PythonActionFactory();
@@ -281,9 +256,33 @@ namespace Centipede
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
 
+
+
             Program.SetupTestActions(Program.ActionsToTest.All);
 
-            //backgroundWorker1.RunWorkerAsync();
+            if (Program.JobFileName == "")
+            {
+                GetJob startWindow = new GetJob();
+                DialogResult loadJob = startWindow.ShowDialog();
+
+                switch (loadJob)
+                {
+                    case DialogResult.Yes:
+                        Program.JobFileName = startWindow.getJobFileName();
+                        Program.LoadJob();
+                        break;
+                    case DialogResult.No:
+                        Program.JobFileName = "new";
+                        Program.JobName = "New";
+                        break;
+                    default:
+                        Close();
+                        break;
+                }
+            }
+
+            this.Text = "Centipede 0.1 " + Program.JobName;
+
 
         }
 
@@ -330,7 +329,18 @@ namespace Centipede
 
         void Program_ActionAdded(Action action, int index)
         {
-            ActionDisplayControl adc = new ActionDisplayControl(action);
+            Type actionType = action.GetType();
+            ActionCategoryAttribute actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
+            ActionDisplayControl adc;
+            if (actionAttribute.DisplayControl != "")
+            {
+                ConstructorInfo constructor = actionType.Assembly.GetType(actionAttribute.DisplayControl).GetConstructor(new Type[] { typeof(Action) });
+                adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
+            }
+            else
+            {
+                adc = new ActionDisplayControl(action);
+            }
             ActionContainer.Controls.Add(adc, 0, index);
             ActionContainer.SetRow(adc, index);
         }
@@ -464,6 +474,12 @@ namespace Centipede
         {   
             //TODO: Check type in here?
             e.Effect = DragDropEffects.Move;
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            Program.SaveJob();
+
         }
 
     }

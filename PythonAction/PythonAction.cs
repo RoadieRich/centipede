@@ -5,7 +5,6 @@ using System.Text;
 using Centipede;
 using Centipede.PyEngine;
 
-
 namespace Centipede.PyAction
 {
     [Centipede.ActionCategory("Other Actions")]
