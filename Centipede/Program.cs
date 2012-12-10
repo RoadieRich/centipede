@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using System.Linq;
 using Centipede.PyAction;
 using System.Xml;
+using System.Xml.Linq;
+using System.Reflection;
 
 namespace Centipede
 {
@@ -23,45 +25,11 @@ namespace Centipede
             if (!mainForm.IsDisposed)
                 Application.Run(mainForm);
         }
-        
+
         /// <summary>
         /// Load a job with a given name
         /// </summary>
         /// <param name="jobName">Name of the job to load</param>
-        public static void LoadJob(string jobName)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public class Variable
-        //{
-        //    public Int32 Index;
-        //    public String Name;
-        //    public Object Value;
-        
-        //    public Variable(Int32 index, String name, Object value)
-        //    {
-        //        Index = index;
-        //        Name = name;
-        //        Value = value;
-        //    }
-
-        //    public Variable()
-        //    {
-        //        Name = "(Name)";
-        //        Value = "(Value)";
-        //    }
-
-        //    public static explicit operator Variable(KeyValuePair<String, Object> kvp)
-        //    {
-        //        return new Variable(-1, kvp.Key, kvp.Value);
-        //    }
-        //    public static implicit operator KeyValuePair<String, Object>(Variable v)
-        //    {
-        //        return new KeyValuePair<string, object>(v.Name, v.Value);
-        //    }
-        //}
-
 
         /// <summary>
         /// Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive, 
@@ -69,11 +37,11 @@ namespace Centipede
         /// </summary>
         public static Dictionary<String, Object> Variables = new Dictionary<String, Object>();
 
-        
+
         public static string JobFileName = "";
         public static string JobName = "";
 
-        private static List<Action> Actions = new List<Action>();
+        internal static List<Action> Actions = new List<Action>();
         internal static MainWindow mainForm;
         //private static JobFile File = null;
 
@@ -104,22 +72,26 @@ namespace Centipede
             {
                 try
                 {
-                    if (BeforeAction != null)
+                    var handler = BeforeAction;
+                    if (handler != null)
                     {
-                        BeforeAction(currentAction);
+                        handler(currentAction);
                     }
                     currentAction.DoAction();
-                    if (ActionCompleted != null)
+
+                    handler = ActionCompleted;
+                    if (handler != null)
                     {
-                        ActionCompleted(currentAction);
+                        handler(currentAction);
                     }
                     currentAction = currentAction.GetNext();
                 }
                 catch (ActionException e)
                 {
-                    if (ActionErrorOccurred != null)
+                    var handler = ActionErrorOccurred;
+                    if (handler != null)
                     {
-                        if (!ActionErrorOccurred(e, ref currentAction))
+                        if (!handler(e, ref currentAction))
                         {
                             completed = false;
                             break;
@@ -128,7 +100,11 @@ namespace Centipede
                 }
             }
 
-            JobCompleted(completed);
+            var handler = JobCompleted;
+            if (handler != null)
+            {
+                handler(completed);
+            }
         }
 
 
@@ -137,15 +113,17 @@ namespace Centipede
         /// </summary>
         /// <param name="action">The action that has just been executed.</param>
         public delegate void ActionUpdateCallback(Action action);
-        public static event ActionUpdateCallback ActionCompleted;
-        public static event ActionUpdateCallback BeforeAction;
+        public static event ActionUpdateCallback ActionCompleted = delegate { };
+        public static event ActionUpdateCallback BeforeAction = delegate { };
+        public delegate void ActionRemovedHandler(Action action);
+        public static event ActionRemovedHandler ActionRemoved = delegate { };
 
         /// <summary>
         /// Handler for job completion
         /// </summary>
         /// <param name="succeeded">True if all actions completed successfully.</param>
         public delegate void CompletedHandler(Boolean succeeded);
-        public static event CompletedHandler JobCompleted;
+        public static event CompletedHandler JobCompleted = delegate { };
 
         /// <summary>
         /// Handler delegate for errors occuring in actions
@@ -154,17 +132,10 @@ namespace Centipede
         /// <param name="nextAction">Set to the next action - useful for repeating actions</param>
         /// <returns>True if execution of Job should continue, false to halt</returns>
         public delegate Boolean ErrorHandler(ActionException e, ref Action nextAction);
-        public static event ErrorHandler ActionErrorOccurred;
+        public static event ErrorHandler ActionErrorOccurred = delegate { };
 
-        public static void LoadJob()
-        {
-            
-            throw new NotImplementedException();
-
-            //JobName = File.getName();
-        }
-
-
+        
+       
         [Flags]
         internal enum ActionsToTest
         {
@@ -197,7 +168,7 @@ namespace Centipede
 
                 Program.AddAction(testPythonAction);
             }
-            
+
             if (actions.HasFlag(ActionsToTest.DemoAction))
             {
                 DemoAction testDemoAction = new DemoAction(Program.Variables);
@@ -214,9 +185,9 @@ namespace Centipede
                 Program.AddAction(testErrorAction);
             }
         }
-        
+
         public delegate void AddActionCallback(Action action, Int32 index);
-        public static event AddActionCallback ActionAdded = new AddActionCallback((a,b) => {});
+        public static event AddActionCallback ActionAdded;
 
         /// <summary>
         /// Add action to the job queue.  By default, it is added as the last action in the job.
@@ -246,17 +217,18 @@ namespace Centipede
                 }
                 else
                 {
-                    Action prevAction = Actions[index-1];
+                    Action prevAction = Actions[index - 1];
                     Action nextAction = Actions[index];
                     prevAction.Next = action;
                     action.Next = nextAction;
                     Actions.Insert(index, action);
                 }
-                
+
             }
-            if (ActionAdded != null)
+            var handler = ActionAdded;
+            if (handler != null)
             {
-                ActionAdded(action, index);
+                handler(action, index);
             }
         }
 
@@ -264,8 +236,8 @@ namespace Centipede
         internal static void RemoveAction(Action action)
         {
             Action prevAction = (from Action a in Actions
-                                    where a.Next == action
-                                    select a).SingleOrDefault();
+                                 where a.Next == action
+                                 select a).SingleOrDefault();
 
             Action nextAction = action.Next;
 
@@ -274,6 +246,11 @@ namespace Centipede
                 prevAction.Next = nextAction;
             }
             Actions.Remove(action);
+            var handler = ActionRemoved;
+            if (handler != null)
+            {
+                handler(action);
+            }
 
         }
 
@@ -282,22 +259,80 @@ namespace Centipede
             return Actions.IndexOf(action);
         }
 
-        internal static void SaveJob()
+        internal static void SaveJob(String filename)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.AppendChild(xmlDoc.CreateElement("CentipedeJob"));
+            XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
+            xmlRoot.SetAttribute("Title", JobName);
+            xmlDoc.AppendChild(xmlRoot);
+
+            XmlElement actionsElement = xmlDoc.CreateElement("Actions");
+            xmlRoot.AppendChild(actionsElement);
 
             foreach (Action action in Actions)
             {
-                action.AddToXMLDoc(xmlDoc);
+                action.AddToXmlElement(actionsElement);
             }
 
-            foreach (XmlElement ele in xmlDoc.FirstChild)
+            XmlElement varsElement = xmlDoc.CreateElement("Variables");
+            foreach (KeyValuePair<String, Object> variableEntry in Variables)
             {
-                AddAction(Action.FromXML(ele, Variables));
+                XmlElement curVarElement = xmlDoc.CreateElement(variableEntry.Value.GetType().Name);
+                curVarElement.SetAttribute("Name", variableEntry.Key);
+                curVarElement.SetAttribute("Value", variableEntry.Value.ToString());
+                varsElement.AppendChild(curVarElement);
+            }
+            xmlRoot.AppendChild(varsElement);
+
+            using (XmlWriter w = XmlWriter.Create(filename))
+            {
+                xmlDoc.WriteTo(w);
+            }
+            JobFileName = filename;
+        }
+
+        internal static void LoadJob(String jobFileName)
+        {
+            Clear();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(jobFileName);
+
+            foreach (XmlElement actionElement in xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
+            {
+
+                AddAction(Action.FromXml(actionElement, Variables));
+            }
+
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            foreach (XmlElement variableElement in xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
+            {
+                String name = variableElement.GetAttribute("name");
+                Type type = asm.GetType(variableElement.LocalName);
+
+                MethodInfo parseMethod = type.GetMethod("Parse", new Type[] { typeof(String) });
+
+                Object value;
+                if (parseMethod == null)
+                {
+                    value = variableElement.GetAttribute("Value");
+                }
+                else
+                {
+                    value = parseMethod.Invoke(type, new object[] { variableElement.GetAttribute("Value") });
+                }
+                Program.Variables.Add(name, value);
+            }
+        }
+
+        internal static void Clear()
+        {
+            Variables.Clear();
+            foreach (Action action in Actions.ToArray())
+            {
+                RemoveAction(action);
             }
         }
     }
-     
-    
 }

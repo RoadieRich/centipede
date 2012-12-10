@@ -16,36 +16,52 @@ namespace Centipede
         {
             InitializeComponent();
         }
-
+        public GetJobResult Result;
         internal string getJobFileName()
         {
-            if (DialogResult == System.Windows.Forms.DialogResult.Yes)
-
-                return "";
-            else if (DialogResult == System.Windows.Forms.DialogResult.No)
-                return "New Clicked";
-            else
-                return "Canceled";
+            switch (Result)
+            {
+                case GetJobResult.New:
+                    return "";
+                case GetJobResult.Open:
+                    JobControl selectedJob = FavouritesListbox.SelectedItem as JobControl;
+                    return selectedJob.Filename;
+                default:
+                    return null;
+            
+            }
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             DialogResult result = openFileDialog1.ShowDialog(this);
-            if (result == System.Windows.Forms.DialogResult.Cancel)
-            {
-                return;
-            }
-            else
-            {
-                int index = FavouritesListbox.Items.Add(new JobControl(openFileDialog1.FileName));
-                FavouritesListbox.SelectedIndex = index;
-            }
         }
 
-        private void FavouritesListbox_DoubleClick(object sender, EventArgs e)
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            FavouritesListbox.Items.ToString();
+            int index = FavouritesListbox.Items.Add(new JobControl(openFileDialog1.FileName));
+            FavouritesListbox.SelectedIndex = index;
         }
+
+        private void NewButton_Click(object sender, EventArgs e)
+        {
+            Result = GetJobResult.New;
+            this.Close();
+        }
+
+        private void LoadButton_Click(object sender, EventArgs e)
+        {
+            Result = GetJobResult.Open;
+            this.Close();
+        }
+    }
+
+    enum GetJobResult
+    {
+        New,
+        Open,
+        Cancel
     }
 
     class JobControl : Control

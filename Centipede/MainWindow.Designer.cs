@@ -61,6 +61,7 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.jobDataSet1 = new Centipede.JobDataSet();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -273,6 +274,11 @@
             this.jobDataSet1.DataSetName = "VarDataSet";
             this.jobDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // saveFileDialog1
+            // 
+            resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
+            this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -310,6 +316,7 @@
         private System.Windows.Forms.TableLayoutPanel ActionContainer;
         private System.Windows.Forms.TabPage UIActTab;
         private System.Windows.Forms.ListView UIActListBox;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
