@@ -41,7 +41,6 @@
             resources.ApplyResources(this.FavouritesListbox, "FavouritesListbox");
             this.FavouritesListbox.DisplayMember = "Text";
             this.FavouritesListbox.Name = "FavouritesListbox";
-            this.FavouritesListbox.DoubleClick += new System.EventHandler(this.FavouritesListbox_DoubleClick);
             // 
             // LoadButton
             // 
@@ -49,6 +48,7 @@
             this.LoadButton.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.LoadButton.Name = "LoadButton";
             this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
             // 
             // BrowseButton
             // 
@@ -60,15 +60,16 @@
             // NewButton
             // 
             resources.ApplyResources(this.NewButton, "NewButton");
-            this.NewButton.DialogResult = System.Windows.Forms.DialogResult.No;
             this.NewButton.Name = "NewButton";
             this.NewButton.UseVisualStyleBackColor = true;
+            this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "100p";
             this.openFileDialog1.FileName = "openFileDialog1";
             resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // GetJob
             // 

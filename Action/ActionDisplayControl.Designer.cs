@@ -1,6 +1,6 @@
-﻿namespace Centipede
+﻿namespace Centipede.Actions
 {
-    partial class ActionDisplayControl
+    public partial class ActionDisplayControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -238,8 +238,6 @@
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
             this.Size = new System.Drawing.Size(139, 65);
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionDisplayControl_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionDisplayControl_DragEnter);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);

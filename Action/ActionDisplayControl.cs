@@ -7,9 +7,9 @@ using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Centipede
+namespace Centipede.Actions
 {
-    internal partial class ActionDisplayControl : UserControl
+    public partial class ActionDisplayControl : UserControl
     {
         List<ToolTip> StatusToolTips = new List<ToolTip>();
 
@@ -26,7 +26,7 @@ namespace Centipede
             }
         }
         
-        internal ActionDisplayControl(Action action)
+        public ActionDisplayControl(Action action)
         {
             InitializeComponent();
             NameLabel.Text = action.Name;
@@ -235,46 +235,62 @@ namespace Centipede
         private ToolTip _statusToolTip;
         private string _statusMessage;
 
-        private void ActMenuDelete_Click(object sender, EventArgs e)
-        {
+        public event DeletedEventHandler Deleted;
+        public delegate void DeletedEventHandler(object sender, CentipedeEventArgs e);
 
-            ToolStripDropDownItem i = sender as ToolStripDropDownItem;
-            ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-           
-            Program.RemoveAction(ThisAction);
-            (this.Parent as TableLayoutPanel).Controls.Remove(this);
-            
-        }
-
-        private void ActionDisplayControl_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.ToString();
-        }
-
+        public event AddEventHandler Add;
+        public delegate void AddEventHandler(object sender, CentipedeEventArgs e);
+ 
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
             ThisAction.Comment = (sender as TextBox).Text;
         }
 
-        private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
+        //private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
+        //{
+        //    e.Effect = DragDropEffects.Move;
+        //}
 
-        private void ActionDisplayControl_DragDrop(object sender, DragEventArgs e)
+        //private void ActionDisplayControl_DragDrop(object sender, DragEventArgs e)
+        //{
+        //    var data = e.Data.GetData("WindowsForms10PersistentObject");
+        //    int index = Program.GetIndexOf(ThisAction);
+        //    Program.AddAction((data as ActionFactory).Generate(), index);
+        //}
+
+        private void ActMenuDelete_Click(object sender, EventArgs e)
         {
-            
-            var data = e.Data.GetData("WindowsForms10PersistentObject");
-            int index = Program.GetIndexOf(ThisAction);
-            Program.AddAction((data as ActionFactory).Generate(), index);
+
+            ToolStripDropDownItem i = sender as ToolStripDropDownItem;
+            ContextMenuStrip cm = i.Owner as ContextMenuStrip;
+
+            this.Deleted.Invoke(this, null);
+
         }
+      
     }
 
-    internal enum ActionState
+    public enum ActionState
     {
         None = -1,
         Running = 0,
         Completed = 1,
         Error = 2
+    }
+
+    public class CentipedeEventArgs : EventArgs
+    { 
+        public CentipedeEventArgs(Type program, List<Action> actions, Dictionary<String, Object> variables) : base()
+        {
+            Program = program;
+            Actions = actions;
+            Variables = variables;
+        }
+
+        public readonly Type Program;
+
+        public readonly List<Action> Actions;
+
+        public readonly Dictionary<string, object> Variables;
     }
 }

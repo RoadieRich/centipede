@@ -108,12 +108,6 @@
       <DependentUpon>GetJob.cs</DependentUpon>
     </Compile>
     <Compile Include="PyEngine.cs" />
-    <Compile Include="ActionDisplayControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ActionDisplayControl.Designer.cs">
-      <DependentUpon>ActionDisplayControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="MainWindow.en-GB.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -133,9 +127,6 @@
     </Compile>
     <EmbeddedResource Include="GetJob.resx">
       <DependentUpon>GetJob.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ActionDisplayControl.resx">
-      <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Centipede_TemporaryKey.pfx" />

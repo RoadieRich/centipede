@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using Centipede.Actions;
+
 
 namespace Centipede
 {
@@ -18,7 +20,7 @@ namespace Centipede
         {
             InitializeComponent();
 
-            Program.Variables.Add("_console", new GuiConsole());
+            //Program.Variables.Add("_console", new GuiConsole());
 
             //ActionFactory fact = new PythonActionFactory();
             //fact.ImageIndex = 0;
@@ -36,7 +38,7 @@ namespace Centipede
             //OtherActListBox.Items.Add(fact);
 
 
-
+            _defaultEventArgs = new CentipedeEventArgs(typeof(Program), null, Program.Variables);
 
         }
 
@@ -169,7 +171,7 @@ namespace Centipede
         }
 
         private JobDataSet _dataSet = new JobDataSet();
-        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state, String message);
+        private delegate void SetStateDeligate(Centipede.Actions.ActionDisplayControl adc, ActionState state, String message);
 
         private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
         {
@@ -184,6 +186,7 @@ namespace Centipede
         }
 
         private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
+        private CentipedeEventArgs _defaultEventArgs;
 
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -255,6 +258,7 @@ namespace Centipede
             Program.JobCompleted += new Program.CompletedHandler(CompletedHandler);
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
+            Program.ActionRemoved += new Program.ActionRemovedHandler(Program_ActionRemoved);
 
 
 
@@ -262,21 +266,22 @@ namespace Centipede
 
             if (Program.JobFileName == "")
             {
+                
                 GetJob startWindow = new GetJob();
                 DialogResult loadJob = startWindow.ShowDialog();
 
                 switch (loadJob)
                 {
                     case DialogResult.Yes:
-                        Program.JobFileName = startWindow.getJobFileName();
-                        Program.LoadJob();
+                        String fileName = startWindow.getJobFileName();
+                        
+                        Program.LoadJob(fileName);
                         break;
                     case DialogResult.No:
                         Program.JobFileName = "new";
                         Program.JobName = "New";
                         break;
                     default:
-                        Close();
                         break;
                 }
             }
@@ -284,6 +289,20 @@ namespace Centipede
             this.Text = "Centipede 0.1 " + Program.JobName;
 
 
+        }
+
+        void Program_ActionRemoved(Action action)
+        {
+            ActionDisplayControl adc = null;
+            foreach (ActionDisplayControl a in ActionContainer.Controls)
+            {
+                if (a.ThisAction == action)
+                {
+                    adc = a;
+                    break;
+                }
+            }
+            ActionContainer.Controls.Remove(adc);
         }
 
         void AddActionTabs_DoubleClick(object sender, EventArgs e)
@@ -341,8 +360,17 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
+            adc.Deleted += new ActionDisplayControl.DeletedEventHandler(adc_Deleted);
+            adc.DragEnter += new DragEventHandler(ActionContainer_DragEnter);
+            adc.DragDrop += new DragEventHandler(ActionContainer_DragDrop);
             ActionContainer.Controls.Add(adc, 0, index);
             ActionContainer.SetRow(adc, index);
+        }
+
+        void adc_Deleted(object sender, CentipedeEventArgs e)
+        {
+            ActionDisplayControl adc = sender as ActionDisplayControl;
+            Program.RemoveAction(adc.ThisAction);
         }
 
         void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
@@ -405,7 +433,19 @@ namespace Centipede
 
         private void LoadBtn_Click(object sender, EventArgs e)
         {
-            Program.Variables.ToArray();
+            GetJob jobForm = new GetJob();
+            jobForm.ShowDialog(this);
+            switch (jobForm.Result)
+            {
+                case GetJobResult.New:
+                    Program.Clear();
+                    break;
+                case GetJobResult.Open:
+                    Program.LoadJob(jobForm.getJobFileName());
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -448,19 +488,15 @@ namespace Centipede
 
         private void ActionContainer_DragDrop(object sender, DragEventArgs e)
         {
-            TableLayoutPanel table = sender as TableLayoutPanel;
-            Control droppedOn = table.GetChildAtPoint(new System.Drawing.Point(e.X, e.Y));
-
             Int32 index = -1;
-
-            if (droppedOn != null)
+            if (sender is ActionDisplayControl)
             {
-                //index = Program.GetIndexOf(droppedOn.Action);
+                index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
             index.ToString();
             var s = e.Data.GetFormats();
             var data = e.Data.GetData("WindowsForms10PersistentObject");
-            Program.AddAction((data as ActionFactory).Generate());
+            Program.AddAction((data as ActionFactory).Generate(), index);
 
         }
 
@@ -471,19 +507,25 @@ namespace Centipede
         }
 
         private void ActionContainer_DragEnter(object sender, DragEventArgs e)
-        {   
+        {
             //TODO: Check type in here?
             e.Effect = DragDropEffects.Move;
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            Program.SaveJob();
-
+            saveFileDialog1.FileName = Program.JobFileName;
+            saveFileDialog1.ShowDialog(this);
         }
 
-    }
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            Program.SaveJob(saveFileDialog1.FileName);
+        }
 
+
+        
+    }
     class GuiConsole
     {
         public void write(string message)

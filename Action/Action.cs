@@ -4,11 +4,13 @@ using System.Xml;
 using System.Reflection;
 using System.Linq;
 using System.IO;
+using System.Xml.Serialization;
 namespace Centipede
 {
     /// <summary>
     /// Base Action class: all actions will subclass this
     /// </summary>
+    [Serializable]
     public abstract class Action
     {
         public Action(String name, Dictionary<String,Object> variables)
@@ -73,15 +75,12 @@ namespace Centipede
             return TrueValues.Contains(ParseAttribute<String>(attributeName));
         }
 
-        public void AddToXMLDoc(XmlDocument doc)
+        public void AddToXmlElement(XmlElement rootElement)
         {
 
-            XmlNode root = doc.FirstChild;
             Type thisType = this.GetType();
+            XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
 
-            XmlElement element = doc.CreateElement(String.Format("Centipede:{0}", thisType.FullName));
-
-            
             foreach (FieldInfo field in thisType.GetFields().Where(f=>f.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Count()>0))
             {
                 element.SetAttribute(field.Name, field.GetValue(this).ToString());
@@ -89,22 +88,35 @@ namespace Centipede
             String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
 
             element.SetAttribute("Comment", this.Comment);
+            element.SetAttribute("Assembly", pluginFilePath);
 
-            element.SetAttribute("_Assembly", pluginFilePath);
+            rootElement.AppendChild(element);
+        }
 
-            root.AppendChild(element);
+
+        static public Action ReadFrom(TextReader reader)
+        {
+            
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Action), "Centipede");
+
+            return xmlSerializer.Deserialize(reader) as Action;
 
         }
 
-        static private Type[] _constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
-        
-
-        static public Action FromXML(XmlElement element, Dictionary<String, Object> variables)
+        public void WriteTo(TextWriter writer)
         {
+            XmlSerializer xmlSerializer = new XmlSerializer(this.GetType(), "Centipede");
+            xmlSerializer.Serialize(writer, this);
+        }
+        
+        static public Action FromXml(XmlElement element, Dictionary<String, Object> variables)
+        {
+            Type[] constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
+            
             Assembly asm;
 
             //if action is not a plugin:
-            if (element.LocalName.Count(c => c != '.') <= 1)
+            if (element.LocalName.Count(c => c == '.') <= 1)
             {
                 asm = Assembly.GetEntryAssembly();
             }
@@ -113,33 +125,40 @@ namespace Centipede
                 String asmPath = Path.Combine(
                                             Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
                                             Properties.Settings.Default.PluginFolder,
-                                            element.GetAttribute("_Assembly"));
+                                            element.GetAttribute("Assembly"));
                 asm = Assembly.LoadFile(asmPath);
             }
             
             Type t = asm.GetType(element.LocalName);
 
-            
+            Object instance;
 
-            Object instance = t.GetConstructor(_constructorArgumentTypes).Invoke(new object[] {variables});
-
-            element.Attributes.RemoveNamedItem("_Assembly");
-
-            foreach (XmlAttribute attribute in element.Attributes)
+            MethodInfo customFromXmlMethod = t.GetMethod("CustomFromXml");
+            if (customFromXmlMethod != null)
             {
-                FieldInfo field = t.GetField(attribute.Name);
-                MethodInfo parseMethod = field.FieldType.GetMethod("Parse", new Type[] {typeof(String)});
-                Object parsedValue = attribute.Value;
-                if (parseMethod != null)
+                instance = customFromXmlMethod.Invoke(t, new object[] {element, variables});
+            }
+            else
+            {
+                instance = t.GetConstructor(constructorArgumentTypes).Invoke(new object[] { variables });
+
+                element.Attributes.RemoveNamedItem("Assembly");
+
+                foreach (XmlAttribute attribute in element.Attributes)
                 {
-                    field.SetValue(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
-                }
-                else
-                {
-                    field.SetValue(instance, attribute.Value);
+                    FieldInfo field = t.GetField(attribute.Name);
+                    MethodInfo parseMethod = field.FieldType.GetMethod("Parse", new Type[] { typeof(String) });
+                    Object parsedValue = attribute.Value;
+                    if (parseMethod != null)
+                    {
+                        field.SetValue(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
+                    }
+                    else
+                    {
+                        field.SetValue(instance, attribute.Value);
+                    }
                 }
             }
-
             return instance as Action;
         }
     }
