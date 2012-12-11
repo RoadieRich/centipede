@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using Centipede.Actions;
+using Microsoft.Win32;
 
 
 namespace Centipede
@@ -261,10 +262,9 @@ namespace Centipede
             Program.ActionRemoved += new Program.ActionRemovedHandler(Program_ActionRemoved);
 
 
+            
 
-            Program.SetupTestActions(Program.ActionsToTest.All);
-
-            if (Program.JobFileName == "")
+            if (true || Program.JobFileName == "")
             {
                 
                 GetJob startWindow = new GetJob();

@@ -17,7 +17,6 @@ namespace Centipede
         [STAThread]
         static void Main(String[] args)
         {
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
@@ -25,11 +24,6 @@ namespace Centipede
             if (!mainForm.IsDisposed)
                 Application.Run(mainForm);
         }
-
-        /// <summary>
-        /// Load a job with a given name
-        /// </summary>
-        /// <param name="jobName">Name of the job to load</param>
 
         /// <summary>
         /// Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive, 
@@ -72,17 +66,17 @@ namespace Centipede
             {
                 try
                 {
-                    var handler = BeforeAction;
-                    if (handler != null)
+                    var beforeActionHandler = BeforeAction;
+                    if (beforeActionHandler != null)
                     {
-                        handler(currentAction);
+                        beforeActionHandler(currentAction);
                     }
                     currentAction.DoAction();
 
-                    handler = ActionCompleted;
-                    if (handler != null)
+                    var afterActionHandler = ActionCompleted;
+                    if (afterActionHandler != null)
                     {
-                        handler(currentAction);
+                        afterActionHandler(currentAction);
                     }
                     currentAction = currentAction.GetNext();
                 }
@@ -100,10 +94,10 @@ namespace Centipede
                 }
             }
 
-            var handler = JobCompleted;
-            if (handler != null)
+            var jobCompletedHandler = JobCompleted;
+            if (jobCompletedHandler != null)
             {
-                handler(completed);
+                jobCompletedHandler(completed);
             }
         }
 
@@ -132,7 +126,7 @@ namespace Centipede
         /// <param name="nextAction">Set to the next action - useful for repeating actions</param>
         /// <returns>True if execution of Job should continue, false to halt</returns>
         public delegate Boolean ErrorHandler(ActionException e, ref Action nextAction);
-        public static event ErrorHandler ActionErrorOccurred = delegate { };
+        public static event ErrorHandler ActionErrorOccurred = delegate { return false; };
 
         
        
@@ -148,7 +142,6 @@ namespace Centipede
         /// <summary>
         /// Add some test actions to the queue.
         /// </summary>
-        [System.Diagnostics.Conditional("DEBUG")]
         internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
         {
 
@@ -291,6 +284,11 @@ namespace Centipede
             JobFileName = filename;
         }
 
+
+        /// <summary>
+        /// Load a job with a given name
+        /// </summary>
+        /// <param name="jobName">Name of the job to load</param>
         internal static void LoadJob(String jobFileName)
         {
             Clear();

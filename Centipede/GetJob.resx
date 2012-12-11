@@ -142,7 +142,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;FavouritesListbox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="LoadButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -169,7 +169,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LoadButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="BrowseButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
@@ -196,7 +196,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;BrowseButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="NewButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -225,11 +225,56 @@
   <data name="&gt;&gt;NewButton.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="BrowseLoadDialogue.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="openFileDialog1.Filter" xml:space="preserve">
+  <data name="BrowseLoadDialogue.Filter" xml:space="preserve">
     <value>Centipede Jobs|*.100p|All Files|*.*</value>
+  </data>
+  <data name="BrowseLoadDialogue.Title" xml:space="preserve">
+    <value>Add file to favourites</value>
+  </data>
+  <data name="OtherButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="OtherButton.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="OtherButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="OtherButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>392, 359</value>
+  </data>
+  <data name="OtherButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="OtherButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="OtherButton.Text" xml:space="preserve">
+    <value>&amp;Other...</value>
+  </data>
+  <data name="&gt;&gt;OtherButton.Name" xml:space="preserve">
+    <value>OtherButton</value>
+  </data>
+  <data name="&gt;&gt;OtherButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OtherButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;OtherButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="OtherOpenDialogue.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>172, 17</value>
+  </metadata>
+  <data name="OtherOpenDialogue.Filter" xml:space="preserve">
+    <value>Centipede Jobs|*.100p|All Files|*.*</value>
+  </data>
+  <data name="OtherOpenDialogue.Title" xml:space="preserve">
+    <value>Open Other File</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -246,10 +291,16 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Centipede</value>
   </data>
-  <data name="&gt;&gt;openFileDialog1.Name" xml:space="preserve">
-    <value>openFileDialog1</value>
+  <data name="&gt;&gt;BrowseLoadDialogue.Name" xml:space="preserve">
+    <value>BrowseLoadDialogue</value>
   </data>
-  <data name="&gt;&gt;openFileDialog1.Type" xml:space="preserve">
+  <data name="&gt;&gt;BrowseLoadDialogue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OtherOpenDialogue.Name" xml:space="preserve">
+    <value>OtherOpenDialogue</value>
+  </data>
+  <data name="&gt;&gt;OtherOpenDialogue.Type" xml:space="preserve">
     <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

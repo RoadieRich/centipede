@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextFile", "TextFile\TextFi
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug with test actions|Any CPU = debug with test actions|Any CPU
+		debug with test actions|Mixed Platforms = debug with test actions|Mixed Platforms
+		debug with test actions|Win32 = debug with test actions|Win32
+		debug with test actions|x86 = debug with test actions|x86
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|Win32 = Debug|Win32
@@ -23,7 +27,13 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.debug with test actions|Any CPU.ActiveCfg = debug with test actions|x86
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.debug with test actions|Mixed Platforms.ActiveCfg = debug with test actions|x86
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.debug with test actions|Mixed Platforms.Build.0 = debug with test actions|x86
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.debug with test actions|Win32.ActiveCfg = debug with test actions|x86
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.debug with test actions|x86.ActiveCfg = debug with test actions|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Debug|Any CPU.Build.0 = Debug|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Debug|Win32.ActiveCfg = Debug|x86
@@ -35,6 +45,12 @@ Global
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|Win32.ActiveCfg = Release|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|x86.ActiveCfg = Release|x86
 		{3985334B-E51C-4F9A-A80A-B419E1AEF523}.Release|x86.Build.0 = Release|x86
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|Any CPU.ActiveCfg = debug with test actions|Any CPU
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|Any CPU.Build.0 = debug with test actions|Any CPU
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|Mixed Platforms.ActiveCfg = debug with test actions|Any CPU
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|Mixed Platforms.Build.0 = debug with test actions|Any CPU
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|Win32.ActiveCfg = debug with test actions|Any CPU
+		{AA2CF479-1D03-4764-B206-594B76DFA970}.debug with test actions|x86.ActiveCfg = debug with test actions|Any CPU
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -47,6 +63,12 @@ Global
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Release|Win32.ActiveCfg = Release|Any CPU
 		{AA2CF479-1D03-4764-B206-594B76DFA970}.Release|x86.ActiveCfg = Release|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|Any CPU.ActiveCfg = debug with test actions|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|Any CPU.Build.0 = debug with test actions|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|Mixed Platforms.ActiveCfg = debug with test actions|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|Mixed Platforms.Build.0 = debug with test actions|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|Win32.ActiveCfg = debug with test actions|Any CPU
+		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.debug with test actions|x86.ActiveCfg = debug with test actions|Any CPU
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -59,6 +81,12 @@ Global
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Release|Win32.ActiveCfg = Release|Any CPU
 		{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}.Release|x86.ActiveCfg = Release|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|Any CPU.ActiveCfg = debug with test actions|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|Any CPU.Build.0 = debug with test actions|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|Mixed Platforms.ActiveCfg = debug with test actions|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|Mixed Platforms.Build.0 = debug with test actions|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|Win32.ActiveCfg = debug with test actions|Any CPU
+		{A67D27AC-3393-42F7-9FE8-179751FCE732}.debug with test actions|x86.ActiveCfg = debug with test actions|Any CPU
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -71,6 +99,12 @@ Global
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Release|Win32.ActiveCfg = Release|Any CPU
 		{A67D27AC-3393-42F7-9FE8-179751FCE732}.Release|x86.ActiveCfg = Release|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|Any CPU.ActiveCfg = debug with test actions|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|Any CPU.Build.0 = debug with test actions|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|Mixed Platforms.ActiveCfg = debug with test actions|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|Mixed Platforms.Build.0 = debug with test actions|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|Win32.ActiveCfg = debug with test actions|Any CPU
+		{B459DEA6-5248-421F-9056-A477A80A74F0}.debug with test actions|x86.ActiveCfg = debug with test actions|Any CPU
 		{B459DEA6-5248-421F-9056-A477A80A74F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B459DEA6-5248-421F-9056-A477A80A74F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B459DEA6-5248-421F-9056-A477A80A74F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
