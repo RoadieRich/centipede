@@ -112,7 +112,6 @@ namespace Centipede
         private void OtherButton_Click(object sender, EventArgs e)
         {
             BrowseLoadDialogue.ShowDialog(this);
-
         }
 
         private void BrowseLoadDialogue_FileOk(object sender, CancelEventArgs e)
@@ -126,13 +125,26 @@ namespace Centipede
         {
         }
 
+        private void OtherOpenDialogue_FileOk(object sender, CancelEventArgs e)
+        {
+            FileDialog dialogue = sender as FileDialog;
+            Program.LoadJob(dialogue.FileName);
+        }
+
+        private void FavouritesListbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListView lv = sender as ListView;
+            Result = GetJobResult.Open;
+            Close();
+        }
+
     }
 
     enum GetJobResult
     {
+        Cancel,
         New,
-        Open,
-        Cancel
+        Open
     }
 
     class JobControl : Control

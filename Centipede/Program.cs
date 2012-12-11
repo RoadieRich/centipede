@@ -284,6 +284,9 @@ namespace Centipede
             JobFileName = filename;
         }
 
+        public delegate void AfterLoadEventHandler(object sender, EventArgs e);
+        public static event AfterLoadEventHandler AfterLoad = delegate { };
+
 
         /// <summary>
         /// Load a job with a given name
@@ -295,7 +298,7 @@ namespace Centipede
 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(jobFileName);
-
+            JobName = (xmlDoc.ChildNodes[1] as XmlElement).GetAttribute("Title");
             foreach (XmlElement actionElement in xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
             {
 
@@ -321,6 +324,12 @@ namespace Centipede
                     value = parseMethod.Invoke(type, new object[] { variableElement.GetAttribute("Value") });
                 }
                 Program.Variables.Add(name, value);
+
+            }
+            var handler = AfterLoad;
+            if (handler != null)
+            {
+                handler(typeof(Program), EventArgs.Empty);
             }
         }
 
