@@ -41,6 +41,8 @@ namespace Centipede
 
             _defaultEventArgs = new CentipedeEventArgs(typeof(Program), null, Program.Variables);
 
+            Instance = this;
+
         }
 
         private Boolean ErrorHandler(ActionException e, ref Action nextAction)
@@ -189,6 +191,11 @@ namespace Centipede
         private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
         private CentipedeEventArgs _defaultEventArgs;
 
+        public delegate void ShowMessageBoxDelegate(String message);
+        public void ShowMessageBox(string message)
+        {
+            System.Windows.Forms.MessageBox.Show(message);
+        }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
@@ -260,13 +267,14 @@ namespace Centipede
             Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
             Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
             Program.ActionRemoved += new Program.ActionRemovedHandler(Program_ActionRemoved);
+            Program.AfterLoad += new Program.AfterLoadEventHandler(Program_AfterLoad);
 
 
-            
 
-            if (true || Program.JobFileName == "")
+
+            if (Program.JobFileName.Length <= 0)
             {
-                
+
                 GetJob startWindow = new GetJob();
                 DialogResult loadJob = startWindow.ShowDialog();
 
@@ -274,7 +282,7 @@ namespace Centipede
                 {
                     case DialogResult.Yes:
                         String fileName = startWindow.getJobFileName();
-                        
+
                         Program.LoadJob(fileName);
                         break;
                     case DialogResult.No:
@@ -285,10 +293,30 @@ namespace Centipede
                         break;
                 }
             }
+            this.Dirty = false;
+        }
 
-            this.Text = "Centipede 0.1 " + Program.JobName;
+        void Program_AfterLoad(object sender, EventArgs e)
+        {
+            this.Dirty = false;
+            this.Text = Program.JobName;
+        }
 
-
+        public new String Text
+        {
+            get
+            {
+                return base.Text;
+            }
+            set
+            {
+                String dirtyMarker = "";
+                if (this.Dirty)
+                {
+                    dirtyMarker = " *";
+                }
+                base.Text = String.Format("Centipede - {0}{1}", new object[] {value, dirtyMarker});
+            }
         }
 
         void Program_ActionRemoved(Action action)
@@ -303,11 +331,7 @@ namespace Centipede
                 }
             }
             ActionContainer.Controls.Remove(adc);
-        }
-
-        void AddActionTabs_DoubleClick(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
+            this.Dirty = true;
         }
 
         private ListView GenerateNewTabPage(String category)
@@ -326,11 +350,6 @@ namespace Centipede
 
 
             return lv;
-        }
-
-        void tabPage_MouseDoubleClick(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         void Program_BeforeAction(Action action)
@@ -365,6 +384,7 @@ namespace Centipede
             adc.DragDrop += new DragEventHandler(ActionContainer_DragDrop);
             ActionContainer.Controls.Add(adc, 0, index);
             ActionContainer.SetRow(adc, index);
+            this.Dirty = true;
         }
 
         void adc_Deleted(object sender, CentipedeEventArgs e)
@@ -439,9 +459,11 @@ namespace Centipede
             {
                 case GetJobResult.New:
                     Program.Clear();
+                    this.Dirty = false;
                     break;
                 case GetJobResult.Open:
                     Program.LoadJob(jobForm.getJobFileName());
+                    this.Dirty = false;
                     break;
                 default:
                     break;
@@ -493,7 +515,6 @@ namespace Centipede
             {
                 index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
-            index.ToString();
             var s = e.Data.GetFormats();
             var data = e.Data.GetData("WindowsForms10PersistentObject");
             Program.AddAction((data as ActionFactory).Generate(), index);
@@ -521,15 +542,36 @@ namespace Centipede
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             Program.SaveJob(saveFileDialog1.FileName);
+            this.Dirty = false;
         }
 
+        public static MainWindow Instance;
+        private bool _dirty;
+        private bool Dirty
+        {
+            get
+            {
+                return _dirty;
+            }
+            set
+            {
+                _dirty = value;
+                this.Text = Program.JobName;
+            }
+        }
 
+        private void MainWindow_Paint(object sender, PaintEventArgs e)
+        {
+            this.Text = Program.JobName;
+        }
+        
         
     }
     class GuiConsole
     {
         public void write(string message)
         {
+            Program.mainForm.Invoke(new MainWindow.ShowMessageBoxDelegate(MainWindow.Instance.ShowMessageBox), new object[] { message });
             MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }

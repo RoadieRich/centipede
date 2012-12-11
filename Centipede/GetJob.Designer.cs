@@ -43,6 +43,7 @@
             resources.ApplyResources(this.FavouritesListbox, "FavouritesListbox");
             this.FavouritesListbox.DisplayMember = "Text";
             this.FavouritesListbox.Name = "FavouritesListbox";
+            this.FavouritesListbox.SelectedIndexChanged += new System.EventHandler(this.FavouritesListbox_SelectedIndexChanged);
             // 
             // LoadButton
             // 
@@ -83,6 +84,7 @@
             // 
             this.OtherOpenDialogue.DefaultExt = "100p";
             resources.ApplyResources(this.OtherOpenDialogue, "OtherOpenDialogue");
+            this.OtherOpenDialogue.FileOk += new System.ComponentModel.CancelEventHandler(this.OtherOpenDialogue_FileOk);
             // 
             // GetJob
             // 
