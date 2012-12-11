@@ -33,7 +33,9 @@
             this.LoadButton = new System.Windows.Forms.Button();
             this.BrowseButton = new System.Windows.Forms.Button();
             this.NewButton = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.BrowseLoadDialogue = new System.Windows.Forms.OpenFileDialog();
+            this.OtherButton = new System.Windows.Forms.Button();
+            this.OtherOpenDialogue = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // FavouritesListbox
@@ -64,18 +66,30 @@
             this.NewButton.UseVisualStyleBackColor = true;
             this.NewButton.Click += new System.EventHandler(this.NewButton_Click);
             // 
-            // openFileDialog1
+            // BrowseLoadDialogue
             // 
-            this.openFileDialog1.DefaultExt = "100p";
-            this.openFileDialog1.FileName = "openFileDialog1";
-            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
-            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            this.BrowseLoadDialogue.DefaultExt = "100p";
+            resources.ApplyResources(this.BrowseLoadDialogue, "BrowseLoadDialogue");
+            this.BrowseLoadDialogue.FileOk += new System.ComponentModel.CancelEventHandler(this.BrowseLoadDialogue_FileOk);
+            // 
+            // OtherButton
+            // 
+            resources.ApplyResources(this.OtherButton, "OtherButton");
+            this.OtherButton.Name = "OtherButton";
+            this.OtherButton.UseVisualStyleBackColor = true;
+            this.OtherButton.Click += new System.EventHandler(this.OtherButton_Click);
+            // 
+            // OtherOpenDialogue
+            // 
+            this.OtherOpenDialogue.DefaultExt = "100p";
+            resources.ApplyResources(this.OtherOpenDialogue, "OtherOpenDialogue");
             // 
             // GetJob
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.NewButton);
+            this.Controls.Add(this.OtherButton);
             this.Controls.Add(this.BrowseButton);
             this.Controls.Add(this.LoadButton);
             this.Controls.Add(this.FavouritesListbox);
@@ -83,6 +97,8 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GetJob_FormClosing);
+            this.Load += new System.EventHandler(this.GetJob_Load);
             this.ResumeLayout(false);
 
         }
@@ -93,6 +109,8 @@
         private System.Windows.Forms.Button LoadButton;
         private System.Windows.Forms.Button BrowseButton;
         private System.Windows.Forms.Button NewButton;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog BrowseLoadDialogue;
+        private System.Windows.Forms.Button OtherButton;
+        private System.Windows.Forms.OpenFileDialog OtherOpenDialogue;
     }
 }
