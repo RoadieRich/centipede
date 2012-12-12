@@ -238,6 +238,7 @@
             resources.ApplyResources(this.progressBar1, "progressBar1");
             this.progressBar1.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // RunButton
             // 
@@ -293,7 +294,6 @@
             this.Name = "MainWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Load += new System.EventHandler(this.MainWindow_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainWindow_Paint);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainWindow_PreviewKeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

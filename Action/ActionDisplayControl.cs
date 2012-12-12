@@ -109,11 +109,13 @@ namespace Centipede.Actions
             String oldVal = attrValue.Text;  
             FieldInfo f = attrValue.Tag as FieldInfo;
             ActionArgumentAttribute argInfo = f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Single() as ActionArgumentAttribute;
+
+            
             if (argInfo.setterMethodName != null)
             {
                 Type type = this.ThisAction.GetType();
                 MethodInfo setterMethod = type.GetMethod(argInfo.setterMethodName);
-
+                    
                 if (!(Boolean)setterMethod.Invoke(this.ThisAction, new object[] { attrValue.Text }))
                 {
                     MessageBox.Show(String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text));
@@ -121,10 +123,28 @@ namespace Centipede.Actions
             }
             else
             {
-                f.SetValue(this.ThisAction, f.FieldType.GetMethod("Parse").Invoke(f, new object[] {attrValue.Text}));
+                Object value = f.GetValue(this.ThisAction);
+                MethodInfo parser = f.FieldType.GetMethod("Parse");
+                if (parser != null)
+                {
+                    try
+                    {
+                        value = parser.Invoke(f, new object[] { attrValue.Text });
+                    }
+                    catch (Exception)
+                    {
+                        String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text);
+                    }
+
+                }
+                else
+                {
+                    value = attrValue.Text;
+                }
+                f.SetValue(this.ThisAction, value);
             }
         }
-
+    
         private Boolean _selected = false;
         private Color _unselectedColour = SystemColors.Control;
 
@@ -238,9 +258,7 @@ namespace Centipede.Actions
         public event DeletedEventHandler Deleted;
         public delegate void DeletedEventHandler(object sender, CentipedeEventArgs e);
 
-        public event AddEventHandler Add;
-        public delegate void AddEventHandler(object sender, CentipedeEventArgs e);
- 
+        
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
             ThisAction.Comment = (sender as TextBox).Text;
