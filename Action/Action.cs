@@ -33,6 +33,18 @@ namespace Centipede
 
         public abstract void DoAction();
 
+        private Int32 _complexity = 1;
+        public virtual Int32 Complexity
+        {
+            get
+            {
+                return _complexity;
+            }
+            protected set
+            {
+                _complexity = value;
+            }
+        }
 
         public virtual Action GetNext()
         {
@@ -169,7 +181,9 @@ namespace Centipede
         public String displayName;
         public String usage;
         public String setterMethodName;
-        public Object setter;
+        public Object setterMethod;
+
+        public delegate Boolean ArgumentSetter(String value);
     }
 
     [System.AttributeUsage(AttributeTargets.Class)]
@@ -183,7 +197,9 @@ namespace Centipede
         public readonly String category;
         public String helpText = "";
         public String displayName = "";
-        public String DisplayControl = "";
+        public String displayControl = "";
+        public String iconName = "";
+
     }
 
     public class ActionException : Exception

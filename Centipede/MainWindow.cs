@@ -9,6 +9,8 @@ using System.IO;
 using System.Reflection;
 using Centipede.Actions;
 using Microsoft.Win32;
+using System.Security.Policy;
+using System.Drawing;
 
 
 namespace Centipede
@@ -139,13 +141,10 @@ namespace Centipede
                     (adc).State = ActionState.Completed;
                 }
 
-                _progress += 10;
-
-                backgroundWorker1.ReportProgress(_progress);
+                //this is supposed to be a percentage, but this works.
+                backgroundWorker1.ReportProgress(currentAction.Complexity);
             }
         }
-
-        private Int32 _progress = 0;
 
         private void CompletedHandler(Boolean success)
         {
@@ -200,47 +199,7 @@ namespace Centipede
         private void MainWindow_Load(object sender, EventArgs e)
         {
             UIActListBox.Items.Add(new ActionFactory("Demo Action", typeof(DemoAction)));
-            DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, Properties.Settings.Default.PluginFolder));
-
-            var dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);
-
-            foreach (FileInfo fi in dlls)
-            {
-                Assembly asm = Assembly.LoadFile(fi.FullName);
-                Type[] pluginsInFile = asm.GetExportedTypes();
-                foreach (Type pluginType in pluginsInFile)
-                {
-                    Object[] customAttributes = pluginType.GetCustomAttributes(typeof(Centipede.ActionCategoryAttribute), true);
-                    if (customAttributes.Count() > 0)
-                    {
-                        ActionCategoryAttribute catAttribute = customAttributes[0] as ActionCategoryAttribute;
-
-                        TabPage tabPage = null;
-                        foreach (TabPage _tabPage in AddActionTabs.TabPages)
-                        {
-                            if (_tabPage.Text == catAttribute.category)
-                            {
-                                tabPage = _tabPage;
-                                break;
-                            }
-                        }
-
-                        ListView catListView;
-                        if (tabPage != null)
-                        {
-                            catListView = tabPage.Tag as ListView;
-                        }
-                        else
-                        {
-                            catListView = GenerateNewTabPage(catAttribute.category);
-                        }
-
-
-                        catListView.Items.Add(new ActionFactory(catAttribute, pluginType));
-                    }
-                }
-
-            }
+            GetActionPlugins();
 
 
             VarDataGridView.DataSource = _dataSet.Variables;
@@ -273,27 +232,93 @@ namespace Centipede
 
 
             if (Program.JobFileName.Length <= 0)
-            {
-
-                GetJob startWindow = new GetJob();
-                DialogResult loadJob = startWindow.ShowDialog();
-
-                switch (loadJob)
-                {
-                    case DialogResult.Yes:
-                        String fileName = startWindow.getJobFileName();
-
-                        Program.LoadJob(fileName);
-                        break;
-                    case DialogResult.No:
-                        Program.JobFileName = "new";
-                        Program.JobName = "New";
-                        break;
-                    default:
-                        break;
-                }
-            }
+                LoadJob();
             this.Dirty = false;
+        }
+
+        private void LoadJob()
+        {
+            GetJob startWindow = new GetJob();
+            startWindow.ShowDialog();
+
+            switch (startWindow.Result)
+            {
+                case GetJobResult.Open:
+                    String fileName = startWindow.getJobFileName();
+
+                    Program.LoadJob(fileName);
+                    break;
+
+                case GetJobResult.New:
+                    Program.JobFileName = "";
+                    Program.JobName = "";
+                    Program.Clear();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void GetActionPlugins()
+        {
+            DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, Properties.Settings.Default.PluginFolder));
+
+            var dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);
+
+            foreach (FileInfo fi in dlls)
+            {
+                Evidence evidence = new Evidence();
+                ApplicationDirectory appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
+                evidence.AddAssemblyEvidence(appDir);
+
+                Assembly asm = Assembly.LoadFrom(fi.FullName);
+
+                Type[] pluginsInFile = asm.GetExportedTypes();
+                foreach (Type pluginType in pluginsInFile)
+                {
+                    Object[] customAttributes = pluginType.GetCustomAttributes(typeof(Centipede.ActionCategoryAttribute), true);
+                    if (customAttributes.Count() > 0)
+                    {
+                        ActionCategoryAttribute catAttribute = customAttributes[0] as ActionCategoryAttribute;
+
+                        TabPage tabPage = null;
+                        foreach (TabPage _tabPage in AddActionTabs.TabPages)
+                        {
+                            if (_tabPage.Text == catAttribute.category)
+                            {
+                                tabPage = _tabPage;
+                                break;
+                            }
+                        }
+
+                        ListView catListView;
+                        if (tabPage != null)
+                        {
+                            catListView = tabPage.Tag as ListView;
+                        }
+                        else
+                        {
+                            catListView = GenerateNewTabPage(catAttribute.category);
+                        }
+
+                        ActionFactory af = new ActionFactory(catAttribute, pluginType);
+
+                        if (catAttribute.iconName != "")
+                        {
+                            String[] names = asm.GetManifestResourceNames();
+                            var t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
+                            Icon icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t,null) as Icon;
+
+
+                            catListView.LargeImageList.Images.Add(pluginType.Name, icon);
+                            af.ImageKey = pluginType.Name;
+                        }
+
+                        catListView.Items.Add(af);
+                    }
+                }
+
+            }
         }
 
         void Program_AfterLoad(object sender, EventArgs e)
@@ -370,9 +395,9 @@ namespace Centipede
             Type actionType = action.GetType();
             ActionCategoryAttribute actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
             ActionDisplayControl adc;
-            if (actionAttribute.DisplayControl != "")
+            if (actionAttribute.displayControl != "")
             {
-                ConstructorInfo constructor = actionType.Assembly.GetType(actionAttribute.DisplayControl).GetConstructor(new Type[] { typeof(Action) });
+                ConstructorInfo constructor = actionType.Assembly.GetType(actionAttribute.displayControl).GetConstructor(new Type[] { typeof(Action) });
                 adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
             }
             else
@@ -453,21 +478,23 @@ namespace Centipede
 
         private void LoadBtn_Click(object sender, EventArgs e)
         {
-            GetJob jobForm = new GetJob();
-            jobForm.ShowDialog(this);
-            switch (jobForm.Result)
+            if (this.Dirty)
             {
-                case GetJobResult.New:
-                    Program.Clear();
-                    this.Dirty = false;
-                    break;
-                case GetJobResult.Open:
-                    Program.LoadJob(jobForm.getJobFileName());
-                    this.Dirty = false;
-                    break;
-                default:
-                    break;
+                DialogResult result = MessageBox.Show(this, "Save changes?", "Unsaved Changes");
+                switch (result)
+                {
+                    case System.Windows.Forms.DialogResult.Yes:
+                        SaveJob();
+                        break;
+                    case System.Windows.Forms.DialogResult.No:
+                        // do nothing
+                        break;
+                    default:
+                        return;
+                }
             }
+
+            LoadJob();
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -476,7 +503,7 @@ namespace Centipede
             {
                 adc.State = ActionState.None;
             }
-
+            progressBar1.Maximum = Program.JobComplexity;
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -493,11 +520,6 @@ namespace Centipede
         private void copyToolStripButton_Click(object sender, EventArgs e)
         {
             ToolStripButton btn = sender as ToolStripButton;
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            progressBar1.Value = Math.Min(e.ProgressPercentage, 100);
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -535,6 +557,20 @@ namespace Centipede
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            SaveJob();
+        }
+
+        private void SaveJob()
+        {
+            if (Program.JobName == "")
+            {
+                AskJobTitle askJobTitle = new AskJobTitle();
+                DialogResult result = askJobTitle.ShowDialog(this);
+                if (result == System.Windows.Forms.DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
             saveFileDialog1.FileName = Program.JobFileName;
             saveFileDialog1.ShowDialog(this);
         }
@@ -560,9 +596,10 @@ namespace Centipede
             }
         }
 
-        private void MainWindow_Paint(object sender, PaintEventArgs e)
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.Text = Program.JobName;
+            //It's not really a percentage, but it serves the purpose
+            this.progressBar1.Increment(e.ProgressPercentage);
         }
         
         

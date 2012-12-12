@@ -98,6 +98,12 @@
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Actions\DemoAction.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
+    <Compile Include="AskJobTitle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AskJobTitle.Designer.cs">
+      <DependentUpon>AskJobTitle.cs</DependentUpon>
+    </Compile>
     <Compile Include="JobDataSet.cs">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -122,6 +128,9 @@
       <DependentUpon>GetJob.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="AskJobTitle.resx">
+      <DependentUpon>AskJobTitle.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.en-GB.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

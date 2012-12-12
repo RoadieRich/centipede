@@ -104,7 +104,14 @@ namespace Centipede
             if (filename == null)
             {
                 Registry.CurrentUser.SetValue(@"Chemineer\Centipede\FavouriteFile", @"%APPDATA%\Centipede\favourites.xml");
-                filename = @"%APPDATA%\Centipede\favourites.xml";
+                filename = System.Environment.ExpandEnvironmentVariables(@"%APPDATA%\Centipede\favourites.xml");
+
+                if (!File.Exists(filename))
+                {
+                    StreamWriter file = new StreamWriter(File.Create(filename));
+                    file.Write(@"<?xml version=""1.0"" encoding=""utf-8""?><favourites />");
+                    file.Close();
+                }
             }
             return System.Environment.ExpandEnvironmentVariables(filename);
         }
@@ -133,9 +140,13 @@ namespace Centipede
 
         private void FavouritesListbox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ListView lv = sender as ListView;
-            Result = GetJobResult.Open;
-            Close();
+            
+        }
+
+        private void FavouritesListbox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Result = GetJobResult.Open;
+            this.Close();
         }
 
     }

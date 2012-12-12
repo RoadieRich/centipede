@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Reflection;
+using System.IO;
 
 namespace Centipede
 {
@@ -127,7 +128,18 @@ namespace Centipede
         public delegate Boolean ErrorHandler(ActionException e, ref Action nextAction);
         public static event ErrorHandler ActionErrorOccurred = delegate { return false; };
 
-        
+        public static Int32 JobComplexity
+        {
+            get
+            {
+                Int32 totalComplexity = 0;
+                foreach (Action action in Actions)
+                {
+                    totalComplexity += action.Complexity;
+                }
+                return totalComplexity;
+            }
+        }
        
         [Flags]
         internal enum ActionsToTest
@@ -296,39 +308,52 @@ namespace Centipede
             Clear();
 
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(jobFileName);
-            JobName = (xmlDoc.ChildNodes[1] as XmlElement).GetAttribute("Title");
-            foreach (XmlElement actionElement in xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
+            if (File.Exists(jobFileName))
             {
-
-                AddAction(Action.FromXml(actionElement, Variables));
-            }
-
-            Assembly asm = Assembly.GetExecutingAssembly();
-
-            foreach (XmlElement variableElement in xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
-            {
-                String name = variableElement.GetAttribute("name");
-                Type type = asm.GetType(variableElement.LocalName);
-
-                MethodInfo parseMethod = type.GetMethod("Parse", new Type[] { typeof(String) });
-
-                Object value;
-                if (parseMethod == null)
+                xmlDoc.Load(jobFileName);
+                JobName = (xmlDoc.ChildNodes[1] as XmlElement).GetAttribute("Title");
+                foreach (XmlElement actionElement in xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
                 {
-                    value = variableElement.GetAttribute("Value");
-                }
-                else
-                {
-                    value = parseMethod.Invoke(type, new object[] { variableElement.GetAttribute("Value") });
-                }
-                Program.Variables.Add(name, value);
 
+                    AddAction(Action.FromXml(actionElement, Variables));
+                }
+
+                Assembly asm = Assembly.GetExecutingAssembly();
+
+
+
+                foreach (XmlElement variableElement in xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
+                {
+                    String name = variableElement.GetAttribute("name");
+                    Type type = asm.GetType(variableElement.LocalName);
+
+                    MethodInfo parseMethod = type.GetMethod("Parse", new Type[] { typeof(String) });
+
+                    Object value;
+                    if (parseMethod == null)
+                    {
+                        value = variableElement.GetAttribute("Value");
+                    }
+                    else
+                    {
+                        value = parseMethod.Invoke(type, new object[] { variableElement.GetAttribute("Value") });
+                    }
+                    Program.Variables.Add(name, value);
+
+                }
+                var handler = AfterLoad;
+                if (handler != null)
+                {
+                    handler(typeof(Program), EventArgs.Empty);
+                }
             }
-            var handler = AfterLoad;
-            if (handler != null)
+        }
+
+        public static Int32 JobLength
+        {
+            get
             {
-                handler(typeof(Program), EventArgs.Empty);
+                return Actions.Count;
             }
         }
 

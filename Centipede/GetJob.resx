@@ -142,13 +142,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;FavouritesListbox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="LoadButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
   </data>
   <data name="LoadButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 359</value>
+    <value>302, 359</value>
   </data>
   <data name="LoadButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -158,6 +158,12 @@
   </data>
   <data name="LoadButton.Text" xml:space="preserve">
     <value>&amp;Load</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>321, 17</value>
+  </metadata>
+  <data name="LoadButton.ToolTip" xml:space="preserve">
+    <value>Load selected job</value>
   </data>
   <data name="&gt;&gt;LoadButton.Name" xml:space="preserve">
     <value>LoadButton</value>
@@ -169,13 +175,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LoadButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="BrowseButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
   </data>
   <data name="BrowseButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 359</value>
+    <value>13, 359</value>
   </data>
   <data name="BrowseButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -184,7 +190,10 @@
     <value>2</value>
   </data>
   <data name="BrowseButton.Text" xml:space="preserve">
-    <value>&amp;Browse...</value>
+    <value>&amp;Add...</value>
+  </data>
+  <data name="BrowseButton.ToolTip" xml:space="preserve">
+    <value>Add job to favourites</value>
   </data>
   <data name="&gt;&gt;BrowseButton.Name" xml:space="preserve">
     <value>BrowseButton</value>
@@ -196,7 +205,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;BrowseButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="NewButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -213,6 +222,9 @@
   <data name="NewButton.Text" xml:space="preserve">
     <value>&amp;New</value>
   </data>
+  <data name="NewButton.ToolTip" xml:space="preserve">
+    <value>Create new job</value>
+  </data>
   <data name="&gt;&gt;NewButton.Name" xml:space="preserve">
     <value>NewButton</value>
   </data>
@@ -223,7 +235,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;NewButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="BrowseLoadDialogue.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -252,6 +264,9 @@
   <data name="OtherButton.Text" xml:space="preserve">
     <value>&amp;Other...</value>
   </data>
+  <data name="OtherButton.ToolTip" xml:space="preserve">
+    <value>Load unlisted job</value>
+  </data>
   <data name="&gt;&gt;OtherButton.Name" xml:space="preserve">
     <value>OtherButton</value>
   </data>
@@ -262,7 +277,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;OtherButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <metadata name="OtherOpenDialogue.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>172, 17</value>
@@ -272,6 +287,36 @@
   </data>
   <data name="OtherOpenDialogue.Title" xml:space="preserve">
     <value>Open Other File</value>
+  </data>
+  <data name="DeleteButton.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="DeleteButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>95, 359</value>
+  </data>
+  <data name="DeleteButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="DeleteButton.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="DeleteButton.Text" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="DeleteButton.ToolTip" xml:space="preserve">
+    <value>Delete job from favourites (coming soon!)</value>
+  </data>
+  <data name="&gt;&gt;DeleteButton.Name" xml:space="preserve">
+    <value>DeleteButton</value>
+  </data>
+  <data name="&gt;&gt;DeleteButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DeleteButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;DeleteButton.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -299,6 +344,12 @@
   </data>
   <data name="&gt;&gt;OtherOpenDialogue.Type" xml:space="preserve">
     <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
+    <value>toolTip1</value>
+  </data>
+  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>GetJob</value>

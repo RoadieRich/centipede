@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Centipede;
 using Centipede.PyEngine;
+using System.Resources;
 
 namespace Centipede.PyAction
 {
-    [Centipede.ActionCategory("Other Actions")]
+
+    [Centipede.ActionCategory("Other Actions", iconName="pycon")]
     public class PythonAction : Centipede.Action
     {
 
@@ -15,7 +17,7 @@ namespace Centipede.PyAction
             : base("Python Action", variables)
         { }
 
-        [ActionArgument(usage = "Source code to be executed")]
+        [ActionArgument(usage = "Source code to be executed", setterMethodName="UpdateSource")]
         public String Source = "";
         //{
         //    get
@@ -27,6 +29,13 @@ namespace Centipede.PyAction
         //        Attributes["source"] = value;
         //    }
         //}
+
+        public Boolean UpdateSource(String newsource)
+        {
+            Source = newsource;
+            this.Complexity = newsource.Split(System.Environment.NewLine.ToCharArray()).Length;
+            return true;
+        }
         public override void DoAction()
         {
             PythonEngine engine = PythonEngine.Instance;
