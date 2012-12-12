@@ -62,11 +62,13 @@
       <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
       <Name>Action</Name>
       <Aliases>global</Aliases>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\PythonEngine\PythonEngine.csproj">
       <Project>{A67D27AC-3393-42F7-9FE8-179751FCE732}</Project>
       <Name>PythonEngine</Name>
       <Aliases>global</Aliases>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

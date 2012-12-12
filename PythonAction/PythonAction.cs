@@ -44,4 +44,25 @@ namespace Centipede.PyAction
             }
         }
     }
+
+    class PythonCondition : BranchCondition
+    {
+        public PythonCondition(String source)
+            : base()
+        {
+            Source = source;
+        }
+
+        public override Boolean Test(Action act)
+        {
+            return PythonEngine.Instance.Evaluate<Boolean>(Source);
+        }
+
+        public string Source;
+
+        public override String ToString()
+        {
+            return "(Python condition)";
+        }
+    }
 }
