@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IronPython.Hosting;
-using IronPython.Runtime;
 
 
 namespace Centipede
@@ -67,23 +65,5 @@ namespace Centipede
         }
     }
 
-    class PythonCondition : BranchCondition
-    {
-        public PythonCondition(String source) : base()
-        {
-            Source = source;
-        }
-
-        public override Boolean Test(Action act)
-        {
-            return PythonEngine.Instance.Evaluate<Boolean>(Source);
-        }
-
-        public string Source;
-
-        public override String ToString()
-        {
-            return "(Python condition)";
-        }
-    }
+    
 }

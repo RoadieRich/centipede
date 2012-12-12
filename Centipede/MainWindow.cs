@@ -199,7 +199,7 @@ namespace Centipede
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-
+            UIActListBox.Items.Add(new ActionFactory("Demo Action", typeof(DemoAction)));
             DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, Properties.Settings.Default.PluginFolder));
 
             var dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);

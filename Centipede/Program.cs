@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using Centipede.PyAction;
 using System.Xml;
 using System.Xml.Linq;
 using System.Reflection;
@@ -142,42 +141,42 @@ namespace Centipede
         /// <summary>
         /// Add some test actions to the queue.
         /// </summary>
-        internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
-        {
+        //internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
+        //{
 
-            JobFileName = "Test File";
+        //    JobFileName = "Test File";
 
-            if (actions.HasFlag(ActionsToTest.PythonAction))
-            {
-                PythonAction testPythonAction = new PythonAction(Program.Variables);
-                testPythonAction.Source = String.Join("\r\n",
-                                        new String[] {@"try:",
-                                                      @"    i = int(variables[""a""])",
-                                                      @"except: ",
-                                                      @"    i = 0",
-                                                      @"variables[""a""] = i+1"});
+        //    if (actions.HasFlag(ActionsToTest.PythonAction))
+        //    {
+        //        PythonAction testPythonAction = new PythonAction(Program.Variables);
+        //        testPythonAction.Source = String.Join("\r\n",
+        //                                new String[] {@"try:",
+        //                                              @"    i = int(variables[""a""])",
+        //                                              @"except: ",
+        //                                              @"    i = 0",
+        //                                              @"variables[""a""] = i+1"});
 
-                testPythonAction.Comment = "Increase Variable i by one";
+        //        testPythonAction.Comment = "Increase Variable i by one";
 
-                Program.AddAction(testPythonAction);
-            }
+        //        Program.AddAction(testPythonAction);
+        //    }
 
-            if (actions.HasFlag(ActionsToTest.DemoAction))
-            {
-                DemoAction testDemoAction = new DemoAction(Program.Variables);
-                testDemoAction.Comment = "Display a text box showing attirbute values";
-                Program.AddAction(testDemoAction);
-            }
+        //    if (actions.HasFlag(ActionsToTest.DemoAction))
+        //    {
+        //        DemoAction testDemoAction = new DemoAction(Program.Variables);
+        //        testDemoAction.Comment = "Display a text box showing attirbute values";
+        //        Program.AddAction(testDemoAction);
+        //    }
 
-            if (actions.HasFlag(ActionsToTest.ErrorAction))
-            {
-                PythonAction testErrorAction = new PythonAction(Program.Variables);
-                testErrorAction.Comment = "Throw an error!";
-                testErrorAction.Source = "raise Exception()";
+        //    if (actions.HasFlag(ActionsToTest.ErrorAction))
+        //    {
+        //        PythonAction testErrorAction = new PythonAction(Program.Variables);
+        //        testErrorAction.Comment = "Throw an error!";
+        //        testErrorAction.Source = "raise Exception()";
 
-                Program.AddAction(testErrorAction);
-            }
-        }
+        //        Program.AddAction(testErrorAction);
+        //    }
+        //}
 
         public delegate void AddActionCallback(Action action, Int32 index);
         public static event AddActionCallback ActionAdded;
