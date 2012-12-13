@@ -9,7 +9,7 @@ using System.Resources;
 namespace Centipede.PyAction
 {
 
-    [Centipede.ActionCategory("Other Actions", iconName="pycon")]
+    [ActionCategory("Other Actions", iconName="pycon")]
     public class PythonAction : Centipede.Action
     {
 

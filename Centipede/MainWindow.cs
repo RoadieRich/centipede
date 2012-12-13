@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using System.Text;
-using System.IO;
-using System.Reflection;
-using Centipede.Actions;
-using Microsoft.Win32;
-using System.Security.Policy;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
+using System.Text;
+using System.Windows.Forms;
+using Centipede.Actions;
 
 
 namespace Centipede
@@ -22,26 +21,6 @@ namespace Centipede
         public MainWindow()
         {
             InitializeComponent();
-
-            //Program.Variables.Add("_console", new GuiConsole());
-
-            //ActionFactory fact = new PythonActionFactory();
-            //fact.ImageIndex = 0;
-            //OtherActListBox.Items.Add(fact);
-
-            //fact = new PythonBranchActionFactory();
-            //fact.ImageIndex = 0;
-            //FlowContListBox.Items.Add(fact);
-
-            //fact = new BranchActionFactory();
-            //fact.ImageIndex = 1;
-            //FlowContListBox.Items.Add(fact);
-
-            //fact = new DemoActionFactory();
-            //OtherActListBox.Items.Add(fact);
-
-
-            _defaultEventArgs = new CentipedeEventArgs(typeof(Program), null, Program.Variables);
 
             Instance = this;
 
@@ -276,6 +255,10 @@ namespace Centipede
                 Type[] pluginsInFile = asm.GetExportedTypes();
                 foreach (Type pluginType in pluginsInFile)
                 {
+                    if (pluginType.IsAbstract)
+                    {
+                        continue;
+                    }
                     Object[] customAttributes = pluginType.GetCustomAttributes(typeof(Centipede.ActionCategoryAttribute), true);
                     if (customAttributes.Count() > 0)
                     {
@@ -600,6 +583,12 @@ namespace Centipede
         {
             //It's not really a percentage, but it serves the purpose
             this.progressBar1.Increment(e.ProgressPercentage);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int a = 0;
+            a += 1;
         }
         
         

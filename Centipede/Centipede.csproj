@@ -150,7 +150,7 @@
     <EmbeddedResource Include="GetJob.resx">
       <DependentUpon>GetJob.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="Properties\app.config" />
     <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="JobDataSet.xsc">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
