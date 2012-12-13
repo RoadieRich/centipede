@@ -80,12 +80,22 @@ namespace Centipede
                     }
                     currentAction = currentAction.GetNext();
                 }
-                catch (ActionException e)
+                catch (Exception e)
                 {
+                    ActionException ae;
+                    if (e is ActionException)
+                    {
+                        ae = e as ActionException;
+                    }
+                    else
+                    {
+                        ae = new ActionException(e, currentAction);
+                    }
+
                     var handler = ActionErrorOccurred;
                     if (handler != null)
                     {
-                        if (!handler(e, ref currentAction))
+                        if (!handler(ae, ref currentAction))
                         {
                             completed = false;
                             break;
