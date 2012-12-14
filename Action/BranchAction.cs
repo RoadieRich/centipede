@@ -6,25 +6,34 @@ using System.Text;
 
 namespace Centipede
 {
-       
+    /// <summary>
+    /// 
+    /// </summary>
     public class BranchAction : Action
     {
+        
         /// <summary>
         /// Basic branch action - has two possible "next" actions, 
         /// which are chosen according to condition.
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="variables"></param>
         /// <param name="condition"></param>
         public BranchAction(String name, Dictionary<String,Object> variables, BranchCondition condition)
             : base(name, variables)
         {
             Condition = condition;
-            Attributes = new Dictionary<string, object>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [ActionArgument]
         public BranchCondition Condition;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [ActionArgument(
             usage = "Next action if condition returns false", 
             displayName="Next Action if False"
@@ -32,11 +41,19 @@ namespace Centipede
         public Action NextIfFalse;
 
         private Boolean Result;
-        public override void DoAction()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected override void DoAction()
         {
             Result = Condition.Test(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override Action GetNext()
         {
             if (Result)
@@ -50,20 +67,27 @@ namespace Centipede
         }
     }
 
-
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class BranchCondition
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
         public BranchCondition()
         {
             
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="act"></param>
+        /// <returns></returns>
         public virtual Boolean Test(Action act)
         {
             return true;
         }
     }
-
-    
 }

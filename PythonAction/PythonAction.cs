@@ -9,7 +9,7 @@ using System.Resources;
 namespace Centipede.PyAction
 {
 
-    [ActionCategory("Other Actions", iconName="pycon")]
+    [ActionCategory("Other Actions", iconName="pycon", displayName="Python Action")]
     public class PythonAction : Centipede.Action
     {
 
@@ -36,7 +36,7 @@ namespace Centipede.PyAction
             this.Complexity = newsource.Split(System.Environment.NewLine.ToCharArray()).Length;
             return true;
         }
-        public override void DoAction()
+        protected override void DoAction()
         {
             PythonEngine engine = PythonEngine.Instance;
             if (!engine.VariableExists("variables"))

@@ -26,7 +26,7 @@ namespace Centipede.TextFile
         [ActionArgument(displayName = "File Variable", usage = "Variable to store the opened file, without % signs")]
         public String FileVarName = "TextFile";
 
-        public override void DoAction()
+        protected override void DoAction()
         {
             FileAccess access = Read ? FileAccess.Read : 0;
             access |= Write ? FileAccess.Write : 0;
@@ -47,7 +47,7 @@ namespace Centipede.TextFile
         [ActionArgument(displayName = "Close", usage = "Close file after saving")]
         Boolean CloseAfter = false;
 
-        public override void DoAction()
+        protected override void DoAction()
         {
             FileStream fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
             
@@ -79,7 +79,7 @@ namespace Centipede.TextFile
         [ActionArgument(displayName="Destination Variable", usage="Variable to store the read text in")]
         public String DestinationVariable = "Line";
 
-        public override void DoAction()
+        protected override void DoAction()
         {
             FileStream fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
             EasyFileStream sr = new EasyFileStream(fs);

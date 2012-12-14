@@ -11,7 +11,8 @@
     <RootNamespace>Centipede</RootNamespace>
     <AssemblyName>Centipede</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -87,7 +88,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -150,7 +150,10 @@
     <EmbeddedResource Include="GetJob.resx">
       <DependentUpon>GetJob.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Properties\app.config" />
+    <None Include="app.config" />
+    <None Include="Properties\app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="JobDataSet.xsc">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
@@ -202,13 +205,6 @@
     <None Include="Resources\ThumbnailView.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Action\Action.csproj">
-      <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
-      <Name>Action</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
@@ -229,6 +225,15 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Action\Action.csproj">
+      <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
+      <Name>Action</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\generic.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,10 +9,14 @@ using System.Windows.Forms;
 
 namespace Centipede.Actions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ActionDisplayControl : UserControl
     {
-        List<ToolTip> StatusToolTips = new List<ToolTip>();
-
+        /// <summary>
+        /// 
+        /// </summary>
         public String StatusMessage
         {
             get
@@ -26,6 +30,10 @@ namespace Centipede.Actions
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
         public ActionDisplayControl(Action action)
         {
             InitializeComponent();
@@ -38,12 +46,7 @@ namespace Centipede.Actions
             Assembly actionAssembly = Assembly.GetAssembly(action.GetType());
             Label attrLabel;
             TextBox attrValue;
-
-            foreach (ActionState state in Enum.GetValues(typeof(ActionState)))
-            {
-                StatusToolTips.Add(new ToolTip());
-            }
-
+                        
             _statusToolTip = new ToolTip();
             _statusToolTip.SetToolTip(StatusIconBox, "");
 
@@ -93,14 +96,7 @@ namespace Centipede.Actions
         private String GetArgumentName(MemberInfo argument)
         {
             ActionArgumentAttribute argAttr = argument.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Single() as ActionArgumentAttribute;
-            if (argAttr.displayName != null)
-            {
-                return argAttr.displayName;
-            }
-            else
-            {
-                return argument.Name;
-            }
+            return argAttr.displayName ?? argument.Name;
         }
 
         void attrValue_TextChanged(object sender, EventArgs e)
@@ -251,11 +247,23 @@ namespace Centipede.Actions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly Action ThisAction;
         private ToolTip _statusToolTip;
         private string _statusMessage;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event DeletedEventHandler Deleted;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public delegate void DeletedEventHandler(object sender, CentipedeEventArgs e);
 
         
@@ -288,16 +296,43 @@ namespace Centipede.Actions
       
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public enum ActionState
     {
+        /// <summary>
+        /// 
+        /// </summary>
         None = -1,
+
+        /// <summary>
+        /// 
+        /// </summary>
         Running = 0,
+
+        /// <summary>
+        /// 
+        /// </summary>
         Completed = 1,
+
+        /// <summary>
+        /// 
+        /// </summary>
         Error = 2
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class CentipedeEventArgs : EventArgs
     { 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="program"></param>
+        /// <param name="actions"></param>
+        /// <param name="variables"></param>
         public CentipedeEventArgs(Type program, List<Action> actions, Dictionary<String, Object> variables) : base()
         {
             Program = program;
@@ -305,10 +340,19 @@ namespace Centipede.Actions
             Variables = variables;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly Type Program;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly List<Action> Actions;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly Dictionary<string, object> Variables;
     }
 }

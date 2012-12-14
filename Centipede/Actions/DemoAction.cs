@@ -11,7 +11,7 @@ namespace Centipede
             : base("Demo Action", variables)
         { }
         
-        public override void DoAction()
+        protected override void DoAction()
         {
             MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
                                           Test1, 
