@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+//using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -70,21 +70,23 @@ namespace Centipede
                 nextAction = null;
                 return false;
             }
-
-            switch (result)
+            else
             {
-                case System.Windows.Forms.DialogResult.Abort:
-                    nextAction = null;
-                    return false;
-                case System.Windows.Forms.DialogResult.Retry:
-                    nextAction = e.ErrorAction;
-                    return true;
-                case System.Windows.Forms.DialogResult.Ignore:
-                    nextAction = e.ErrorAction.GetNext();
-                    return true;
-                default:
-                    nextAction = null;
-                    return false;
+                switch (result)
+                {
+                    case System.Windows.Forms.DialogResult.Abort:
+                        nextAction = null;
+                        return false;
+                    case System.Windows.Forms.DialogResult.Retry:
+                        nextAction = e.ErrorAction;
+                        return true;
+                    case System.Windows.Forms.DialogResult.Ignore:
+                        nextAction = e.ErrorAction.GetNext();
+                        return true;
+                    default:
+                        nextAction = null;
+                        return false;
+                }
             }
         }
 
@@ -167,8 +169,7 @@ namespace Centipede
         }
 
         private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
-        private CentipedeEventArgs _defaultEventArgs;
-
+        
         public delegate void ShowMessageBoxDelegate(String message);
         public void ShowMessageBox(string message)
         {
@@ -177,21 +178,17 @@ namespace Centipede
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            UIActListBox.Items.Add(new ActionFactory("Demo Action", typeof(DemoAction)));
+            ActionFactory af = new ActionFactory("Demo Action", typeof(DemoAction));
+            UIActListBox.LargeImageList.Images.Add("generic", Properties.Resources.generic);
+            af.ImageKey = "generic";
+            UIActListBox.Items.Add(af);
+
             GetActionPlugins();
 
 
             VarDataGridView.DataSource = _dataSet.Variables;
             _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
             _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
-
-            //SetActionDisplayState = new SetStateDeligate((adc, state) => adc.State = state);
-
-            //    void SetState(ActionDisplayControl adc, ActionState state)
-            //{
-            //    adc.State = state;
-            //}
-
 
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
@@ -283,6 +280,7 @@ namespace Centipede
                         {
                             catListView = GenerateNewTabPage(catAttribute.category);
                         }
+                        
 
                         ActionFactory af = new ActionFactory(catAttribute, pluginType);
 
@@ -290,11 +288,19 @@ namespace Centipede
                         {
                             String[] names = asm.GetManifestResourceNames();
                             var t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
-                            Icon icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t,null) as Icon;
-
-
-                            catListView.LargeImageList.Images.Add(pluginType.Name, icon);
-                            af.ImageKey = pluginType.Name;
+                            System.Drawing.Icon icon;
+                            if (t != null)
+                            {
+                                icon = t.GetProperty(catAttribute.iconName, typeof(System.Drawing.Icon)).GetValue(t, null) as System.Drawing.Icon;
+                                catListView.LargeImageList.Images.Add(pluginType.Name, icon);
+                                af.ImageKey = pluginType.Name;
+                            }
+                            else
+                            {
+                                af.ImageKey = "generic";
+                            }
+                                
+                            
                         }
 
                         catListView.Items.Add(af);
@@ -345,9 +351,9 @@ namespace Centipede
         private ListView GenerateNewTabPage(String category)
         {
             ListView lv = new ListView();
-            ImageList il = new ImageList();
-            lv.LargeImageList = il;
-            lv.SmallImageList = il;
+            
+            lv.LargeImageList = ActionIcons;
+            lv.SmallImageList = ActionIcons;
             TabPage tabPage = new TabPage(category);
             tabPage.Controls.Add(lv);
             lv.Dock = DockStyle.Fill;
@@ -378,7 +384,7 @@ namespace Centipede
             Type actionType = action.GetType();
             ActionCategoryAttribute actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
             ActionDisplayControl adc;
-            if (actionAttribute.displayControl != "")
+            if (actionAttribute.displayControl != null)
             {
                 ConstructorInfo constructor = actionType.Assembly.GetType(actionAttribute.displayControl).GetConstructor(new Type[] { typeof(Action) });
                 adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;

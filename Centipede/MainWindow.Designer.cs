@@ -6,7 +6,7 @@
         private System.Windows.Forms.TabPage ActionsTab;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl AddActionTabs;
-        private System.Windows.Forms.ImageList FlowControlActIcons;
+        private System.Windows.Forms.ImageList ActionIcons;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ImageList OtherActIcons;
         private System.Windows.Forms.TabPage VarsTab;
@@ -38,6 +38,7 @@
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListView();
+            this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.VarsTab = new System.Windows.Forms.TabPage();
@@ -51,7 +52,6 @@
             this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.FlowControlActIcons = new System.Windows.Forms.ImageList(this.components);
             this.OtherActIcons = new System.Windows.Forms.ImageList(this.components);
             this.LoadBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -120,10 +120,19 @@
             // UIActListBox
             // 
             resources.ApplyResources(this.UIActListBox, "UIActListBox");
+            this.UIActListBox.LargeImageList = this.ActionIcons;
             this.UIActListBox.Name = "UIActListBox";
+            this.UIActListBox.SmallImageList = this.ActionIcons;
             this.UIActListBox.UseCompatibleStateImageBehavior = false;
             this.UIActListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
             this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
+            // 
+            // ActionIcons
+            // 
+            this.ActionIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ActionIcons.ImageStream")));
+            this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
+            this.ActionIcons.Images.SetKeyName(1, "If.ico");
             // 
             // ActionsVarsTabControl
             // 
@@ -213,13 +222,6 @@
             // 
             this.VarMenuSelectAll.Name = "VarMenuSelectAll";
             resources.ApplyResources(this.VarMenuSelectAll, "VarMenuSelectAll");
-            // 
-            // FlowControlActIcons
-            // 
-            this.FlowControlActIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("FlowControlActIcons.ImageStream")));
-            this.FlowControlActIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.FlowControlActIcons.Images.SetKeyName(0, "pycon.ico");
-            this.FlowControlActIcons.Images.SetKeyName(1, "If.ico");
             // 
             // OtherActIcons
             // 

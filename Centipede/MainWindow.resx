@@ -186,11 +186,44 @@
   <data name="UIActListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <metadata name="ActionIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>270, 17</value>
+  </metadata>
+  <data name="ActionIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
+        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
+        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BdAHZAv8BdQHTAv8BoAHmAv8DYgHPAxYBHOAAA2kB9gGB
+        Ae0C/wGBAegC/wF9AeAC/wHVAfYC/wFrAdAC/wN/AfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
+        AYEB5wL/AXsB3gL/AXAB1gb/AygBOwMZASADEgEXBAUIAAMsAf8DLAH/AywB/wMsAf8DLAH/AywB/wwA
+        AywB/wMsAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAMs
+        Af8UAAMsAf8DLAH/kAADWgG5AcwBugGlAf8BiAGBAXIB/wKBAXEF/wGBAe0C/wGBAe0C/wGBAe0C/wGB
+        AesC/wGBAeMC/wF3AdsC/wFsAdIC/wFlAcsC/wGdAeQC/wNiAc8DFwEdEAADLAH/FAADLAH/AywB/5AA
+        A2kB9gGhAYEBdwH/AY8BgQFtAf8BhAGBAW8B/wHxAe4B6gH/AZsB9AL/AYEB7QL/AYEB7QL/AYEB7QL/
+        AYEB6gL/AYAB4gL/AXUB2QL/AWoB0QL/AWwBzAL/A38B+QMeASkQAAMsAf8UAAMsAf8DLAH/kAAE/wGk
+        AYEBaQH/AZkBgQFrAf8BjQGBAW4B/wGjAY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BfgHgAv8BcwHY
+        Av8BaAHPBv8DHwEqEAADLAH/FAADLAH/AywB/5AAA3IB9QGyAYIBcwH/AaIBgQFpAf8BlgGBAWwB/wGL
+        AYEBbgH/AoEBcAH/AoEBcQH/AoEBcQH/AoEBcgH/AawBnAGJAf8B7QH9Av8BgQHnAv8BewHfAv8BfAHZ
+        Av8DfwH4AxkBIQQAAywB/wMsAf8DLAH/AywB/wwAAywB/wMsAf8DLAH/AywB/wMsAf8DLAH/iAADWQG2
+        AdwBwgGiAf8BrQGBAWsB/wGgAYEBagH/AZQBgQFsAf8BiQGBAW4B/wKBAXEB/wKBAXEB/wKBAXEB/wKB
+        AXMF/wGBAewC/wGBAeYC/wGsAe8C/wNdAcQDCgELKAADLAH/AywB/5QAA1sBuAN4AfcQ/wHJAb4BsQH/
+        AoEBcQH/AoEBcQn/A3IB9QNbAbgDHAElFAADLAH/FAADLAH/AywB/6AABP8BmwGBAWsB/wGQAYEBbQH/
+        AYUBgQFvAf8CgQFxAf8CgQFxBf8DHgEpIAADLAH/GAADLAH/AywB/wMsAf8DLAH/lAADcgH1AaYBgQFs
+        Af8B6AHfAdMB/wGOAYEBbQH/AYIBgQFwAf8CgQF1Af8DfwH4AxkBIeAAA1kBtgHYAcABowH/AagBgQF1
+        Af8BlwGBAWwB/wGTAYEBeQH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuAN4AfcE/wNyAfUDWgG5AxwBJdQA
+        AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
+        Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
+        AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
+</value>
+  </data>
   <data name="UIActListBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>0, 0</value>
   </data>
   <data name="UIActListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>427, 164</value>
+    <value>433, 170</value>
   </data>
   <data name="UIActListBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -209,9 +242,6 @@
   </data>
   <data name="UIActTab.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>
-  </data>
-  <data name="UIActTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
   </data>
   <data name="UIActTab.Size" type="System.Drawing.Size, System.Drawing">
     <value>433, 170</value>
@@ -468,39 +498,6 @@
   <data name="&gt;&gt;ActionsVarsTabControl.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <metadata name="FlowControlActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>270, 17</value>
-  </metadata>
-  <data name="FlowControlActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
-        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
-        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
-        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BcgHZAv8BcwHTAv8BoAHmAv8DYgHPAxYBHOAAA2sB9gGB
-        Ae0C/wGBAegC/wF7AeAC/wHVAfYC/wFpAdAC/wOBAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AXkB3gL/AW4B1gb/AygBOwMZASADEgEXBAUIAAMqAf8DKgH/AyoB/wMqAf8DKgH/AyoB/wwA
-        AyoB/wMqAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAMq
-        Af8UAAMqAf8DKgH/kAADWgG5AcwBugGlAf8BiAGBAXAB/wKBAW8F/wGBAe0C/wGBAe0C/wGBAe0C/wGB
-        AesC/wGAAeMC/wF1AdsC/wFqAdIC/wFjAcsC/wGdAeQC/wNiAc8DFwEdEAADKgH/FAADKgH/AyoB/5AA
-        A2sB9gGhAYEBdQH/AY8BgQFrAf8BhAGBAW0B/wHxAe4B6gH/AZsB9AL/AYEB7QL/AYEB7QL/AYEB7QL/
-        AYEB6gL/AX4B4gL/AXMB2QL/AWgB0QL/AWoBzAL/A4EB+QMeASkQAAMqAf8UAAMqAf8DKgH/kAAE/wGk
-        AYEBZwH/AZkBgQFpAf8BjQGBAWwB/wGjAY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BfAHgAv8BcQHY
-        Av8BZgHPBv8DHwEqEAADKgH/FAADKgH/AyoB/5AAA3IB9QGyAYIBcQH/AaIBgQFnAf8BlgGBAWoB/wGL
-        AYEBbAH/AoEBbgH/AoEBbwH/AoEBbwH/AoEBcAH/AawBnAGJAf8B7QH9Av8BgQHnAv8BeQHfAv8BegHZ
-        Av8DfwH4AxkBIQQAAyoB/wMqAf8DKgH/AyoB/wwAAyoB/wMqAf8DKgH/AyoB/wMqAf8DKgH/iAADWQG2
-        AdwBwgGiAf8BrQGBAWkB/wGgAYEBaAH/AZQBgQFqAf8BiQGBAWwB/wKBAW8B/wKBAW8B/wKBAW8B/wKB
-        AXEF/wGBAewC/wGBAeYC/wGsAe8C/wNdAcQDCgELKAADKgH/AyoB/5QAA1sBuAN6AfcQ/wHJAb4BsQH/
-        AoEBbwH/AoEBbwn/A3IB9QNbAbgDHAElFAADKgH/FAADKgH/AyoB/6AABP8BmwGBAWkB/wGQAYEBawH/
-        AYUBgQFtAf8CgQFvAf8CgQFvBf8DHgEpIAADKgH/GAADKgH/AyoB/wMqAf8DKgH/lAADcgH1AaYBgQFq
-        Af8B6AHfAdMB/wGOAYEBawH/AYIBgQFuAf8CgQFzAf8DfwH4AxkBIeAAA1kBtgHYAcABowH/AagBgQFz
-        Af8BlwGBAWoB/wGTAYEBdwH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuAN6AfcE/wNyAfUDWgG5AxwBJdQA
-        AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
-        Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
-        AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
-</value>
-  </data>
   <metadata name="OtherActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>423, 17</value>
   </metadata>
@@ -511,21 +508,21 @@
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
         BAAAAk1TRnQBSQFMAwEBAAEEAQABBAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
         ARADAAEBAQABIAYAARAmAAQGAxQBGgMZASEDGQEhAxMBGAQF5AADGgEjA18BwwN/AfgE/wN/AfgDXwHN
-        AzMBUAQG4AADWwG4AbMB9QL/AYEB4wL/AXIB2QL/AXMB0wL/AaAB5gL/A2IBzwMWARzgAANrAfYBgQHt
-        Av8BgQHoAv8BewHgAv8B1QH2Av8BaQHQAv8DgQH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wGB
-        AecC/wF5Ad4C/wFuAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgN/AfgI/wGBAe0C/wGBAe0C/wG+
-        AfcS/wN/AfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAXAB/wKBAW8F/wGBAe0C/wGBAe0C/wGB
-        Ae0C/wGBAesC/wGAAeMC/wF1AdsC/wFqAdIC/wFjAcsC/wGdAeQC/wNiAc8DFwEdwAADawH2AaEBgQF1
-        Af8BjwGBAWsB/wGEAYEBbQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BfgHi
-        Av8BcwHZAv8BaAHRAv8BagHMAv8DgQH5Ax4BKcAABP8BpAGBAWcB/wGZAYEBaQH/AY0BgQFsAf8BowGO
-        AYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AXwB4AL/AXEB2AL/AWYBzwb/Ax8BKsAAA3IB9QGyAYIBcQH/
-        AaIBgQFnAf8BlgGBAWoB/wGLAYEBbAH/AoEBbgH/AoEBbwH/AoEBbwH/AoEBcAH/AawBnAGJAf8B7QH9
-        Av8BgQHnAv8BeQHfAv8BegHZAv8DfwH4AxkBIcAAA1kBtgHcAcIBogH/Aa0BgQFpAf8BoAGBAWgB/wGU
-        AYEBagH/AYkBgQFsAf8CgQFvAf8CgQFvAf8CgQFvAf8CgQFxBf8BgQHsAv8BgQHmAv8BrAHvAv8DXQHE
-        AwoBC8QAA1sBuAN6AfcQ/wHJAb4BsQH/AoEBbwH/AoEBbwn/A3IB9QNbAbgDHAEl1AAE/wGbAYEBaQH/
-        AZABgQFrAf8BhQGBAW0B/wKBAW8B/wKBAW8F/wMeASngAANyAfUBpgGBAWoB/wHoAd8B0wH/AY4BgQFr
-        Af8BggGBAW4B/wKBAXMB/wN/AfgDGQEh4AADWQG2AdgBwAGjAf8BqAGBAXMB/wGXAYEBagH/AZMBgQF3
-        Af8BxAG3AagB/wNdAcQDCgEL5AADWwG4A3oB9wT/A3IB9QNaAbkDHAEl1AABQgFNAT4HAAE+AwABKAMA
+        AzMBUAQG4AADWwG4AbMB9QL/AYEB4wL/AXQB2QL/AXUB0wL/AaAB5gL/A2IBzwMWARzgAANpAfYBgQHt
+        Av8BgQHoAv8BfQHgAv8B1QH2Av8BawHQAv8DfwH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wGB
+        AecC/wF7Ad4C/wFwAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgN/AfgI/wGBAe0C/wGBAe0C/wG+
+        AfcS/wN/AfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAXIB/wKBAXEF/wGBAe0C/wGBAe0C/wGB
+        Ae0C/wGBAesC/wGBAeMC/wF3AdsC/wFsAdIC/wFlAcsC/wGdAeQC/wNiAc8DFwEdwAADaQH2AaEBgQF3
+        Af8BjwGBAW0B/wGEAYEBbwH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgAHi
+        Av8BdQHZAv8BagHRAv8BbAHMAv8DfwH5Ax4BKcAABP8BpAGBAWkB/wGZAYEBawH/AY0BgQFuAf8BowGO
+        AYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AX4B4AL/AXMB2AL/AWgBzwb/Ax8BKsAAA3IB9QGyAYIBcwH/
+        AaIBgQFpAf8BlgGBAWwB/wGLAYEBbgH/AoEBcAH/AoEBcQH/AoEBcQH/AoEBcgH/AawBnAGJAf8B7QH9
+        Av8BgQHnAv8BewHfAv8BfAHZAv8DfwH4AxkBIcAAA1kBtgHcAcIBogH/Aa0BgQFrAf8BoAGBAWoB/wGU
+        AYEBbAH/AYkBgQFuAf8CgQFxAf8CgQFxAf8CgQFxAf8CgQFzBf8BgQHsAv8BgQHmAv8BrAHvAv8DXQHE
+        AwoBC8QAA1sBuAN4AfcQ/wHJAb4BsQH/AoEBcQH/AoEBcQn/A3IB9QNbAbgDHAEl1AAE/wGbAYEBawH/
+        AZABgQFtAf8BhQGBAW8B/wKBAXEB/wKBAXEF/wMeASngAANyAfUBpgGBAWwB/wHoAd8B0wH/AY4BgQFt
+        Af8BggGBAXAB/wKBAXUB/wN/AfgDGQEh4AADWQG2AdgBwAGjAf8BqAGBAXUB/wGXAYEBbAH/AZMBgQF5
+        Af8BxAG3AagB/wNdAcQDCgEL5AADWwG4A3gB9wT/A3IB9QNaAbkDHAEl1AABQgFNAT4HAAE+AwABKAMA
         AUADAAEQAwABAQEAAQEFAAGAFwAD/wEAAfgBHwYAAfABDwYAAfABDwYAAfABDwYAAYABATYAAYABAQYA
         AfABDwYAAfABDwYAAfABDwYAAfgBHwYACw==
 </value>
@@ -703,7 +700,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -738,6 +735,12 @@
         //4Au//+AHd//kBu//5ADd/+IAO//nAHd/5sBu/+XADf/jgAP/52AH/+bsBH/l3AAf57gAD+d2AAfn7s
         AH592AA+f7gAPn94AD5//AAef/wABn/+AGB//wD4f//D/n//8/5///n+f//5/n///P5///z+AAAAAA==
 </value>
+  </data>
+  <data name="&gt;&gt;ActionIcons.Name" xml:space="preserve">
+    <value>ActionIcons</value>
+  </data>
+  <data name="&gt;&gt;ActionIcons.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;VarMenuUndo.Name" xml:space="preserve">
     <value>VarMenuUndo</value>
@@ -786,12 +789,6 @@
   </data>
   <data name="&gt;&gt;VarMenuSelectAll.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;FlowControlActIcons.Name" xml:space="preserve">
-    <value>FlowControlActIcons</value>
-  </data>
-  <data name="&gt;&gt;FlowControlActIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;OtherActIcons.Name" xml:space="preserve">
     <value>OtherActIcons</value>

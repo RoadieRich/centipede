@@ -4,7 +4,10 @@ using System.Xml;
 using System.Reflection;
 using System.Linq;
 using System.IO;
-using System.Xml.Serialization;
+using Centipede.StringInject;
+
+[assembly:CLSCompliant(true)]
+
 namespace Centipede
 {
     /// <summary>
@@ -13,27 +16,80 @@ namespace Centipede
     [Serializable]
     public abstract class Action
     {
-        public Action(String name, Dictionary<String,Object> variables)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="variables"></param>
+        protected Action(String name, Dictionary<String,Object> variables)
         {
             Name = name;
             Variables = variables;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
         public delegate void Setter(String s);
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected Dictionary<String, Object> Variables;
 
-        public Dictionary<String, Object> Attributes = new Dictionary<string, object>();
-        //public Dictionary<String, String> AttributeInfo = new Dictionary<string, string>();
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly String Name;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public String Comment = "";
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Object Tag;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Action Next = null;
 
-        public abstract void DoAction();
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void InitAction()
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected abstract void DoAction();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        protected virtual void CleanupAction()
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Run()
+        {
+            InitAction();
+            DoAction();
+            CleanupAction();
+        }
 
         private Int32 _complexity = 1;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual Int32 Complexity
         {
             get
@@ -46,47 +102,38 @@ namespace Centipede
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public virtual Action GetNext()
         {
             return Next;
         }
 
-        public T ParseAttribute<T>(String attributeName)
-        {
-            String attrText = Attributes[attributeName] as String;
-            if (attrText.StartsWith("%"))
-            {
-                return (T)Variables[attrText.Substring(1)];
-            }
-            else
-            {
-                return (T)Attributes[attributeName];
-            }
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         protected String ParseStringForVariable(String str)
         {
-            if (str.StartsWith("%"))
-            {
-                return Variables[str.Substring(1)] as String;
-            }
-            else
-            {
-                return str;
-            }
+            return str.Inject(Variables);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static HashSet<String> TrueValues = new HashSet<string>(new String[]{
                                          "yes",
                                          "true",
                                          "1"
                                      });
-
-        public Boolean ParseBoolAttribute(String attributeName)
-        {
-            return TrueValues.Contains(ParseAttribute<String>(attributeName));
-        }
-
+                
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rootElement"></param>
         public void AddToXmlElement(XmlElement rootElement)
         {
 
@@ -104,23 +151,13 @@ namespace Centipede
 
             rootElement.AppendChild(element);
         }
-
-
-        static public Action ReadFrom(TextReader reader)
-        {
-            
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Action), "Centipede");
-
-            return xmlSerializer.Deserialize(reader) as Action;
-
-        }
-
-        public void WriteTo(TextWriter writer)
-        {
-            XmlSerializer xmlSerializer = new XmlSerializer(this.GetType(), "Centipede");
-            xmlSerializer.Serialize(writer, this);
-        }
-        
+               
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="variables"></param>
+        /// <returns></returns>
         static public Action FromXml(XmlElement element, Dictionary<String, Object> variables)
         {
             Type[] constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
@@ -136,8 +173,8 @@ namespace Centipede
             {
                 String asmPath = Path.Combine(
                                             Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-                                            Properties.Settings.Default.PluginFolder,
-                                            element.GetAttribute("Assembly"));
+                                            Path.Combine(Properties.Settings.Default.PluginFolder,
+                                            element.GetAttribute("Assembly")));
                 asm = Assembly.LoadFile(asmPath);
             }
             
@@ -175,75 +212,177 @@ namespace Centipede
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [System.AttributeUsage(AttributeTargets.Field)]
     public sealed class ActionArgumentAttribute : System.Attribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public String displayName;
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public String usage;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public String setterMethodName;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Object setterMethod;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public delegate Boolean ArgumentSetter(String value);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [System.AttributeUsage(AttributeTargets.Class)]
     public sealed class ActionCategoryAttribute : System.Attribute
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="category"></param>
         public ActionCategoryAttribute(String category)
         {
             this.category = category;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly String category;
-        public String helpText = "";
-        public String displayName = "";
-        public String displayControl = "";
-        public String iconName = "";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String helpText;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String displayName;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String displayControl;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public String iconName;
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ActionException : Exception
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="action"></param>
         public ActionException(String message, Action action)
             : base(message)
         {
             ErrorAction = action;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
         public ActionException(Action action)
         {
             ErrorAction = action;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
+        /// <param name="action"></param>
         public ActionException(string message, Exception exception, Action action)
             : base(message, exception)
         {
             ErrorAction = action;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public ActionException(string message)
             : base(message) { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="action"></param>
         public ActionException(Exception e, Action action)
             : base(e.Message, e)
         {
             ErrorAction = action;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public readonly Action ErrorAction = null;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
     public class ValidationException : Exception
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public ValidationException()
         { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public ValidationException(string message)
             : base(message)
         { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="inner"></param>
         public ValidationException(string message, Exception inner)
             : base(message, inner)
         { }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         protected ValidationException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context)

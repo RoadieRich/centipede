@@ -37,7 +37,7 @@ namespace Centipede
 
         internal static List<Action> Actions = new List<Action>();
         internal static MainWindow mainForm;
-        //private static JobFile File = null;
+
 
         /// <summary>
         /// Run the job, starting with the first action added.
@@ -71,7 +71,7 @@ namespace Centipede
                     {
                         beforeActionHandler(currentAction);
                     }
-                    currentAction.DoAction();
+                    currentAction.Run();
 
                     var afterActionHandler = ActionCompleted;
                     if (afterActionHandler != null)

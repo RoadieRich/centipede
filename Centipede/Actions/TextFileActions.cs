@@ -17,12 +17,7 @@ namespace Centipede
     {
         public OpenTextFileAction(Dictionary<String, Object> variables)
             : base("Open Text File", variables)
-        {
-            Attributes["Filename"] = "";
-            Attributes["Read"] = "1";
-            Attributes["Write"] = "1";
-            Attributes["Destination Var"] = "Text File";
-        }
+        { }
 
         [ActionArgument(usage="Filename to open")]
         public String Filename = "";
@@ -39,13 +34,12 @@ namespace Centipede
         )]
         public String FileVar = "Text File";
 
-        public override void DoAction()
+        protected override void DoAction()
         {
-            String filename = ParseAttribute<String>("Filename");
-            FileAccess access = ParseBoolAttribute("Read") ? FileAccess.Read : 0;
-            access |= ParseBoolAttribute("Write") ? FileAccess.Write : 0;
+            FileAccess access = Read ? FileAccess.Read : 0;
+            access |= Write ? FileAccess.Write : 0;
 
-            Program.Variables[Attributes["Destination Var"] as String] = File.Open(filename, FileMode.OpenOrCreate, access);
+            Program.Variables[FileVar] = File.Open(Filename, FileMode.OpenOrCreate, access);
         }
 
 
