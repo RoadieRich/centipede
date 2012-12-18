@@ -59,24 +59,31 @@ namespace Centipede
         public Action Next = null;
 
         /// <summary>
-        /// 
+        /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, 
+        /// converting an object from Variables to a specific type.
+        /// <example>
+        /// protected override void InitAction()
+        /// {
+        ///     this.TextFile = Variables["TextFile"] as FileStream;
+        /// }
+        /// </example>
         /// </summary>
         protected virtual void InitAction()
         { }
 
         /// <summary>
-        /// 
+        /// Perform the action
         /// </summary>
         protected abstract void DoAction();
         
         /// <summary>
-        /// 
+        /// Cleanup, e.g. saving local variables back into Variables
         /// </summary>
         protected virtual void CleanupAction()
         { }
 
         /// <summary>
-        /// 
+        /// Execute the action, performing init and cleanup as required
         /// </summary>
         public void Run()
         {
@@ -88,7 +95,7 @@ namespace Centipede
         private Int32 _complexity = 1;
 
         /// <summary>
-        /// 
+        /// In integer representing the complexity of the action, used to indicate progress in the job"
         /// </summary>
         public virtual Int32 Complexity
         {
@@ -103,20 +110,25 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Get the next action, can be overridden to allow custom flow control
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Action</returns>
         public virtual Action GetNext()
         {
             return Next;
         }
 
         /// <summary>
-        /// 
+        /// Parse a string, injecting values from Variables as required
         /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        protected String ParseStringForVariable(String str)
+        /// <example>
+        /// Variables["variable_a"] = "foo";
+        /// Variables["variable_b"] = "bar"
+        /// ParseStringForVariable("{variable_a}{variable_b}") //returns "foobar"
+        /// </example>
+        /// <param name="str">The string to parse</param>
+        /// <returns>String</returns>
+        public String ParseStringForVariable(String str)
         {
             return str.Inject(Variables);
         }
@@ -124,16 +136,17 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
+        [Obsolete]
         public static HashSet<String> TrueValues = new HashSet<string>(new String[]{
                                          "yes",
                                          "true",
                                          "1"
                                      });
-                
+        
         /// <summary>
-        /// 
+        /// Append xml code for the action to the given parent element
         /// </summary>
-        /// <param name="rootElement"></param>
+        /// <param name="rootElement">The parent element to add the action to</param>
         public void AddToXmlElement(XmlElement rootElement)
         {
 
@@ -153,10 +166,10 @@ namespace Centipede
         }
                
         /// <summary>
-        /// 
+        /// Loads an action from an XmlElement
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="variables"></param>
+        /// <param name="element">the xml to convert</param>
+        /// <param name="variables">Program.Variables, passed to the Action.ctor</param>
         /// <returns></returns>
         static public Action FromXml(XmlElement element, Dictionary<String, Object> variables)
         {
@@ -210,10 +223,13 @@ namespace Centipede
             }
             return instance as Action;
         }
+
+        public virtual void Dispose()
+        { }
     }
 
     /// <summary>
-    /// 
+    /// Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Field)]
     public sealed class ActionArgumentAttribute : System.Attribute
@@ -247,49 +263,49 @@ namespace Centipede
     }
 
     /// <summary>
-    /// 
+    /// Marks a class as an Action, to be displayed in the GUI listbox
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Class)]
     public sealed class ActionCategoryAttribute : System.Attribute
     {
         /// <summary>
-        /// 
+        /// Marks a class as an Action, to be displayed in the GUI listbox
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name="category"><see cref="ActionCategoryAttribute.category"/></param>
         public ActionCategoryAttribute(String category)
         {
             this.category = category;
         }
 
         /// <summary>
-        /// 
+        /// the category tab to add the action to
         /// </summary>
         public readonly String category;
 
         /// <summary>
-        /// 
+        /// helptext for the action, displayed as a tooltip
         /// </summary>
         public String helpText;
 
         /// <summary>
-        /// 
+        /// The display name for the action, defaults to the classname
         /// </summary>
         public String displayName;
 
         /// <summary>
-        /// 
+        /// name of a custom display control used to display the action on thr Actions listview
         /// </summary>
         public String displayControl;
 
         /// <summary>
-        /// 
+        /// name of the icon in the resource file
         /// </summary>
         public String iconName;
 
     }
 
     /// <summary>
-    /// 
+    /// Thrown when an action raises an exception
     /// </summary>
     public class ActionException : Exception
     {

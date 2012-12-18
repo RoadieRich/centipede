@@ -111,20 +111,20 @@ namespace Centipede
                 {
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
-
-                ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
-                if (adc.InvokeRequired)
-                {
-                    adc.Invoke(SetActionDisplayState, adc, ActionState.Completed, "Completed");
-                }
-                else
-                {
-                    (adc).State = ActionState.Completed;
-                }
-
-                //this is supposed to be a percentage, but this works.
-                backgroundWorker1.ReportProgress(currentAction.Complexity);
             }
+            ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
+            if (adc.InvokeRequired)
+            {
+                adc.Invoke(SetActionDisplayState, adc, ActionState.Completed, "Completed");
+            }
+            else
+            {
+                (adc).State = ActionState.Completed;
+            }
+
+            //this is supposed to be a percentage, but this works.
+            backgroundWorker1.ReportProgress(currentAction.Complexity);
+
         }
 
         private void CompletedHandler(Boolean success)
@@ -154,7 +154,7 @@ namespace Centipede
         }
 
         private JobDataSet _dataSet = new JobDataSet();
-        private delegate void SetStateDeligate(Centipede.Actions.ActionDisplayControl adc, ActionState state, String message);
+        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state, String message);
 
         private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
         {
@@ -169,7 +169,7 @@ namespace Centipede
         }
 
         private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
-        
+
         public delegate void ShowMessageBoxDelegate(String message);
         public void ShowMessageBox(string message)
         {
@@ -178,9 +178,21 @@ namespace Centipede
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            ActionFactory af = new ActionFactory("Demo Action", typeof(DemoAction));
             UIActListBox.LargeImageList.Images.Add("generic", Properties.Resources.generic);
+
+            ActionFactory af = new ActionFactory("Demo Action", typeof(DemoAction));
             af.ImageKey = "generic";
+
+            UIActListBox.Items.Add(af);
+
+            af = new ActionFactory("Get Filename", typeof(GetFileNameAction));
+            af.ImageKey = "generic";
+
+            UIActListBox.Items.Add(af);
+
+            af = new ActionFactory("Show Messagebox", typeof(ShowMessageBox));
+            af.ImageKey = "generic";
+
             UIActListBox.Items.Add(af);
 
             GetActionPlugins();
@@ -246,9 +258,15 @@ namespace Centipede
                 Evidence evidence = new Evidence();
                 ApplicationDirectory appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
                 evidence.AddAssemblyEvidence(appDir);
-
-                Assembly asm = Assembly.LoadFrom(fi.FullName);
-
+                Assembly asm;
+                try
+                {
+                    asm = Assembly.LoadFrom(fi.FullName);
+                }
+                catch (BadImageFormatException)
+                {
+                    continue;
+                }
                 Type[] pluginsInFile = asm.GetExportedTypes();
                 foreach (Type pluginType in pluginsInFile)
                 {
@@ -280,7 +298,7 @@ namespace Centipede
                         {
                             catListView = GenerateNewTabPage(catAttribute.category);
                         }
-                        
+
 
                         ActionFactory af = new ActionFactory(catAttribute, pluginType);
 
@@ -299,8 +317,8 @@ namespace Centipede
                             {
                                 af.ImageKey = "generic";
                             }
-                                
-                            
+
+
                         }
 
                         catListView.Items.Add(af);
@@ -329,7 +347,7 @@ namespace Centipede
                 {
                     dirtyMarker = " *";
                 }
-                base.Text = String.Format("Centipede - {0}{1}", new object[] {value, dirtyMarker});
+                base.Text = String.Format("Centipede - {0}{1}", new object[] { value, dirtyMarker });
             }
         }
 
@@ -351,7 +369,7 @@ namespace Centipede
         private ListView GenerateNewTabPage(String category)
         {
             ListView lv = new ListView();
-            
+
             lv.LargeImageList = ActionIcons;
             lv.SmallImageList = ActionIcons;
             TabPage tabPage = new TabPage(category);
@@ -386,7 +404,7 @@ namespace Centipede
             ActionDisplayControl adc;
             if (actionAttribute.displayControl != null)
             {
-                ConstructorInfo constructor = actionType.Assembly.GetType(actionAttribute.displayControl).GetConstructor(new Type[] { typeof(Action) });
+                ConstructorInfo constructor = actionType.Assembly.GetType(action.GetType().Namespace + "." + actionAttribute.displayControl).GetConstructor(new Type[] { typeof(Action) });
                 adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
             }
             else
@@ -496,6 +514,7 @@ namespace Centipede
             backgroundWorker1.RunWorkerAsync();
         }
 
+        [STAThread]
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             Program.RunJob();
@@ -596,8 +615,13 @@ namespace Centipede
             int a = 0;
             a += 1;
         }
-        
-        
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            Program.Dispose(disposing);
+        }
     }
     class GuiConsole
     {

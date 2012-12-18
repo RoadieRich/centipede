@@ -45,6 +45,7 @@ namespace Centipede
         /// <param name="updateCallback"><see cref="ActionUpdateCallback"/></param>
         /// <param name="completedHandler"><see cref="CompletedHandler"/></param>
         /// <param name="errorHandler"><see cref="ErrorHandler"/></param>
+        [STAThread]
         public static void RunJob()
         {
             Action currentAction = null;
@@ -57,7 +58,7 @@ namespace Centipede
                 }
                 return;
             }
-
+            
             currentAction = Actions[0];
 
             Boolean completed = true;
@@ -373,6 +374,17 @@ namespace Centipede
             foreach (Action action in Actions.ToArray())
             {
                 RemoveAction(action);
+            }
+        }
+
+        internal static void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (Action action in Actions)
+                {
+                    action.Dispose();
+                }
             }
         }
     }

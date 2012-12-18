@@ -1,4 +1,5 @@
-﻿namespace Centipede.Actions
+﻿using System.Windows.Forms;
+namespace Centipede.Actions
 {
     public partial class ActionDisplayControl
     {
@@ -26,7 +27,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        protected virtual void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionDisplayControl));
@@ -87,11 +88,11 @@
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.AttributeTable.Location = new System.Drawing.Point(4, 34);
-            this.AttributeTable.MinimumSize = new System.Drawing.Size(0, 28);
+            this.AttributeTable.MinimumSize = new System.Drawing.Size(10, 10);
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(132, 28);
+            this.AttributeTable.Size = new System.Drawing.Size(139, 10);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -108,7 +109,7 @@
             this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusIconBox.BackColor = System.Drawing.Color.Transparent;
             this.StatusIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.StatusIconBox.Location = new System.Drawing.Point(110, 3);
+            this.StatusIconBox.Location = new System.Drawing.Point(117, 3);
             this.StatusIconBox.Name = "StatusIconBox";
             this.StatusIconBox.Size = new System.Drawing.Size(26, 26);
             this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -218,7 +219,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.CommentTextBox.Location = new System.Drawing.Point(104, 7);
             this.CommentTextBox.Name = "CommentTextBox";
-            this.CommentTextBox.Size = new System.Drawing.Size(0, 20);
+            this.CommentTextBox.Size = new System.Drawing.Size(7, 20);
             this.CommentTextBox.TabIndex = 4;
             this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
             // 
@@ -229,6 +230,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
             this.Controls.Add(this.StatusIconBox);
@@ -237,7 +239,7 @@
             this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.NameLabel);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(139, 65);
+            this.Size = new System.Drawing.Size(146, 47);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -249,7 +251,6 @@
 
         private System.Windows.Forms.Label NameLabel;
         private System.Windows.Forms.Button ExpandButton;
-        private System.Windows.Forms.TableLayoutPanel AttributeTable;
         private System.Windows.Forms.ImageList StatusIcons;
         private System.Windows.Forms.PictureBox StatusIconBox;
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
@@ -267,6 +268,7 @@
         private System.Windows.Forms.TextBox CommentTextBox;
         private System.Windows.Forms.ToolTip StatusTooltip;
         private System.Windows.Forms.ToolTip ArgumentTooltips;
+        protected System.Windows.Forms.TableLayoutPanel AttributeTable;
 
 
     }

@@ -9,7 +9,11 @@ using System.Resources;
 namespace Centipede.PyAction
 {
 
-    [ActionCategory("Other Actions", iconName="pycon", displayName="Python Action")]
+    [ActionCategory("Other Actions", 
+        iconName="pycon", 
+        displayName="Python Action", 
+        displayControl="PythonDisplayControl"
+        )]
     public class PythonAction : Centipede.Action
     {
 
@@ -54,24 +58,24 @@ namespace Centipede.PyAction
         }
     }
 
-    class PythonCondition : BranchCondition
-    {
-        public PythonCondition(String source)
-            : base()
-        {
-            Source = source;
-        }
+    //class PythonCondition : BranchCondition
+    //{
+    //    public PythonCondition(String source)
+    //        : base()
+    //    {
+    //        Source = source;
+    //    }
 
-        public override Boolean Test(Action act)
-        {
-            return PythonEngine.Instance.Evaluate<Boolean>(Source);
-        }
+    //    public override Boolean Test(Action act)
+    //    {
+    //        return PythonEngine.Instance.Evaluate<Boolean>(Source);
+    //    }
 
-        public string Source;
+    //    public string Source;
 
-        public override String ToString()
-        {
-            return "(Python condition)";
-        }
-    }
+    //    public override String ToString()
+    //    {
+    //        return "(Python condition)";
+    //    }
+    //}
 }
