@@ -63,6 +63,7 @@
             this.jobDataSet1 = new Centipede.JobDataSet();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.button1 = new System.Windows.Forms.Button();
+            this.GetFileNameDialogue = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -290,6 +291,11 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // GetFileNameDialogue
+            // 
+            this.GetFileNameDialogue.AddExtension = false;
+            resources.ApplyResources(this.GetFileNameDialogue, "GetFileNameDialogue");
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -330,6 +336,7 @@
         private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button button1;
+        internal System.Windows.Forms.OpenFileDialog GetFileNameDialogue;
     }
 }
 

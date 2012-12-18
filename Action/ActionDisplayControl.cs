@@ -29,7 +29,26 @@ namespace Centipede.Actions
                 StatusTooltip.SetToolTip(StatusIconBox, value);
             }
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected ActionDisplayControl()
+        {
+            InitializeComponent();
+        }
+
+        protected void SetProperties()
+        {
+            this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            this.BackColor = SystemColors.Control;
+            NameLabel.Text = ThisAction.Name;
+
+            CommentTextBox.Text = ThisAction.Comment;
+
+            ThisAction.Tag = this;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -37,12 +56,11 @@ namespace Centipede.Actions
         public ActionDisplayControl(Action action)
         {
             InitializeComponent();
-            NameLabel.Text = action.Name;
-
-            this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            this.BackColor = SystemColors.Control;
-
             ThisAction = action;
+            SetProperties();
+            
+
+            
             Assembly actionAssembly = Assembly.GetAssembly(action.GetType());
             Label attrLabel;
             TextBox attrValue;
@@ -87,10 +105,6 @@ namespace Centipede.Actions
                 //attrValue.TextChanged += ;
                 attrValue.Leave += new EventHandler(attrValue_TextChanged);
             }
-
-            CommentTextBox.Text = action.Comment;
-
-            action.Tag = this;
         }
 
         private String GetArgumentName(MemberInfo argument)
@@ -250,7 +264,11 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        public readonly Action ThisAction;
+        public Action ThisAction
+        {
+            get;
+            protected set;
+        }
         private ToolTip _statusToolTip;
         private string _statusMessage;
 

@@ -96,7 +96,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFactory.cs" />
+    <Compile Include="Actions\BranchAction.cs" />
+    <Compile Include="Actions\BranchDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Actions\DemoAction.cs" />
+    <Compile Include="Actions\GetFileNameAction.cs" />
+    <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
     <Compile Include="AskJobTitle.cs">
       <SubType>Form</SubType>
@@ -128,6 +134,9 @@
       <DependentUpon>GetJob.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Actions\BranchDisplayControl.resx">
+      <DependentUpon>BranchDisplayControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AskJobTitle.resx">
       <DependentUpon>AskJobTitle.cs</DependentUpon>
     </EmbeddedResource>
