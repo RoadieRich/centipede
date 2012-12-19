@@ -224,6 +224,9 @@ namespace Centipede
             return instance as Action;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void Dispose()
         { }
     }

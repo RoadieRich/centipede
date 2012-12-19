@@ -37,7 +37,9 @@ namespace Centipede.Actions
         {
             InitializeComponent();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         protected void SetProperties()
         {
             this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
@@ -308,7 +310,11 @@ namespace Centipede.Actions
             ToolStripDropDownItem i = sender as ToolStripDropDownItem;
             ContextMenuStrip cm = i.Owner as ContextMenuStrip;
 
-            this.Deleted.Invoke(this, null);
+            var handler = this.Deleted;
+            if (handler != null)
+            {
+                handler(this, null);
+            }
 
         }
       
