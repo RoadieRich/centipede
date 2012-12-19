@@ -487,7 +487,7 @@ namespace Centipede
         {
             if (this.Dirty)
             {
-                DialogResult result = MessageBox.Show(this, "Save changes?", "Unsaved Changes");
+                DialogResult result = MessageBox.Show(this, "Save changes?", "Unsaved Changes", MessageBoxButtons.YesNoCancel);
                 switch (result)
                 {
                     case System.Windows.Forms.DialogResult.Yes:
@@ -510,6 +510,7 @@ namespace Centipede
             {
                 adc.State = ActionState.None;
             }
+            progressBar1.Value = 0;
             progressBar1.Maximum = Program.JobComplexity;
             backgroundWorker1.RunWorkerAsync();
         }
