@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Centipede</name>
+    </assembly>
+    <members>
+        <member name="F:Centipede.ActionDisplayControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Centipede.ActionDisplayControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Centipede.ActionDisplayControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:Centipede.ActionDisplayControl.BackColor">
+            
+             <summary>
+             Gets or sets the background color for the control.
+             </summary>
+             <value>
+             A System.Drawing.Color that represents the background color of the control.
+             The default is the value of the System.Windows.Forms.Control.DefaultBackColor
+             property.
+             </value>
+        </member>
+        <member name="P:Centipede.ActionDisplayControl.Selected">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Centipede.ActionDisplayControl.State">
+            <summary>
+            Sets the displayed state of the action.
+            <see cref="T:Centipede.ActionState"/>
+            </summary>
+        </member>
+        <member name="F:Centipede.JobActionListBox.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Centipede.JobActionListBox.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Centipede.JobActionListBox.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Centipede.GetJob.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Centipede.GetJob.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Centipede.GetJob.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.VariablesDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.ActionsDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.VariablesRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.ActionsRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.VariablesRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Centipede.JobDataSet.ActionsRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="M:Centipede.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="M:Centipede.Program.LoadJob(System.String)">
+            <summary>
+            Load a job with a given name
+            </summary>
+            <param name="jobName">Name of the job to load</param>
+        </member>
+        <member name="F:Centipede.Program.Variables">
+            <summary>
+            Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive, 
+            I can't figure a way of doing it easily. 
+            </summary>
+        </member>
+        <member name="M:Centipede.Program.RunJob">
+            <summary>
+            Run the job, starting with the first action added.
+            </summary>
+            <param name="updateCallback"><see cref="T:Centipede.Program.ActionUpdateCallback"/></param>
+            <param name="completedHandler"><see cref="T:Centipede.Program.CompletedHandler"/></param>
+            <param name="errorHandler"><see cref="T:Centipede.Program.ErrorHandler"/></param>
+        </member>
+        <member name="M:Centipede.Program.AddAction(Centipede.Action,System.Int32)">
+            <summary>
+            Add action to the job queue.  By default, it is added as the last action in the job.
+            </summary>
+            <param name="action">Action to add</param>
+        </member>
+        <member name="T:Centipede.Program.ActionUpdateCallback">
+            <summary>
+            Called after executing an action
+            </summary>
+            <param name="action">The action that has just been executed.</param>
+        </member>
+        <member name="T:Centipede.Program.CompletedHandler">
+            <summary>
+            Handler for job completion
+            </summary>
+            <param name="succeeded">True if all actions completed successfully.</param>
+        </member>
+        <member name="T:Centipede.Program.ErrorHandler">
+            <summary>
+            Handler delegate for errors occuring in actions
+            </summary>
+            <param name="e">The exception that caused the error</param>
+            <param name="nextAction">Set to the next action - useful for repeating actions</param>
+            <returns>True if execution of Job should continue, false to halt</returns>
+        </member>
+        <member name="T:Centipede.Action">
+            <summary>
+            Base Action class: all actions will subclass this
+            </summary>
+        </member>
+        <member name="T:Centipede.PythonEngine">
+            <summary>
+            The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
+            </summary>
+        </member>
+        <member name="M:Centipede.PythonEngine.Execute(System.String)">
+            <summary>
+            Execute code internally
+            </summary>
+            <param name="code">The code to execute</param>
+        </member>
+        <member name="M:Centipede.PythonEngine.Evaluate``1(System.String)">
+            <summary>
+            Evaluate the expression
+            </summary>
+            <typeparam name="T">(C#) Type to coerce the value of the expression to</typeparam>
+            <param name="expression">Expression to evaluate</param>
+            <returns>The result of the expression, coerced to type T</returns>
+        </member>
+        <member name="M:Centipede.PythonEngine.SetVariable(System.String,System.Object)">
+            <summary>
+            Set a python variable, inside the Engine.
+            </summary>
+            <param name="name">Name of the variable to set</param>
+            <param name="value">Value to set it to</param>
+        </member>
+        <member name="M:Centipede.PythonEngine.GetVariable(System.String)">
+            <summary>
+            Get the value of a variable inside the python engine.
+            </summary>
+            <param name="name">Variable name to get</param>
+            <returns>The variable's value.  Will need casting to the correct type.</returns>
+        </member>
+        <member name="M:Centipede.PythonEngine.GetVariable``1(System.String)">
+            <summary>
+            Get a python variable, with a known type
+            </summary>
+            <typeparam name="T">The (c#) type to get the variable as</typeparam>
+            <param name="name">Name of the variable to fetch</param>
+            <returns>The value of the variable, cast to the appropriate C# type</returns>
+        </member>
+        <member name="P:Centipede.PythonEngine.Instance">
+            <summary>
+            The PyEngine Singleton.  <seealso href="http://msdn.microsoft.com/en-us/library/ff650316.aspx"/>
+            </summary>
+        </member>
+        <member name="M:Centipede.BranchAction.#ctor(System.String,Centipede.BranchCondition)">
+            <summary>
+            Basic branch action - has two possible "next" actions, 
+            which are chosen according to condition.
+            </summary>
+            <param name="name"></param>
+            <param name="condition"></param>
+        </member>
+        <member name="T:Centipede.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Centipede.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Centipede.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>
