@@ -4,3 +4,11 @@ syntax: regexp
 /Debug/
 syntax: glob
 *.suo
+*ActionTemplate*
+*.orig
+bin/*
+bin_/*
+dox/*
+units_library/*
+ipch/*
+*/Thumbs.db

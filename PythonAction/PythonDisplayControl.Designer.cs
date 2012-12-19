@@ -1,7 +1,8 @@
 ﻿namespace Centipede.PyAction
 {
     partial class PythonDisplayControl
-    {
+    { 
+        #region Component Designer generated code
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -20,14 +21,15 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
+       
 
         /// <summary> 
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private new void InitializeComponent()
         {
+            base.InitializeComponent();
             this.SuspendLayout();
             // 
             // PythonDisplayControl
@@ -39,7 +41,6 @@
             this.Load += new System.EventHandler(this.PythonDisplayControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

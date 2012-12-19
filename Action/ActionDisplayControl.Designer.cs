@@ -268,6 +268,10 @@ namespace Centipede.Actions
         private System.Windows.Forms.TextBox CommentTextBox;
         private System.Windows.Forms.ToolTip StatusTooltip;
         private System.Windows.Forms.ToolTip ArgumentTooltips;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected System.Windows.Forms.TableLayoutPanel AttributeTable;
 
 
