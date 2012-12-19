@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 
 namespace Centipede
@@ -70,12 +71,12 @@ namespace Centipede
     /// <summary>
     /// 
     /// </summary>
-    public class BranchCondition
+    public abstract class BranchCondition
     {
         /// <summary>
         /// 
         /// </summary>
-        public BranchCondition()
+        protected BranchCondition()
         {
 
         }
@@ -85,9 +86,8 @@ namespace Centipede
         /// </summary>
         /// <param name="act"></param>
         /// <returns></returns>
-        public virtual Boolean Test(Action act)
-        {
-            return true;
-        }
+        public abstract Boolean Test(Action act);
+
+        public abstract Control[] MakeControls();
     }
 }
