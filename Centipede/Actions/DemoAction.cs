@@ -9,7 +9,9 @@ namespace Centipede
     {
         public DemoAction(Dictionary<String, Object> variables)
             : base("Demo Action", variables)
-        { }
+        {
+            Test2 = "Text";
+        }
         
         protected override void DoAction()
         {
@@ -31,8 +33,10 @@ namespace Centipede
 
         public Boolean Test1Set(ref String s)
         {
+
+
             Int32 oldVal = Test1;
-            if (Int32.TryParse(s, out Test1))
+            if (Int32.TryParse(s, out Test1) || Int32.TryParse(ParseStringForVariable(s), out Test1))
             {
                 return true;
             }
@@ -47,7 +51,7 @@ namespace Centipede
         [ActionArgument(
             usage = "Second Value to display (string)",
             displayName = "Test 2")]
-        public String Test2 = "attr 2";
+        public String Test2 { get; set; }
     }
 
     
