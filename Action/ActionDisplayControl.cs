@@ -58,60 +58,197 @@ namespace Centipede.Actions
         public ActionDisplayControl(Action action)
         {
             InitializeComponent();
-            ThisAction = action;
+            thisAction = action;
             SetProperties();
             
-
-            
-            Assembly actionAssembly = Assembly.GetAssembly(action.GetType());
-            Label attrLabel;
-            TextBox attrValue;
-                        
             _statusToolTip = new ToolTip();
             _statusToolTip.SetToolTip(StatusIconBox, "");
 
-            Type actionType = action.GetType();
-
-            List<FieldInfo> arguments = new List<FieldInfo>(from FieldInfo fi in actionType.GetFields()
-                               where (fi.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0)
-                               select fi);
+            GenerateArgumentsFromFields();
+            GenerateArgumentsFromProperties();
             
-            foreach (FieldInfo arg in arguments)
+        }
+
+        private void GenerateArgumentsFromFields()
+        {
+            Type actionType = ThisAction.GetType();
+
+            var fieldArguments = from FieldInfo fi in actionType.GetFields()
+                                 where (GetArgumentAttribute(fi) != null)
+                                 select fi;
+
+            foreach (FieldInfo arg in fieldArguments)
             {
-                ActionArgumentAttribute attrData = arg.GetCustomAttributes(true)[0] as ActionArgumentAttribute;
-                attrLabel = new Label();
-                attrLabel.Text = GetArgumentName(arg);
-                attrLabel.Dock = DockStyle.Fill;
-                ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
-
-                AttributeTable.Controls.Add(attrLabel);
-
-                attrValue = new TextBox();
-                attrValue.Width = 250;
-
-                attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                if (arg.Name == "Source")
-                {
-                    attrValue.Multiline = true;
-                    attrValue.Height = 175;
-                    //attrValue.Dock = DockStyle.Fill;
-                    attrValue.ScrollBars = ScrollBars.Both;
-                    attrValue.Font = new Font(FontFamily.GenericMonospace, 10);
-                    attrValue.WordWrap = false;
-                }
-                attrValue.Text = arg.GetValue(action).ToString();
-                //attrValue.Dock = DockStyle.Top;
-
-                AttributeTable.Controls.Add(attrValue);
-                attrValue.Tag = arg;
-                //attrValue.TextChanged += ;
-                attrValue.Leave += new EventHandler(attrValue_TextChanged);
+                AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
             }
         }
 
-        private String GetArgumentName(MemberInfo argument)
+        private Control[] GenerateFieldControls(MemberInfo arg)
         {
-            ActionArgumentAttribute argAttr = argument.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Single() as ActionArgumentAttribute;
+            ActionArgumentAttribute attrData = GetArgumentAttribute(arg);
+            Label attrLabel = new Label();
+            attrLabel.Text = GetArgumentName(arg);
+            attrLabel.Dock = DockStyle.Fill;
+            ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
+
+            Control attrValue;
+            switch (GetFieldTypeClass(arg))
+            {
+                case FieldType.Boolean:
+                    attrValue = new CheckBox();
+                    attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                    (attrValue as CheckBox).Checked = GetValue<Boolean>(arg);
+                    break;
+                case FieldType.Other:
+                case FieldType.String:
+                case FieldType.Numeric:
+                default:
+                    attrValue = new TextBox();
+                    attrValue.Width = 250;
+                    attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    attrValue.Text = GetValue<dynamic>(arg).ToString();
+                    break;
+                
+            }
+            
+            //attrValue.Dock = DockStyle.Top;
+
+            attrValue.Tag = arg;
+            attrValue.TextChanged += GetTextChangedHandler(arg);
+            attrValue.Leave += GetLeaveHandler(arg);
+            return new Control[2]{attrLabel, attrValue};
+        }
+
+        private T GetValue<T>(MemberInfo arg)
+        {
+            if (arg is FieldInfo)
+            {
+                return (T)(arg as FieldInfo).GetValue(ThisAction);
+            }
+            else
+            {
+                return (T)(arg as PropertyInfo).GetGetMethod().Invoke(ThisAction, Type.EmptyTypes);
+            }
+        }
+
+        private void GenerateArgumentsFromProperties()
+        {
+            Type actionType = ThisAction.GetType();
+
+            var propertyArguments = from PropertyInfo pi in actionType.GetProperties()
+                                    where (GetArgumentAttribute(pi) != null)
+                                    select pi;
+
+            foreach (PropertyInfo arg in propertyArguments)
+            {
+            
+                AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
+            }
+        }
+
+        private EventHandler GetTextChangedHandler(MemberInfo arg)
+        {
+            ActionArgumentAttribute argAttr = GetArgumentAttribute(arg);
+            Type actionType = ThisAction.GetType();
+            if (argAttr.onTextChangedHandlerName == null)
+            {
+                return delegate { return; };
+            }
+            else
+            {
+                MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onTextChangedHandlerName);
+                return new EventHandler(
+                    (sender, e) => method.Invoke(ThisAction, new Object[]{ sender, e })
+                );
+            }
+        }
+
+        private static ActionArgumentAttribute GetArgumentAttribute(MemberInfo arg)
+        {
+            return arg.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
+        }
+
+        private EventHandler GetLeaveHandler(MemberInfo arg)
+        {
+            ActionArgumentAttribute argAttr = GetArgumentAttribute(arg);
+            
+            if (argAttr.onLeaveHandlerName == null)
+            {
+                if (argAttr.onTextChangedHandlerName==null)
+                {
+                    return attrValue_TextChanged;
+                }
+                else
+                {
+                    return delegate { return; };
+                }
+                
+            }
+            else
+            {
+                Type actionType = ThisAction.GetType();
+                MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
+                return new EventHandler(
+                    delegate(object sender, EventArgs e){
+                        method.Invoke(ThisAction, new object[] { sender, e });
+                    }
+                );
+            }
+        }
+
+        private enum FieldType
+        {
+            Other, String, Numeric, Boolean, 
+        }
+        private static Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>()
+        {
+            {typeof(bool),      FieldType.Boolean},
+            {typeof(byte),      FieldType.Numeric},
+            {typeof(sbyte),     FieldType.Numeric},
+            {typeof(char),      FieldType.String},
+            {typeof(decimal),   FieldType.Numeric},
+            {typeof(double),    FieldType.Numeric},
+            {typeof(float),     FieldType.Numeric},
+            {typeof(int),       FieldType.Numeric},
+            {typeof(uint),      FieldType.Numeric},
+            {typeof(long),      FieldType.Numeric},
+            {typeof(ulong),     FieldType.Numeric},
+            {typeof(short),     FieldType.Numeric},
+            {typeof(ushort),    FieldType.Numeric},
+            {typeof(string),    FieldType.String},
+        };
+        private FieldType GetFieldTypeClass<T>(T arg) where T : MemberInfo
+        {
+
+            Type baseType = GetFieldType(arg);
+            
+            while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
+            {
+                baseType = baseType.BaseType;
+            }
+
+            FieldType fieldType;
+            TypeMapping.TryGetValue(baseType, out fieldType);
+
+            return fieldType;
+        }
+
+        private static Type GetFieldType<T>(T arg) where T : MemberInfo
+        {
+            Type baseType;
+            if (arg is FieldInfo)
+            {
+                baseType = (arg as FieldInfo).FieldType;
+            }
+            else
+            {
+                baseType = (arg as PropertyInfo).PropertyType;
+            }
+            return baseType;
+        } 
+        String GetArgumentName(MemberInfo argument)
+        {
+            ActionArgumentAttribute argAttr = GetArgumentAttribute(argument);
             return argAttr.displayName ?? argument.Name;
         }
 
@@ -119,42 +256,37 @@ namespace Centipede.Actions
         {
             TextBox attrValue = sender as TextBox;
             String oldVal = attrValue.Text;  
-            FieldInfo f = attrValue.Tag as FieldInfo;
-            ActionArgumentAttribute argInfo = f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Single() as ActionArgumentAttribute;
+            MemberInfo f = attrValue.Tag as MemberInfo;
+            ActionArgumentAttribute argInfo = GetArgumentAttribute(f);
 
-            
-            if (argInfo.setterMethodName != null)
+            Object value = GetValue<Object>(f);
+            MethodInfo parser = GetFieldType(f).GetMethod("Parse", new Type[] {typeof(String)});
+            if (parser != null)
             {
-                Type type = this.ThisAction.GetType();
-                MethodInfo setterMethod = type.GetMethod(argInfo.setterMethodName);
-                    
-                if (!(Boolean)setterMethod.Invoke(this.ThisAction, new object[] { attrValue.Text }))
+                try
                 {
-                    MessageBox.Show(String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text));
+                    value = parser.Invoke(f, new object[] { attrValue.Text });
                 }
+                catch (Exception)
+                {
+                    String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text);
+                }
+                    
             }
             else
             {
-                Object value = f.GetValue(this.ThisAction);
-                MethodInfo parser = f.FieldType.GetMethod("Parse");
-                if (parser != null)
-                {
-                    try
-                    {
-                        value = parser.Invoke(f, new object[] { attrValue.Text });
-                    }
-                    catch (Exception)
-                    {
-                        String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text);
-                    }
-
-                }
-                else
-                {
-                    value = attrValue.Text;
-                }
-                f.SetValue(this.ThisAction, value);
+                value = attrValue.Text;
             }
+
+            if (f is FieldInfo)
+            {
+                (f as FieldInfo).SetValue(this.ThisAction, value);
+            }
+            else
+            {
+                (f as PropertyInfo).SetValue(this.ThisAction, value, null);
+            }
+            
         }
     
         private Boolean _selected = false;
@@ -266,10 +398,12 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        public Action ThisAction
+        public virtual Action ThisAction
         {
-            get;
-            protected set;
+            get
+            {
+                return thisAction;
+            }            
         }
         private ToolTip _statusToolTip;
         private string _statusMessage;
@@ -278,6 +412,7 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         public event DeletedEventHandler Deleted;
+        protected Action thisAction;
 
         /// <summary>
         /// 
