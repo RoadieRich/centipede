@@ -29,7 +29,6 @@
         /// </summary>
         private new void InitializeComponent()
         {
-            base.InitializeComponent();
             this.SuspendLayout();
             // 
             // PythonDisplayControl
@@ -41,6 +40,7 @@
             this.Load += new System.EventHandler(this.PythonDisplayControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
