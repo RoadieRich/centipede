@@ -16,11 +16,13 @@ namespace Centipede.PyAction
         public PythonDisplayControl(Centipede.Action action)
         {
             InitializeComponent();
-            base.ThisAction = action as PythonAction;
+            thisAction = action as PythonAction;
             SetProperties();
             PythonAction pyAct = action as PythonAction;
 
             Scintilla scintilla = new Scintilla();
+
+            base.NameLabel.Text = action.Name;
            
             scintilla.TextChanged += new EventHandler(sourceControl_TextChanged);
             scintilla.ConfigurationManager.Language = "python";

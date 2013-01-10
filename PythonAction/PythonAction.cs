@@ -21,24 +21,27 @@ namespace Centipede.PyAction
             : base("Python Action", variables)
         { }
 
-        [ActionArgument(usage = "Source code to be executed", setterMethodName="UpdateSource")]
-        public String Source = "";
-        //{
-        //    get
-        //    {
-        //        return (String)Attributes["source"];
-        //    }
-        //    set
-        //    {
-        //        Attributes["source"] = value;
-        //    }
-        //}
-
-        public Boolean UpdateSource(String newsource)
+        [ActionArgument(usage = "Source code to be executed", onTextChangedHandlerName = "UpdateSource")]
+        public String Source
         {
-            Source = newsource;
-            this.Complexity = newsource.Split(System.Environment.NewLine.ToCharArray()).Length;
-            return true;
+            get
+            {
+                return this._source;
+            }
+            set
+            {
+                this._source = value;
+                _complexity = value.Split(System.Environment.NewLine.ToCharArray()).Length;
+            }
+        }
+        private int _complexity;
+        private  string _source;
+
+        public void UpdateSource(object sender, EventArgs e)
+        {
+            ScintillaNET.Scintilla control = sender as ScintillaNET.Scintilla;
+            Source = control.Text;
+            this._complexity = Source.Split(System.Environment.NewLine.ToCharArray()).Length;
         }
         protected override void DoAction()
         {
@@ -56,6 +59,14 @@ namespace Centipede.PyAction
                 throw new ActionException(e, this);
             }
         }
+        public override int Complexity
+        {
+            get
+            {
+                return _complexity;
+            }
+        }
+
     }
 
     //class PythonCondition : BranchCondition
