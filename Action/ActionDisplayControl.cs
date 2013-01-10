@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Linq.Expressions;
 
 namespace Centipede.Actions
 {
@@ -75,38 +76,40 @@ namespace Centipede.Actions
 
             var fieldArguments = from FieldInfo fi in actionType.GetFields()
                                  where (GetArgumentAttribute(fi) != null)
-                                 select fi;
+                                 select new FieldAndPropertyWrapper(fi);
+                                  
+            
 
-            foreach (FieldInfo arg in fieldArguments)
+            foreach (FieldAndPropertyWrapper arg in fieldArguments)
             {
                 AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
             }
         }
 
-        private Control[] GenerateFieldControls(MemberInfo arg)
+        private Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
         {
-            ActionArgumentAttribute attrData = GetArgumentAttribute(arg);
+            ActionArgumentAttribute attrData = arg.GetArguementAttribute();
             Label attrLabel = new Label();
             attrLabel.Text = GetArgumentName(arg);
             attrLabel.Dock = DockStyle.Fill;
             ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
 
             Control attrValue;
-            switch (GetFieldTypeClass(arg))
+            switch (arg.GetFieldTypeCategory())
             {
-                case FieldType.Boolean:
+                case FieldAndPropertyWrapper.FieldType.Boolean:
                     attrValue = new CheckBox();
                     attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-                    (attrValue as CheckBox).Checked = GetValue<Boolean>(arg);
+                    (attrValue as CheckBox).Checked = arg.Get<Boolean>(ThisAction);
                     break;
-                case FieldType.Other:
-                case FieldType.String:
-                case FieldType.Numeric:
+                case FieldAndPropertyWrapper.FieldType.Other:
+                case FieldAndPropertyWrapper.FieldType.String:
+                case FieldAndPropertyWrapper.FieldType.Numeric:
                 default:
                     attrValue = new TextBox();
                     attrValue.Width = 250;
                     attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    attrValue.Text = GetValue<dynamic>(arg).ToString();
+                    attrValue.Text = arg.Get<Object>(thisAction).ToString();
                     break;
                 
             }
@@ -127,7 +130,7 @@ namespace Centipede.Actions
             }
             else
             {
-                return (T)(arg as PropertyInfo).GetGetMethod().Invoke(ThisAction, Type.EmptyTypes);
+                return (T)(arg as PropertyInfo).GetValue(ThisAction, null);
             }
         }
 
@@ -141,12 +144,11 @@ namespace Centipede.Actions
 
             foreach (PropertyInfo arg in propertyArguments)
             {
-            
                 AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
             }
         }
 
-        private EventHandler GetTextChangedHandler(MemberInfo arg)
+        private EventHandler GetTextChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = GetArgumentAttribute(arg);
             Type actionType = ThisAction.GetType();
@@ -165,7 +167,7 @@ namespace Centipede.Actions
 
         private static ActionArgumentAttribute GetArgumentAttribute(MemberInfo arg)
         {
-            return arg.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
+            
         }
 
         private EventHandler GetLeaveHandler(MemberInfo arg)
@@ -189,66 +191,21 @@ namespace Centipede.Actions
                 Type actionType = ThisAction.GetType();
                 MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
                 return new EventHandler(
-                    delegate(object sender, EventArgs e){
-                        method.Invoke(ThisAction, new object[] { sender, e });
-                    }
+                    (sender, e) => method.Invoke(ThisAction, new object[] { sender, e })
                 );
             }
         }
 
-        private enum FieldType
-        {
-            Other, String, Numeric, Boolean, 
-        }
-        private static Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>()
-        {
-            {typeof(bool),      FieldType.Boolean},
-            {typeof(byte),      FieldType.Numeric},
-            {typeof(sbyte),     FieldType.Numeric},
-            {typeof(char),      FieldType.String},
-            {typeof(decimal),   FieldType.Numeric},
-            {typeof(double),    FieldType.Numeric},
-            {typeof(float),     FieldType.Numeric},
-            {typeof(int),       FieldType.Numeric},
-            {typeof(uint),      FieldType.Numeric},
-            {typeof(long),      FieldType.Numeric},
-            {typeof(ulong),     FieldType.Numeric},
-            {typeof(short),     FieldType.Numeric},
-            {typeof(ushort),    FieldType.Numeric},
-            {typeof(string),    FieldType.String},
-        };
-        private FieldType GetFieldTypeClass<T>(T arg) where T : MemberInfo
-        {
-
-            Type baseType = GetFieldType(arg);
-            
-            while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
-            {
-                baseType = baseType.BaseType;
-            }
-
-            FieldType fieldType;
-            TypeMapping.TryGetValue(baseType, out fieldType);
-
-            return fieldType;
-        }
+       
+        
 
         private static Type GetFieldType<T>(T arg) where T : MemberInfo
         {
-            Type baseType;
-            if (arg is FieldInfo)
-            {
-                baseType = (arg as FieldInfo).FieldType;
-            }
-            else
-            {
-                baseType = (arg as PropertyInfo).PropertyType;
-            }
-            return baseType;
+            
         } 
-        String GetArgumentName(MemberInfo argument)
+        String GetArgumentName(FieldAndPropertyWrapper argument)
         {
-            ActionArgumentAttribute argAttr = GetArgumentAttribute(argument);
+            ActionArgumentAttribute argAttr = argument.GetArguementAttribute();
             return argAttr.displayName ?? argument.Name;
         }
 
@@ -513,5 +470,100 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         public readonly Dictionary<string, object> Variables;
+    }
+
+    class FieldAndPropertyWrapper
+    {
+
+        public FieldAndPropertyWrapper(MemberInfo member)
+        {
+            this.member = member;
+            if (member is PropertyInfo)
+            {
+                _getter = o => (member as PropertyInfo).GetValue(o, null);
+                _setter = (o,v) => (member as PropertyInfo).SetValue(o, v, null);
+            }
+            else
+            {
+                _getter = o => (member as FieldInfo).GetValue(o);
+                _setter = (o, v) => (member as FieldInfo).SetValue(o, v);
+            }
+        }
+
+        MemberInfo member = null;
+        
+        private readonly Expression<Func<object, object>> _getter;
+        public T Get<T>(object o)
+        {
+            return (T)_getter.Compile()(o);
+        }
+        private readonly Expression<Action<object, object>> _setter;
+        public void Set<T>(object o, T v)
+        {
+            _setter.Compile()(o, v);
+        }
+
+
+        public ActionArgumentAttribute GetArguementAttribute()
+        {
+            return member.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
+        }
+
+
+        public string Name { get { return member.Name; } }
+
+        public Type GetType()
+        {
+            Type baseType;
+            if (member is FieldInfo)
+            {
+                baseType = (member as FieldInfo).FieldType;
+            }
+            else
+            {
+                baseType = (member as PropertyInfo).PropertyType;
+            }
+            return baseType;
+            
+        }
+
+        public enum FieldType
+        {
+            //first value listed is used for default()
+            Other, String, Numeric, Boolean,
+        }
+        private static Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>()
+        {
+            {typeof(bool),      FieldType.Boolean},
+            {typeof(byte),      FieldType.Numeric},
+            {typeof(sbyte),     FieldType.Numeric},
+            {typeof(char),      FieldType.String},
+            {typeof(decimal),   FieldType.Numeric},
+            {typeof(double),    FieldType.Numeric},
+            {typeof(float),     FieldType.Numeric},
+            {typeof(int),       FieldType.Numeric},
+            {typeof(uint),      FieldType.Numeric},
+            {typeof(long),      FieldType.Numeric},
+            {typeof(ulong),     FieldType.Numeric},
+            {typeof(short),     FieldType.Numeric},
+            {typeof(ushort),    FieldType.Numeric},
+            {typeof(string),    FieldType.String},
+        };
+
+        public FieldType GetFieldTypeCategory()
+        {
+
+            Type baseType = GetType();
+
+            while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
+            {
+                baseType = baseType.BaseType;
+            }
+
+            FieldType fieldType;
+            TypeMapping.TryGetValue(baseType, out fieldType);  //out's default value if key is not found
+
+            return fieldType;
+        }
     }
 }
