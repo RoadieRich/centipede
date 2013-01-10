@@ -309,9 +309,17 @@ namespace Centipede
                             System.Drawing.Icon icon;
                             if (t != null)
                             {
-                                icon = t.GetProperty(catAttribute.iconName, typeof(System.Drawing.Icon)).GetValue(t, null) as System.Drawing.Icon;
-                                catListView.LargeImageList.Images.Add(pluginType.Name, icon);
-                                af.ImageKey = pluginType.Name;
+
+                                try
+                                {
+                                    icon = t.GetProperty(catAttribute.iconName, typeof(System.Drawing.Icon)).GetValue(t, null) as System.Drawing.Icon;
+                                    catListView.LargeImageList.Images.Add(pluginType.Name, icon);
+                                    af.ImageKey = pluginType.Name;
+                                }
+                                catch (Exception)
+                                {
+                                    af.ImageKey = "generic";
+                                }
                             }
                             else
                             {

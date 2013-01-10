@@ -381,7 +381,9 @@ namespace Centipede
         {
             if (disposing)
             {
-                foreach (Action action in Actions)
+
+
+                foreach (IDisposable action in Actions)
                 {
                     action.Dispose();
                 }
