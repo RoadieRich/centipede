@@ -123,10 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="FavouritesListbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 13</value>
+    <value>6, 19</value>
   </data>
   <data name="FavouritesListbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>535, 342</value>
+    <value>325, 225</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="FavouritesListbox.TabIndex" type="System.Int32, mscorlib">
@@ -139,29 +139,29 @@
     <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;FavouritesListbox.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;FavouritesListbox.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>0</value>
   </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>321, 17</value>
+  </metadata>
   <data name="LoadButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+    <value>Bottom, Right</value>
   </data>
   <data name="LoadButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>302, 359</value>
+    <value>193, 275</value>
   </data>
   <data name="LoadButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 44</value>
   </data>
   <data name="LoadButton.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="LoadButton.Text" xml:space="preserve">
-    <value>&amp;Load</value>
+    <value>&amp;Load selected</value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>321, 17</value>
-  </metadata>
   <data name="LoadButton.ToolTip" xml:space="preserve">
     <value>Load selected job</value>
   </data>
@@ -175,22 +175,22 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LoadButton.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="BrowseButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left</value>
   </data>
   <data name="BrowseButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 359</value>
+    <value>337, 19</value>
   </data>
   <data name="BrowseButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 44</value>
   </data>
   <data name="BrowseButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="BrowseButton.Text" xml:space="preserve">
-    <value>&amp;Add...</value>
+    <value>&amp;Add favourite...</value>
   </data>
   <data name="BrowseButton.ToolTip" xml:space="preserve">
     <value>Add job to favourites</value>
@@ -202,25 +202,25 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BrowseButton.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;BrowseButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="NewButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
   <data name="NewButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>473, 359</value>
+    <value>355, 275</value>
   </data>
   <data name="NewButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 44</value>
   </data>
   <data name="NewButton.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="NewButton.Text" xml:space="preserve">
-    <value>&amp;New</value>
+    <value>&amp;New job</value>
   </data>
   <data name="NewButton.ToolTip" xml:space="preserve">
     <value>Create new job</value>
@@ -247,22 +247,22 @@
     <value>Add file to favourites</value>
   </data>
   <data name="OtherButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+    <value>Bottom, Right</value>
   </data>
   <data name="OtherButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="OtherButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>392, 359</value>
+    <value>274, 275</value>
   </data>
   <data name="OtherButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 44</value>
   </data>
   <data name="OtherButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="OtherButton.Text" xml:space="preserve">
-    <value>&amp;Other...</value>
+    <value>&amp;Browse for job...</value>
   </data>
   <data name="OtherButton.ToolTip" xml:space="preserve">
     <value>Load unlisted job</value>
@@ -288,20 +288,23 @@
   <data name="OtherOpenDialogue.Title" xml:space="preserve">
     <value>Open Other File</value>
   </data>
+  <data name="DeleteButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
   <data name="DeleteButton.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="DeleteButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>95, 359</value>
+    <value>337, 69</value>
   </data>
   <data name="DeleteButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 44</value>
   </data>
   <data name="DeleteButton.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="DeleteButton.Text" xml:space="preserve">
-    <value>&amp;Delete</value>
+    <value>&amp;Delete favourite</value>
   </data>
   <data name="DeleteButton.ToolTip" xml:space="preserve">
     <value>Delete job from favourites (coming soon!)</value>
@@ -313,9 +316,36 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;DeleteButton.Parent" xml:space="preserve">
-    <value>$this</value>
+    <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;DeleteButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>321, 17</value>
+  </metadata>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>418, 257</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Favourite Jobs</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -328,7 +358,10 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>560, 394</value>
+    <value>442, 329</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>450, 200</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Centipede</value>

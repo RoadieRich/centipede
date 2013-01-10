@@ -39,12 +39,11 @@ namespace Centipede
         private void BrowseButton_Click(object sender, EventArgs e)
         {
             DialogResult result = BrowseLoadDialogue.ShowDialog(this);
-            AddFavourite(BrowseLoadDialogue.FileName);
         }
 
         private void AddFavourite(string filename)
         {
-            FavouritesListbox.Controls.Add(new JobControl(filename));
+            FavouritesListbox.Items.Add(new JobControl(filename));
             String faveFilename = GetFaveFilename();
             XmlDocument xmlDoc = new XmlDocument();
             
@@ -118,14 +117,13 @@ namespace Centipede
 
         private void OtherButton_Click(object sender, EventArgs e)
         {
-            BrowseLoadDialogue.ShowDialog(this);
+            OtherOpenDialogue.ShowDialog(this);
         }
 
         private void BrowseLoadDialogue_FileOk(object sender, CancelEventArgs e)
         {
-            FileDialog dialogue = sender as OpenFileDialog;
-            int index = FavouritesListbox.Items.Add(new JobControl(dialogue.FileName));
-            FavouritesListbox.SelectedIndex = index;
+            FileDialog dialog = sender as FileDialog;
+            AddFavourite(dialog.FileName);
         }
 
         private void GetJob_FormClosing(object sender, FormClosingEventArgs e)
@@ -148,7 +146,6 @@ namespace Centipede
             this.Result = GetJobResult.Open;
             this.Close();
         }
-
     }
 
     enum GetJobResult

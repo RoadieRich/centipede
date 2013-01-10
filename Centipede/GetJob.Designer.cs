@@ -39,6 +39,8 @@
             this.OtherOpenDialogue = new System.Windows.Forms.OpenFileDialog();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // FavouritesListbox
@@ -101,22 +103,29 @@
             this.toolTip1.SetToolTip(this.DeleteButton, resources.GetString("DeleteButton.ToolTip"));
             this.DeleteButton.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.FavouritesListbox);
+            this.groupBox1.Controls.Add(this.DeleteButton);
+            this.groupBox1.Controls.Add(this.BrowseButton);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.TabStop = false;
+            // 
             // GetJob
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.DeleteButton);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.NewButton);
             this.Controls.Add(this.OtherButton);
-            this.Controls.Add(this.BrowseButton);
             this.Controls.Add(this.LoadButton);
-            this.Controls.Add(this.FavouritesListbox);
             this.Name = "GetJob";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GetJob_FormClosing);
             this.Load += new System.EventHandler(this.GetJob_Load);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -132,5 +141,6 @@
         private System.Windows.Forms.OpenFileDialog OtherOpenDialogue;
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
