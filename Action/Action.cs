@@ -5,8 +5,9 @@ using System.Reflection;
 using System.Linq;
 using System.IO;
 using Centipede.StringInject;
+using Centipede.Actions;
 
-[assembly:CLSCompliant(true)]
+[assembly: CLSCompliant(true)]
 
 namespace Centipede
 {
@@ -21,7 +22,7 @@ namespace Centipede
         /// </summary>
         /// <param name="name"></param>
         /// <param name="variables"></param>
-        protected Action(String name, Dictionary<String,Object> variables)
+        protected Action(String name, Dictionary<String, Object> variables)
         {
             Name = name;
             Variables = variables;
@@ -75,7 +76,7 @@ namespace Centipede
         /// Perform the action
         /// </summary>
         protected abstract void DoAction();
-        
+
         /// <summary>
         /// Cleanup, e.g. saving local variables back into Variables
         /// </summary>
@@ -135,7 +136,7 @@ namespace Centipede
         /// <param name="title"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        protected AskEventEnums.DialogResult Ask(String message, String title="Question", AskEventEnums.AskType options=AskEventEnums.AskType.YesNoCancel)
+        protected AskEventEnums.DialogResult Ask(String message, String title = "Question", AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
         {
             var handler = OnAsk;
             if (handler != null)
@@ -144,10 +145,10 @@ namespace Centipede
                 eventArgs.Icon = AskEventEnums.MessageIcon.Question;
                 eventArgs.Message = message;
                 eventArgs.Title = title;
-                eventArgs.Type=options;
+                eventArgs.Type = options;
                 OnAsk(this, eventArgs);
-                return eventArgs.Result;    
-                
+                return eventArgs.Result;
+
             }
             return AskEventEnums.DialogResult.None;
         }
@@ -179,7 +180,7 @@ namespace Centipede
                                          "true",
                                          "1"
                                      });
-        
+
         /// <summary>
         /// Append xml code for the action to the given parent element
         /// </summary>
@@ -190,9 +191,14 @@ namespace Centipede
             Type thisType = this.GetType();
             XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
 
-            foreach (FieldInfo field in thisType.GetFields().Where(f=>f.GetCustomAttributes(typeof(ActionArgumentAttribute),true).Count()>0))
+            foreach (FieldInfo field in thisType.GetFields().Where(f => f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0))
             {
                 element.SetAttribute(field.Name, field.GetValue(this).ToString());
+            }
+
+            foreach (PropertyInfo prop in thisType.GetProperties().Where(f => f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0))
+            {
+                element.SetAttribute(prop.Name, prop.GetValue(this, null).ToString());
             }
             String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
 
@@ -201,7 +207,7 @@ namespace Centipede
 
             rootElement.AppendChild(element);
         }
-               
+
         /// <summary>
         /// Loads an action from an XmlElement
         /// </summary>
@@ -211,7 +217,7 @@ namespace Centipede
         static public Action FromXml(XmlElement element, Dictionary<String, Object> variables)
         {
             Type[] constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
-            
+
             Assembly asm;
 
             //if action is not a plugin:
@@ -227,7 +233,7 @@ namespace Centipede
                                             element.GetAttribute("Assembly")));
                 asm = Assembly.LoadFile(asmPath);
             }
-            
+
             Type t = asm.GetType(element.LocalName);
 
             Object instance;
@@ -235,7 +241,7 @@ namespace Centipede
             MethodInfo customFromXmlMethod = t.GetMethod("CustomFromXml");
             if (customFromXmlMethod != null)
             {
-                instance = customFromXmlMethod.Invoke(t, new object[] {element, variables});
+                instance = customFromXmlMethod.Invoke(t, new object[] { element, variables });
             }
             else
             {
@@ -245,16 +251,16 @@ namespace Centipede
 
                 foreach (XmlAttribute attribute in element.Attributes)
                 {
-                    FieldInfo field = t.GetField(attribute.Name);
-                    MethodInfo parseMethod = field.FieldType.GetMethod("Parse", new Type[] { typeof(String) });
+                    FieldAndPropertyWrapper field = t.GetField(attribute.Name);
+                    MethodInfo parseMethod = field.GetType().GetMethod("Parse", new Type[] { typeof(String) });
                     Object parsedValue = attribute.Value;
                     if (parseMethod != null)
                     {
-                        field.SetValue(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
+                        field.Set(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
                     }
                     else
                     {
-                        field.SetValue(instance, attribute.Value);
+                        field.Set(instance, attribute.Value);
                     }
                 }
             }
@@ -264,9 +270,9 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        
+
         public virtual void Dispose()
-        {   
+        {
         }
     }
 
@@ -280,7 +286,7 @@ namespace Centipede
         /// 
         /// </summary>
         public String displayName;
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -437,7 +443,7 @@ namespace Centipede
         public ValidationException(string message, Exception inner)
             : base(message, inner)
         { }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -460,10 +466,10 @@ namespace Centipede
     }
 
     public static class AskEventEnums
-	{
-		public enum AskType 
+    {
+        public enum AskType
         {
-            AbortRetryIgnore =  System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore,
+            AbortRetryIgnore = System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore,
             OK = System.Windows.Forms.MessageBoxButtons.OK,
             OKCancel = System.Windows.Forms.MessageBoxButtons.OKCancel,
             RetryCancel = System.Windows.Forms.MessageBoxButtons.RetryCancel,
@@ -480,7 +486,7 @@ namespace Centipede
             None = System.Windows.Forms.DialogResult.None,
             OK = System.Windows.Forms.DialogResult.OK,
             Retry = System.Windows.Forms.DialogResult.Retry,
-            Yes = System.Windows.Forms.DialogResult.Yes    
+            Yes = System.Windows.Forms.DialogResult.Yes
         }
 
         public enum MessageIcon
@@ -495,5 +501,5 @@ namespace Centipede
             Stop = System.Windows.Forms.MessageBoxIcon.Stop,
             Warning = System.Windows.Forms.MessageBoxIcon.Warning
         }
-	}
+    }
 }
