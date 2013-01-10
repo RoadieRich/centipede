@@ -17,14 +17,14 @@ namespace Centipede
         [ActionArgument]
         public String Title = "Message";
 
-        [ActionArgument]
-        public String Message = "";
+        [ActionArgument(displayName="Message")]
+        public String MessageText = "";
 
         private delegate void _showMessageBox();
 
         protected override void DoAction()
         {
-            String parsedMessage = ParseStringForVariable(Message);
+            String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);
             MainWindow.Instance.Invoke(new _showMessageBox(() => MessageBox.Show(MainWindow.Instance, parsedMessage, parsedTitle)));
         }
