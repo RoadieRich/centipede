@@ -65,18 +65,17 @@ namespace Centipede.Actions
             _statusToolTip = new ToolTip();
             _statusToolTip.SetToolTip(StatusIconBox, "");
 
-            GenerateArgumentsFromFields();
-            GenerateArgumentsFromProperties();
+            GenerateArguments();
             
         }
 
-        private void GenerateArgumentsFromFields()
+        private void GenerateArguments()
         {
             Type actionType = ThisAction.GetType();
 
-            var fieldArguments = from FieldInfo fi in actionType.GetFields()
-                                 where (GetArgumentAttribute(fi) != null)
-                                 select new FieldAndPropertyWrapper(fi);
+            var fieldArguments = from fi in actionType.GetMembers().Where(fi=> (fi is FieldInfo || fi is PropertyInfo)).Select(fi => new FieldAndPropertyWrapper(fi))
+                                 where fi.GetArguementAttribute() != null
+                                 select fi;
                                   
             
 
@@ -136,21 +135,21 @@ namespace Centipede.Actions
 
         private void GenerateArgumentsFromProperties()
         {
-            Type actionType = ThisAction.GetType();
+            //Type actionType = ThisAction.GetType();
 
-            var propertyArguments = from PropertyInfo pi in actionType.GetProperties()
-                                    where (GetArgumentAttribute(pi) != null)
-                                    select pi;
+            //var propertyArguments = from PropertyInfo pi in actionType.GetProperties()
+            //                        where (GetArgumentAttribute(pi) != null)
+            //                        select new FieldAndPropertyWrapper(pi);
 
-            foreach (PropertyInfo arg in propertyArguments)
-            {
-                AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
-            }
+            //foreach (FieldAndPropertyWrapper arg in propertyArguments)
+            //{
+            //    AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
+            //}
         }
 
         private EventHandler GetTextChangedHandler(FieldAndPropertyWrapper arg)
         {
-            ActionArgumentAttribute argAttr = GetArgumentAttribute(arg);
+            ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
             Type actionType = ThisAction.GetType();
             if (argAttr.onTextChangedHandlerName == null)
             {
@@ -165,14 +164,9 @@ namespace Centipede.Actions
             }
         }
 
-        private static ActionArgumentAttribute GetArgumentAttribute(MemberInfo arg)
+        private EventHandler GetLeaveHandler(FieldAndPropertyWrapper arg)
         {
-            
-        }
-
-        private EventHandler GetLeaveHandler(MemberInfo arg)
-        {
-            ActionArgumentAttribute argAttr = GetArgumentAttribute(arg);
+            ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
             
             if (argAttr.onLeaveHandlerName == null)
             {
@@ -198,11 +192,6 @@ namespace Centipede.Actions
 
        
         
-
-        private static Type GetFieldType<T>(T arg) where T : MemberInfo
-        {
-            
-        } 
         String GetArgumentName(FieldAndPropertyWrapper argument)
         {
             ActionArgumentAttribute argAttr = argument.GetArguementAttribute();
@@ -213,11 +202,11 @@ namespace Centipede.Actions
         {
             TextBox attrValue = sender as TextBox;
             String oldVal = attrValue.Text;  
-            MemberInfo f = attrValue.Tag as MemberInfo;
-            ActionArgumentAttribute argInfo = GetArgumentAttribute(f);
+            FieldAndPropertyWrapper f = attrValue.Tag as FieldAndPropertyWrapper;
+            ActionArgumentAttribute argInfo = f.GetArguementAttribute();
 
-            Object value = GetValue<Object>(f);
-            MethodInfo parser = GetFieldType(f).GetMethod("Parse", new Type[] {typeof(String)});
+            Object value = f.Get<Object>(ThisAction);
+            MethodInfo parser = f.GetMemberType().GetMethod("Parse", new Type[] {typeof(String)});
             if (parser != null)
             {
                 try
@@ -234,15 +223,8 @@ namespace Centipede.Actions
             {
                 value = attrValue.Text;
             }
-
-            if (f is FieldInfo)
-            {
-                (f as FieldInfo).SetValue(this.ThisAction, value);
-            }
-            else
-            {
-                (f as PropertyInfo).SetValue(this.ThisAction, value, null);
-            }
+            
+            f.Set(this.ThisAction, value);
             
         }
     
@@ -474,7 +456,13 @@ namespace Centipede.Actions
 
     class FieldAndPropertyWrapper
     {
-
+        public Type DeclaringType
+        {
+            get
+            {
+                return member.DeclaringType;
+            }
+        }
         public FieldAndPropertyWrapper(MemberInfo member)
         {
             this.member = member;
@@ -512,7 +500,7 @@ namespace Centipede.Actions
 
         public string Name { get { return member.Name; } }
 
-        public Type GetType()
+        public Type GetMemberType()
         {
             Type baseType;
             if (member is FieldInfo)
@@ -553,7 +541,7 @@ namespace Centipede.Actions
         public FieldType GetFieldTypeCategory()
         {
 
-            Type baseType = GetType();
+            Type baseType = GetMemberType();
 
             while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
             {
@@ -565,5 +553,14 @@ namespace Centipede.Actions
 
             return fieldType;
         }
+        public static implicit operator FieldAndPropertyWrapper (FieldInfo f)
+        {
+            return new FieldAndPropertyWrapper(f);
+        }
+        public static implicit operator FieldAndPropertyWrapper(PropertyInfo p)
+        {
+            return new FieldAndPropertyWrapper(p);
+        }
+
     }
 }
