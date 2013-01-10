@@ -14,7 +14,7 @@ namespace Centipede
     /// Base Action class: all actions will subclass this
     /// </summary>
     [Serializable]
-    public abstract class Action
+    public abstract class Action : IDisposable
     {
         /// <summary>
         /// 
@@ -92,8 +92,6 @@ namespace Centipede
             CleanupAction();
         }
 
-        private Int32 _complexity = 1;
-
         /// <summary>
         /// In integer representing the complexity of the action, used to indicate progress in the job"
         /// </summary>
@@ -101,11 +99,7 @@ namespace Centipede
         {
             get
             {
-                return _complexity;
-            }
-            protected set
-            {
-                _complexity = value;
+                return 1;
             }
         }
 
@@ -131,6 +125,49 @@ namespace Centipede
         public String ParseStringForVariable(String str)
         {
             return str.Inject(Variables);
+        }
+
+
+        /// <summary>
+        /// Ask a question
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        protected AskEventEnums.DialogResult Ask(String message, String title="Question", AskEventEnums.AskType options=AskEventEnums.AskType.YesNoCancel)
+        {
+            var handler = OnAsk;
+            if (handler != null)
+            {
+                AskActionEventArgs eventArgs = new AskActionEventArgs();
+                eventArgs.Icon = AskEventEnums.MessageIcon.Question;
+                eventArgs.Message = message;
+                eventArgs.Title = title;
+                eventArgs.Type=options;
+                OnAsk(this, eventArgs);
+                return eventArgs.Result;    
+                
+            }
+            return AskEventEnums.DialogResult.None;
+        }
+
+        public static event AskEvent OnAsk = delegate { return AskEventEnums.DialogResult.None; };
+
+        public delegate AskEventEnums.DialogResult AskEvent(object sender, AskActionEventArgs e);
+
+        protected void Message(String message, String title = "Message", AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
+        {
+            var handler = OnAsk;
+            if (handler != null)
+            {
+                AskActionEventArgs eventArgs = new AskActionEventArgs();
+                eventArgs.Icon = messageIcon;
+                eventArgs.Message = message;
+                eventArgs.Title = title;
+                eventArgs.Type = AskEventEnums.AskType.OK;
+                OnAsk(this, eventArgs);
+            }
         }
 
         /// <summary>
@@ -227,14 +264,16 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
+        
         public virtual void Dispose()
-        { }
+        {   
+        }
     }
 
     /// <summary>
     /// Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
     /// </summary>
-    [System.AttributeUsage(AttributeTargets.Field)]
+    [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class ActionArgumentAttribute : System.Attribute
     {
         /// <summary>
@@ -255,7 +294,9 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public Object setterMethod;
+
+        public String onLeaveHandlerName;
+        public string onTextChangedHandlerName;
 
         /// <summary>
         /// 
@@ -408,4 +449,51 @@ namespace Centipede
             : base(info, context)
         { }
     }
+
+    public class AskActionEventArgs : EventArgs
+    {
+        public String Message;
+        public String Title;
+        public AskEventEnums.AskType Type;
+        public AskEventEnums.DialogResult Result = AskEventEnums.DialogResult.None;
+        public AskEventEnums.MessageIcon Icon = AskEventEnums.MessageIcon.Information;
+    }
+
+    public static class AskEventEnums
+	{
+		public enum AskType 
+        {
+            AbortRetryIgnore =  System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore,
+            OK = System.Windows.Forms.MessageBoxButtons.OK,
+            OKCancel = System.Windows.Forms.MessageBoxButtons.OKCancel,
+            RetryCancel = System.Windows.Forms.MessageBoxButtons.RetryCancel,
+            YesNo = System.Windows.Forms.MessageBoxButtons.YesNo,
+            YesNoCancel = System.Windows.Forms.MessageBoxButtons.YesNoCancel
+        }
+        public enum DialogResult
+        {
+            Abort = System.Windows.Forms.DialogResult.Abort,
+
+            Cancel = System.Windows.Forms.DialogResult.Cancel,
+            Ignore = System.Windows.Forms.DialogResult.Ignore,
+            No = System.Windows.Forms.DialogResult.No,
+            None = System.Windows.Forms.DialogResult.None,
+            OK = System.Windows.Forms.DialogResult.OK,
+            Retry = System.Windows.Forms.DialogResult.Retry,
+            Yes = System.Windows.Forms.DialogResult.Yes    
+        }
+
+        public enum MessageIcon
+        {
+            Asterisk = System.Windows.Forms.MessageBoxIcon.Asterisk,
+            Error = System.Windows.Forms.MessageBoxIcon.Error,
+            Exclamation = System.Windows.Forms.MessageBoxIcon.Exclamation,
+            Hand = System.Windows.Forms.MessageBoxIcon.Hand,
+            Information = System.Windows.Forms.MessageBoxIcon.Information,
+            None = System.Windows.Forms.MessageBoxIcon.None,
+            Question = System.Windows.Forms.MessageBoxIcon.Question,
+            Stop = System.Windows.Forms.MessageBoxIcon.Stop,
+            Warning = System.Windows.Forms.MessageBoxIcon.Warning
+        }
+	}
 }

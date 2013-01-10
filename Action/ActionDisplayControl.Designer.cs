@@ -249,7 +249,6 @@ namespace Centipede.Actions
 
         #endregion
 
-        private System.Windows.Forms.Label NameLabel;
         private System.Windows.Forms.Button ExpandButton;
         private System.Windows.Forms.ImageList StatusIcons;
         private System.Windows.Forms.PictureBox StatusIconBox;
@@ -273,6 +272,7 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         protected System.Windows.Forms.TableLayoutPanel AttributeTable;
+        protected Label NameLabel;
 
 
     }
