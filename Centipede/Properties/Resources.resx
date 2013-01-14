@@ -142,4 +142,22 @@
   <data name="generic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\generic.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainWindow_ErrorHandler_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="MainWindow_CompletedHandler_Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="MainWindow_LoadBtn_Click_Save_changes_" xml:space="preserve">
+    <value>Save changes?</value>
+  </data>
+  <data name="MainWindow_LoadBtn_Click_Unsaved_Changes" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
+  <data name="BranchDisplayControl_BranchDisplayControl_Action_if_false" xml:space="preserve">
+    <value>Action if false</value>
+  </data>
+  <data name="DemoAction_DoAction_Demo_Action_executed" xml:space="preserve">
+    <value>Demo Action executed</value>
+  </data>
 </root>

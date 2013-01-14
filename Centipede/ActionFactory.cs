@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Centipede
@@ -10,27 +8,27 @@ namespace Centipede
     {
         internal ActionFactory(String displayName, Type actionType) : base(displayName)
         {
-            this.ActionType = actionType;
+            _actionType = actionType;
         }
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType)
         {
             String displayName = catAttribute.displayName != "" ? catAttribute.displayName : pluginType.Name;
-            this.Text = displayName;
-            this.ToolTipText = catAttribute.helpText;
-            this.ActionType = pluginType;
+            Text = displayName;
+            ToolTipText = catAttribute.helpText;
+            _actionType = pluginType;
         }
 
-        private readonly Type ActionType;
+        private readonly Type _actionType;
         
 
         public Action Generate()
         {
 
-            Type[] typeArray = new Type[1];
+            var typeArray = new Type[1];
             typeArray[0] = typeof(Dictionary<String, Object>);
         
-            return ActionType.GetConstructor(new Type[] {typeof(Dictionary<String, Object>)}).Invoke(new object[1]{Program.Variables}) as Action;
+            return _actionType.GetConstructor(new[] {typeof(Dictionary<String, Object>)}).Invoke(new object[]{Program.Variables}) as Action;
         }
     }
 }

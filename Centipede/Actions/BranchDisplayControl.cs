@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Centipede.Actions;
+using Centipede.Properties;
 
-namespace Centipede
+
+namespace Centipede.Actions
 {
+// ReSharper disable UnusedMember.Global
     class BranchDisplayControl : ActionDisplayControl
+// ReSharper restore UnusedMember.Global
     {
         BranchDisplayControl(Action action) 
             : base(action)
         {
-            ComboBox actionCombo = new ComboBox();
-            actionCombo.DropDown += new EventHandler(actionCombo_DropDown);
-            actionCombo.SelectionChangeCommitted += new EventHandler(actionCombo_SelectionChangeCommitted);
+            var actionCombo = new ComboBox();
+            actionCombo.DropDown += actionCombo_DropDown;
+            actionCombo.SelectionChangeCommitted += actionCombo_SelectionChangeCommitted;
             actionCombo.DisplayMember = "DisplayText";
             actionCombo.ValueMember = "Action";
-            Label actionComboLabel = new Label();
-            actionComboLabel.Text = "Action if false";
+            var actionComboLabel = new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Action_if_false };
             AttributeTable.Controls.Add(actionComboLabel);
             AttributeTable.Controls.Add(actionCombo);
 
@@ -32,13 +32,13 @@ namespace Centipede
 
         void actionCombo_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            ComboBox combo = sender as ComboBox;
+            var combo = sender as ComboBox;
             ThisAction.Condition = combo.SelectedValue as BranchCondition;
         }
 
         void actionCombo_DropDown(object sender, EventArgs e)
         {
-            ComboBox combo = sender as ComboBox;
+            var combo = sender as ComboBox;
             combo.Items.Clear();
             combo.Items.AddRange(from Action a in Program.Actions
                                      where a != ThisAction
@@ -47,7 +47,7 @@ namespace Centipede
                                 );
         }
 
-        public new BranchAction ThisAction
+        private new BranchAction ThisAction
         {
             get
             {
@@ -55,27 +55,24 @@ namespace Centipede
             }
         }
 
-        #region Designer required code
-        private new void InitializeComponent()
+        private void InitializeComponent()
         {
-            base.InitializeComponent();
             this.SuspendLayout();
             // 
             // BranchDisplayControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "BranchDisplayControl";
-            this.Size = new System.Drawing.Size(191, 117);
+            this.Size = new System.Drawing.Size(186, 87);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
-        #endregion
     }
 
     internal static class ListExtention
     {
-        public static void AddRange(this System.Windows.Forms.ComboBox.ObjectCollection list, System.Collections.IEnumerable items)
+        public static void AddRange(this ComboBox.ObjectCollection list, System.Collections.IEnumerable items)
         {
             foreach (Object item in items)
             {

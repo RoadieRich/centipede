@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 
-namespace Centipede
+namespace Centipede.Actions
 {
     /// <summary>
     /// 
     /// </summary>
+// ReSharper disable ClassNeverInstantiated.Global
     public class BranchAction : Action
+// ReSharper restore ClassNeverInstantiated.Global
     {
 
         /// <summary>
@@ -39,16 +39,20 @@ namespace Centipede
             usage = "Next action if condition returns false",
             displayName = "Next Action if False"
         )]
+// ReSharper disable UnassignedField.Global
+// ReSharper disable MemberCanBePrivate.Global
         public Action NextIfFalse;
+// ReSharper restore MemberCanBePrivate.Global
+// ReSharper restore UnassignedField.Global
 
-        private Boolean Result;
+        private Boolean _result;
 
         /// <summary>
         /// 
         /// </summary>
         protected override void DoAction()
         {
-            Result = Condition.Test(this);
+            _result = Condition.Test(this);
         }
 
         /// <summary>
@@ -57,14 +61,11 @@ namespace Centipede
         /// <returns></returns>
         public override Action GetNext()
         {
-            if (Result)
+            if (_result)
             {
                 return Next;
             }
-            else
-            {
-                return NextIfFalse;
-            }
+            return NextIfFalse;
         }
     }
 
@@ -76,17 +77,9 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        protected BranchCondition()
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="act"></param>
+        /// <param name="action"></param>
         /// <returns></returns>
-        public abstract Boolean Test(Action act);
+        public abstract Boolean Test(Action action);
 
         public abstract Control[] MakeControls();
     }

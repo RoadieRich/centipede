@@ -1,4 +1,7 @@
-﻿namespace Centipede.PyAction
+﻿using System;
+
+
+namespace PyAction
 {
     partial class PythonDisplayControl
     { 
@@ -37,7 +40,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "PythonDisplayControl";
             this.Size = new System.Drawing.Size(179, 105);
-            this.Load += new System.EventHandler(this.PythonDisplayControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

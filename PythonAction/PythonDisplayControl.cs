@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+using System.Drawing.Printing;
 using System.Windows.Forms;
-using Centipede.PyAction;
 using ScintillaNET;
 
-namespace Centipede.PyAction
+
+namespace PyAction
 {
+// ReSharper disable UnusedMember.Global
     public partial class PythonDisplayControl : Centipede.Actions.ActionDisplayControl
+// ReSharper restore UnusedMember.Global
     {
         public PythonDisplayControl(Centipede.Action action)
         {
             InitializeComponent();
-            thisAction = action as PythonAction;
+            ThisAction = action as PythonAction;
             SetProperties();
-            PythonAction pyAct = action as PythonAction;
 
-            Scintilla scintilla = new Scintilla();
+            NameLabel.Text = action.Name;
 
-            base.NameLabel.Text = action.Name;
-           
-            scintilla.TextChanged += new EventHandler(sourceControl_TextChanged);
-            scintilla.ConfigurationManager.Language = "python";
-            scintilla.Margins[0].Width = 20;
-            scintilla.Dock = DockStyle.Fill;
-
+            var scintilla = new Scintilla
+                            {
+                                    ConfigurationManager = { Language = "python" },
+                                    Dock = DockStyle.Fill,
+                                    Margins = { Margin0 = { Width = 20 } }
+                            };
+            //scintilla.Margins[0].Width = 20;
+            scintilla.TextChanged += sourceControl_TextChanged;
+            
             this.AttributeTable.Controls.Add(scintilla);
             AttributeTable.SetColumnSpan(scintilla, 2);
             
@@ -40,17 +38,19 @@ namespace Centipede.PyAction
             {
                 return base.ThisAction as PythonAction;
             }
+            protected set
+            {
+                base.ThisAction = value;
+            }
         }
 
         void sourceControl_TextChanged(object sender, EventArgs e)
         {
-            Scintilla source = sender as Scintilla;
-            ThisAction.Source = source.Text;
-        }
-
-        private void PythonDisplayControl_Load(object sender, EventArgs e)
-        {
-            ThisAction.ToString();
+            var source = sender as Scintilla;
+            if (source != null)
+            {
+                ThisAction.Source = source.Text;
+            }
         }
     }
 }

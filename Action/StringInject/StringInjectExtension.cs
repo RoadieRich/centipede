@@ -1,8 +1,7 @@
-﻿using System;
-using System.Text.RegularExpressions;
 using System.Collections;
-using System.Globalization;
 using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 namespace Centipede.StringInject
@@ -14,7 +13,7 @@ namespace Centipede.StringInject
     {
         /// <summary>
         /// Extension method that replaces keys in a string with the values of matching object properties.
-        /// <remarks>Uses <see cref="String.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
+        /// <remarks>Uses <see cref="string.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
         /// </summary>
         /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
         /// <param name="injectionObject">The object whose properties should be injected in the string</param>
@@ -26,7 +25,7 @@ namespace Centipede.StringInject
 
         /// <summary>
         /// Extension method that replaces keys in a string with the values of matching dictionary entries.
-        /// <remarks>Uses <see cref="String.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
+        /// <remarks>Uses <see cref="string.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
         /// </summary>
         /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
         /// <param name="dictionary">An <see cref="IDictionary"/> with keys and values to inject into the string</param>
@@ -38,7 +37,7 @@ namespace Centipede.StringInject
 
         /// <summary>
         /// Extension method that replaces keys in a string with the values of matching hashtable entries.
-        /// <remarks>Uses <see cref="String.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
+        /// <remarks>Uses <see cref="string.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
         /// </summary>
         /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
         /// <param name="attributes">A <see cref="Hashtable"/> with keys and values to inject into the string</param>
@@ -73,7 +72,7 @@ namespace Centipede.StringInject
             //loop through matches, since each key may be used more than once (and with a different format string)
             foreach (Match m in attributeRegex.Matches(formatString))
             {
-                string replacement = m.ToString();
+                string replacement;
                 if (m.Groups[2].Length > 0) //matched {foo:SomeFormat}
                 {
                     //do a double string.Format - first to build the proper format string, and then to format the replacement value

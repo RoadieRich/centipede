@@ -57,19 +57,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
-    <Compile Include="ActionDisplayControl.cs">
+    <Compile Include="Actions\ActionDisplayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ActionDisplayControl.Designer.cs">
+    <Compile Include="Actions\ActionDisplayControl.Designer.cs">
       <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\CentipedeEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="StringInjectExtension.cs" />
+    <Compile Include="StringInject\StringInjectExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
@@ -78,7 +79,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ActionDisplayControl.resx">
+    <EmbeddedResource Include="Actions\ActionDisplayControl.resx">
       <DependentUpon>ActionDisplayControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
