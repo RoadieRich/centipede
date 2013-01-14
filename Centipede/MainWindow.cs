@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 //using System.Drawing;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 using Centipede.Actions;
+using Centipede.Properties;
 
 
 namespace Centipede
@@ -26,21 +28,21 @@ namespace Centipede
 
         }
 
-        private Boolean ErrorHandler(ActionException e, ref Action nextAction)
+        private Boolean ErrorHandler(ActionException e, out Action nextAction)
         {
-            StringBuilder messageBuilder = new StringBuilder();
+            var messageBuilder = new StringBuilder();
 
             if (e.ErrorAction != null)
             {
                 UpdateHandlerDone(e.ErrorAction);
-                ActionDisplayControl adc = e.ErrorAction.Tag as ActionDisplayControl;
-                if (adc.InvokeRequired)
+                var adc = e.ErrorAction.Tag as ActionDisplayControl;
+                if (adc != null && adc.InvokeRequired)
                 {
-                    adc.Invoke(SetActionDisplayState, adc, ActionState.Error, e.Message);
+                    adc.Invoke(_setActionDisplayState, adc, ActionState.Error, e.Message);
                 }
                 else
                 {
-                    SetActionDisplayState(adc, ActionState.Error, e.Message);
+                    _setActionDisplayState(adc, ActionState.Error, e.Message);
                 }
 
                 messageBuilder.AppendLine("Error occurred in ");
@@ -60,7 +62,7 @@ namespace Centipede
 
             DialogResult result = MessageBox.Show(
                 messageBuilder.ToString(),
-                "Error",
+                Resources.MainWindow_ErrorHandler_Error,
                 MessageBoxButtons.AbortRetryIgnore,
                 MessageBoxIcon.Exclamation
             );
@@ -70,23 +72,20 @@ namespace Centipede
                 nextAction = null;
                 return false;
             }
-            else
+            switch (result)
             {
-                switch (result)
-                {
-                    case System.Windows.Forms.DialogResult.Abort:
-                        nextAction = null;
-                        return false;
-                    case System.Windows.Forms.DialogResult.Retry:
-                        nextAction = e.ErrorAction;
-                        return true;
-                    case System.Windows.Forms.DialogResult.Ignore:
-                        nextAction = e.ErrorAction.GetNext();
-                        return true;
-                    default:
-                        nextAction = null;
-                        return false;
-                }
+            case DialogResult.Abort:
+                nextAction = null;
+                return false;
+            case DialogResult.Retry:
+                nextAction = e.ErrorAction;
+                return true;
+            case DialogResult.Ignore:
+                nextAction = e.ErrorAction.GetNext();
+                return true;
+            default:
+                nextAction = null;
+                return false;
             }
         }
 
@@ -101,21 +100,18 @@ namespace Centipede
                 JobDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
                 if (row != null)
                 {
-                    if (row.Value != v.Value)
-                    {
-                        row.Value = v.Value;
-                        //row.SetModified();
-                    }
+                    row.Value = v.Value;
+                    //row.SetModified();
                 }
                 else
                 {
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
             }
-            ActionDisplayControl adc = currentAction.Tag as ActionDisplayControl;
+            var adc = currentAction.Tag as ActionDisplayControl;
             if (adc.InvokeRequired)
             {
-                adc.Invoke(SetActionDisplayState, adc, ActionState.Completed, "Completed");
+                adc.Invoke(_setActionDisplayState, adc, ActionState.Completed, "Completed");
             }
             else
             {
@@ -141,19 +137,18 @@ namespace Centipede
                 message = "Job did not finish.";
                 icon = MessageBoxIcon.Error;
             }
-            MessageBox.Show(message, "Finished", MessageBoxButtons.OK, icon);
+            MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
         }
 
         private void ItemActivate(object sender, EventArgs e)
         {
-            ListView sendingListView = sender as ListView;
+            var sendingListView = sender as ListView;
 
-            ActionFactory sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
+            var sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
 
             Program.AddAction(sendingActionFactory.Generate());
         }
 
-        private JobDataSet _dataSet = new JobDataSet();
         private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state, String message);
 
         private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
@@ -168,30 +163,21 @@ namespace Centipede
             }
         }
 
-        private SetStateDeligate SetActionDisplayState = new SetStateDeligate(SetActionDisplayedState);
-
-        public delegate void ShowMessageBoxDelegate(String message);
-        public void ShowMessageBox(string message)
-        {
-            System.Windows.Forms.MessageBox.Show(message);
-        }
+        private readonly SetStateDeligate _setActionDisplayState = SetActionDisplayedState;
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            UIActListBox.LargeImageList.Images.Add("generic", Properties.Resources.generic);
+            UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
 
-            ActionFactory af = new ActionFactory("Demo Action", typeof(DemoAction));
-            af.ImageKey = "generic";
-
-            UIActListBox.Items.Add(af);
-
-            af = new ActionFactory("Get Filename", typeof(GetFileNameAction));
-            af.ImageKey = "generic";
+            var af = new ActionFactory("Demo Action", typeof(DemoAction)) { ImageKey = @"generic" };
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Show Messagebox", typeof(ShowMessageBox));
-            af.ImageKey = "generic";
+            af = new ActionFactory("Get Filename", typeof(GetFileNameAction)) { ImageKey = @"generic" };
+
+            UIActListBox.Items.Add(af);
+
+            af = new ActionFactory("Show Messagebox", typeof(ShowMessageBox)) { ImageKey = @"generic" };
 
             UIActListBox.Items.Add(af);
 
@@ -199,8 +185,8 @@ namespace Centipede
 
 
             VarDataGridView.DataSource = _dataSet.Variables;
-            _dataSet.Variables.VariablesRowChanged += new JobDataSet.VariablesRowChangeEventHandler(Variables_VariablesRowChanged);
-            _dataSet.Variables.RowDeleted += new DataRowChangeEventHandler(Variables_RowDeleted);
+            _dataSet.Variables.VariablesRowChanged += Variables_VariablesRowChanged;
+            _dataSet.Variables.RowDeleted += Variables_RowDeleted;
 
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
@@ -208,31 +194,31 @@ namespace Centipede
                 s.SizeType = SizeType.AutoSize;
             }
 
-            Program.ActionCompleted += new Program.ActionUpdateCallback(UpdateHandlerDone);
-            Program.BeforeAction += new Program.ActionUpdateCallback(Program_BeforeAction);
-            Program.JobCompleted += new Program.CompletedHandler(CompletedHandler);
-            Program.ActionErrorOccurred += new Program.ErrorHandler(ErrorHandler);
-            Program.ActionAdded += new Program.AddActionCallback(Program_ActionAdded);
-            Program.ActionRemoved += new Program.ActionRemovedHandler(Program_ActionRemoved);
-            Program.AfterLoad += new Program.AfterLoadEventHandler(Program_AfterLoad);
+            Program.ActionCompleted += UpdateHandlerDone;
+            Program.BeforeAction += Program_BeforeAction;
+            Program.JobCompleted += CompletedHandler;
+            Program.ActionErrorOccurred += ErrorHandler;
+            Program.ActionAdded += Program_ActionAdded;
+            Program.ActionRemoved += Program_ActionRemoved;
+            Program.AfterLoad += Program_AfterLoad;
 
 
 
 
             if (Program.JobFileName.Length <= 0)
                 LoadJob();
-            this.Dirty = false;
+            Dirty = false;
         }
 
         private void LoadJob()
         {
-            GetJob startWindow = new GetJob();
+            var startWindow = new GetJob();
             startWindow.ShowDialog();
 
             switch (startWindow.Result)
             {
                 case GetJobResult.Open:
-                    String fileName = startWindow.getJobFileName();
+                    String fileName = startWindow.GetJobFileName();
 
                     Program.LoadJob(fileName);
                     break;
@@ -242,21 +228,19 @@ namespace Centipede
                     Program.JobName = "";
                     Program.Clear();
                     break;
-                default:
-                    break;
             }
         }
 
         private void GetActionPlugins()
         {
-            DirectoryInfo di = new DirectoryInfo(Path.Combine(Application.StartupPath, Properties.Settings.Default.PluginFolder));
+            var di = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
 
             var dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);
 
             foreach (FileInfo fi in dlls)
             {
-                Evidence evidence = new Evidence();
-                ApplicationDirectory appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
+                var evidence = new Evidence();
+                var appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
                 evidence.AddAssemblyEvidence(appDir);
                 Assembly asm;
                 try
@@ -274,84 +258,79 @@ namespace Centipede
                     {
                         continue;
                     }
-                    Object[] customAttributes = pluginType.GetCustomAttributes(typeof(Centipede.ActionCategoryAttribute), true);
-                    if (customAttributes.Count() > 0)
+                    
+                    if (pluginType.GetCustomAttributes(typeof(ActionCategoryAttribute), true).Any())
                     {
-                        ActionCategoryAttribute catAttribute = customAttributes[0] as ActionCategoryAttribute;
-
-                        TabPage tabPage = null;
-                        foreach (TabPage _tabPage in AddActionTabs.TabPages)
-                        {
-                            if (_tabPage.Text == catAttribute.category)
-                            {
-                                tabPage = _tabPage;
-                                break;
-                            }
-                        }
-
-                        ListView catListView;
-                        if (tabPage != null)
-                        {
-                            catListView = tabPage.Tag as ListView;
-                        }
-                        else
-                        {
-                            catListView = GenerateNewTabPage(catAttribute.category);
-                        }
-
-
-                        ActionFactory af = new ActionFactory(catAttribute, pluginType);
-
-                        if (catAttribute.iconName != "")
-                        {
-                            String[] names = asm.GetManifestResourceNames();
-                            var t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
-                            System.Drawing.Icon icon;
-                            if (t != null)
-                            {
-
-                                try
-                                {
-                                    icon = t.GetProperty(catAttribute.iconName, typeof(System.Drawing.Icon)).GetValue(t, null) as System.Drawing.Icon;
-                                    catListView.LargeImageList.Images.Add(pluginType.Name, icon);
-                                    af.ImageKey = pluginType.Name;
-                                }
-                                catch (Exception)
-                                {
-                                    af.ImageKey = "generic";
-                                }
-                            }
-                            else
-                            {
-                                af.ImageKey = "generic";
-                            }
-
-
-                        }
-
-                        catListView.Items.Add(af);
+                        AddToActionTab(pluginType);
                     }
                 }
 
             }
         }
 
-        void Program_AfterLoad(object sender, EventArgs e)
+        private void AddToActionTab(Type pluginType)
         {
-            this.Dirty = false;
-            this.Text = Program.JobName;
+
+            Assembly asm = pluginType.Assembly;
+            Object[] customAttributes = pluginType.GetCustomAttributes(typeof(ActionCategoryAttribute), true);
+
+            var catAttribute = customAttributes[0] as ActionCategoryAttribute;
+
+            TabPage tabPage = AddActionTabs.TabPages.Cast<TabPage>()
+                                           .FirstOrDefault(tp => tp.Text == catAttribute.category);
+
+            ListView catListView;
+            if (tabPage != null)
+            {
+                catListView = tabPage.Tag as ListView;
+            }
+            else
+            {
+                catListView = GenerateNewTabPage(catAttribute.category);
+            }
+
+
+            var af = new ActionFactory(catAttribute, pluginType);
+
+            if (catAttribute.iconName != "")
+            {
+                var t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
+                if (t != null)
+                {
+                    var icon = t.GetProperty(catAttribute.iconName, typeof(System.Drawing.Icon)).GetValue(t, null) as System.Drawing.Icon;
+                    if (icon != null)
+                    {
+                        catListView.LargeImageList.Images.Add(pluginType.Name, icon);
+                        af.ImageKey = pluginType.Name;
+                    }
+                    else
+                    {
+                        af.ImageKey = @"generic";
+                    }
+                }
+                else
+                {
+                    af.ImageKey = @"generic";
+                }
+
+
+            }
+
+            catListView.Items.Add(af);
         }
 
-        public new String Text
+        void Program_AfterLoad(object sender, EventArgs e)
         {
-            get
-            {
-                return base.Text;
-            }
+            Dirty = false;
+            Text = Program.JobName;
+        }
+
+        private new String Text
+        {
             set
             {
                 String dirtyMarker = "";
-                if (this.Dirty)
+                if (Dirty)
                 {
                     dirtyMarker = " *";
                 }
@@ -361,31 +340,26 @@ namespace Centipede
 
         void Program_ActionRemoved(Action action)
         {
-            ActionDisplayControl adc = null;
-            foreach (ActionDisplayControl a in ActionContainer.Controls)
+            ActionDisplayControl adc = ActionContainer.Controls
+                                                      .Cast<ActionDisplayControl>()
+                                                      .FirstOrDefault(a => a.ThisAction == action);
+            if (adc != null)
             {
-                if (a.ThisAction == action)
-                {
-                    adc = a;
-                    break;
-                }
+                ActionContainer.Controls.Remove(adc);
+                Dirty = true;
             }
-            ActionContainer.Controls.Remove(adc);
-            this.Dirty = true;
         }
 
         private ListView GenerateNewTabPage(String category)
         {
-            ListView lv = new ListView();
+            var lv = new ListView { LargeImageList = ActionIcons, SmallImageList = ActionIcons };
 
-            lv.LargeImageList = ActionIcons;
-            lv.SmallImageList = ActionIcons;
-            TabPage tabPage = new TabPage(category);
+            var tabPage = new TabPage(category);
             tabPage.Controls.Add(lv);
             lv.Dock = DockStyle.Fill;
             tabPage.Tag = lv;
-            lv.ItemDrag += new ItemDragEventHandler(BeginDrag);
-            lv.ItemActivate += new EventHandler(ItemActivate);
+            lv.ItemDrag += BeginDrag;
+            lv.ItemActivate += ItemActivate;
             AddActionTabs.TabPages.Add(tabPage);
 
 
@@ -394,10 +368,10 @@ namespace Centipede
 
         void Program_BeforeAction(Action action)
         {
-            ActionDisplayControl adc = action.Tag as ActionDisplayControl;
+            var adc = action.Tag as ActionDisplayControl;
             if (adc.InvokeRequired)
             {
-                adc.Invoke(SetActionDisplayState, adc, ActionState.Running, "Running");
+                adc.Invoke(_setActionDisplayState, adc, ActionState.Running, "Running");
             }
             else
             {
@@ -408,64 +382,67 @@ namespace Centipede
         void Program_ActionAdded(Action action, int index)
         {
             Type actionType = action.GetType();
-            ActionCategoryAttribute actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
+            var actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
             ActionDisplayControl adc;
-            if (actionAttribute.displayControl != null)
+            if (actionAttribute != null && actionAttribute.displayControl != null)
             {
-                ConstructorInfo constructor = actionType.Assembly.GetType(action.GetType().Namespace + "." + actionAttribute.displayControl).GetConstructor(new Type[] { typeof(Action) });
+                ConstructorInfo constructor = actionType.Assembly.GetType(string.Format("{0}.{1}",
+                                                                                        action.GetType().Namespace,
+                                                                                        actionAttribute.displayControl))
+                                                        .GetConstructor(new[] { typeof (Action) });
+                Debug.Assert(constructor != null, "constructor != null");
                 adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
             }
             else
             {
                 adc = new ActionDisplayControl(action);
             }
-            adc.Deleted += new ActionDisplayControl.DeletedEventHandler(adc_Deleted);
-            adc.DragEnter += new DragEventHandler(ActionContainer_DragEnter);
-            adc.DragDrop += new DragEventHandler(ActionContainer_DragDrop);
+            adc.Deleted += adc_Deleted;
+            adc.DragEnter += ActionContainer_DragEnter;
+            adc.DragDrop += ActionContainer_DragDrop;
             ActionContainer.Controls.Add(adc, 0, index);
             ActionContainer.SetRow(adc, index);
-            this.Dirty = true;
+            Dirty = true;
         }
 
         void adc_Deleted(object sender, CentipedeEventArgs e)
         {
-            ActionDisplayControl adc = sender as ActionDisplayControl;
+            var adc = sender as ActionDisplayControl;
             Program.RemoveAction(adc.ThisAction);
         }
 
         void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            foreach (String key in (from kvp in Program.Variables
-                                    where _dataSet.Variables.Rows.Contains(kvp.Key)
-                                    select kvp.Key))
+            foreach (String key in from kvp in Program.Variables
+                                   where _dataSet.Variables.Rows.Contains(kvp.Key)
+                                   select kvp.Key
+                                       into k
+                                       where !k.StartsWith("_")
+                                       select k)
             {
-                if (key != "console")
-                {
-                    Program.Variables.Remove(key);
-                    break;
-                }
+                Program.Variables.Remove(key);
+                break;
             }
 
         }
 
         void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
         {
-            JobDataSet.VariablesDataTable table = sender as JobDataSet.VariablesDataTable;
-            JobDataSet.VariablesRow row = e.Row as JobDataSet.VariablesRow;
+            JobDataSet.VariablesRow row = e.Row;
 
             if (!Program.Variables.ContainsKey(row.Name))
             {
                 var it = from kvp in Program.Variables
                          where !_dataSet.Variables.Rows.Contains(kvp.Key)
-                         select kvp.Key;
+                         select kvp.Key
+                             into k
+                             where !k.StartsWith("_")
+                             select k;
 
                 foreach (String key in it)
                 {
-                    if (key != "console")
-                    {
-                        Program.Variables.Remove(key);
-                        break;
-                    }
+                    Program.Variables.Remove(key);
+                    break;
                 }
 
             }
@@ -484,7 +461,7 @@ namespace Centipede
 
         private void VarDataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
         {
-            DataGridView view = sender as DataGridView;
+            var view = sender as DataGridView;
             view.ClearSelection();
             view.Rows[e.RowIndex].Selected = true;
             e.ContextMenuStrip = VarsContextMenu;
@@ -493,15 +470,18 @@ namespace Centipede
 
         private void LoadBtn_Click(object sender, EventArgs e)
         {
-            if (this.Dirty)
+            if (Dirty)
             {
-                DialogResult result = MessageBox.Show(this, "Save changes?", "Unsaved Changes", MessageBoxButtons.YesNoCancel);
+                DialogResult result = MessageBox.Show(this,
+                                                      Resources.MainWindow_LoadBtn_Click_Save_changes_,
+                                                      Resources.MainWindow_LoadBtn_Click_Unsaved_Changes,
+                                                      MessageBoxButtons.YesNoCancel);
                 switch (result)
                 {
-                    case System.Windows.Forms.DialogResult.Yes:
+                    case DialogResult.Yes:
                         SaveJob();
                         break;
-                    case System.Windows.Forms.DialogResult.No:
+                    case DialogResult.No:
                         // do nothing
                         break;
                     default:
@@ -529,16 +509,6 @@ namespace Centipede
             Program.RunJob();
         }
 
-        private void FlowControlToolbar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void copyToolStripButton_Click(object sender, EventArgs e)
-        {
-            ToolStripButton btn = sender as ToolStripButton;
-        }
-
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             if (e.KeyData == Keys.F5)
@@ -554,7 +524,6 @@ namespace Centipede
             {
                 index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
-            var s = e.Data.GetFormats();
             var data = e.Data.GetData("WindowsForms10PersistentObject");
             Program.AddAction((data as ActionFactory).Generate(), index);
 
@@ -581,9 +550,9 @@ namespace Centipede
         {
             if (Program.JobName == "")
             {
-                AskJobTitle askJobTitle = new AskJobTitle();
+                var askJobTitle = new AskJobTitle();
                 DialogResult result = askJobTitle.ShowDialog(this);
-                if (result == System.Windows.Forms.DialogResult.Cancel)
+                if (result == DialogResult.Cancel)
                 {
                     return;
                 }
@@ -595,11 +564,13 @@ namespace Centipede
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             Program.SaveJob(saveFileDialog1.FileName);
-            this.Dirty = false;
+            Dirty = false;
         }
 
         public static MainWindow Instance;
         private bool _dirty;
+        private readonly JobDataSet _dataSet = new JobDataSet();
+
         private bool Dirty
         {
             get
@@ -609,20 +580,21 @@ namespace Centipede
             set
             {
                 _dirty = value;
-                this.Text = Program.JobName;
+                Text = Program.JobName;
             }
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
-            this.progressBar1.Increment(e.ProgressPercentage);
+            progressBar1.Increment(e.ProgressPercentage);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int a = 0;
-            a += 1;
+// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+            ToString();
+// ReSharper restore ReturnValueOfPureMethodIsNotUsed
         }
 
         protected override void Dispose(bool disposing)
@@ -630,14 +602,6 @@ namespace Centipede
             base.Dispose(disposing);
 
             Program.Dispose(disposing);
-        }
-    }
-    class GuiConsole
-    {
-        public void write(string message)
-        {
-            Program.mainForm.Invoke(new MainWindow.ShowMessageBoxDelegate(MainWindow.Instance.ShowMessageBox), new object[] { message });
-            MessageBox.Show(Program.mainForm, message, "Python Output");
         }
     }
 }

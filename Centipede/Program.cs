@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using System.Xml;
-using System.Xml.Linq;
 using System.Reflection;
 using System.IO;
 
@@ -15,46 +14,43 @@ namespace Centipede
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(String[] args)
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            mainForm = new MainWindow();
-            if (!mainForm.IsDisposed)
-                Application.Run(mainForm);
+            _mainForm = new MainWindow();
+            if (!_mainForm.IsDisposed)
+                Application.Run(_mainForm);
         }
 
         /// <summary>
         /// Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive, 
         /// I can't figure a way of doing it easily. 
         /// </summary>
-        public static Dictionary<String, Object> Variables = new Dictionary<String, Object>();
+        public static readonly Dictionary<String, Object> Variables = new Dictionary<String, Object>();
 
 
         public static string JobFileName = "";
         public static string JobName = "";
 
-        internal static List<Action> Actions = new List<Action>();
-        internal static MainWindow mainForm;
+        internal static readonly List<Action> Actions = new List<Action>();
+        private static MainWindow _mainForm;
 
 
         /// <summary>
         /// Run the job, starting with the first action added.
         /// </summary>
-        /// <param name="updateCallback"><see cref="ActionUpdateCallback"/></param>
-        /// <param name="completedHandler"><see cref="CompletedHandler"/></param>
-        /// <param name="errorHandler"><see cref="ErrorHandler"/></param>
         [STAThread]
         public static void RunJob()
         {
-            Action currentAction = null;
+            Action currentAction;
 
             if (Actions.Count < 1)
             {
                 if (ActionErrorOccurred != null)
                 {
-                    ActionErrorOccurred(new ActionException("No Actions Added"), ref currentAction);
+                    ActionErrorOccurred(new ActionException("No Actions Added"), out currentAction);
                 }
                 return;
             }
@@ -72,6 +68,7 @@ namespace Centipede
                     {
                         beforeActionHandler(currentAction);
                     }
+
                     currentAction.Run();
 
                     var afterActionHandler = ActionCompleted;
@@ -96,7 +93,7 @@ namespace Centipede
                     var handler = ActionErrorOccurred;
                     if (handler != null)
                     {
-                        if (!handler(ae, ref currentAction))
+                        if (!handler(ae, out currentAction))
                         {
                             completed = false;
                             break;
@@ -136,39 +133,38 @@ namespace Centipede
         /// <param name="e">The exception that caused the error</param>
         /// <param name="nextAction">Set to the next action - useful for repeating actions</param>
         /// <returns>True if execution of Job should continue, false to halt</returns>
-        public delegate Boolean ErrorHandler(ActionException e, ref Action nextAction);
-        public static event ErrorHandler ActionErrorOccurred = delegate { return false; };
+        public delegate Boolean ErrorHandler(ActionException e, out Action nextAction);
+
+        public static event ErrorHandler ActionErrorOccurred = delegate(ActionException e, out Action nextAction)
+                                                                   {
+                                                                       nextAction = null;
+                                                                       return false;
+                                                                   };
 
         public static Int32 JobComplexity
         {
             get
             {
-                Int32 totalComplexity = 0;
-                foreach (Action action in Actions)
-                {
-                    totalComplexity += action.Complexity;
-                }
-                return totalComplexity;
+                return Actions.Sum(action => action.Complexity);
             }
         }
        
-        [Flags]
-        internal enum ActionsToTest
-        {
-            PythonAction = 1,
-            DemoAction = 2,
-            ErrorAction = 4,
-            All = 1 | 2 | 4
-        }
-
+        //[Flags]
+        //internal enum ActionsToTest
+        //{
+        //    PythonAction = 1,
+        //    DemoAction = 2,
+        //    ErrorAction = 4,
+        //    All = 1 | 2 | 4
+        //}
+        //
         /// <summary>
         /// Add some test actions to the queue.
         /// </summary>
         //internal static void SetupTestActions(ActionsToTest actions = ActionsToTest.All)
         //{
-
         //    JobFileName = "Test File";
-
+        //
         //    if (actions.HasFlag(ActionsToTest.PythonAction))
         //    {
         //        PythonAction testPythonAction = new PythonAction(Program.Variables);
@@ -178,25 +174,25 @@ namespace Centipede
         //                                              @"except: ",
         //                                              @"    i = 0",
         //                                              @"variables[""a""] = i+1"});
-
+        //
         //        testPythonAction.Comment = "Increase Variable i by one";
-
+        //
         //        Program.AddAction(testPythonAction);
         //    }
-
+        //
         //    if (actions.HasFlag(ActionsToTest.DemoAction))
         //    {
         //        DemoAction testDemoAction = new DemoAction(Program.Variables);
         //        testDemoAction.Comment = "Display a text box showing attirbute values";
         //        Program.AddAction(testDemoAction);
         //    }
-
+        //
         //    if (actions.HasFlag(ActionsToTest.ErrorAction))
         //    {
         //        PythonAction testErrorAction = new PythonAction(Program.Variables);
         //        testErrorAction.Comment = "Throw an error!";
         //        testErrorAction.Source = "raise Exception()";
-
+        //
         //        Program.AddAction(testErrorAction);
         //    }
         //}
@@ -208,6 +204,7 @@ namespace Centipede
         /// Add action to the job queue.  By default, it is added as the last action in the job.
         /// </summary>
         /// <param name="action">Action to add</param>
+        /// <param name="index">(Optional) Index to add action at.  Defaults to end (-1).</param>
         public static void AddAction(Action action, Int32 index = -1)
         {
             if (index == -1)
@@ -250,10 +247,8 @@ namespace Centipede
 
         internal static void RemoveAction(Action action)
         {
-            Action prevAction = (from Action a in Actions
-                                 where a.Next == action
-                                 select a).SingleOrDefault();
-
+            Action prevAction = Actions.SingleOrDefault(a => a.Next == action);
+                
             Action nextAction = action.Next;
 
             if (prevAction != null)
@@ -269,14 +264,16 @@ namespace Centipede
 
         }
 
+/*
         internal static int GetIndexOf(Action action)
         {
             return Actions.IndexOf(action);
         }
+*/
 
         internal static void SaveJob(String filename)
         {
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
             xmlRoot.SetAttribute("Title", JobName);
             xmlDoc.AppendChild(xmlRoot);
@@ -313,12 +310,12 @@ namespace Centipede
         /// <summary>
         /// Load a job with a given name
         /// </summary>
-        /// <param name="jobName">Name of the job to load</param>
+        /// <param name="jobFileName">Name of the job to load</param>
         internal static void LoadJob(String jobFileName)
         {
             Clear();
 
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             if (File.Exists(jobFileName))
             {
                 xmlDoc.Load(jobFileName);
@@ -338,18 +335,13 @@ namespace Centipede
                     String name = variableElement.GetAttribute("name");
                     Type type = asm.GetType(variableElement.LocalName);
 
-                    MethodInfo parseMethod = type.GetMethod("Parse", new Type[] { typeof(String) });
+                    MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof(String) });
 
-                    Object value;
-                    if (parseMethod == null)
-                    {
-                        value = variableElement.GetAttribute("Value");
-                    }
-                    else
-                    {
-                        value = parseMethod.Invoke(type, new object[] { variableElement.GetAttribute("Value") });
-                    }
-                    Program.Variables.Add(name, value);
+                    object value = parseMethod == null
+                                           ? variableElement.GetAttribute("Value")
+                                           : parseMethod.Invoke(type,
+                                                                new object[] { variableElement.GetAttribute("Value") });
+                    Variables.Add(name, value);
 
                 }
                 var handler = AfterLoad;
@@ -360,6 +352,7 @@ namespace Centipede
             }
         }
 
+/*
         public static Int32 JobLength
         {
             get
@@ -367,6 +360,7 @@ namespace Centipede
                 return Actions.Count;
             }
         }
+*/
 
         internal static void Clear()
         {

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Centipede;
-using Centipede.PyEngine;
-using System.Resources;
+using PythonEngine;
 
-namespace Centipede.PyAction
+
+namespace PyAction
 {
 
     [ActionCategory("Other Actions", 
@@ -14,38 +12,44 @@ namespace Centipede.PyAction
         displayName="Python Action", 
         displayControl="PythonDisplayControl"
         )]
+// ReSharper disable ClassNeverInstantiated.Global
     public class PythonAction : Centipede.Action
+// ReSharper restore ClassNeverInstantiated.Global
     {
 
         public PythonAction(Dictionary<String, Object> variables)
             : base("Python Action", variables)
         { }
 
-        [ActionArgument(usage = "Source code to be executed", onTextChangedHandlerName = "UpdateSource")]
+        [ActionArgument(usage = "Source code to be executed")]
         public String Source
         {
+// ReSharper disable MemberCanBePrivate.Global
             get
+// ReSharper restore MemberCanBePrivate.Global
             {
-                return this._source;
+                return _source;
             }
             set
             {
-                this._source = value;
-                _complexity = value.Split(System.Environment.NewLine.ToCharArray()).Length;
+                _source = value;
+                _complexity = value.Split(Environment.NewLine.ToCharArray()).Length;
             }
         }
         private int _complexity;
-        private  string _source;
+        private string _source;
 
+/*
         public void UpdateSource(object sender, EventArgs e)
         {
             ScintillaNET.Scintilla control = sender as ScintillaNET.Scintilla;
             Source = control.Text;
             this._complexity = Source.Split(System.Environment.NewLine.ToCharArray()).Length;
         }
+*/
         protected override void DoAction()
         {
-            PythonEngine engine = PythonEngine.Instance;
+            PythonEngine.PythonEngine engine = PythonEngine.PythonEngine.Instance;
             if (!engine.VariableExists("variables"))
             {
                 engine.SetVariable("variables", Variables);

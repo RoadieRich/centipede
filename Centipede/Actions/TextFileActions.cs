@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
-namespace Centipede
+
+namespace Centipede.Actions
 {
     abstract class BaseTextFileAction : Action
     {
@@ -13,13 +12,18 @@ namespace Centipede
         { }
     }
 
+// ReSharper disable UnusedMember.Global
     class OpenTextFileAction : BaseTextFileAction
+// ReSharper restore UnusedMember.Global
     {
         public OpenTextFileAction(Dictionary<String, Object> variables)
             : base("Open Text File", variables)
         { }
 
         [ActionArgument(usage="Filename to open")]
+// ReSharper disable ConvertToConstant.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
         public String Filename = "";
 
         [ActionArgument(usage="Allow read access")]
@@ -34,6 +38,9 @@ namespace Centipede
         )]
         public String FileVar = "Text File";
 
+        // ReSharper restore MemberCanBePrivate.Global
+        // ReSharper restore FieldCanBeMadeReadOnly.Global
+        // ReSharper restore ConvertToConstant.Global
         protected override void DoAction()
         {
             FileAccess access = Read ? FileAccess.Read : 0;

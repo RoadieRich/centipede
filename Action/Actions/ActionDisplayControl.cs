@@ -1,12 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Linq.Expressions;
+
 
 namespace Centipede.Actions
 {
@@ -20,13 +19,8 @@ namespace Centipede.Actions
         /// </summary>
         public String StatusMessage
         {
-            get
-            {
-                return _statusMessage;
-            }
             set
             {
-                _statusMessage = value;
                 StatusTooltip.SetToolTip(StatusIconBox, value);
             }
         }
@@ -36,15 +30,18 @@ namespace Centipede.Actions
         /// </summary>
         protected ActionDisplayControl()
         {
+            Selected = false;
+            // ReSharper disable DoNotCallOverridableMethodsInConstructor
             InitializeComponent();
         }
+
         /// <summary>
         /// 
         /// </summary>
         protected void SetProperties()
         {
-            this.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            this.BackColor = SystemColors.Control;
+            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            BackColor = SystemColors.Control;
             NameLabel.Text = ThisAction.Name;
 
             CommentTextBox.Text = ThisAction.Comment;
@@ -58,8 +55,12 @@ namespace Centipede.Actions
         /// <param name="action"></param>
         public ActionDisplayControl(Action action)
         {
+            Selected = false;
             InitializeComponent();
-            thisAction = action;
+
+            ThisAction = action;
+
+            // ReSharper restore DoNotCallOverridableMethodsInConstructor
             SetProperties();
 
             _statusToolTip = new ToolTip();
@@ -73,11 +74,12 @@ namespace Centipede.Actions
         {
             Type actionType = ThisAction.GetType();
 
-            var fieldArguments = from fi in actionType.GetMembers().Where(fi => (fi is FieldInfo || fi is PropertyInfo)).Select(fi => new FieldAndPropertyWrapper(fi))
-                                 where fi.GetArguementAttribute() != null
-                                 select fi;
-
-
+            var fieldArguments = from fi in actionType.GetMembers()
+                                 where fi is FieldInfo || fi is PropertyInfo
+                                 select new FieldAndPropertyWrapper((dynamic)fi)
+                                     into wrapped
+                                     where wrapped.GetArguementAttribute() != null
+                                     select wrapped;
 
             foreach (FieldAndPropertyWrapper arg in fieldArguments)
             {
@@ -88,28 +90,27 @@ namespace Centipede.Actions
         private Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute attrData = arg.GetArguementAttribute();
-            Label attrLabel = new Label();
-            attrLabel.Text = GetArgumentName(arg);
-            attrLabel.Dock = DockStyle.Fill;
+            var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
             ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
 
             Control attrValue;
             switch (arg.GetFieldTypeCategory())
             {
                 case FieldAndPropertyWrapper.FieldType.Boolean:
-                    attrValue = new CheckBox();
-                    attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-                    (attrValue as CheckBox).Checked = arg.Get<Boolean>(ThisAction);
+                    attrValue = new CheckBox { Anchor = AnchorStyles.Top | AnchorStyles.Left };
+                (attrValue as CheckBox).Checked = arg.Get<Boolean>(ThisAction);
                     break;
-                case FieldAndPropertyWrapper.FieldType.Other:
-                case FieldAndPropertyWrapper.FieldType.String:
-                case FieldAndPropertyWrapper.FieldType.Numeric:
+                //case FieldAndPropertyWrapper.FieldType.Other:
+                //case FieldAndPropertyWrapper.FieldType.String:
+                //case FieldAndPropertyWrapper.FieldType.Numeric:
                 default:
-                    attrValue = new TextBox();
-                    attrValue.Width = 250;
-                    attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    attrValue.Text = arg.Get<Object>(thisAction).ToString();
-                    break;
+                    attrValue = new TextBox
+                                {
+                                        Width = 250,
+                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                                        Text = arg.Get<Object>(ThisAction).ToString()
+                                };
+                break;
 
             }
 
@@ -118,50 +119,18 @@ namespace Centipede.Actions
             attrValue.Tag = arg;
             attrValue.TextChanged += GetTextChangedHandler(arg);
             attrValue.Leave += GetLeaveHandler(arg);
-            return new Control[2] { attrLabel, attrValue };
-        }
-
-        private T GetValue<T>(MemberInfo arg)
-        {
-            if (arg is FieldInfo)
-            {
-                return (T)(arg as FieldInfo).GetValue(ThisAction);
-            }
-            else
-            {
-                return (T)(arg as PropertyInfo).GetValue(ThisAction, null);
-            }
-        }
-
-        private void GenerateArgumentsFromProperties()
-        {
-            //Type actionType = ThisAction.GetType();
-
-            //var propertyArguments = from PropertyInfo pi in actionType.GetProperties()
-            //                        where (GetArgumentAttribute(pi) != null)
-            //                        select new FieldAndPropertyWrapper(pi);
-
-            //foreach (FieldAndPropertyWrapper arg in propertyArguments)
-            //{
-            //    AttributeTable.Controls.AddRange(GenerateFieldControls(arg));
-            //}
+            return new[] { attrLabel, attrValue };
         }
 
         private EventHandler GetTextChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
-            Type actionType = ThisAction.GetType();
             if (argAttr.onTextChangedHandlerName == null)
             {
-                return delegate { return; };
+                return delegate { };
             }
-            else
-            {
-                MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onTextChangedHandlerName);
-                return new EventHandler(
-                    (sender, e) => method.Invoke(ThisAction, new Object[] { sender, e })
-                );
-            }
+            MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onTextChangedHandlerName);
+            return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
         private EventHandler GetLeaveHandler(FieldAndPropertyWrapper arg)
@@ -174,20 +143,11 @@ namespace Centipede.Actions
                 {
                     return attrValue_TextChanged;
                 }
-                else
-                {
-                    return delegate { return; };
-                }
-
+                return delegate { };
             }
-            else
-            {
-                Type actionType = ThisAction.GetType();
-                MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
-                return new EventHandler(
-                    (sender, e) => method.Invoke(ThisAction, new object[] { sender, e })
-                );
-            }
+            Type actionType = ThisAction.GetType();
+            MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
+            return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
 
@@ -200,13 +160,12 @@ namespace Centipede.Actions
 
         void attrValue_TextChanged(object sender, EventArgs e)
         {
-            TextBox attrValue = sender as TextBox;
-            String oldVal = attrValue.Text;
-            FieldAndPropertyWrapper f = attrValue.Tag as FieldAndPropertyWrapper;
+            var attrValue = sender as TextBox;
+            var f = attrValue.Tag as FieldAndPropertyWrapper;
             ActionArgumentAttribute argInfo = f.GetArguementAttribute();
 
-            Object value = f.Get<Object>(ThisAction);
-            MethodInfo parser = f.GetMemberType().GetMethod("Parse", new Type[] { typeof(String) });
+            var value = f.Get<Object>(ThisAction);
+            MethodInfo parser = f.GetMemberType().GetMethod("Parse", new[] { typeof(String) });
             if (parser != null)
             {
                 try
@@ -215,21 +174,22 @@ namespace Centipede.Actions
                 }
                 catch (Exception)
                 {
-                    String.Format("Invalid Value entered in {0}.{1}: {2}", this.ThisAction.Name, argInfo.displayName, attrValue.Text);
+                    MessageBox.Show(String.Format("Invalid Value entered in {0}.{1}: {2}", ThisAction.Name, argInfo.displayName, attrValue.Text));
                 }
-
             }
             else
             {
                 value = attrValue.Text;
             }
 
-            f.Set(this.ThisAction, value);
+            f.Set(ThisAction, value);
 
         }
 
-        private Boolean _selected = false;
-        private Color _unselectedColour = SystemColors.Control;
+// ReSharper disable ConvertToConstant.Local
+// ReSharper disable FieldCanBeMadeReadOnly.Local
+        // ReSharper restore FieldCanBeMadeReadOnly.Local
+// ReSharper restore ConvertToConstant.Local
 
         ///
         /// <summary>
@@ -240,21 +200,13 @@ namespace Centipede.Actions
         /// The default is the value of the System.Windows.Forms.Control.DefaultBackColor
         /// property.
         /// </value>
-        public new Color BackColor
+        private new Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
             set
             {
                 if (!Selected)
                 {
                     base.BackColor = value;
-                }
-                else
-                {
-                    _unselectedColour = value;
                 }
             }
         }
@@ -262,25 +214,12 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        public Boolean Selected
+// ReSharper disable MemberCanBePrivate.Global
+        public bool Selected
+// ReSharper restore MemberCanBePrivate.Global
         {
-            get
-            {
-                return _selected;
-            }
-            set
-            {
-                if (value)
-                {
-                    _unselectedColour = BackColor;
-                    base.BackColor = SystemColors.Highlight;
-                }
-                else
-                {
-                    base.BackColor = _unselectedColour;
-                }
-                _selected = value;
-            }
+            get;
+            private set;
         }
 
         private void ExpandButton_Click(object sender, EventArgs e)
@@ -305,7 +244,9 @@ namespace Centipede.Actions
         /// </summary>
         public ActionState State
         {
+// ReSharper disable UnusedMember.Global
             get
+// ReSharper restore UnusedMember.Global
             {
                 return _state;
             }
@@ -337,21 +278,20 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
+// ReSharper disable VirtualMemberNeverOverriden.Global
         public virtual Action ThisAction
+// ReSharper restore VirtualMemberNeverOverriden.Global
         {
-            get
-            {
-                return thisAction;
-            }
+            get;
+            protected set;
         }
-        private ToolTip _statusToolTip;
-        private string _statusMessage;
+
+        private readonly ToolTip _statusToolTip;
 
         /// <summary>
         /// 
         /// </summary>
         public event DeletedEventHandler Deleted;
-        protected Action thisAction;
 
         /// <summary>
         /// 
@@ -380,11 +320,7 @@ namespace Centipede.Actions
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
-
-            ToolStripDropDownItem i = sender as ToolStripDropDownItem;
-            ContextMenuStrip cm = i.Owner as ContextMenuStrip;
-
-            var handler = this.Deleted;
+            var handler = Deleted;
             if (handler != null)
             {
                 handler(this, null);
@@ -420,66 +356,30 @@ namespace Centipede.Actions
         Error = 2
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CentipedeEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="program"></param>
-        /// <param name="actions"></param>
-        /// <param name="variables"></param>
-        public CentipedeEventArgs(Type program, List<Action> actions, Dictionary<String, Object> variables)
-            : base()
-        {
-            Program = program;
-            Actions = actions;
-            Variables = variables;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly Type Program;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly List<Action> Actions;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly Dictionary<string, object> Variables;
-    }
-
     class FieldAndPropertyWrapper
     {
         public Type DeclaringType
         {
             get
             {
-                return member.DeclaringType;
+                return _member.DeclaringType;
             }
         }
-        public FieldAndPropertyWrapper(MemberInfo member)
+        public FieldAndPropertyWrapper(PropertyInfo prop)
         {
-            this.member = member;
-            if (member is PropertyInfo)
-            {
-                _getter = o => (member as PropertyInfo).GetValue(o, null);
-                _setter = (o, v) => (member as PropertyInfo).SetValue(o, v, null);
-            }
-            else
-            {
-                _getter = o => (member as FieldInfo).GetValue(o);
-                _setter = (o, v) => (member as FieldInfo).SetValue(o, v);
-            }
+            _member = prop;
+            _getter = o => prop.GetValue(o, null);
+            _setter = (o, v) => prop.SetValue(o, v, null);
         }
 
-        MemberInfo member = null;
+        public FieldAndPropertyWrapper(FieldInfo field)
+        {
+            _member = field;
+            _getter = o => field.GetValue(o);
+            _setter = (o, v) => field.SetValue(o, v);
+        }
+
+        readonly MemberInfo _member;
 
         private readonly Expression<Func<object, object>> _getter;
         public T Get<T>(object o)
@@ -495,22 +395,22 @@ namespace Centipede.Actions
 
         public ActionArgumentAttribute GetArguementAttribute()
         {
-            return member.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
+            return _member.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
         }
 
 
-        public string Name { get { return member.Name; } }
+        public string Name { get { return _member.Name; } }
 
         public Type GetMemberType()
         {
             Type baseType;
-            if (member is FieldInfo)
+            if (_member is FieldInfo)
             {
-                baseType = (member as FieldInfo).FieldType;
+                baseType = (_member as FieldInfo).FieldType;
             }
             else
             {
-                baseType = (member as PropertyInfo).PropertyType;
+                baseType = (_member as PropertyInfo).PropertyType;
             }
             return baseType;
 
@@ -521,8 +421,8 @@ namespace Centipede.Actions
             //first value listed is used for default()
             Other, String, Numeric, Boolean,
         }
-        private static Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>()
-        {
+        private static readonly Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>
+                                                                          {
             {typeof(bool),      FieldType.Boolean},
             {typeof(byte),      FieldType.Numeric},
             {typeof(sbyte),     FieldType.Numeric},
@@ -546,11 +446,14 @@ namespace Centipede.Actions
 
             while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
             {
-                baseType = baseType.BaseType;
+                baseType = baseType.BaseType ?? typeof (Object);
             }
 
             FieldType fieldType;
-            TypeMapping.TryGetValue(baseType, out fieldType);  //out's default value if key is not found
+            if (TypeMapping.TryGetValue(baseType, out fieldType))
+            {
+                return FieldType.Other;
+            }
 
             return fieldType;
         }
@@ -562,6 +465,17 @@ namespace Centipede.Actions
         {
             return new FieldAndPropertyWrapper(p);
         }
-
+        public static explicit operator FieldAndPropertyWrapper(MemberInfo m)
+        {
+            if (m is FieldInfo)
+            {
+                return new FieldAndPropertyWrapper(m as FieldInfo);
+            }
+            if (m is PropertyInfo)
+            {
+                return new FieldAndPropertyWrapper(m as PropertyInfo);
+            }
+            throw new InvalidCastException();
+        }
     }
 }

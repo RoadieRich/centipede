@@ -4,8 +4,11 @@ using System.Xml;
 using System.Reflection;
 using System.Linq;
 using System.IO;
-using Centipede.StringInject;
 using Centipede.Actions;
+using Centipede.StringInject;
+
+
+// ReSharper disable UnusedMember.Global
 
 [assembly: CLSCompliant(true)]
 
@@ -31,13 +34,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="s"></param>
-        public delegate void Setter(String s);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        protected Dictionary<String, Object> Variables;
+        protected readonly Dictionary<String, Object> Variables;
 
         /// <summary>
         /// 
@@ -57,7 +54,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public Action Next = null;
+        public Action Next;
 
         /// <summary>
         /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, 
@@ -123,7 +120,7 @@ namespace Centipede
         /// </example>
         /// <param name="str">The string to parse</param>
         /// <returns>String</returns>
-        public String ParseStringForVariable(String str)
+        protected String ParseStringForVariable(String str)
         {
             return str.Inject(Variables);
         }
@@ -137,15 +134,18 @@ namespace Centipede
         /// <param name="options"></param>
         /// <returns></returns>
         protected AskEventEnums.DialogResult Ask(String message, String title = "Question", AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
+
         {
             var handler = OnAsk;
             if (handler != null)
             {
-                AskActionEventArgs eventArgs = new AskActionEventArgs();
-                eventArgs.Icon = AskEventEnums.MessageIcon.Question;
-                eventArgs.Message = message;
-                eventArgs.Title = title;
-                eventArgs.Type = options;
+                var eventArgs = new AskActionEventArgs
+                                {
+                                        Icon = AskEventEnums.MessageIcon.Question,
+                                        Message = message,
+                                        Title = title,
+                                        Type = options
+                                };
                 OnAsk(this, eventArgs);
                 return eventArgs.Result;
 
@@ -153,20 +153,32 @@ namespace Centipede
             return AskEventEnums.DialogResult.None;
         }
 
-        public static event AskEvent OnAsk = delegate { return AskEventEnums.DialogResult.None; };
+        /// <summary>
+        /// 
+        /// </summary>
+// ReSharper disable EventNeverSubscribedTo.Global
+        public static event AskEvent OnAsk = delegate { };
+// ReSharper restore EventNeverSubscribedTo.Global
 
-        public delegate AskEventEnums.DialogResult AskEvent(object sender, AskActionEventArgs e);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void AskEvent(object sender, AskActionEventArgs e);
 
         protected void Message(String message, String title = "Message", AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
         {
             var handler = OnAsk;
             if (handler != null)
             {
-                AskActionEventArgs eventArgs = new AskActionEventArgs();
-                eventArgs.Icon = messageIcon;
-                eventArgs.Message = message;
-                eventArgs.Title = title;
-                eventArgs.Type = AskEventEnums.AskType.OK;
+                var eventArgs = new AskActionEventArgs
+                                               {
+                                                       Icon = messageIcon,
+                                                       Message = message,
+                                                       Title = title,
+                                                       Type = AskEventEnums.AskType.OK
+                                               };
                 OnAsk(this, eventArgs);
             }
         }
@@ -175,7 +187,7 @@ namespace Centipede
         /// 
         /// </summary>
         [Obsolete]
-        public static HashSet<String> TrueValues = new HashSet<string>(new String[]{
+        public static HashSet<String> TrueValues = new HashSet<string>(new[]{
                                          "yes",
                                          "true",
                                          "1"
@@ -188,24 +200,45 @@ namespace Centipede
         public void AddToXmlElement(XmlElement rootElement)
         {
 
-            Type thisType = this.GetType();
-            XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
-
-            foreach (FieldInfo field in thisType.GetFields().Where(f => f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0))
+            Type thisType = GetType();
+            if (rootElement.OwnerDocument != null)
             {
-                element.SetAttribute(field.Name, field.GetValue(this).ToString());
+                XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
+
+                //foreach (
+                //        FieldInfo field in from f in thisType.GetFields()
+                //                           where f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Any()
+                //                           select f
+                //        )
+                //{
+                //    element.SetAttribute(field.Name, field.GetValue(this).ToString());
+                //}
+
+                //foreach (PropertyInfo prop in from p in thisType.GetProperties()
+                //                              where p.GetCustomAttributes(typeof (ActionArgumentAttribute), true).Any()
+                //                              select p)
+                //{
+                //    element.SetAttribute(prop.Name, prop.GetValue(this, null).ToString());
+                //}
+
+                foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
+                                                      where member is FieldInfo || member is PropertyInfo
+                                                      select new FieldAndPropertyWrapper((dynamic)member)
+                                                          into wrapped
+                                                          where wrapped.GetArguementAttribute() != null
+                                                          select wrapped
+                        )
+                {
+                    element.SetAttribute(wrappedMember.Name, wrappedMember.Get<dynamic>(this).ToString());
+                }
+
+                String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
+
+                element.SetAttribute("Comment", Comment);
+                element.SetAttribute("Assembly", pluginFilePath);
+
+                rootElement.AppendChild(element);
             }
-
-            foreach (PropertyInfo prop in thisType.GetProperties().Where(f => f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Count() > 0))
-            {
-                element.SetAttribute(prop.Name, prop.GetValue(this, null).ToString());
-            }
-            String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
-
-            element.SetAttribute("Comment", this.Comment);
-            element.SetAttribute("Assembly", pluginFilePath);
-
-            rootElement.AppendChild(element);
         }
 
         /// <summary>
@@ -227,16 +260,23 @@ namespace Centipede
             }
             else
             {
-                String asmPath = Path.Combine(
-                                            Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-                                            Path.Combine(Properties.Settings.Default.PluginFolder,
-                                            element.GetAttribute("Assembly")));
-                asm = Assembly.LoadFile(asmPath);
+                string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                if (location != null)
+                {
+                    String asmPath = Path.Combine(location,
+                                                  Path.Combine(Properties.Settings.Default.PluginFolder,
+                                                               element.GetAttribute("Assembly")));
+                    asm = Assembly.LoadFile(asmPath);
+                }
+                else
+                {
+                    throw new FileNotFoundException();
+                }
             }
 
             Type t = asm.GetType(element.LocalName);
 
-            Object instance;
+            Object instance = null;
 
             MethodInfo customFromXmlMethod = t.GetMethod("CustomFromXml");
             if (customFromXmlMethod != null)
@@ -245,23 +285,22 @@ namespace Centipede
             }
             else
             {
-                instance = t.GetConstructor(constructorArgumentTypes).Invoke(new object[] { variables });
+                ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
+                if (constructorInfo != null)
+                {
+                    instance = constructorInfo.Invoke(new object[] { variables });
+                }
 
                 element.Attributes.RemoveNamedItem("Assembly");
 
                 foreach (XmlAttribute attribute in element.Attributes)
                 {
                     FieldAndPropertyWrapper field = t.GetField(attribute.Name);
-                    MethodInfo parseMethod = field.GetType().GetMethod("Parse", new Type[] { typeof(String) });
-                    Object parsedValue = attribute.Value;
-                    if (parseMethod != null)
-                    {
-                        field.Set(instance, parseMethod.Invoke(field, new object[] { attribute.Value }));
-                    }
-                    else
-                    {
-                        field.Set(instance, attribute.Value);
-                    }
+                    MethodInfo parseMethod = field.GetType().GetMethod("Parse", new[] { typeof(String) });
+                    field.Set(instance,
+                              parseMethod != null
+                                      ? parseMethod.Invoke(field, new object[] { attribute.Value })
+                                      : attribute.Value);
                 }
             }
             return instance as Action;
@@ -279,13 +318,17 @@ namespace Centipede
     /// <summary>
     /// Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
     /// </summary>
-    [System.AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public sealed class ActionArgumentAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public sealed class ActionArgumentAttribute : Attribute
     {
+
+    // ReSharper disable InconsistentNaming
+    // ReSharper disable UnassignedField.Global
         /// <summary>
         /// 
         /// </summary>
         public String displayName;
+
 
         /// <summary>
         /// 
@@ -295,13 +338,11 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public String setterMethodName;
+        public String onLeaveHandlerName;
 
         /// <summary>
         /// 
         /// </summary>
-
-        public String onLeaveHandlerName;
         public string onTextChangedHandlerName;
 
         /// <summary>
@@ -310,14 +351,27 @@ namespace Centipede
         /// <param name="value"></param>
         /// <returns></returns>
         public delegate Boolean ArgumentSetter(String value);
+        /// <summary>
+        /// 
+        /// </summary>
+        public string setterMethodName
+        {
+            get;
+            set;
+        }
+        // ReSharper restore InconsistentNaming
+        // ReSharper restore UnassignedField.Global
     }
 
     /// <summary>
     /// Marks a class as an Action, to be displayed in the GUI listbox
     /// </summary>
-    [System.AttributeUsage(AttributeTargets.Class)]
-    public sealed class ActionCategoryAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class ActionCategoryAttribute : Attribute
     {
+
+        // ReSharper disable InconsistentNaming
+        // ReSharper disable UnassignedField.Global
         /// <summary>
         /// Marks a class as an Action, to be displayed in the GUI listbox
         /// </summary>
@@ -352,6 +406,8 @@ namespace Centipede
         /// </summary>
         public String iconName;
 
+        // ReSharper restore InconsistentNaming
+        // ReSharper restore UnassignedField.Global
     }
 
     /// <summary>
@@ -412,7 +468,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public readonly Action ErrorAction = null;
+        public readonly Action ErrorAction;
     }
 
     /// <summary>
@@ -456,50 +512,155 @@ namespace Centipede
         { }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class AskActionEventArgs : EventArgs
     {
+        /// <summary>
+        /// 
+        /// </summary>
+// ReSharper disable NotAccessedField.Global
         public String Message;
+        /// <summary>
+        /// 
+        /// </summary>
         public String Title;
+        /// <summary>
+        /// 
+        /// </summary>
         public AskEventEnums.AskType Type;
+// ReSharper disable ConvertToConstant.Global
+        /// <summary>
+        /// 
+        /// </summary>
+// ReSharper disable FieldCanBeMadeReadOnly.Global
         public AskEventEnums.DialogResult Result = AskEventEnums.DialogResult.None;
+// ReSharper restore FieldCanBeMadeReadOnly.Global
+// ReSharper restore ConvertToConstant.Global
+        /// <summary>
+        /// 
+        /// </summary>
         public AskEventEnums.MessageIcon Icon = AskEventEnums.MessageIcon.Information;
+// ReSharper restore NotAccessedField.Global
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static class AskEventEnums
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public enum AskType
         {
+            /// <summary>
+            /// 
+            /// </summary>
             AbortRetryIgnore = System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore,
+            /// <summary>
+            /// 
+            /// </summary>
             OK = System.Windows.Forms.MessageBoxButtons.OK,
+            /// <summary>
+            /// 
+            /// </summary>
             OKCancel = System.Windows.Forms.MessageBoxButtons.OKCancel,
+            /// <summary>
+            /// 
+            /// </summary>
             RetryCancel = System.Windows.Forms.MessageBoxButtons.RetryCancel,
+            /// <summary>
+            /// 
+            /// </summary>
             YesNo = System.Windows.Forms.MessageBoxButtons.YesNo,
+            /// <summary>
+            /// 
+            /// </summary>
             YesNoCancel = System.Windows.Forms.MessageBoxButtons.YesNoCancel
         }
+        /// <summary>
+        /// 
+        /// </summary>
         public enum DialogResult
-        {
+        { 
+            /// <summary>
+            /// 
+            /// </summary>
             Abort = System.Windows.Forms.DialogResult.Abort,
-
+            /// <summary>
+            /// 
+            /// </summary>
             Cancel = System.Windows.Forms.DialogResult.Cancel,
+            /// <summary>
+            /// 
+            /// </summary>
             Ignore = System.Windows.Forms.DialogResult.Ignore,
+            /// <summary>
+            /// 
+            /// </summary>
             No = System.Windows.Forms.DialogResult.No,
+            /// <summary>
+            /// 
+            /// </summary>
             None = System.Windows.Forms.DialogResult.None,
+            /// <summary>
+            /// 
+            /// </summary>
             OK = System.Windows.Forms.DialogResult.OK,
+            /// <summary>
+            /// 
+            /// </summary>
             Retry = System.Windows.Forms.DialogResult.Retry,
+            /// <summary>
+            /// 
+            /// </summary>
             Yes = System.Windows.Forms.DialogResult.Yes
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public enum MessageIcon
         {
+            /// <summary>
+            /// 
+            /// </summary>
             Asterisk = System.Windows.Forms.MessageBoxIcon.Asterisk,
+            /// <summary>
+            /// 
+            /// </summary>
             Error = System.Windows.Forms.MessageBoxIcon.Error,
+            /// <summary>
+            /// 
+            /// </summary>
             Exclamation = System.Windows.Forms.MessageBoxIcon.Exclamation,
+            /// <summary>
+            /// 
+            /// </summary>
             Hand = System.Windows.Forms.MessageBoxIcon.Hand,
+            /// <summary>
+            /// 
+            /// </summary>
             Information = System.Windows.Forms.MessageBoxIcon.Information,
+            /// <summary>
+            /// 
+            /// </summary>
             None = System.Windows.Forms.MessageBoxIcon.None,
+            /// <summary>
+            /// 
+            /// </summary>
             Question = System.Windows.Forms.MessageBoxIcon.Question,
+            /// <summary>
+            /// 
+            /// </summary>
             Stop = System.Windows.Forms.MessageBoxIcon.Stop,
+            /// <summary>
+            /// 
+            /// </summary>
             Warning = System.Windows.Forms.MessageBoxIcon.Warning
         }
     }
 }
+// ReSharper restore UnusedMember.Global

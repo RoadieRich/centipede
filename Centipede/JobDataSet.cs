@@ -1,13 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-    using System;
-using System.Data;
+﻿using System;
 
 namespace Centipede {
     //using Variable = Program.Variable;
     
     public partial class JobDataSet {
-        partial class ActionsDataTable
+        class ActionsDataTable
         {
         }
     

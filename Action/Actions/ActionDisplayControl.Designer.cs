@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
+
+
 namespace Centipede.Actions
 {
     public partial class ActionDisplayControl

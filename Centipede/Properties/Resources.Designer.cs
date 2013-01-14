@@ -60,6 +60,15 @@ namespace Centipede.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Action if false.
+        /// </summary>
+        internal static string BranchDisplayControl_BranchDisplayControl_Action_if_false {
+            get {
+                return ResourceManager.GetString("BranchDisplayControl_BranchDisplayControl_Action_if_false", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Icon Centipede {
             get {
                 object obj = ResourceManager.GetObject("Centipede", resourceCulture);
@@ -81,6 +90,15 @@ namespace Centipede.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Demo Action executed.
+        /// </summary>
+        internal static string DemoAction_DoAction_Demo_Action_executed {
+            get {
+                return ResourceManager.GetString("DemoAction_DoAction_Demo_Action_executed", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Icon generic {
             get {
                 object obj = ResourceManager.GetObject("generic", resourceCulture);
@@ -92,6 +110,42 @@ namespace Centipede.Properties {
             get {
                 object obj = ResourceManager.GetObject("If", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        internal static string MainWindow_CompletedHandler_Finished {
+            get {
+                return ResourceManager.GetString("MainWindow_CompletedHandler_Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string MainWindow_ErrorHandler_Error {
+            get {
+                return ResourceManager.GetString("MainWindow_ErrorHandler_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes?.
+        /// </summary>
+        internal static string MainWindow_LoadBtn_Click_Save_changes_ {
+            get {
+                return ResourceManager.GetString("MainWindow_LoadBtn_Click_Save_changes_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        internal static string MainWindow_LoadBtn_Click_Unsaved_Changes {
+            get {
+                return ResourceManager.GetString("MainWindow_LoadBtn_Click_Unsaved_Changes", resourceCulture);
             }
         }
         

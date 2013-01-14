@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Centipede;
 using System.Windows.Forms;
 
-namespace Centipede
+
+namespace Centipede.Actions
 {
     [ActionCategory("UI", displayName="Show Messagebox")]
     class ShowMessageBox : Action
@@ -15,18 +13,24 @@ namespace Centipede
         { }
 
         [ActionArgument]
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ConvertToConstant.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
         public String Title = "Message";
 
         [ActionArgument(displayName="Message")]
         public String MessageText = "";
 
-        private delegate void _showMessageBox();
+        // ReSharper restore FieldCanBeMadeReadOnly.Global
+        // ReSharper restore ConvertToConstant.Global
+        // ReSharper restore MemberCanBePrivate.Global
+        private delegate void ShowMessageBoxDelegate();
 
         protected override void DoAction()
         {
             String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);
-            MainWindow.Instance.Invoke(new _showMessageBox(() => MessageBox.Show(MainWindow.Instance, parsedMessage, parsedTitle)));
+            MainWindow.Instance.Invoke(new ShowMessageBoxDelegate(() => MessageBox.Show(MainWindow.Instance, parsedMessage, parsedTitle)));
         }
     }
 }

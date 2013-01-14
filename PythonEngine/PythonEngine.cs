@@ -4,23 +4,23 @@ using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
 
-namespace Centipede.PyEngine
+namespace PythonEngine
 {
     /// <summary>
     /// The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
     /// </summary>
     public class PythonEngine
     {
-        private ScriptEngine PyEngine = null;
-        private ScriptScope PyScope = null;
+        private readonly ScriptEngine _pyEngine;
+        private readonly ScriptScope _pyScope;
 
         private PythonEngine()
         {
-            if (PyEngine == null)
+            if (_pyEngine == null)
             {
-                PyEngine = Python.CreateEngine();
-                PyScope = PyEngine.CreateScope();
-                PyScope.ImportModule("sys");
+                _pyEngine = Python.CreateEngine();
+                _pyScope = _pyEngine.CreateScope();
+                _pyScope.ImportModule("sys");
 
             }
         }
@@ -31,11 +31,11 @@ namespace Centipede.PyEngine
         /// <param name="code">The code to execute</param>
         public void Execute(String code)
         {
-            ScriptSource source = PyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);;
+            ScriptSource source = _pyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
             try
             {
                 CompiledCode compiled = source.Compile();
-                compiled.Execute(PyScope);
+                compiled.Execute(_pyScope);
             }
             catch (Exception e)
             {
@@ -49,13 +49,14 @@ namespace Centipede.PyEngine
         /// <typeparam name="T">The (C#) Type to coerce the value of the expression to</typeparam>
         /// <param name="expression">Expression to evaluate</param>
         /// <returns>The result of the expression, coerced to type T</returns>
+// ReSharper disable UnusedMember.Global
         public T Evaluate<T>(String expression)
         {
             try
             {
-                ScriptSource source = PyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
+                ScriptSource source = _pyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
                 CompiledCode compiled = source.Compile();
-                return compiled.Execute<T>(PyScope);
+                return compiled.Execute<T>(_pyScope);
             }
             catch (Exception e)
             {
@@ -70,7 +71,7 @@ namespace Centipede.PyEngine
         /// <param name="value">Value to set it to</param>
         public void SetVariable(String name, Object value)
         {
-            PyScope.SetVariable(name, value);
+            _pyScope.SetVariable(name, value);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace Centipede.PyEngine
         /// <returns>The variable's value.  Will need casting to the correct type.</returns>
         public Object GetVariable(String name)
         {
-            return PyScope.GetVariable(name);
+            return _pyScope.GetVariable(name);
         }
 
         /// <summary>
@@ -91,23 +92,23 @@ namespace Centipede.PyEngine
         /// <returns>The value of the variable, cast to the appropriate C# type</returns>
         public T GetVariable<T>(String name)
         {
-            return PyScope.GetVariable<T>(name);
+            return _pyScope.GetVariable<T>(name);
         }
 
         public CompiledCode Compile(String code, SourceCodeKind kind)
         {
-            return PyEngine.CreateScriptSourceFromString(code, kind).Compile();
+            return _pyEngine.CreateScriptSourceFromString(code, kind).Compile();
         }
 
         public Boolean VariableExists(String name)
         {
-            return PyScope.ContainsVariable(name);
+            return _pyScope.ContainsVariable(name);
         }
 
         #region Singleton handling code
 
         private volatile static PythonEngine _instance;
-        private static Object _syncRoot = new Object();
+        private static readonly Object SyncRoot = new Object();
 
         /// <summary>
         /// The PyEngine Singleton.  <seealso href="http://msdn.microsoft.com/en-us/library/ff650316.aspx"/>
@@ -118,7 +119,7 @@ namespace Centipede.PyEngine
             {
                 if (_instance == null)
                 {
-                    lock (_syncRoot)
+                    lock (SyncRoot)
                     {
                         if (_instance == null)
                         {
@@ -140,7 +141,7 @@ namespace Centipede.PyEngine
         [Obsolete]
         public static implicit operator ScriptScope (PythonEngine pyEngine)
         {
-            return pyEngine.PyScope;
+            return pyEngine._pyScope;
         }
         
     }
