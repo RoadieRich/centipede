@@ -94,42 +94,53 @@ namespace Centipede.Actions
             ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
 
             Control attrValue;
-            switch (arg.GetFieldTypeCategory())
             {
+                switch (arg.GetFieldTypeCategory())
+                {
                 case FieldAndPropertyWrapper.FieldType.Boolean:
-                    attrValue = new CheckBox { Anchor = AnchorStyles.Top | AnchorStyles.Left };
-                (attrValue as CheckBox).Checked = arg.Get<Boolean>(ThisAction);
+                    CheckBox cb = new CheckBox
+                                  {
+                                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                                        Checked = arg.Get<Boolean>(ThisAction)
+                                  };
+                    cb.CheckedChanged += GetChangedHandler(arg) ?? ((sender, e) => arg.Set(ThisAction, (sender as CheckBox).Checked));
+
+                    attrValue = cb;
+
                     break;
-                //case FieldAndPropertyWrapper.FieldType.Other:
-                //case FieldAndPropertyWrapper.FieldType.String:
-                //case FieldAndPropertyWrapper.FieldType.Numeric:
+                    //case FieldAndPropertyWrapper.FieldType.Other:
+                    //case FieldAndPropertyWrapper.FieldType.String:
+                    //case FieldAndPropertyWrapper.FieldType.Numeric:
                 default:
                     attrValue = new TextBox
                                 {
-                                        Width = 250,
                                         Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
                                         Text = arg.Get<Object>(ThisAction).ToString()
                                 };
-                break;
+                    attrValue.TextChanged += GetChangedHandler(arg);
+                    break;
+                }
 
+                attrValue.Tag = arg;
+                attrValue.Leave += GetLeaveHandler(arg);
             }
 
-            //attrValue.Dock = DockStyle.Top;
-
-            attrValue.Tag = arg;
-            attrValue.TextChanged += GetTextChangedHandler(arg);
-            attrValue.Leave += GetLeaveHandler(arg);
             return new[] { attrLabel, attrValue };
         }
 
-        private EventHandler GetTextChangedHandler(FieldAndPropertyWrapper arg)
+        private Control GetDisplayControl(FieldAndPropertyWrapper fieldAndPropertyWrapper)
+        {
+            return null;
+        }
+
+        private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
-            if (argAttr.onTextChangedHandlerName == null)
+            if (argAttr.onChangedHandlerName == null)
             {
-                return delegate { };
+                return null;
             }
-            MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onTextChangedHandlerName);
+            MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onChangedHandlerName);
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
@@ -139,11 +150,11 @@ namespace Centipede.Actions
 
             if (argAttr.onLeaveHandlerName == null)
             {
-                if (argAttr.onTextChangedHandlerName == null)
+                if (argAttr.onChangedHandlerName == null)
                 {
                     return attrValue_TextChanged;
                 }
-                return delegate { };
+                return null;
             }
             Type actionType = ThisAction.GetType();
             MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
@@ -327,7 +338,6 @@ namespace Centipede.Actions
             }
 
         }
-
     }
 
     /// <summary>

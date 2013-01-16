@@ -7,8 +7,8 @@ namespace Centipede.Actions
 {
     abstract class BaseTextFileAction : Action
     {
-        protected BaseTextFileAction(String name, Dictionary<String, Object> variables)
-            : base(name, variables)
+        protected BaseTextFileAction(String name, Dictionary<String, Object> v)
+            : base(name, v)
         { }
     }
 
@@ -16,8 +16,8 @@ namespace Centipede.Actions
     class OpenTextFileAction : BaseTextFileAction
 // ReSharper restore UnusedMember.Global
     {
-        public OpenTextFileAction(Dictionary<String, Object> variables)
-            : base("Open Text File", variables)
+        public OpenTextFileAction(Dictionary<String, Object> v)
+            : base("Open Text File", v)
         { }
 
         [ActionArgument(usage="Filename to open")]

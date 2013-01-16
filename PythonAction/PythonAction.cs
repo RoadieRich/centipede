@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Centipede;
+using Centipede.Actions;
 using PythonEngine;
+using Action = Centipede.Action;
 
 
 namespace PyAction
@@ -17,8 +19,8 @@ namespace PyAction
 // ReSharper restore ClassNeverInstantiated.Global
     {
 
-        public PythonAction(Dictionary<String, Object> variables)
-            : base("Python Action", variables)
+        public PythonAction(Dictionary<String, Object> v)
+            : base("Python Action", v)
         { }
 
         [ActionArgument(usage = "Source code to be executed")]
@@ -72,25 +74,24 @@ namespace PyAction
         }
 
     }
+/*
+    public class PythonCondition : BranchCondition
+    {
+        public PythonCondition(Action action)
+                : base(action)
+        { }
 
-    //class PythonCondition : BranchCondition
-    //{
-    //    public PythonCondition(String source)
-    //        : base()
-    //    {
-    //        Source = source;
-    //    }
+        public String Source = @"true";
 
-    //    public override Boolean Test(Action act)
-    //    {
-    //        return PythonEngine.Instance.Evaluate<Boolean>(Source);
-    //    }
-
-    //    public string Source;
-
-    //    public override String ToString()
-    //    {
-    //        return "(Python condition)";
-    //    }
-    //}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override bool Test()
+        {
+            PythonEngine.PythonEngine pyEngine = PythonEngine.PythonEngine.Instance;
+            return pyEngine.Evaluate<Boolean>(Source);
+        }
+    }
+*/
 }

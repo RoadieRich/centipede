@@ -10,8 +10,8 @@ namespace Centipede.Actions
     [ActionCategory("UI")]
     public class DemoAction : Action
     {
-        public DemoAction(Dictionary<String, Object> variables)
-            : base("Demo Action", variables)
+        public DemoAction(Dictionary<String, Object> v)
+            : base("Demo Action", v)
         {
             Test2 = "Text";
         }
@@ -21,8 +21,7 @@ namespace Centipede.Actions
             MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
                                           Test1, 
                                           ParseStringForVariable(Test2)
-                           )
-                           ,
+                           ),
                            Resources.DemoAction_DoAction_Demo_Action_executed
             );
         }
@@ -30,7 +29,7 @@ namespace Centipede.Actions
         [ActionArgument(
             usage = "First Value to display (int)",
             displayName = "Test 1",
-            setterMethodName = "Test1Set"
+            onChangedHandlerName = "Test1Set"
         )]
 // ReSharper disable MemberCanBePrivate.Global
         public Int32 Test1 = 1;

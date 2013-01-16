@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 
 namespace Centipede.Actions
@@ -8,29 +7,26 @@ namespace Centipede.Actions
     /// <summary>
     /// 
     /// </summary>
-// ReSharper disable ClassNeverInstantiated.Global
-    public class BranchAction : Action
-// ReSharper restore ClassNeverInstantiated.Global
-    {
 
+    [ActionCategory("Flow Control", displayName="Branch", displayControl="BranchDisplayControl")]
+    // ReSharper disable ClassNeverInstantiated.Global
+    public class BranchAction : Action
+    {
         /// <summary>
         /// Basic branch action - has two possible "next" actions, 
         /// which are chosen according to condition.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="variables"></param>
-        /// <param name="condition"></param>
-        public BranchAction(String name, Dictionary<String, Object> variables, BranchCondition condition)
-            : base(name, variables)
+        /// <param name="v"></param>
+        public BranchAction(Dictionary<String, Object> v)
+            : base("Branch", v)
         {
-            Condition = condition;
         }
 
         /// <summary>
         /// 
         /// </summary>
         [ActionArgument]
-        public BranchCondition Condition;
+        public String ConditionSource = "True";
 
         /// <summary>
         /// 
@@ -39,11 +35,7 @@ namespace Centipede.Actions
             usage = "Next action if condition returns false",
             displayName = "Next Action if False"
         )]
-// ReSharper disable UnassignedField.Global
-// ReSharper disable MemberCanBePrivate.Global
         public Action NextIfFalse;
-// ReSharper restore MemberCanBePrivate.Global
-// ReSharper restore UnassignedField.Global
 
         private Boolean _result;
 
@@ -52,7 +44,10 @@ namespace Centipede.Actions
         /// </summary>
         protected override void DoAction()
         {
-            _result = Condition.Test(this);
+            PythonEngine.PythonEngine pye = PythonEngine.PythonEngine.Instance;
+            
+            var scope = pye.GetNewScope(Variables);
+            _result = pye.Evaluate<bool>(ConditionSource, scope);
         }
 
         /// <summary>
@@ -61,26 +56,9 @@ namespace Centipede.Actions
         /// <returns></returns>
         public override Action GetNext()
         {
-            if (_result)
-            {
-                return Next;
-            }
-            return NextIfFalse;
+            return _result ? Next : NextIfFalse;
         }
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public abstract class BranchCondition
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public abstract Boolean Test(Action action);
-
-        public abstract Control[] MakeControls();
-    }
+    // ReSharper restore ClassNeverInstantiated.Global
+    
 }

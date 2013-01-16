@@ -24,17 +24,17 @@ namespace Centipede
         /// 
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="variables"></param>
-        protected Action(String name, Dictionary<String, Object> variables)
+        /// <param name="v"></param>
+        protected Action(String name, Dictionary<String, Object> v)
         {
             Name = name;
-            Variables = variables;
+            Variables = v;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        protected readonly Dictionary<String, Object> Variables;
+        public readonly Dictionary<String, Object> Variables;
 
         /// <summary>
         /// 
@@ -321,14 +321,13 @@ namespace Centipede
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class ActionArgumentAttribute : Attribute
     {
-
     // ReSharper disable InconsistentNaming
     // ReSharper disable UnassignedField.Global
+     
         /// <summary>
         /// 
         /// </summary>
         public String displayName;
-
 
         /// <summary>
         /// 
@@ -343,22 +342,18 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public string onTextChangedHandlerName;
+        public string onChangedHandlerName;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public delegate Boolean ArgumentSetter(String value);
+        public string setterMethodName;
+
         /// <summary>
         /// 
         /// </summary>
-        public string setterMethodName
-        {
-            get;
-            set;
-        }
+        public string displayControl;
+
         // ReSharper restore InconsistentNaming
         // ReSharper restore UnassignedField.Global
     }

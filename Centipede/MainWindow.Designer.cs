@@ -39,6 +39,8 @@
             this.UIActTab = new System.Windows.Forms.TabPage();
             this.UIActListBox = new System.Windows.Forms.ListView();
             this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
+            this.FlowControlActionTab = new System.Windows.Forms.TabPage();
+            this.FlowControlListBox = new System.Windows.Forms.ListView();
             this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.VarsTab = new System.Windows.Forms.TabPage();
@@ -62,7 +64,6 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.jobDataSet1 = new Centipede.JobDataSet();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
             this.GetFileNameDialogue = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -70,6 +71,7 @@
             this.splitContainer1.SuspendLayout();
             this.AddActionTabs.SuspendLayout();
             this.UIActTab.SuspendLayout();
+            this.FlowControlActionTab.SuspendLayout();
             this.ActionsVarsTabControl.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             this.VarsTab.SuspendLayout();
@@ -105,6 +107,7 @@
             // AddActionTabs
             // 
             this.AddActionTabs.Controls.Add(this.UIActTab);
+            this.AddActionTabs.Controls.Add(this.FlowControlActionTab);
             resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
             this.AddActionTabs.HotTrack = true;
             this.AddActionTabs.Multiline = true;
@@ -134,6 +137,23 @@
             this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
             this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
             this.ActionIcons.Images.SetKeyName(1, "If.ico");
+            // 
+            // FlowControlActionTab
+            // 
+            this.FlowControlActionTab.Controls.Add(this.FlowControlListBox);
+            resources.ApplyResources(this.FlowControlActionTab, "FlowControlActionTab");
+            this.FlowControlActionTab.Name = "FlowControlActionTab";
+            this.FlowControlActionTab.UseVisualStyleBackColor = true;
+            // 
+            // FlowControlListBox
+            // 
+            resources.ApplyResources(this.FlowControlListBox, "FlowControlListBox");
+            this.FlowControlListBox.LargeImageList = this.ActionIcons;
+            this.FlowControlListBox.Name = "FlowControlListBox";
+            this.FlowControlListBox.SmallImageList = this.ActionIcons;
+            this.FlowControlListBox.UseCompatibleStateImageBehavior = false;
+            this.FlowControlListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
+            this.FlowControlListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             // 
             // ActionsVarsTabControl
             // 
@@ -284,13 +304,6 @@
             resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // button1
-            // 
-            resources.ApplyResources(this.button1, "button1");
-            this.button1.Name = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // GetFileNameDialogue
             // 
             this.GetFileNameDialogue.AddExtension = false;
@@ -301,7 +314,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.RunButton);
             this.Controls.Add(this.progressBar1);
@@ -318,6 +330,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.AddActionTabs.ResumeLayout(false);
             this.UIActTab.ResumeLayout(false);
+            this.FlowControlActionTab.ResumeLayout(false);
             this.ActionsVarsTabControl.ResumeLayout(false);
             this.ActionsTab.ResumeLayout(false);
             this.VarsTab.ResumeLayout(false);
@@ -335,8 +348,9 @@
         private System.Windows.Forms.TabPage UIActTab;
         private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
-        private System.Windows.Forms.Button button1;
         internal System.Windows.Forms.OpenFileDialog GetFileNameDialogue;
+        private System.Windows.Forms.TabPage FlowControlActionTab;
+        private System.Windows.Forms.ListView FlowControlListBox;
     }
 }
 

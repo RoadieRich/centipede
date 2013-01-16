@@ -9,6 +9,7 @@ namespace Centipede
         internal ActionFactory(String displayName, Type actionType) : base(displayName)
         {
             _actionType = actionType;
+            ImageKey = @"Generic";
         }
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType)
@@ -17,10 +18,10 @@ namespace Centipede
             Text = displayName;
             ToolTipText = catAttribute.helpText;
             _actionType = pluginType;
+            ImageKey = @"Generic";
         }
 
         private readonly Type _actionType;
-        
 
         public Action Generate()
         {

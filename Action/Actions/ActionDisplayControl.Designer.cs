@@ -39,11 +39,11 @@ namespace Centipede.Actions
             this.StatusIcons = new System.Windows.Forms.ImageList(this.components);
             this.StatusIconBox = new System.Windows.Forms.PictureBox();
             this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuCut = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,21 +59,23 @@ namespace Centipede.Actions
             // 
             // NameLabel
             // 
-            this.NameLabel.AutoSize = true;
+            this.NameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.NameLabel.AutoEllipsis = true;
             this.NameLabel.BackColor = System.Drawing.Color.Transparent;
-            this.NameLabel.Location = new System.Drawing.Point(32, 10);
+            this.NameLabel.Location = new System.Drawing.Point(55, 8);
             this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(35, 13);
+            this.NameLabel.Size = new System.Drawing.Size(1341, 16);
             this.NameLabel.TabIndex = 0;
-            this.NameLabel.Text = "label1";
+            this.NameLabel.Text = "<NAME>";
             // 
             // ExpandButton
             // 
             this.ExpandButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ExpandButton.Location = new System.Drawing.Point(3, 3);
+            this.ExpandButton.Location = new System.Drawing.Point(4, 4);
             this.ExpandButton.Margin = new System.Windows.Forms.Padding(0);
             this.ExpandButton.Name = "ExpandButton";
-            this.ExpandButton.Size = new System.Drawing.Size(26, 26);
+            this.ExpandButton.Size = new System.Drawing.Size(48, 48);
             this.ExpandButton.TabIndex = 1;
             this.ExpandButton.Text = "+";
             this.ExpandButton.UseVisualStyleBackColor = true;
@@ -89,12 +91,12 @@ namespace Centipede.Actions
             this.AttributeTable.ColumnCount = 2;
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.AttributeTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.AttributeTable.Location = new System.Drawing.Point(4, 34);
+            this.AttributeTable.Location = new System.Drawing.Point(4, 53);
             this.AttributeTable.MinimumSize = new System.Drawing.Size(10, 10);
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(139, 10);
+            this.AttributeTable.Size = new System.Drawing.Size(1446, 283);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -111,21 +113,21 @@ namespace Centipede.Actions
             this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusIconBox.BackColor = System.Drawing.Color.Transparent;
             this.StatusIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.StatusIconBox.Location = new System.Drawing.Point(117, 3);
+            this.StatusIconBox.Location = new System.Drawing.Point(1402, 4);
             this.StatusIconBox.Name = "StatusIconBox";
-            this.StatusIconBox.Size = new System.Drawing.Size(26, 26);
-            this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.StatusIconBox.Size = new System.Drawing.Size(48, 48);
+            this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.StatusIconBox.TabIndex = 3;
             this.StatusIconBox.TabStop = false;
             // 
             // ActionContextMenu
             // 
             this.ActionContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
             this.ActMenuMoveUp,
             this.ActMenuMoveDown,
             this.toolStripSeparator3,
             this.ActMenuUndo,
-            this.toolStripSeparator1,
             this.ActMenuCut,
             this.ActMenuCopy,
             this.ActMenuPaste,
@@ -134,7 +136,12 @@ namespace Centipede.Actions
             this.ActMenuSelectAll});
             this.ActionContextMenu.Name = "ActionContextMenu";
             this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(143, 220);
+            this.ActionContextMenu.Size = new System.Drawing.Size(143, 198);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
             // 
             // ActMenuMoveUp
             // 
@@ -163,11 +170,6 @@ namespace Centipede.Actions
             this.ActMenuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.ActMenuUndo.Size = new System.Drawing.Size(142, 22);
             this.ActMenuUndo.Text = "&Undo";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
             // 
             // ActMenuCut
             // 
@@ -219,10 +221,11 @@ namespace Centipede.Actions
             // 
             this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommentTextBox.Location = new System.Drawing.Point(104, 7);
+            this.CommentTextBox.Location = new System.Drawing.Point(55, 32);
             this.CommentTextBox.Name = "CommentTextBox";
-            this.CommentTextBox.Size = new System.Drawing.Size(7, 20);
+            this.CommentTextBox.Size = new System.Drawing.Size(1341, 20);
             this.CommentTextBox.TabIndex = 4;
+            this.CommentTextBox.WordWrap = false;
             this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
             // 
             // ActionDisplayControl
@@ -235,13 +238,13 @@ namespace Centipede.Actions
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
-            this.Controls.Add(this.StatusIconBox);
-            this.Controls.Add(this.CommentTextBox);
-            this.Controls.Add(this.AttributeTable);
-            this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.NameLabel);
+            this.Controls.Add(this.CommentTextBox);
+            this.Controls.Add(this.ExpandButton);
+            this.Controls.Add(this.AttributeTable);
+            this.Controls.Add(this.StatusIconBox);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(146, 47);
+            this.Size = new System.Drawing.Size(1453, 342);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -259,7 +262,6 @@ namespace Centipede.Actions
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem ActMenuUndo;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem ActMenuCut;
         private System.Windows.Forms.ToolStripMenuItem ActMenuCopy;
         private System.Windows.Forms.ToolStripMenuItem ActMenuPaste;
@@ -275,6 +277,7 @@ namespace Centipede.Actions
         /// </summary>
         protected System.Windows.Forms.TableLayoutPanel AttributeTable;
         protected Label NameLabel;
+        private ToolStripSeparator toolStripSeparator1;
 
 
     }

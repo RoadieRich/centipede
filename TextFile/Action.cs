@@ -12,8 +12,8 @@ namespace TextFile
     public class OpenTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        public OpenTextFile(Dictionary<String, Object> variables) 
-            : base("Open Text File", variables)
+        public OpenTextFile(Dictionary<String, Object> v) 
+            : base("Open Text File", v)
         { }
 
         // ReSharper disable MemberCanBePrivate.Global
@@ -47,8 +47,8 @@ namespace TextFile
     public class SaveTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        SaveTextFile(Dictionary<String, Object> variables)
-            : base("Save Text File", variables)
+        SaveTextFile(Dictionary<String, Object> v)
+            : base("Save Text File", v)
         { }
 
         // ReSharper disable MemberCanBePrivate.Global
@@ -81,8 +81,8 @@ namespace TextFile
     public class ReadLineFromTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        public ReadLineFromTextFile(Dictionary<String, Object> variables)
-            : base("Read Line", variables)
+        public ReadLineFromTextFile(Dictionary<String, Object> v)
+            : base("Read Line", v)
         { }
 
         // ReSharper disable MemberCanBePrivate.Global
