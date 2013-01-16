@@ -160,4 +160,7 @@
   <data name="DemoAction_DoAction_Demo_Action_executed" xml:space="preserve">
     <value>Demo Action executed</value>
   </data>
+  <data name="BranchDisplayControl_BranchDisplayControl_Condition" xml:space="preserve">
+    <value>Condition</value>
+  </data>
 </root>

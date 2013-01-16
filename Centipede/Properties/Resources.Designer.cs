@@ -69,6 +69,15 @@ namespace Centipede.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Condition.
+        /// </summary>
+        internal static string BranchDisplayControl_BranchDisplayControl_Condition {
+            get {
+                return ResourceManager.GetString("BranchDisplayControl_BranchDisplayControl_Condition", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Icon Centipede {
             get {
                 object obj = ResourceManager.GetObject("Centipede", resourceCulture);

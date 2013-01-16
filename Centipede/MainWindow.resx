@@ -183,75 +183,6 @@
   <data name="&gt;&gt;splitContainer1.Panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="UIActListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <metadata name="ActionIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>270, 17</value>
-  </metadata>
-  <data name="ActionIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
-        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
-        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
-        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BdwHZAv8BeAHTAv8BoAHmAv8DYgHPAxYBHOAAA2YB9gGB
-        Ae0C/wGBAegC/wGAAeAC/wHVAfYC/wFuAdAC/wN8AfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AX4B3gL/AXMB1gb/AygBOwMZASADEgEXBAUIAAMvAf8DLwH/Ay8B/wMvAf8DLwH/Ay8B/wwA
-        Ay8B/wMvAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAMv
-        Af8UAAMvAf8DLwH/kAADWgG5AcwBugGlAf8BiAGBAXUB/wKBAXQF/wGBAe0C/wGBAe0C/wGBAe0C/wGB
-        AesC/wGBAeMC/wF6AdsC/wFvAdIC/wFoAcsC/wGdAeQC/wNiAc8DFwEdEAADLwH/FAADLwH/Ay8B/5AA
-        A2YB9gGhAYEBegH/AY8BgQFwAf8BhAGBAXIB/wHxAe4B6gH/AZsB9AL/AYEB7QL/AYEB7QL/AYEB7QL/
-        AYEB6gL/AYEB4gL/AXgB2QL/AW0B0QL/AW8BzAL/A3wB+QMeASkQAAMvAf8UAAMvAf8DLwH/kAAE/wGk
-        AYEBbAH/AZkBgQFuAf8BjQGBAXEB/wGjAY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BgQHgAv8BdgHY
-        Av8BawHPBv8DHwEqEAADLwH/FAADLwH/Ay8B/5AAA3IB9QGyAYIBdgH/AaIBgQFsAf8BlgGBAW8B/wGL
-        AYEBcQH/AoEBcwH/AoEBdAH/AoEBdAH/AoEBdQH/AawBnAGJAf8B7QH9Av8BgQHnAv8BfgHfAv8BfwHZ
-        Av8DfwH4AxkBIQQAAy8B/wMvAf8DLwH/Ay8B/wwAAy8B/wMvAf8DLwH/Ay8B/wMvAf8DLwH/iAADWQG2
-        AdwBwgGiAf8BrQGBAW4B/wGgAYEBbQH/AZQBgQFvAf8BiQGBAXEB/wKBAXQB/wKBAXQB/wKBAXQB/wKB
-        AXYF/wGBAewC/wGBAeYC/wGsAe8C/wNdAcQDCgELKAADLwH/Ay8B/5QAA1sBuAN1AfcQ/wHJAb4BsQH/
-        AoEBdAH/AoEBdAn/A3IB9QNbAbgDHAElFAADLwH/FAADLwH/Ay8B/6AABP8BmwGBAW4B/wGQAYEBcAH/
-        AYUBgQFyAf8CgQF0Af8CgQF0Bf8DHgEpIAADLwH/GAADLwH/Ay8B/wMvAf8DLwH/lAADcgH1AaYBgQFv
-        Af8B6AHfAdMB/wGOAYEBcAH/AYIBgQFzAf8CgQF4Af8DfwH4AxkBIeAAA1kBtgHYAcABowH/AagBgQF4
-        Af8BlwGBAW8B/wGTAYEBfAH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuAN1AfcE/wNyAfUDWgG5AxwBJdQA
-        AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
-        Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
-        AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
-</value>
-  </data>
-  <data name="UIActListBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="UIActListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>332, 131</value>
-  </data>
-  <data name="UIActListBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Name" xml:space="preserve">
-    <value>UIActListBox</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Parent" xml:space="preserve">
-    <value>UIActTab</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="UIActTab.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 22</value>
-  </data>
-  <data name="UIActTab.Size" type="System.Drawing.Size, System.Drawing">
-    <value>332, 131</value>
-  </data>
-  <data name="UIActTab.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="UIActTab.Text" xml:space="preserve">
-    <value>UI</value>
-  </data>
   <data name="&gt;&gt;UIActTab.Name" xml:space="preserve">
     <value>UIActTab</value>
   </data>
@@ -263,6 +194,18 @@
   </data>
   <data name="&gt;&gt;UIActTab.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Name" xml:space="preserve">
+    <value>FlowControlActionTab</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Parent" xml:space="preserve">
+    <value>AddActionTabs</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="AddActionTabs.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -321,8 +264,209 @@
   <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;UIActListBox.Name" xml:space="preserve">
+    <value>UIActListBox</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Parent" xml:space="preserve">
+    <value>UIActTab</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="UIActTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="UIActTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>332, 131</value>
+  </data>
+  <data name="UIActTab.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="UIActTab.Text" xml:space="preserve">
+    <value>UI</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Name" xml:space="preserve">
+    <value>UIActTab</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.Parent" xml:space="preserve">
+    <value>AddActionTabs</value>
+  </data>
+  <data name="&gt;&gt;UIActTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="UIActListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <metadata name="ActionIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>270, 17</value>
+  </metadata>
+  <data name="ActionIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABO
+        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
+        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BeQHZAv8BegHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
+        Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wFwAdAC/wN6AfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
+        AYEB5wL/AYAB3gL/AXUB1gb/AygBOwMZASADEgEXBAUIAAMxAf8DMQH/AzEB/wMxAf8DMQH/AzEB/wwA
+        AzEB/wMxAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAMx
+        Af8UAAMxAf8DMQH/kAADWgG5AcwBugGlAf8BiAGBAXcB/wKBAXYF/wGBAe0C/wGBAe0C/wGBAe0C/wGB
+        AesC/wGBAeMC/wF8AdsC/wFxAdIC/wFqAcsC/wGdAeQC/wNiAc8DFwEdEAADMQH/FAADMQH/AzEB/5AA
+        A2QB9gGhAYEBfAH/AY8BgQFyAf8BhAGBAXQB/wHxAe4B6gH/AZsB9AL/AYEB7QL/AYEB7QL/AYEB7QL/
+        AYEB6gL/AYEB4gL/AXoB2QL/AW8B0QL/AXEBzAL/A3oB+QMeASkQAAMxAf8UAAMxAf8DMQH/kAAE/wGk
+        AYEBbgH/AZkBgQFwAf8BjQGBAXMB/wGjAY4BgQH/AfAB7gHqDf8B7QH9Av8BhQHtAv8BgQHgAv8BeAHY
+        Av8BbQHPBv8DHwEqEAADMQH/FAADMQH/AzEB/5AAA3IB9QGyAYIBeAH/AaIBgQFuAf8BlgGBAXEB/wGL
+        AYEBcwH/AoEBdQH/AoEBdgH/AoEBdgH/AoEBdwH/AawBnAGJAf8B7QH9Av8BgQHnAv8BgAHfAv8BgQHZ
+        Av8DfwH4AxkBIQQAAzEB/wMxAf8DMQH/AzEB/wwAAzEB/wMxAf8DMQH/AzEB/wMxAf8DMQH/iAADWQG2
+        AdwBwgGiAf8BrQGBAXAB/wGgAYEBbwH/AZQBgQFxAf8BiQGBAXMB/wKBAXYB/wKBAXYB/wKBAXYB/wKB
+        AXgF/wGBAewC/wGBAeYC/wGsAe8C/wNdAcQDCgELKAADMQH/AzEB/5QAA1sBuANzAfcQ/wHJAb4BsQH/
+        AoEBdgH/AoEBdgn/A3IB9QNbAbgDHAElFAADMQH/FAADMQH/AzEB/6AABP8BmwGBAXAB/wGQAYEBcgH/
+        AYUBgQF0Af8CgQF2Af8CgQF2Bf8DHgEpIAADMQH/GAADMQH/AzEB/wMxAf8DMQH/lAADcgH1AaYBgQFx
+        Af8B6AHfAdMB/wGOAYEBcgH/AYIBgQF1Af8CgQF6Af8DfwH4AxkBIeAAA1kBtgHYAcABowH/AagBgQF6
+        Af8BlwGBAXEB/wGTAYEBfgH/AcQBtwGoAf8DXQHEAwoBC+QAA1sBuANzAfcE/wNyAfUDWgG5AxwBJdQA
+        AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
+        Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
+        AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
+</value>
+  </data>
+  <data name="UIActListBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="UIActListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>332, 131</value>
+  </data>
+  <data name="UIActListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Name" xml:space="preserve">
+    <value>UIActListBox</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.Parent" xml:space="preserve">
+    <value>UIActTab</value>
+  </data>
+  <data name="&gt;&gt;UIActListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Name" xml:space="preserve">
+    <value>FlowControlListBox</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Parent" xml:space="preserve">
+    <value>FlowControlActionTab</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="FlowControlActionTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="FlowControlActionTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="FlowControlActionTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>332, 131</value>
+  </data>
+  <data name="FlowControlActionTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="FlowControlActionTab.Text" xml:space="preserve">
+    <value>Flow Control</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Name" xml:space="preserve">
+    <value>FlowControlActionTab</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.Parent" xml:space="preserve">
+    <value>AddActionTabs</value>
+  </data>
+  <data name="&gt;&gt;FlowControlActionTab.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="FlowControlListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="FlowControlListBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="FlowControlListBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>326, 125</value>
+  </data>
+  <data name="FlowControlListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Name" xml:space="preserve">
+    <value>FlowControlListBox</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.Parent" xml:space="preserve">
+    <value>FlowControlActionTab</value>
+  </data>
+  <data name="&gt;&gt;FlowControlListBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="ActionsVarsTabControl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Name" xml:space="preserve">
+    <value>ActionsTab</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.Parent" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;ActionsTab.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Name" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Parent" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ActionsVarsTabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="ActionsVarsTabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>354, 384</value>
+  </data>
+  <data name="ActionsVarsTabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Name" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ActionsVarsTabControl.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="ActionsTab.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>
@@ -351,9 +495,81 @@
   <data name="&gt;&gt;ActionsTab.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;VarDataGridView.Name" xml:space="preserve">
+    <value>VarDataGridView</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Parent" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="VarsTab.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="VarsTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="VarsTab.Size" type="System.Drawing.Size, System.Drawing">
+    <value>346, 358</value>
+  </data>
+  <data name="VarsTab.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="VarsTab.Text" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Name" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.Parent" xml:space="preserve">
+    <value>ActionsVarsTabControl</value>
+  </data>
+  <data name="&gt;&gt;VarsTab.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <metadata name="VarsContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="VarsContextMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 148</value>
+  </data>
+  <data name="&gt;&gt;VarsContextMenu.Name" xml:space="preserve">
+    <value>VarsContextMenu</value>
+  </data>
+  <data name="&gt;&gt;VarsContextMenu.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="VarDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="VarDataGridView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="VarDataGridView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>441, 439</value>
+  </data>
+  <data name="VarDataGridView.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Name" xml:space="preserve">
+    <value>VarDataGridView</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.Parent" xml:space="preserve">
+    <value>VarsTab</value>
+  </data>
+  <data name="&gt;&gt;VarDataGridView.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="VarMenuUndo.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -417,87 +633,6 @@
   <data name="VarMenuSelectAll.Text" xml:space="preserve">
     <value>Select &amp;All</value>
   </data>
-  <data name="VarsContextMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 148</value>
-  </data>
-  <data name="&gt;&gt;VarsContextMenu.Name" xml:space="preserve">
-    <value>VarsContextMenu</value>
-  </data>
-  <data name="&gt;&gt;VarsContextMenu.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="VarDataGridView.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="VarDataGridView.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="VarDataGridView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>441, 439</value>
-  </data>
-  <data name="VarDataGridView.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;VarDataGridView.Name" xml:space="preserve">
-    <value>VarDataGridView</value>
-  </data>
-  <data name="&gt;&gt;VarDataGridView.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;VarDataGridView.Parent" xml:space="preserve">
-    <value>VarsTab</value>
-  </data>
-  <data name="&gt;&gt;VarDataGridView.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="VarsTab.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 22</value>
-  </data>
-  <data name="VarsTab.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="VarsTab.Size" type="System.Drawing.Size, System.Drawing">
-    <value>447, 445</value>
-  </data>
-  <data name="VarsTab.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="VarsTab.Text" xml:space="preserve">
-    <value>Variables</value>
-  </data>
-  <data name="&gt;&gt;VarsTab.Name" xml:space="preserve">
-    <value>VarsTab</value>
-  </data>
-  <data name="&gt;&gt;VarsTab.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;VarsTab.Parent" xml:space="preserve">
-    <value>ActionsVarsTabControl</value>
-  </data>
-  <data name="&gt;&gt;VarsTab.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="ActionsVarsTabControl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
-  </data>
-  <data name="ActionsVarsTabControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>354, 384</value>
-  </data>
-  <data name="ActionsVarsTabControl.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;ActionsVarsTabControl.Name" xml:space="preserve">
-    <value>ActionsVarsTabControl</value>
-  </data>
-  <data name="&gt;&gt;ActionsVarsTabControl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ActionsVarsTabControl.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;ActionsVarsTabControl.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
   <metadata name="OtherActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>423, 17</value>
   </metadata>
@@ -508,21 +643,21 @@
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABM
         BAAAAk1TRnQBSQFMAwEBAAEEAQABBAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
         ARADAAEBAQABIAYAARAmAAQGAxQBGgMZASEDGQEhAxMBGAQF5AADGgEjA18BwwN/AfgE/wN/AfgDXwHN
-        AzMBUAQG4AADWwG4AbMB9QL/AYEB4wL/AXcB2QL/AXgB0wL/AaAB5gL/A2IBzwMWARzgAANmAfYBgQHt
-        Av8BgQHoAv8BgAHgAv8B1QH2Av8BbgHQAv8DfAH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wGB
-        AecC/wF+Ad4C/wFzAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgN/AfgI/wGBAe0C/wGBAe0C/wG+
-        AfcS/wN/AfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAXUB/wKBAXQF/wGBAe0C/wGBAe0C/wGB
-        Ae0C/wGBAesC/wGBAeMC/wF6AdsC/wFvAdIC/wFoAcsC/wGdAeQC/wNiAc8DFwEdwAADZgH2AaEBgQF6
-        Af8BjwGBAXAB/wGEAYEBcgH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BeAHZAv8BbQHRAv8BbwHMAv8DfAH5Ax4BKcAABP8BpAGBAWwB/wGZAYEBbgH/AY0BgQFxAf8BowGO
-        AYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AYEB4AL/AXYB2AL/AWsBzwb/Ax8BKsAAA3IB9QGyAYIBdgH/
-        AaIBgQFsAf8BlgGBAW8B/wGLAYEBcQH/AoEBcwH/AoEBdAH/AoEBdAH/AoEBdQH/AawBnAGJAf8B7QH9
-        Av8BgQHnAv8BfgHfAv8BfwHZAv8DfwH4AxkBIcAAA1kBtgHcAcIBogH/Aa0BgQFuAf8BoAGBAW0B/wGU
-        AYEBbwH/AYkBgQFxAf8CgQF0Af8CgQF0Af8CgQF0Af8CgQF2Bf8BgQHsAv8BgQHmAv8BrAHvAv8DXQHE
-        AwoBC8QAA1sBuAN1AfcQ/wHJAb4BsQH/AoEBdAH/AoEBdAn/A3IB9QNbAbgDHAEl1AAE/wGbAYEBbgH/
-        AZABgQFwAf8BhQGBAXIB/wKBAXQB/wKBAXQF/wMeASngAANyAfUBpgGBAW8B/wHoAd8B0wH/AY4BgQFw
-        Af8BggGBAXMB/wKBAXgB/wN/AfgDGQEh4AADWQG2AdgBwAGjAf8BqAGBAXgB/wGXAYEBbwH/AZMBgQF8
-        Af8BxAG3AagB/wNdAcQDCgEL5AADWwG4A3UB9wT/A3IB9QNaAbkDHAEl1AABQgFNAT4HAAE+AwABKAMA
+        AzMBUAQG4AADWwG4AbMB9QL/AYEB4wL/AXkB2QL/AXoB0wL/AaAB5gL/A2IBzwMWARzgAANkAfYBgQHt
+        Av8BgQHoAv8BgQHgAv8B1QH2Av8BcAHQAv8DegH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wGB
+        AecC/wGAAd4C/wF1AdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgN/AfgI/wGBAe0C/wGBAe0C/wG+
+        AfcS/wN/AfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAGBAXcB/wKBAXYF/wGBAe0C/wGBAe0C/wGB
+        Ae0C/wGBAesC/wGBAeMC/wF8AdsC/wFxAdIC/wFqAcsC/wGdAeQC/wNiAc8DFwEdwAADZAH2AaEBgQF8
+        Af8BjwGBAXIB/wGEAYEBdAH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
+        Av8BegHZAv8BbwHRAv8BcQHMAv8DegH5Ax4BKcAABP8BpAGBAW4B/wGZAYEBcAH/AY0BgQFzAf8BowGO
+        AYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AYEB4AL/AXgB2AL/AW0Bzwb/Ax8BKsAAA3IB9QGyAYIBeAH/
+        AaIBgQFuAf8BlgGBAXEB/wGLAYEBcwH/AoEBdQH/AoEBdgH/AoEBdgH/AoEBdwH/AawBnAGJAf8B7QH9
+        Av8BgQHnAv8BgAHfAv8BgQHZAv8DfwH4AxkBIcAAA1kBtgHcAcIBogH/Aa0BgQFwAf8BoAGBAW8B/wGU
+        AYEBcQH/AYkBgQFzAf8CgQF2Af8CgQF2Af8CgQF2Af8CgQF4Bf8BgQHsAv8BgQHmAv8BrAHvAv8DXQHE
+        AwoBC8QAA1sBuANzAfcQ/wHJAb4BsQH/AoEBdgH/AoEBdgn/A3IB9QNbAbgDHAEl1AAE/wGbAYEBcAH/
+        AZABgQFyAf8BhQGBAXQB/wKBAXYB/wKBAXYF/wMeASngAANyAfUBpgGBAXEB/wHoAd8B0wH/AY4BgQFy
+        Af8BggGBAXUB/wKBAXoB/wN/AfgDGQEh4AADWQG2AdgBwAGjAf8BqAGBAXoB/wGXAYEBcQH/AZMBgQF+
+        Af8BxAG3AagB/wNdAcQDCgEL5AADWwG4A3MB9wT/A3IB9QNaAbkDHAEl1AABQgFNAT4HAAE+AwABKAMA
         AUADAAEQAwABAQEAAQEFAAGAFwAD/wEAAfgBHwYAAfABDwYAAfABDwYAAfABDwYAAYABATYAAYABAQYA
         AfABDwYAAfABDwYAAfABDwYAAfgBHwYACw==
 </value>
@@ -552,7 +687,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;LoadBtn.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="progressBar1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
@@ -576,7 +711,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;progressBar1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="RunButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
@@ -603,7 +738,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;RunButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="SaveButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -630,7 +765,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <metadata name="updateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>156, 17</value>
@@ -677,30 +812,6 @@
   </metadata>
   <data name="saveFileDialog1.Filter" xml:space="preserve">
     <value>Centipede File|*.100p|All files|*.*</value>
-  </data>
-  <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 176</value>
-  </data>
-  <data name="button1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="button1.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="button1.Text" xml:space="preserve">
-    <value>button1</value>
-  </data>
-  <data name="&gt;&gt;button1.Name" xml:space="preserve">
-    <value>button1</value>
-  </data>
-  <data name="&gt;&gt;button1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;button1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;button1.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <metadata name="GetFileNameDialogue.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>409, 49</value>

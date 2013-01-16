@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-//using System.Drawing;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,8 +15,6 @@ using Centipede.Properties;
 
 namespace Centipede
 {
-
-
     public partial class MainWindow : Form
     {
         public MainWindow()
@@ -169,24 +166,32 @@ namespace Centipede
         {
             UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
 
-            var af = new ActionFactory("Demo Action", typeof(DemoAction)) { ImageKey = @"generic" };
+            var af = new ActionFactory("Demo Action", typeof(DemoAction));
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Get Filename", typeof(GetFileNameAction)) { ImageKey = @"generic" };
+            af = new ActionFactory("Get Filename", typeof(GetFileNameAction));
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Show Messagebox", typeof(ShowMessageBox)) { ImageKey = @"generic" };
+            af = new ActionFactory("Show Messagebox", typeof(ShowMessageBox));
 
             UIActListBox.Items.Add(af);
+
+            af = new ActionFactory("Branch", typeof(BranchAction));
+
+            FlowControlListBox.Items.Add(af);
+
+            af = new ActionFactory("Variable", typeof(VariableAction)); 
+
+            FlowControlListBox.Items.Add(af);
 
             GetActionPlugins();
 
 
             VarDataGridView.DataSource = _dataSet.Variables;
             _dataSet.Variables.VariablesRowChanged += Variables_VariablesRowChanged;
-            _dataSet.Variables.RowDeleted += Variables_RowDeleted;
+            _dataSet.Variables.RowDeleted += DataStore_Variables_RowDeleted;
 
             foreach (RowStyle s in ActionContainer.RowStyles)
             {
@@ -303,17 +308,7 @@ namespace Centipede
                         catListView.LargeImageList.Images.Add(pluginType.Name, icon);
                         af.ImageKey = pluginType.Name;
                     }
-                    else
-                    {
-                        af.ImageKey = @"generic";
-                    }
                 }
-                else
-                {
-                    af.ImageKey = @"generic";
-                }
-
-
             }
 
             catListView.Items.Add(af);
@@ -390,7 +385,7 @@ namespace Centipede
                                                                                         action.GetType().Namespace,
                                                                                         actionAttribute.displayControl))
                                                         .GetConstructor(new[] { typeof (Action) });
-                Debug.Assert(constructor != null, "constructor != null");
+
                 adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
             }
             else
@@ -411,19 +406,21 @@ namespace Centipede
             Program.RemoveAction(adc.ThisAction);
         }
 
-        void Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
+        void DataStore_Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            foreach (String key in from kvp in Program.Variables
-                                   where _dataSet.Variables.Rows.Contains(kvp.Key)
-                                   select kvp.Key
+            IEnumerable<string> varsToDelete = from kvp in Program.Variables
+                                       where !_dataSet.Variables.Rows.Contains(kvp.Key)
+                                       select kvp.Key
                                        into k
                                        where !k.StartsWith("_")
-                                       select k)
-            {
-                Program.Variables.Remove(key);
-                break;
-            }
+                                       select k;
 
+            // ReSharper disable PossibleMultipleEnumeration
+            if (varsToDelete.Any())
+            {
+                Program.Variables.Remove(varsToDelete.First());
+            }
+            // ReSharper restore PossibleMultipleEnumeration
         }
 
         void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
@@ -588,13 +585,6 @@ namespace Centipede
         {
             //It's not really a percentage, but it serves the purpose
             progressBar1.Increment(e.ProgressPercentage);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-// ReSharper disable ReturnValueOfPureMethodIsNotUsed
-            ToString();
-// ReSharper restore ReturnValueOfPureMethodIsNotUsed
         }
 
         protected override void Dispose(bool disposing)

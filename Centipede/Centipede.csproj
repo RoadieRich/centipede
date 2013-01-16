@@ -84,6 +84,11 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
+    <Reference Include="ScintillaNET">
+      <HintPath>..\bin\Debug\plugins\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -104,6 +109,7 @@
     <Compile Include="Actions\GetFileNameAction.cs" />
     <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
+    <Compile Include="Actions\VariableAction.cs" />
     <Compile Include="AskJobTitle.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +245,10 @@
     <ProjectReference Include="..\Action\Action.csproj">
       <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
       <Name>Action</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PythonEngine\PythonEngine.csproj">
+      <Project>{A67D27AC-3393-42F7-9FE8-179751FCE732}</Project>
+      <Name>PythonEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
