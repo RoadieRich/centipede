@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Centipede {
+
+namespace Centipede
+{
     //using Variable = Program.Variable;
-    
-    public partial class JobDataSet {
-        class ActionsDataTable
-        {
-        }
-    
+
+    public partial class JobDataSet
+    {
+        private class ActionsDataTable
+        { }
+
         partial class VariablesDataTable
-        {
-            
-        }
+        { }
     }
 }
