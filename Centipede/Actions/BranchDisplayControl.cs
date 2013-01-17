@@ -21,7 +21,15 @@ namespace Centipede.Actions
             var actionCombo = new ComboBox();
             actionCombo.DropDown += actionCombo_DropDown;
             actionCombo.SelectionChangeCommitted +=
-                    (sender, e) => ThisAction.NextIfFalse = ((dynamic)(sender as ComboBox).SelectedItem).A as Action;
+                    (sender, e) =>
+                        {
+                            ComboBox combo = sender as ComboBox;
+                            if (combo == null)
+                            {
+                                throw new ArgumentException();
+                            }
+                            ThisAction.NextIfFalse = (combo.SelectedValue) as Action;
+                        };
             var actionComboLabel = new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Action_if_false };
             AttributeTable.Controls.Add(actionComboLabel);
             AttributeTable.Controls.Add(actionCombo);
@@ -33,7 +41,15 @@ namespace Centipede.Actions
                                                  AcceptsReturn = false,
                                                  Text = ThisAction.ConditionSource
                                          };
-            conditionControl.TextChanged += (sender, e) => { ThisAction.ConditionSource = (sender as Scintilla).Text; };
+            conditionControl.TextChanged += (sender, e) =>
+                                                {
+                                                    Scintilla scintilla = sender as Scintilla;
+                                                    if (scintilla == null)
+                                                    {
+                                                        throw new ArgumentException();
+                                                    }
+                                                    ThisAction.ConditionSource = (scintilla).Text;
+                                                };
 
             AttributeTable.Controls.Add(new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Condition });
             AttributeTable.Controls.Add(conditionControl);
@@ -41,19 +57,21 @@ namespace Centipede.Actions
         
         void actionCombo_DropDown(object sender, EventArgs e)
         {
-            var combo = sender as ComboBox;
-            combo.Items.Clear();
-            var items = from Action a in Program.Actions
-                        where a != ThisAction
-                        select new
-                               {
-                                       S = String.Format("{0}: {1}",
-                                                         a.Name, a.Comment),
-                                       A = a
-                               }
-                        into c
-                        select c;
-            combo.Items.AddRange(items);
+            ComboBox combo = sender as ComboBox;
+            if (combo == null)
+            {
+                throw new ArgumentException();
+            }
+            var actionIter = from Action a in Program.Actions
+                             where a != ThisAction
+                             select new
+                                    {
+                                            S = String.Format("{0}: {1}",
+                                                              a.Name, a.Comment),
+                                            A = a
+                                    };
+            combo.DataSource = actionIter.ToList();
+
             combo.DisplayMember = "S";
             combo.ValueMember = "A";
         }
@@ -78,17 +96,6 @@ namespace Centipede.Actions
             ResumeLayout(false);
             PerformLayout();
 
-        }
-    }
-
-    internal static class ListExtention
-    {
-        public static void AddRange(this ComboBox.ObjectCollection list, System.Collections.IEnumerable items)
-        {
-            foreach (Object item in items)
-            {
-                list.Add(item);
-            }
         }
     }
 }

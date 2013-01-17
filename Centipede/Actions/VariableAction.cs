@@ -11,7 +11,6 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="v"></param>
         public VariableAction(Dictionary<string, object> v)
                 : base("Variable", v)

@@ -24,7 +24,11 @@ namespace Centipede
                     return "";
                 case GetJobResult.Open:
                     var selectedJob = FavouritesListbox.SelectedItem as JobControl;
-                    return selectedJob.Filename;
+                if (selectedJob == null)
+                {
+                    throw new NullReferenceException("selectedJob");
+                }
+                return selectedJob.Filename;
                 default:
                     return null;
             }
@@ -83,6 +87,10 @@ namespace Centipede
                 if (xmlDoc.HasChildNodes)
                 {
                     var faveXmlStoreElement = xmlDoc.GetElementsByTagName("favourites")[0] as XmlElement;
+                    if (faveXmlStoreElement == null)
+                    {
+                        throw new ArgumentNullException("sender");
+                    }
                     foreach (XmlElement favouriteItem in faveXmlStoreElement.ChildNodes)
                     {
                         FavouritesListbox.Items.Add(new JobControl(favouriteItem.GetAttribute("Filename")));
@@ -118,6 +126,10 @@ namespace Centipede
         private void BrowseLoadDialogue_FileOk(object sender, CancelEventArgs e)
         {
             var dialog = sender as FileDialog;
+            if (dialog == null)
+            {
+                throw new ArgumentNullException("sender");
+            }
             AddFavourite(dialog.FileName);
         }
 
@@ -128,6 +140,10 @@ namespace Centipede
         private void OtherOpenDialogue_FileOk(object sender, CancelEventArgs e)
         {
             var dialogue = sender as FileDialog;
+            if (dialogue == null)
+            {
+                throw new ArgumentNullException("sender");
+            }
             Program.LoadJob(dialogue.FileName);
         }
 

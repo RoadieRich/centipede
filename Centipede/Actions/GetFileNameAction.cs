@@ -40,7 +40,12 @@ namespace Centipede.Actions
 
         private void GetFileNameDialogue_FileOk(object sender, CancelEventArgs e)
         {
-            Variables[ParseStringForVariable(DestinationVariable)] = (sender as FileDialog).FileName;
+            FileDialog dialog = sender as FileDialog;
+            if (dialog == null)
+            {
+                throw new ArgumentException("sender");
+            }
+            Variables[ParseStringForVariable(DestinationVariable)] = dialog.FileName;
         }
 
         protected override void CleanupAction()
