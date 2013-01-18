@@ -72,10 +72,22 @@ namespace TestProject1
         [TestMethod()]
         public void ActionFactoryConstructorTest()
         {
-            ActionCategoryAttribute catAttribute = null; // TODO: Initialize to an appropriate value
-            Type pluginType = null; // TODO: Initialize to an appropriate value
+            string category = "category";
+            string helpTextValue = "help text";
+            string iconNameValue = "icon name";
+            string displayNameValue = "display name";
+            ActionCategoryAttribute catAttribute = new ActionCategoryAttribute(category)
+                                                   {
+                                                           helpText = helpTextValue,
+                                                           displayName = displayNameValue,
+                                                           iconName=iconNameValue
+                                                   };
+            Type pluginType = typeof (TestAction);
             ActionFactory target = new ActionFactory(catAttribute, pluginType);
-            Assert.Inconclusive("TODO: Implement code to verify target");
+            Assert.AreEqual(displayNameValue, target.Text, "Display name not set correctly");
+            PrivateObject targetPrivate = new PrivateObject(target);
+            Assert.AreEqual(pluginType,targetPrivate.GetField("_actionType"), "_actionType field not set correctly");
+
         }
 
         /// <summary>
@@ -84,10 +96,13 @@ namespace TestProject1
         [TestMethod()]
         public void ActionFactoryConstructorTest1()
         {
-            string displayName = string.Empty; // TODO: Initialize to an appropriate value
-            Type actionType = null; // TODO: Initialize to an appropriate value
-            ActionFactory target = new ActionFactory(displayName, actionType);
-            Assert.Inconclusive("TODO: Implement code to verify target");
+            string displayNameValue = "display name";
+            Type actionType = typeof(TestAction);
+            ActionFactory target = new ActionFactory(displayNameValue, actionType);
+            
+            Assert.AreEqual(displayNameValue, target.Text, "Display name not set correctly");
+            PrivateObject targetPrivate = new PrivateObject(target);
+            Assert.AreEqual(actionType, targetPrivate.GetField("_actionType"), "_actionType field not set correctly");
         }
 
         /// <summary>
@@ -96,14 +111,15 @@ namespace TestProject1
         [TestMethod()]
         public void GenerateTest()
         {
-            ActionCategoryAttribute catAttribute = null; // TODO: Initialize to an appropriate value
-            Type pluginType = null; // TODO: Initialize to an appropriate value
-            ActionFactory target = new ActionFactory(catAttribute, pluginType); // TODO: Initialize to an appropriate value
-            Action expected = null; // TODO: Initialize to an appropriate value
-            Action actual;
-            actual = target.Generate();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            ActionFactory target = new ActionFactory("DisplayName", typeof (TestAction));
+            Action actual = target.Generate();
+            Assert.IsInstanceOfType(actual, typeof(TestAction), "Wrong type returned from Generate()");
+            TestAction ta = actual as TestAction;
+
+            Assert.AreEqual(1, ta.CtorCalled, "Ctor called {0} times, expected 1", ta.CtorCalled);
+            Assert.AreEqual(0,
+                            ta.CleanupActionCalled + ta.DisposeCalled + ta.DoActionCalled + ta.GetNextCalled +
+                            ta.InitActionCalled, "Extra methods called in Generate()");
         }
     }
 }

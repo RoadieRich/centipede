@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace Centipede.StringInject
 {
+    // ReSharper disable LoopCanBeConvertedToQuery
+
     /// <summary>
     /// From http://mo.notono.us/2008/07/c-stringinject-format-strings-by-key.html
     /// </summary>
@@ -48,7 +50,9 @@ namespace Centipede.StringInject
             if (attributes == null || formatString == null)
                 return result;
 
+// ReSharper disable LoopCanBeConvertedToQuery
             foreach (string attributeKey in attributes.Keys)
+
             {
                 result = result.InjectSingleValue(attributeKey, attributes[attributeKey]);
             }

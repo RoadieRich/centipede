@@ -91,7 +91,10 @@ namespace Centipede.Actions
         {
             ActionArgumentAttribute attrData = arg.GetArguementAttribute();
             var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
-            ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
+            if(!string.IsNullOrEmpty(attrData.usage))
+            {
+                ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
+            }
 
             Control attrValue;
             {
@@ -114,9 +117,10 @@ namespace Centipede.Actions
                 default:
                     attrValue = new TextBox
                                 {
-                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                                        Text = arg.Get<Object>(ThisAction).ToString()
+                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
                                 };
+                    object obj = arg.Get<Object>(ThisAction);//.ToString();
+                    attrValue.Text = (obj ?? "").ToString();
                     attrValue.TextChanged += GetChangedHandler(arg);
                     break;
                 }
@@ -128,10 +132,12 @@ namespace Centipede.Actions
             return new[] { attrLabel, attrValue };
         }
 
+/*
         private Control GetDisplayControl(FieldAndPropertyWrapper fieldAndPropertyWrapper)
         {
             return null;
         }
+*/
 
         private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
@@ -176,7 +182,7 @@ namespace Centipede.Actions
             ActionArgumentAttribute argInfo = f.GetArguementAttribute();
 
             var value = f.Get<Object>(ThisAction);
-            MethodInfo parser = f.GetMemberType().GetMethod("Parse", new[] { typeof(String) });
+            MethodInfo parser = f.MemberType.GetMethod("Parse", new[] { typeof(String) });
             if (parser != null)
             {
                 try
@@ -380,26 +386,30 @@ namespace Centipede.Actions
             _member = prop;
             _getter = o => prop.GetValue(o, null);
             _setter = (o, v) => prop.SetValue(o, v, null);
+            _memberType  = prop.PropertyType;
         }
 
         public FieldAndPropertyWrapper(FieldInfo field)
         {
             _member = field;
-            _getter = o => field.GetValue(o);
-            _setter = (o, v) => field.SetValue(o, v);
+            _getter = field.GetValue;
+            _setter = field.SetValue;
+            _memberType  = field.FieldType;
         }
 
         readonly MemberInfo _member;
 
-        private readonly Expression<Func<object, object>> _getter;
+        private readonly Func<object, object> _getter;
         public T Get<T>(object o)
         {
-            return (T)_getter.Compile()(o);
+            return (T)_getter(o);
         }
-        private readonly Expression<Action<object, object>> _setter;
+        private readonly Action<object, object> _setter;
+        private readonly Type _memberType;
+
         public void Set<T>(object o, T v)
         {
-            _setter.Compile()(o, v);
+            _setter(o, v);
         }
 
 
@@ -409,21 +419,20 @@ namespace Centipede.Actions
         }
 
 
-        public string Name { get { return _member.Name; } }
-
-        public Type GetMemberType()
+        public string Name
         {
-            Type baseType;
-            if (_member is FieldInfo)
+            get
             {
-                baseType = (_member as FieldInfo).FieldType;
+                return _member.Name;
             }
-            else
-            {
-                baseType = (_member as PropertyInfo).PropertyType;
-            }
-            return baseType;
+        }
 
+        public Type MemberType
+        {
+            get
+            {
+                return _memberType;
+            }
         }
 
         public enum FieldType
@@ -452,7 +461,7 @@ namespace Centipede.Actions
         public FieldType GetFieldTypeCategory()
         {
 
-            Type baseType = GetMemberType();
+            Type baseType = MemberType;
 
             while (!TypeMapping.ContainsKey(baseType) && baseType != typeof(object))
             {
@@ -460,7 +469,7 @@ namespace Centipede.Actions
             }
 
             FieldType fieldType;
-            if (TypeMapping.TryGetValue(baseType, out fieldType))
+            if (!TypeMapping.TryGetValue(baseType, out fieldType))
             {
                 return FieldType.Other;
             }

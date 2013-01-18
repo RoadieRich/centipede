@@ -28,7 +28,6 @@ namespace PyAction
         {
 // ReSharper disable MemberCanBePrivate.Global
             get
-// ReSharper restore MemberCanBePrivate.Global
             {
                 return _source;
             }
