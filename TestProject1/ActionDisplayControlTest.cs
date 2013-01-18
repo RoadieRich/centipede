@@ -1,4 +1,5 @@
-﻿using Centipede.Actions;
+﻿using System.Collections.Generic;
+using Centipede.Actions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Centipede;
@@ -74,9 +75,10 @@ namespace TestProject1
         [TestMethod()]
         public void ActionDisplayControlConstructorTest()
         {
-            Action action = null; // TODO: Initialize to an appropriate value
+            Action action = new TestAction(new Dictionary<string, object>());
             ActionDisplayControl target = new ActionDisplayControl(action);
-            Assert.Inconclusive("TODO: Implement code to verify target");
+            PrivateObject targetPrivate = new PrivateObject(target);
+            Assert.AreEqual(action, target.ThisAction);
         }
 
         /// <summary>

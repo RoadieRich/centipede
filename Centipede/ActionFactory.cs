@@ -14,7 +14,8 @@ namespace Centipede
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType)
         {
-            String displayName = catAttribute.displayName != "" ? catAttribute.displayName : pluginType.Name;
+            String displayName;
+            displayName = catAttribute.displayName != string.Empty ? catAttribute.displayName : pluginType.Name;
             Text = displayName;
             ToolTipText = catAttribute.helpText;
             _actionType = pluginType;

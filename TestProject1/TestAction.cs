@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Centipede;
 using Action = Centipede.Action;
 
 
@@ -9,12 +10,12 @@ namespace TestProject1
 {
     class TestAction : Centipede.Action
     {
-        public bool CtorCalled = false;
-        public bool DoActionCalled = false;
-        public bool InitActionCalled = false;
-        public bool CleanupActionCalled = false;
-        public bool GetNextCalled = false;
-        public bool DisposeCalled = false;
+        public int CtorCalled = 0;
+        public int DoActionCalled = 0;
+        public int InitActionCalled = 0;
+        public int CleanupActionCalled = 0;
+        public int GetNextCalled = 0;
+        public int DisposeCalled = 0;
 
         /// <summary>
         /// 
@@ -23,7 +24,7 @@ namespace TestProject1
         public TestAction(Dictionary<string, object> v)
                 : base("TestAction", v)
         {
-            CtorCalled = true;
+            CtorCalled++;
         }
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace TestProject1
         /// </summary>
         protected override void DoAction()
         {
-            DoActionCalled = true;
+            DoActionCalled++;
             TestFunctions();
 
         }
@@ -51,7 +52,7 @@ namespace TestProject1
         protected override void InitAction()
         {
             base.InitAction();
-            InitActionCalled = true;
+            InitActionCalled++;
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace TestProject1
         /// </summary>
         protected override void CleanupAction()
         {
-            CleanupActionCalled = true;
+            CleanupActionCalled++;
             base.CleanupAction();
         }
 
@@ -69,7 +70,7 @@ namespace TestProject1
         /// <returns>Action</returns>
         public override Action GetNext()
         {
-            GetNextCalled = true;
+            GetNextCalled++;
             return base.GetNext();
         }
 
@@ -78,8 +79,20 @@ namespace TestProject1
         /// </summary>
         public override void Dispose()
         {
-            this.DisposeCalled = true;
+            this.DisposeCalled++;
             base.Dispose();
+        }
+
+
+        [ActionArgument(displayName = "Field Argument")]
+        public String FieldArgument = "field argument value";
+
+
+        [ActionArgument(displayName = "Property Argument")]
+        public String PropertyArgument
+        {
+            get;
+            set;
         }
     }
 }

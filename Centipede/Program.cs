@@ -158,6 +158,19 @@ namespace Centipede
                                                                    };
 
         public static event AddActionCallback ActionAdded;
+        //{
+        //    add
+        //    {
+        //        AddActionCallbacks.Add(value);
+        //    }
+        //    remove
+        //    {
+        //        AddActionCallbacks.Remove(value);
+        //    }
+            
+        //}
+
+        //private static List<AddActionCallback> AddActionCallbacks = new List<AddActionCallback>(); 
 
         /// <summary>
         ///     Add action to the job queue.  By default, it is added as the last action in the job.
@@ -306,32 +319,33 @@ namespace Centipede
             }
         }
 
-        /*
+        
         public static Int32 JobLength
         {
             get
             {
-                return Actions.Count;
+                return Actions.Sum(a=>a.Complexity);
             }
         }
-*/
+
 
         internal static void Clear()
         {
             Variables.Clear();
-            foreach (Action action in Actions.ToArray())
+            while (Actions.Count > 0)
             {
-                RemoveAction(action);
+                RemoveAction(Actions.First());
             }
         }
 
-        internal static void Dispose(bool disposing)
+        public static void Dispose(bool disposing)
         {
             if (disposing)
             {
                 foreach (IDisposable action in Actions)
                 {
                     action.Dispose();
+                    
                 }
             }
         }

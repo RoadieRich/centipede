@@ -34,7 +34,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public readonly Dictionary<String, Object> Variables;
+        protected readonly Dictionary<String, Object> Variables;
 
         /// <summary>
         /// 

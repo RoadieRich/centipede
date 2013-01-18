@@ -52,10 +52,14 @@ namespace TestProject1
         //}
         //
         //Use TestInitialize to run code before running each test
-        //[TestInitialize()]
-        //public void MyTestInitialize()
-        //{
-        //}
+        [TestInitialize()]
+        public void MyTestInitialize()
+        {
+            Program.Actions.Clear();
+            Program.Variables.Clear();
+            
+
+        }
         //
         //Use TestCleanup to run code after each test has run
         //[TestCleanup()]
@@ -72,7 +76,6 @@ namespace TestProject1
         [TestMethod()]
         public void AddActionTest()
         {
-            Program.Actions.Clear();
             int addActionCallbackCalls = 0;
             Program.AddActionCallback cb = delegate { addActionCallbackCalls++; };
             Program.ActionAdded += cb;
@@ -116,11 +119,10 @@ namespace TestProject1
         [TestMethod()]
         public void DisposeTest()
         {
-            bool disposing = true;
             TestAction testAction = new TestAction(_fakeVarDict);
             Program.Actions.Add(testAction);
-            Program.Dispose(disposing);
-            Assert.IsTrue(testAction.DisposeCalled);
+            Program.Dispose(true);
+            Assert.AreEqual(testAction.DisposeCalled, 1, "Dispose was called {0} times.  Should be 1.", testAction.DisposeCalled);
         }
 
         /// <summary>
@@ -164,7 +166,7 @@ namespace TestProject1
         [TestMethod()]
         public void RunJobTest()
         {
-            TestAction testAction=new TestAction(new Dictionary<string, object>());
+            TestAction testAction = new TestAction(new Dictionary<string, object>());
             Program.Actions.Add(testAction);
             int beforeCBCalls = 0;
             Program.ActionUpdateCallback beforeCB = delegate(Action action)
@@ -195,20 +197,23 @@ namespace TestProject1
 
             Program.RunJob();
 
-            Assert.IsTrue(testAction.InitActionCalled, "Action not initialised");
-            Assert.IsTrue(testAction.DoActionCalled, "Action not done");
-            Assert.IsTrue(testAction.CleanupActionCalled, "Action not cleaned up");
-            Assert.AreEqual(beforeCBCalls, 1, "beforeCB called {0} times", beforeCBCalls);
-            Assert.AreEqual(afterCBCalls, 1, "beforeCB called {0} times", beforeCBCalls);
+            Assert.AreEqual(testAction.InitActionCalled, 1, "Init action called {0} times, should be 1",
+                            testAction.InitActionCalled);
+            Assert.AreEqual(testAction.DoActionCalled, 1, "DoAction called {0} times, should be 1.",
+                            testAction.DoActionCalled);
+            Assert.AreEqual(testAction.CleanupActionCalled, 1, "CleanupAction called {0} times, should be 1",
+                            testAction.CleanupActionCalled);
+            Assert.AreEqual(beforeCBCalls, 1, "beforeCB called {0} times, should be 1", beforeCBCalls);
+            Assert.AreEqual(afterCBCalls, 1, "beforeCB called {0} times, should be 1", beforeCBCalls);
             Assert.AreEqual(completedCBCalls, 1, "completedCB called {0} times, should be 1", completedCBCalls);
             Assert.IsTrue((bool)completedCBArgument, "completedCB passed incorrect value");
 
-            
+            Program.ErrorHandler errorCb;
             foreach (bool jobShouldContinue in new[] { true, false })
             {
                 int errorCBCalls = 0;
                 ActionException testException = new ActionException(testAction);
-                Program.ErrorHandler errorCb = (ActionException exception, out Action action) =>
+                errorCb = (ActionException exception, out Action action) =>
                                                    {
                                                        errorCBCalls++;
                                                        Assert.AreEqual(exception, testException,
@@ -227,6 +232,25 @@ namespace TestProject1
                 Assert.AreEqual(errorCBCalls, 1, "ErrorCB called {0} times", errorCBCalls);
                 Assert.AreEqual(completedCBArgument, jobShouldContinue);
             }
+            errorCb = (ActionException exception, out Action action) =>
+                                               {
+                                                   Assert.IsInstanceOfType(exception, typeof (ActionException),
+                                                                           "Unknown exception type passed into error handler");
+                                                   Assert.AreEqual(exception.ErrorAction, testAction,
+                                                                   "Exception ErrorAction not set correctly");
+                                                   action = null;
+                                                   return true;
+                                               };
+
+            testAction.TestFunctions = () =>
+                                           {
+                                               throw new Exception();
+                                           };
+            Program.ActionErrorOccurred += errorCb;
+            Program.RunJob();
+            Program.ActionErrorOccurred -= errorCb;
+            
+
         }
 
         /// <summary>
@@ -235,7 +259,7 @@ namespace TestProject1
         [TestMethod()]
         public void SaveJobTest()
         {
-            string filename; // TODO: Initialize to an appropriate value
+            //string filename; // TODO: Initialize to an appropriate value
             //Program.SaveJob(filename);
 
             Assert.Inconclusive("Too difficult to test right now");
