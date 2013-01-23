@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Centipede;
 using Centipede.Actions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Centipede;
 using System.Windows.Forms;
 using Action = Centipede.Action;
 
@@ -88,11 +88,21 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void ActMenuDelete_ClickTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
+            ActionDisplayControl adc = new ActionDisplayControl(new TestAction(new Dictionary<string, object>()));
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new PrivateObject(adc));
+            object sender = null, received = null;
+            EventArgs e = new CentipedeEventArgs(null, new List<Action>(),new Dictionary<string, object>() );
+            int handlerCalled = 0;
+
+
+            adc.Deleted += (delegate(object sndr, CentipedeEventArgs cea)
+                                   {
+                                       handlerCalled++;
+                                       received = sndr;
+                                   });
             target.ActMenuDelete_Click(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Assert.AreEqual(adc, received);
+            Assert.AreEqual(1, handlerCalled);
         }
 
         /// <summary>
@@ -102,11 +112,17 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void CommentTextBox_TextChangedTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>())); // TODO: Initialize to an appropriate value
             EventArgs e = null; // TODO: Initialize to an appropriate value
+            String newComment = @"test";
+            TextBox sender = new TextBox
+                             {
+                                     Text = newComment
+                             };
+            
             target.CommentTextBox_TextChanged(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Assert.AreEqual(newComment, target.ThisAction.Comment);
+            
         }
 
         /// <summary>
@@ -116,10 +132,12 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void DisposeTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            bool disposing = false; // TODO: Initialize to an appropriate value
-            target.Dispose(disposing);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            TestAction action = new TestAction(new Dictionary<string, object>());
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action);
+            target.Dispose(false);
+            Assert.AreEqual(0, action.DisposeCalled);
+            target.Dispose(true);
+            Assert.AreEqual(1, action.DisposeCalled);
         }
 
         /// <summary>
@@ -132,8 +150,15 @@ namespace TestProject1
             ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
             object sender = null; // TODO: Initialize to an appropriate value
             EventArgs e = null; // TODO: Initialize to an appropriate value
+            int visibilityChanged = 0;
+            target.AttributeTable.VisibleChanged += delegate { visibilityChanged++; };
+            bool currentVisibility = target.AttributeTable.Visible;
             target.ExpandButton_Click(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Assert.AreEqual(1, visibilityChanged);
+            Assert.AreEqual(!currentVisibility, target.AttributeTable.Visible);
+            target.ExpandButton_Click(sender, e);
+            Assert.AreEqual(2, visibilityChanged);
+            Assert.AreEqual(currentVisibility, target.AttributeTable.Visible);
         }
 
         /// <summary>
@@ -143,9 +168,9 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void GenerateArgumentsTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            target.GenerateArguments();
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>())); // TODO: Initialize to an appropriate value
+            
+            Assert.AreEqual(4, target.AttributeTable.Controls.Count);
         }
 
         /// <summary>
@@ -155,13 +180,19 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void GenerateFieldControlsTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor arg = null; // TODO: Initialize to an appropriate value
-            Control[] expected = null; // TODO: Initialize to an appropriate value
+            TestAction action = new TestAction(new Dictionary<string, object>());
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            FieldAndPropertyWrapper_Accessor arg = new FieldAndPropertyWrapper_Accessor(action.GetType().GetField("FieldArgument"));
+            
             Control[] actual;
             actual = target.GenerateFieldControls(arg);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(2, actual.Length);
+            Assert.IsInstanceOfType(actual[0], typeof(Label));
+            Assert.IsInstanceOfType(actual[1], typeof(TextBox));
+            Label label = actual[0] as Label;
+            TextBox textBox = actual[1] as TextBox;
+            Assert.AreEqual("field argument value", textBox.Text);
+
         }
 
         /// <summary>
@@ -171,13 +202,38 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void GetArgumentNameTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor argument = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = target.GetArgumentName(argument);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            TestAction action = new TestAction(new Dictionary<string, object>());
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            FieldAndPropertyWrapper_Accessor argument = new FieldAndPropertyWrapper_Accessor(typeof(TestAction).GetField("FieldArgument")); // TODO: Initialize to an appropriate value
+            
+            string actual = target.GetArgumentName(argument);
+            
+            Assert.AreEqual("Field Argument", actual);
+        }
+
+        class ActionWithChangedHandler : Action
+        {
+            public ActionWithChangedHandler()
+                    : base("", new Dictionary<string, object>())
+            { }
+
+            /// <summary>
+            /// Perform the action
+            /// </summary>
+            protected override void DoAction()
+            { }
+
+            [ActionArgument(onChangedHandlerName = "changed")]
+            public string Argument = "";
+
+            public object senderReceived;
+            public EventArgs EventArgs;
+
+            public void changed(object sender, EventArgs e)
+            {
+                this.senderReceived = sender;
+                this.EventArgs = e;
+            }
         }
 
         /// <summary>
@@ -187,13 +243,44 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void GetChangedHandlerTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor arg = null; // TODO: Initialize to an appropriate value
-            EventHandler expected = null; // TODO: Initialize to an appropriate value
-            EventHandler actual;
-            actual = target.GetChangedHandler(arg);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            ActionWithChangedHandler action = new ActionWithChangedHandler();
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            FieldAndPropertyWrapper_Accessor arg = typeof (ActionWithChangedHandler).GetField("Argument");
+
+            EventHandler handler = target.GetChangedHandler(arg);
+            
+            object sender = new object();
+            EventArgs e = new EventArgs();
+
+            handler(sender, e);
+
+            Assert.AreSame(sender, action.senderReceived);
+            Assert.AreSame(e, action.EventArgs);
+        }
+
+        class ActionWithLeaveHandler : Action
+        {
+            public ActionWithLeaveHandler()
+                : base("", new Dictionary<string, object>())
+            { }
+
+            /// <summary>
+            /// Perform the action
+            /// </summary>
+            protected override void DoAction()
+            { }
+
+            [ActionArgument(onLeaveHandlerName = "changed")]
+            public string Argument = "";
+
+            public object senderReceived;
+            public EventArgs EventArgs;
+
+            public void changed(object sender, EventArgs e)
+            {
+                this.senderReceived = sender;
+                this.EventArgs = e;
+            }
         }
 
         /// <summary>
@@ -203,27 +290,20 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void GetLeaveHandlerTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor arg = null; // TODO: Initialize to an appropriate value
-            EventHandler expected = null; // TODO: Initialize to an appropriate value
-            EventHandler actual;
-            actual = target.GetLeaveHandler(arg);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            ActionWithLeaveHandler action = new ActionWithLeaveHandler();
+            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            FieldAndPropertyWrapper_Accessor arg = action.GetType().GetField("Argument");
+
+            EventHandler handler = target.GetLeaveHandler(arg);
+
+            object sender = new object();
+            EventArgs e = new EventArgs();
+
+            handler(sender, e);
+
+            Assert.AreSame(sender, action.senderReceived);
+            Assert.AreSame(e, action.EventArgs);
         }
 
-        /// <summary>
-        ///A test for attrValue_TextChanged
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Action.dll")]
-        public void attrValue_TextChangedTest()
-        {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
-            target.attrValue_TextChanged(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
     }
 }

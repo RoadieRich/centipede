@@ -134,7 +134,6 @@ namespace Centipede
         /// <param name="options"></param>
         /// <returns></returns>
         protected AskEventEnums.DialogResult Ask(String message, String title = "Question", AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
-
         {
             var handler = OnAsk;
             if (handler != null)
@@ -157,7 +156,7 @@ namespace Centipede
         /// 
         /// </summary>
 // ReSharper disable EventNeverSubscribedTo.Global
-        public static event AskEvent OnAsk = delegate { };
+        public event AskEvent OnAsk = delegate { };
 // ReSharper restore EventNeverSubscribedTo.Global
 
         /// <summary>
@@ -167,6 +166,12 @@ namespace Centipede
         /// <param name="e"></param>
         public delegate void AskEvent(object sender, AskActionEventArgs e);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
+        /// <param name="messageIcon"></param>
         protected void Message(String message, String title = "Message", AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
         {
             var handler = OnAsk;
