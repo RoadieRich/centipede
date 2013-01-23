@@ -197,12 +197,10 @@ namespace TestProject1
 
             Program.RunJob();
 
-            Assert.AreEqual(testAction.InitActionCalled, 1, "Init action called {0} times, should be 1",
-                            testAction.InitActionCalled);
             Assert.AreEqual(testAction.DoActionCalled, 1, "DoAction called {0} times, should be 1.",
                             testAction.DoActionCalled);
-            Assert.AreEqual(testAction.CleanupActionCalled, 1, "CleanupAction called {0} times, should be 1",
-                            testAction.CleanupActionCalled);
+            Assert.AreEqual(testAction.GetNextCalled, 1, "GetNext called {0} times, should be 1.",
+                            testAction.GetNextCalled);
             Assert.AreEqual(beforeCBCalls, 1, "beforeCB called {0} times, should be 1", beforeCBCalls);
             Assert.AreEqual(afterCBCalls, 1, "beforeCB called {0} times, should be 1", beforeCBCalls);
             Assert.AreEqual(completedCBCalls, 1, "completedCB called {0} times, should be 1", completedCBCalls);

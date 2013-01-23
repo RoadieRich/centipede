@@ -85,7 +85,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
     <Reference Include="ScintillaNET">
       <HintPath>..\bin\Debug\plugins\ScintillaNET.dll</HintPath>
     </Reference>

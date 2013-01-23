@@ -19,8 +19,10 @@ namespace Centipede.Actions
             if (disposing && (components != null))
             {
                 components.Dispose();
+                ThisAction.Dispose();
             }
             base.Dispose(disposing);
+            
         }
 
         #region Component Designer generated code
@@ -276,6 +278,9 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         protected System.Windows.Forms.TableLayoutPanel AttributeTable;
+        /// <summary>
+        /// 
+        /// </summary>
         protected Label NameLabel;
         private ToolStripSeparator toolStripSeparator1;
 

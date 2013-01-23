@@ -10,6 +10,59 @@ namespace TestProject1
 {
     class TestAction : Centipede.Action
     {
+        protected bool Equals(TestAction other)
+        {
+            return string.Equals(FieldArgument, other.FieldArgument) && string.Equals(PropertyArgument, other.PropertyArgument);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return Equals((TestAction)obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((FieldArgument != null ? FieldArgument.GetHashCode() : 0) * 397) ^ (PropertyArgument != null ? PropertyArgument.GetHashCode() : 0) ^ ((Comment!=null?Comment.GetHashCode() : 0) * 1559);
+            }
+        }
+
+        public static bool operator ==(TestAction left, TestAction right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(TestAction left, TestAction right)
+        {
+            return !Equals(left, right);
+        }
+
         public int CtorCalled = 0;
         public int DoActionCalled = 0;
         public int InitActionCalled = 0;

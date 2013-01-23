@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PythonEngine;
 
 
 namespace Centipede.Actions
@@ -17,6 +18,10 @@ namespace Centipede.Actions
         /// which are chosen according to condition.
         /// </summary>
         /// <param name="v"></param>
+        /// <remarks>
+        /// Condition is a simple python expression, which is evalutated in a "safe" scope: 
+        /// changes made to any (python) variables will be lost.
+        /// </remarks>
         public BranchAction(Dictionary<String, Object> v)
             : base("Branch", v)
         {
@@ -44,7 +49,7 @@ namespace Centipede.Actions
         /// </summary>
         protected override void DoAction()
         {
-            PythonEngine.PythonEngine pye = PythonEngine.PythonEngine.Instance;
+            var pye = PythonEngine.PythonEngine.Instance;
             
             var scope = pye.GetNewScope(Variables);
             _result = pye.Evaluate<bool>(ConditionSource, scope);

@@ -1,4 +1,5 @@
-﻿using Centipede;
+﻿using System.Diagnostics;
+using Centipede;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Xml;
@@ -67,32 +68,21 @@ namespace TestProject1
         //
         #endregion
 
-
-        internal virtual Action CreateAction()
-        {
-            // TODO: Instantiate an appropriate concrete class.
-            Action target = null;
-            return target;
-        }
-
         /// <summary>
         ///A test for AddToXmlElement
         ///</summary>
         [TestMethod()]
         public void AddToXmlElementTest()
         {
-            Action target = CreateAction(); // TODO: Initialize to an appropriate value
-            XmlElement rootElement = null; // TODO: Initialize to an appropriate value
-            target.AddToXmlElement(rootElement);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Assert.Inconclusive("You want me to test what?");
         }
 
-        internal virtual Action_Accessor CreateAction_Accessor()
-        {
-            // TODO: Instantiate an appropriate concrete class.
-            Action_Accessor target = null;
-            return target;
-        }
+        //internal virtual Action_Accessor CreateAction_Accessor()
+        //{
+        //    // TODO: Instantiate an appropriate concrete class.
+        //    //Action_Accessor target = 
+        //    //return target;
+        //}
 
         /// <summary>
         ///A test for Ask
@@ -101,29 +91,36 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void AskTest()
         {
-            PrivateObject param0 = null; // TODO: Initialize to an appropriate value
-            Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
-            string message = string.Empty; // TODO: Initialize to an appropriate value
-            string title = string.Empty; // TODO: Initialize to an appropriate value
-            AskEventEnums.AskType options = new AskEventEnums.AskType(); // TODO: Initialize to an appropriate value
-            AskEventEnums.DialogResult expected = new AskEventEnums.DialogResult(); // TODO: Initialize to an appropriate value
-            AskEventEnums.DialogResult actual;
-            actual = target.Ask(message, title, options);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
+            TestAction action = new TestAction(new Dictionary<string, object>());
+            PrivateObject po = new PrivateObject(action);
 
-        /// <summary>
-        ///A test for CleanupAction
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Action.dll")]
-        public void CleanupActionTest()
-        {
-            PrivateObject param0 = null; // TODO: Initialize to an appropriate value
-            Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
-            target.CleanupAction();
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            String message = TestHelpers.RandomString(100);
+            String title = TestHelpers.RandomString(10);
+            AskEventEnums.AskType askType = (AskEventEnums.AskType)TestHelpers.RandomInt;
+            AskEventEnums.DialogResult actual = (AskEventEnums.DialogResult)(-1),
+                                       expected = (AskEventEnums.DialogResult)Math.Abs(TestHelpers.RandomInt);
+
+
+            action.OnAsk += (sender, e) =>
+                                {
+                                    Assert.AreEqual(askType, e.Type);
+                                    Assert.AreEqual(message, e.Message);
+                                    Assert.AreEqual(title, e.Title);
+                                    e.Result = expected;
+                                };
+
+            
+            //protected AskEventEnums.DialogResult Ask(String message,
+            //String title = "Question", 
+            //AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
+            action.TestFunctions = delegate
+                                       {
+                                           actual =
+                                                   (AskEventEnums.DialogResult)po.Invoke("Ask", message, title, askType);
+                                       };
+
+            action.Run();
+            Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
@@ -132,21 +129,9 @@ namespace TestProject1
         [TestMethod()]
         public void DisposeTest()
         {
-            Action target = CreateAction(); // TODO: Initialize to an appropriate value
+            Action target = new TestAction(null); // TODO: Initialize to an appropriate value
             target.Dispose();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for DoAction
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Action.dll")]
-        public void DoActionTest()
-        {
-            // Private Accessor for DoAction is not found. Please rebuild the containing project or run the Publicize.exe manually.
-            Assert.Inconclusive("Private Accessor for DoAction is not found. Please rebuild the containing project" +
-                    " or run the Publicize.exe manually.");
         }
 
         /// <summary>
@@ -155,13 +140,7 @@ namespace TestProject1
         [TestMethod()]
         public void FromXmlTest()
         {
-            XmlElement element = null; // TODO: Initialize to an appropriate value
-            Dictionary<string, object> variables = null; // TODO: Initialize to an appropriate value
-            Action expected = null; // TODO: Initialize to an appropriate value
-            Action actual;
-            actual = Action.FromXml(element, variables);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.Inconclusive("Do what now?");
         }
 
         /// <summary>
@@ -170,25 +149,15 @@ namespace TestProject1
         [TestMethod()]
         public void GetNextTest()
         {
-            Action target = CreateAction(); // TODO: Initialize to an appropriate value
-            Action expected = null; // TODO: Initialize to an appropriate value
+            Action target = new TestAction(null); // TODO: Initialize to an appropriate value
+            Action expected = new TestAction(null); // TODO: Initialize to an appropriate value
+
+            target.Next = expected;
+            
             Action actual;
             actual = target.GetNext();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for InitAction
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Action.dll")]
-        public void InitActionTest()
-        {
-            PrivateObject param0 = null; // TODO: Initialize to an appropriate value
-            Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
-            target.InitAction();
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Assert.AreSame(expected, actual);
+            
         }
 
         /// <summary>
@@ -198,6 +167,7 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void MessageTest()
         {
+            ;
             PrivateObject param0 = null; // TODO: Initialize to an appropriate value
             Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
             string message = string.Empty; // TODO: Initialize to an appropriate value
@@ -215,12 +185,12 @@ namespace TestProject1
         public void ParseStringForVariableTest()
         {
             PrivateObject param0 = null; // TODO: Initialize to an appropriate value
-            Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
+            //Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
             string str = string.Empty; // TODO: Initialize to an appropriate value
             string expected = string.Empty; // TODO: Initialize to an appropriate value
             string actual;
-            actual = target.ParseStringForVariable(str);
-            Assert.AreEqual(expected, actual);
+          //  actual = target.ParseStringForVariable(str);
+            //Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
@@ -230,21 +200,12 @@ namespace TestProject1
         [TestMethod()]
         public void RunTest()
         {
-            Action target = CreateAction(); // TODO: Initialize to an appropriate value
+            TestAction action = new TestAction(new Dictionary<string, object>());
+            Action target = action;
             target.Run();
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for Complexity
-        ///</summary>
-        [TestMethod()]
-        public void ComplexityTest()
-        {
-            Action target = CreateAction(); // TODO: Initialize to an appropriate value
-            int actual;
-            actual = target.Complexity;
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(1, action.InitActionCalled);
+            Assert.AreEqual(1, action.DoActionCalled);
+            Assert.AreEqual(1, action.CleanupActionCalled);
         }
     }
 }
