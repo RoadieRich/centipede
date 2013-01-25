@@ -19,7 +19,7 @@ namespace Centipede
     {
         public static MainWindow Instance;
         private readonly JobDataSet _dataSet = new JobDataSet();
-        private readonly SetStateDeligate _setActionDisplayState = SetActionDisplayedState;
+        
         private bool _dirty;
 
         public MainWindow()
@@ -61,17 +61,19 @@ namespace Centipede
 
             if (e.ErrorAction != null)
             {
-                UpdateHandlerDone(e.ErrorAction);
+                //UpdateHandlerDone(e.ErrorAction);
                 var adc = e.ErrorAction.Tag as ActionDisplayControl;
-                if (adc != null && adc.InvokeRequired)
+                SetState(adc, ActionState.Error, e.Message);
+
+                if (ActionContainer.InvokeRequired)
                 {
-                    adc.Invoke(_setActionDisplayState, adc, ActionState.Error, e.Message);
+                    ActionContainer.Invoke(new Action<Control>(ActionContainer.ScrollControlIntoView), adc);
                 }
                 else
                 {
-                    _setActionDisplayState(adc, ActionState.Error, e.Message);
+                    ActionContainer.ScrollControlIntoView(adc);
                 }
-
+                
                 messageBuilder.AppendLine("Error occurred in ");
                 messageBuilder.Append(e.ErrorAction.Name).Append(" (");
                 messageBuilder.Append(e.ErrorAction.Comment).AppendLine(")");
@@ -135,21 +137,26 @@ namespace Centipede
                 }
             }
             var adc = currentAction.Tag as ActionDisplayControl;
-            if (adc == null)
-            {
-                throw new ArgumentNullException("currentAction");
-            }
-            if (adc.InvokeRequired)
-            {
-                adc.Invoke(_setActionDisplayState, adc, ActionState.Completed, "Completed");
-            }
-            else
-            {
-                (adc).State = ActionState.Completed;
-            }
+            SetState(adc, ActionState.Completed, "Completed");
 
             //this is supposed to be a percentage, but this works.
             backgroundWorker1.ReportProgress(currentAction.Complexity);
+        }
+
+        private void SetState(ActionDisplayControl adc, ActionState state, String message)
+        {
+            if (adc == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (adc.InvokeRequired)
+            {
+                adc.Invoke(new Action<ActionDisplayControl, ActionState, string>(_setActionDisplayedState), adc, state, message);
+            }
+            else
+            {
+                _setActionDisplayedState(adc,state,message);
+            }
         }
 
         private void CompletedHandler(Boolean success)
@@ -186,7 +193,7 @@ namespace Centipede
             Program.AddAction(sendingActionFactory.Generate());
         }
 
-        private static void SetActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
+        private void _setActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
         {
             lock (adc)
             {
@@ -377,14 +384,7 @@ namespace Centipede
         private void Program_BeforeAction(Action action)
         {
             var adc = action.Tag as ActionDisplayControl;
-            if (adc.InvokeRequired)
-            {
-                adc.Invoke(_setActionDisplayState, adc, ActionState.Running, "Running");
-            }
-            else
-            {
-                adc.State = ActionState.Running;
-            }
+            SetState(adc, ActionState.Running, "Running");
         }
 
         private void Program_ActionAdded(Action action, int index)
@@ -505,7 +505,7 @@ namespace Centipede
         {
             foreach (ActionDisplayControl adc in ActionContainer.Controls)
             {
-                adc.State = ActionState.None;
+                SetState(adc, ActionState.None, String.Empty);
             }
             progressBar1.Value = 0;
             progressBar1.Maximum = Program.JobComplexity;
@@ -586,7 +586,5 @@ namespace Centipede
 
             Program.Dispose(disposing);
         }
-
-        private delegate void SetStateDeligate(ActionDisplayControl adc, ActionState state, String message);
     }
 }
