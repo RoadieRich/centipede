@@ -213,17 +213,7 @@ namespace Centipede
             af = new ActionFactory("Show Messagebox", typeof (ShowMessageBox));
 
             UIActListBox.Items.Add(af);
-
-            af = new ActionFactory("Branch", typeof (BranchAction));
-
-            FlowControlListBox.Items.Add(af);
-
-            af = new ActionFactory("Variable", typeof (VariableAction));
-
-            FlowControlListBox.Items.Add(af);
-
-            FlowControlActionTab.Tag = FlowControlListBox;
-
+            
             GetActionPlugins();
 
             VarDataGridView.DataSource = _dataSet.Variables;

@@ -7,7 +7,6 @@ using System.IO;
 using Centipede.Actions;
 using Centipede.StringInject;
 
-
 // ReSharper disable UnusedMember.Global
 
 [assembly: CLSCompliant(true)]
@@ -59,13 +58,15 @@ namespace Centipede
         /// <summary>
         /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, 
         /// converting an object from Variables to a specific type.
+        /// </summary>
         /// <example>
+        /// <code>
         /// protected override void InitAction()
         /// {
         ///     this.TextFile = Variables["TextFile"] as FileStream;
         /// }
+        /// </code>
         /// </example>
-        /// </summary>
         protected virtual void InitAction()
         { }
 
@@ -114,9 +115,11 @@ namespace Centipede
         /// Parse a string, injecting values from Variables as required
         /// </summary>
         /// <example>
+        /// <code>
         /// Variables["variable_a"] = "foo";
         /// Variables["variable_b"] = "bar"
         /// ParseStringForVariable("{variable_a}{variable_b}") //returns "foobar"
+        /// </code>
         /// </example>
         /// <param name="str">The string to parse</param>
         /// <returns>String</returns>
@@ -252,9 +255,9 @@ namespace Centipede
         /// <param name="element">the xml to convert</param>
         /// <param name="variables">Program.Variables, passed to the Action.ctor</param>
         /// <returns></returns>
-        static public Action FromXml(XmlElement element, Dictionary<String, Object> variables)
+        public static Action FromXml(XmlElement element, Dictionary<String, Object> variables)
         {
-            Type[] constructorArgumentTypes = { typeof(Dictionary<String, Object>) };
+            Type[] constructorArgumentTypes = new[] { typeof (Dictionary<String, Object>) };
 
             Assembly asm;
 
@@ -311,9 +314,7 @@ namespace Centipede
             return instance as Action;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        
 
         public virtual void Dispose()
         {

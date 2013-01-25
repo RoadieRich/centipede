@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation1", "Documentation1\Documentation1.shfbproj", "{791688F0-AA12-42D9-9A9C-22515E65B199}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Centipede1.vsmdi
@@ -147,6 +149,23 @@ Global
 		{9E5F8A29-464D-48E4-95F3-00A0239F324C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9E5F8A29-464D-48E4-95F3-00A0239F324C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{9E5F8A29-464D-48E4-95F3-00A0239F324C}.Release|x86.ActiveCfg = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|Any CPU.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|Any CPU.Build.0 = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|Mixed Platforms.Build.0 = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|Win32.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.debug with test actions|x86.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|Win32.ActiveCfg = Release|Any CPU
+		{791688F0-AA12-42D9-9A9C-22515E65B199}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

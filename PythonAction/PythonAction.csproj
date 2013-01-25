@@ -64,6 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchAction.cs" />
+    <Compile Include="BranchDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -77,6 +81,7 @@
     <Compile Include="PythonDisplayControl.Designer.cs">
       <DependentUpon>PythonDisplayControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="VariableAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Action\Action.csproj">
@@ -100,6 +105,9 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BranchDisplayControl.resx">
+      <DependentUpon>BranchDisplayControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -114,6 +122,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\generic.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\branch.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\variable.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

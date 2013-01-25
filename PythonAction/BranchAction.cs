@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using PythonEngine;
+using Centipede;
+using Action = Centipede.Action;
 
 
-namespace Centipede.Actions
+namespace PyAction
 {
     /// <summary>
     /// 
     /// </summary>
 
-    [ActionCategory("Flow Control", displayName="Branch", displayControl="BranchDisplayControl")]
+    [ActionCategory("Flow Control", displayName="Branch", displayControl="BranchDisplayControl", iconName="branch")]
     // ReSharper disable ClassNeverInstantiated.Global
     public class BranchAction : Action
     {

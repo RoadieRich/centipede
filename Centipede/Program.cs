@@ -46,7 +46,7 @@ namespace Centipede
         public static string JobFileName = "";
         public static string JobName = "";
 
-        internal static readonly List<Action> Actions = new List<Action>();
+        public static readonly List<Action> Actions = new List<Action>();
         private static MainWindow _mainForm;
 
         public static Int32 JobComplexity

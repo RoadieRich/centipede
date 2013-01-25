@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Centipede.PyAction.Properties {
+namespace PyAction.Properties {
     using System;
     
     
@@ -60,9 +60,23 @@ namespace Centipede.PyAction.Properties {
             }
         }
         
+        public static System.Drawing.Icon branch {
+            get {
+                object obj = ResourceManager.GetObject("branch", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         public static System.Drawing.Icon pycon {
             get {
                 object obj = ResourceManager.GetObject("pycon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        public static System.Drawing.Icon variable {
+            get {
+                object obj = ResourceManager.GetObject("variable", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

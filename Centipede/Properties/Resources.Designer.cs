@@ -22,7 +22,7 @@ namespace Centipede.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -63,7 +63,7 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Action if false.
         /// </summary>
-        internal static string BranchDisplayControl_BranchDisplayControl_Action_if_false {
+        public static string BranchDisplayControl_BranchDisplayControl_Action_if_false {
             get {
                 return ResourceManager.GetString("BranchDisplayControl_BranchDisplayControl_Action_if_false", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Condition.
         /// </summary>
-        internal static string BranchDisplayControl_BranchDisplayControl_Condition {
+        public static string BranchDisplayControl_BranchDisplayControl_Condition {
             get {
                 return ResourceManager.GetString("BranchDisplayControl_BranchDisplayControl_Condition", resourceCulture);
             }

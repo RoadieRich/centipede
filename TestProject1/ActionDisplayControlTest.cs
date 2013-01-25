@@ -1,44 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using Centipede;
 using Centipede.Actions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Windows.Forms;
 using Action = Centipede.Action;
 
 
 namespace TestProject1
 {
-    
-    
     /// <summary>
-    ///This is a test class for ActionDisplayControlTest and is intended
-    ///to contain all ActionDisplayControlTest Unit Tests
-    ///</summary>
-    [TestClass()]
+    ///     This is a test class for ActionDisplayControlTest and is intended
+    ///     to contain all ActionDisplayControlTest Unit Tests
+    /// </summary>
+    [TestClass]
     public class ActionDisplayControlTest
     {
-
-
-        private TestContext testContextInstance;
-
+        /*
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
         ///</summary>
         public TestContext TestContext
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+            get;
+            set;
         }
+*/
 
         #region Additional test attributes
+
         // 
         //You can use the following additional attributes as you write your tests:
         //
@@ -66,74 +57,75 @@ namespace TestProject1
         //{
         //}
         //
+
         #endregion
 
-
         /// <summary>
-        ///A test for ActionDisplayControl Constructor
-        ///</summary>
-        [TestMethod()]
-        public void ActionDisplayControlConstructorTest()
+        ///     Check that ADC constructor correctly assigns ThisAction
+        /// </summary>
+        [TestMethod]
+        public void ActionDisplayControlConstructorThisActionTest()
         {
             Action action = new TestAction(new Dictionary<string, object>());
-            ActionDisplayControl target = new ActionDisplayControl(action);
-            PrivateObject targetPrivate = new PrivateObject(target);
+            var target = new ActionDisplayControl(action);
             Assert.AreEqual(action, target.ThisAction);
         }
 
         /// <summary>
-        ///A test for ActMenuDelete_Click
-        ///</summary>
-        [TestMethod()]
+        ///     Check arguments passed to Deleted event listener(s)
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void ActMenuDelete_ClickTest()
         {
-            ActionDisplayControl adc = new ActionDisplayControl(new TestAction(new Dictionary<string, object>()));
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new PrivateObject(adc));
-            object sender = null, received = null;
-            EventArgs e = new CentipedeEventArgs(null, new List<Action>(),new Dictionary<string, object>() );
+            var adc = new ActionDisplayControl(new TestAction(new Dictionary<string, object>()));
+            var target = new ActionDisplayControl_Accessor(new PrivateObject(adc));
+            object received = null;
+            EventArgs e = new CentipedeEventArgs(null, new List<Action>(), new Dictionary<string, object>());
             int handlerCalled = 0;
-
+            EventArgs receivedArgs = null;
 
             adc.Deleted += (delegate(object sndr, CentipedeEventArgs cea)
-                                   {
-                                       handlerCalled++;
-                                       received = sndr;
-                                   });
-            target.ActMenuDelete_Click(sender, e);
+                                {
+                                    handlerCalled++;
+                                    received = sndr;
+                                    receivedArgs = cea;
+                                });
+
+            target.ActMenuDelete_Click(null, e);
             Assert.AreEqual(adc, received);
             Assert.AreEqual(1, handlerCalled);
+            Assert.AreEqual(e, receivedArgs);
         }
 
         /// <summary>
-        ///A test for CommentTextBox_TextChanged
-        ///</summary>
-        [TestMethod()]
+        ///     A test for CommentTextBox_TextChanged
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void CommentTextBox_TextChangedTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>())); // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
-            String newComment = @"test";
-            TextBox sender = new TextBox
-                             {
-                                     Text = newComment
-                             };
-            
-            target.CommentTextBox_TextChanged(sender, e);
+            var target =
+                    new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>()));
+            String newComment = TestHelpers.RandomString(12);
+            var sender = new TextBox
+                         {
+                                 Text = newComment
+                         };
+
+            target.CommentTextBox_TextChanged(sender, null);
             Assert.AreEqual(newComment, target.ThisAction.Comment);
-            
         }
 
         /// <summary>
-        ///A test for Dispose
-        ///</summary>
-        [TestMethod()]
+        ///     A test for Dispose
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void DisposeTest()
         {
-            TestAction action = new TestAction(new Dictionary<string, object>());
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action);
+            var action = new TestAction(new Dictionary<string, object>());
+            var target = new ActionDisplayControl_Accessor(action);
             target.Dispose(false);
             Assert.AreEqual(0, action.DisposeCalled);
             target.Dispose(true);
@@ -141,169 +133,175 @@ namespace TestProject1
         }
 
         /// <summary>
-        ///A test for ExpandButton_Click
-        ///</summary>
-        [TestMethod()]
+        ///     A test for ExpandButton_Click
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void ExpandButton_ClickTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
+            var target = new ActionDisplayControl_Accessor();
             int visibilityChanged = 0;
             target.AttributeTable.VisibleChanged += delegate { visibilityChanged++; };
             bool currentVisibility = target.AttributeTable.Visible;
-            target.ExpandButton_Click(sender, e);
+            target.ExpandButton_Click(null, null);
             Assert.AreEqual(1, visibilityChanged);
             Assert.AreEqual(!currentVisibility, target.AttributeTable.Visible);
-            target.ExpandButton_Click(sender, e);
+            target.ExpandButton_Click(null, null);
             Assert.AreEqual(2, visibilityChanged);
             Assert.AreEqual(currentVisibility, target.AttributeTable.Visible);
         }
 
         /// <summary>
-        ///A test for GenerateArguments
-        ///</summary>
-        [TestMethod()]
+        ///     A test for GenerateArguments
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void GenerateArgumentsTest()
         {
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>())); // TODO: Initialize to an appropriate value
-            
+            var target =
+                    new ActionDisplayControl_Accessor(new TestAction(new Dictionary<string, object>()));
+
             Assert.AreEqual(4, target.AttributeTable.Controls.Count);
         }
 
         /// <summary>
-        ///A test for GenerateFieldControls
-        ///</summary>
-        [TestMethod()]
+        ///     A test for GenerateFieldControls
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void GenerateFieldControlsTest()
         {
-            TestAction action = new TestAction(new Dictionary<string, object>());
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor arg = new FieldAndPropertyWrapper_Accessor(action.GetType().GetField("FieldArgument"));
-            
-            Control[] actual;
-            actual = target.GenerateFieldControls(arg);
-            Assert.AreEqual(2, actual.Length);
-            Assert.IsInstanceOfType(actual[0], typeof(Label));
-            Assert.IsInstanceOfType(actual[1], typeof(TextBox));
-            Label label = actual[0] as Label;
-            TextBox textBox = actual[1] as TextBox;
-            Assert.AreEqual("field argument value", textBox.Text);
+            var action = new TestAction(new Dictionary<string, object>());
+            var target = new ActionDisplayControl_Accessor(action);
+            var arg =
+                    new FieldAndPropertyWrapper_Accessor(action.GetType().GetField("FieldArgument"));
 
+            Control[] actual = target.GenerateFieldControls(arg);
+            Assert.AreEqual(2, actual.Length);
+            Assert.IsInstanceOfType(actual[0], typeof (Label));
+            Assert.IsInstanceOfType(actual[1], typeof (TextBox));
+            var label = actual[0] as Label;
+            var textBox = actual[1] as TextBox;
+            Assert.AreEqual("field argument value", textBox.Text);
+            Assert.AreEqual("Field Argument", label.Text);
         }
 
         /// <summary>
-        ///A test for GetArgumentName
-        ///</summary>
-        [TestMethod()]
+        ///     A test for GetArgumentName
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void GetArgumentNameTest()
         {
-            TestAction action = new TestAction(new Dictionary<string, object>());
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
-            FieldAndPropertyWrapper_Accessor argument = new FieldAndPropertyWrapper_Accessor(typeof(TestAction).GetField("FieldArgument")); // TODO: Initialize to an appropriate value
-            
+            var action = new TestAction(new Dictionary<string, object>());
+            var target = new ActionDisplayControl_Accessor(action);
+            var argument =
+                    new FieldAndPropertyWrapper_Accessor(typeof (TestAction).GetField("FieldArgument"));
+
             string actual = target.GetArgumentName(argument);
-            
+
             Assert.AreEqual("Field Argument", actual);
         }
 
-        class ActionWithChangedHandler : Action
+        private class ActionWithChangedHandler : Action
         {
+            // ReSharper disable UnusedMember.Local
+
             public ActionWithChangedHandler()
                     : base("", new Dictionary<string, object>())
             { }
 
             /// <summary>
-            /// Perform the action
+            ///     Perform the action
             /// </summary>
             protected override void DoAction()
             { }
 
-            [ActionArgument(onChangedHandlerName = "changed")]
+            [ActionArgument(onChangedHandlerName = "Changed")]
             public string Argument = "";
 
-            public object senderReceived;
+            public object SenderReceived;
             public EventArgs EventArgs;
 
-            public void changed(object sender, EventArgs e)
+            public void Changed(object sender, EventArgs e)
             {
-                this.senderReceived = sender;
-                this.EventArgs = e;
+                SenderReceived = sender;
+                EventArgs = e;
             }
+
+            // ReSharper restore UnusedMember.Local
         }
 
         /// <summary>
-        ///A test for GetChangedHandler
-        ///</summary>
-        [TestMethod()]
+        ///     A test for GetChangedHandler
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void GetChangedHandlerTest()
         {
-            ActionWithChangedHandler action = new ActionWithChangedHandler();
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            var action = new ActionWithChangedHandler();
+            var target = new ActionDisplayControl_Accessor(action);
             FieldAndPropertyWrapper_Accessor arg = typeof (ActionWithChangedHandler).GetField("Argument");
 
             EventHandler handler = target.GetChangedHandler(arg);
-            
-            object sender = new object();
-            EventArgs e = new EventArgs();
+
+            var sender = new object();
+            var e = new EventArgs();
 
             handler(sender, e);
 
-            Assert.AreSame(sender, action.senderReceived);
+            Assert.AreSame(sender, action.SenderReceived);
             Assert.AreSame(e, action.EventArgs);
         }
 
-        class ActionWithLeaveHandler : Action
+        private class ActionWithLeaveHandler : Action
         {
+            // ReSharper disable UnusedMember.Local
             public ActionWithLeaveHandler()
-                : base("", new Dictionary<string, object>())
+                    : base("", new Dictionary<string, object>())
             { }
 
             /// <summary>
-            /// Perform the action
+            ///     Perform the action
             /// </summary>
             protected override void DoAction()
             { }
 
-            [ActionArgument(onLeaveHandlerName = "changed")]
+            [ActionArgument(onLeaveHandlerName = "Leaving")]
             public string Argument = "";
 
-            public object senderReceived;
+            public object SenderReceived;
             public EventArgs EventArgs;
 
-            public void changed(object sender, EventArgs e)
+            public void Leaving(object sender, EventArgs e)
             {
-                this.senderReceived = sender;
-                this.EventArgs = e;
+                SenderReceived = sender;
+                EventArgs = e;
             }
+
+            // ReSharper restore UnusedMember.Local
         }
 
         /// <summary>
-        ///A test for GetLeaveHandler
-        ///</summary>
-        [TestMethod()]
+        ///     A test for GetLeaveHandler
+        /// </summary>
+        [TestMethod]
         [DeploymentItem("Action.dll")]
         public void GetLeaveHandlerTest()
         {
-            ActionWithLeaveHandler action = new ActionWithLeaveHandler();
-            ActionDisplayControl_Accessor target = new ActionDisplayControl_Accessor(action); // TODO: Initialize to an appropriate value
+            var action = new ActionWithLeaveHandler();
+            var target = new ActionDisplayControl_Accessor(action);
             FieldAndPropertyWrapper_Accessor arg = action.GetType().GetField("Argument");
 
             EventHandler handler = target.GetLeaveHandler(arg);
 
-            object sender = new object();
-            EventArgs e = new EventArgs();
+            var sender = new object();
+            var e = new EventArgs();
 
             handler(sender, e);
 
-            Assert.AreSame(sender, action.senderReceived);
+            Assert.AreSame(sender, action.SenderReceived);
             Assert.AreSame(e, action.EventArgs);
         }
-
     }
 }

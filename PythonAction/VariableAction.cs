@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Centipede;
+using Action = Centipede.Action;
 
-namespace Centipede.Actions
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ConvertToConstant.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+namespace PyAction
 {
-    [ActionCategory("Flow Control")]
+    [ActionCategory("Flow Control", displayName="Variable", iconName="variable")]
     public class VariableAction : Action
     {
         /// <summary>
