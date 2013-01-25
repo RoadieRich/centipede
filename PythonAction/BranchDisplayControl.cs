@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Centipede;
+using Centipede.Actions;
 using Centipede.Properties;
-using PyAction;
 using ScintillaNET;
+using Action = Centipede.Action;
 
 
-namespace Centipede.Actions
+namespace PyAction
 {
 // ReSharper disable UnusedMember.Global
     class BranchDisplayControl : ActionDisplayControl
