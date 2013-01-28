@@ -202,12 +202,7 @@ namespace Centipede.Actions
             f.Set(ThisAction, value);
 
         }
-
-// ReSharper disable ConvertToConstant.Local
-// ReSharper disable FieldCanBeMadeReadOnly.Local
-        // ReSharper restore FieldCanBeMadeReadOnly.Local
-// ReSharper restore ConvertToConstant.Local
-
+        
         ///
         /// <summary>
         /// Gets or sets the background color for the control.

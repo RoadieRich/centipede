@@ -12,3 +12,12 @@ dox/*
 units_library/*
 ipch/*
 */Thumbs.db
+*.DotSettings
+Documentation1/Help/*
+*.DotSettings.user
+TestProject1/*.dll
+TestProject1/*.pdb
+TestProject1/*.xml
+TestProject1/*.exe
+TestProject1/*.XML
+*.resources.dll
