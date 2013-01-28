@@ -163,4 +163,19 @@
   <data name="BranchDisplayControl_BranchDisplayControl_Condition" xml:space="preserve">
     <value>Condition</value>
   </data>
+  <data name="MainWindow_Text_Centipede____0__1_" xml:space="preserve">
+    <value>Centipede - {0}{1}</value>
+  </data>
+  <data name="MainWindow_Text_Centipede" xml:space="preserve">
+    <value>Centipede</value>
+  </data>
+  <data name="MainWindow_ErrorHandler_Error_occurred_in_" xml:space="preserve">
+    <value>Error occurred in </value>
+  </data>
+  <data name="MainWindow_ErrorHandler_Message_was_" xml:space="preserve">
+    <value>Message was:</value>
+  </data>
+  <data name="MainWindow_ErrorHandler_Error_" xml:space="preserve">
+    <value>Error:</value>
+  </data>
 </root>

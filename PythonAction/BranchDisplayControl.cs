@@ -39,10 +39,11 @@ namespace PyAction
 
             Scintilla conditionControl = new Scintilla
                                          {
-                                                 ConfigurationManager = { Language = "python" },
+                                                 ConfigurationManager = { Language = @"python" },
                                                  Height = 20,
                                                  AcceptsReturn = false,
-                                                 Text = ThisAction.ConditionSource
+                                                 Text = ThisAction.ConditionSource,
+                                                 Dock = DockStyle.Fill
                                          };
             conditionControl.TextChanged += (sender, e) =>
                                                 {

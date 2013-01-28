@@ -51,7 +51,8 @@ namespace TestProject1
         //{
         //}
         //
-        //Use TestInitialize to run code before running each test
+
+        ///<summary>Use TestInitialize to run code before running each test</summary>
         [TestInitialize()]
         public void MyTestInitialize()
         {

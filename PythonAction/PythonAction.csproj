@@ -81,6 +81,11 @@
     <Compile Include="PythonDisplayControl.Designer.cs">
       <DependentUpon>PythonDisplayControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="PythonDisplayControl1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PythonDisplayControl.resx</DependentUpon>
+    </Compile>
     <Compile Include="VariableAction.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +120,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PythonDisplayControl.resx">
       <DependentUpon>PythonDisplayControl.cs</DependentUpon>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PythonDisplayControl1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

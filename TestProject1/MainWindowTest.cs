@@ -360,21 +360,7 @@ namespace TestProject1
             target.SaveJob();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
-
-        /// <summary>
-        ///A test for SetActionDisplayedState
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Centipede.exe")]
-        public void SetActionDisplayedStateTest()
-        {
-            ActionDisplayControl adc = null; // TODO: Initialize to an appropriate value
-            ActionState state = new ActionState(); // TODO: Initialize to an appropriate value
-            string message = string.Empty; // TODO: Initialize to an appropriate value
-            //MainWindow_Accessor.SetState(adc, state, message);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
+        
         /// <summary>
         ///A test for UpdateHandlerDone
         ///</summary>

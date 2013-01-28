@@ -33,12 +33,12 @@ namespace Centipede
         {
             set
             {
-                String dirtyMarker = "";
+                String dirtyMarker = String.Empty;
                 if (Dirty)
                 {
-                    dirtyMarker = " *";
+                    dirtyMarker = @" *";
                 }
-                base.Text = String.Format("Centipede - {0}{1}", new object[] { value, dirtyMarker });
+                base.Text = String.Format(@"{2} - {0}{1}", value, dirtyMarker, Resources.MainWindow_Text_Centipede);
             }
         }
 
@@ -74,16 +74,16 @@ namespace Centipede
                     ActionContainer.ScrollControlIntoView(adc);
                 }
                 
-                messageBuilder.AppendLine("Error occurred in ");
-                messageBuilder.Append(e.ErrorAction.Name).Append(" (");
-                messageBuilder.Append(e.ErrorAction.Comment).AppendLine(")");
+                messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Error_occurred_in_);
+                messageBuilder.Append(e.ErrorAction.Name).Append(@" (");
+                messageBuilder.Append(e.ErrorAction.Comment).AppendLine(@")");
                 messageBuilder.AppendLine();
-                messageBuilder.AppendLine("Message was:");
+                messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Message_was_);
                 messageBuilder.AppendLine(e.Message);
             }
             else
             {
-                messageBuilder.AppendLine("Error:");
+                messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Error_);
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine(e.Message);
             }
@@ -121,7 +121,7 @@ namespace Centipede
         {
             foreach (var v in Program.Variables.ToArray())
             {
-                if (v.Key.StartsWith("_"))
+                if (v.Key.StartsWith(@"_"))
                 {
                     continue;
                 }
@@ -323,6 +323,7 @@ namespace Centipede
             if (tabPage != null)
             {
                 catListView = tabPage.Tag as ListView;
+                
             }
             else
             {
@@ -331,7 +332,7 @@ namespace Centipede
 
             var af = new ActionFactory(catAttribute, pluginType);
 
-            if (catAttribute.iconName != "")
+            if (!string.IsNullOrEmpty(catAttribute.iconName))
             {
                 Type t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
                 if (t != null)

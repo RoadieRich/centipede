@@ -9,7 +9,7 @@ using Action = Centipede.Action;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 namespace PyAction
 {
-    [ActionCategory("Flow Control", displayName="Variable", iconName="variable")]
+    [ActionCategory("Flow Control", displayName="Variable", iconName=@"variable")]
     public class VariableAction : Action
     {
         /// <summary>

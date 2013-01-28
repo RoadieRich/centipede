@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing.Printing;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -20,25 +19,25 @@ namespace PyAction
 
             var scintilla = new Scintilla
                             {
-                                    ConfigurationManager = { Language = "python" },
+                                    ConfigurationManager = { Language = @"python" },
                                     Dock = DockStyle.Fill,
                                     Margins = { Margin0 = { Width = 20 } }
                             };
             //scintilla.Margins[0].Width = 20;
             scintilla.TextChanged += sourceControl_TextChanged;
             
-            this.AttributeTable.Controls.Add(scintilla);
+            AttributeTable.Controls.Add(scintilla);
             AttributeTable.SetColumnSpan(scintilla, 2);
             
         }
 
-        public new PythonAction ThisAction
+        private new PythonAction ThisAction
         {
             get
             {
                 return base.ThisAction as PythonAction;
             }
-            protected set
+            set
             {
                 base.ThisAction = value;
             }

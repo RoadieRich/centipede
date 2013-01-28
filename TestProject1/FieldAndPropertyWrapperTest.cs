@@ -106,6 +106,9 @@ namespace TestProject1
             //Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod()]
         public void GetTest()
         {
@@ -167,6 +170,9 @@ namespace TestProject1
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod()]
         public void SetTest()
         {
