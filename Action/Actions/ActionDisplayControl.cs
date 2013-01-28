@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Centipede.Properties;
 
 
 namespace Centipede.Actions
@@ -75,10 +76,10 @@ namespace Centipede.Actions
 
             var fieldArguments = from fi in actionType.GetMembers()
                                  where fi is FieldInfo || fi is PropertyInfo
-                                 select new FieldAndPropertyWrapper((dynamic)fi)
-                                     into wrapped
-                                     where wrapped.GetArguementAttribute() != null
-                                     select wrapped;
+                                 select (FieldAndPropertyWrapper)fi
+                                 into wrapped
+                                 where wrapped.GetArguementAttribute() != null
+                                 select wrapped;
 
             foreach (FieldAndPropertyWrapper arg in fieldArguments)
             {
@@ -190,7 +191,7 @@ namespace Centipede.Actions
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(String.Format("Invalid Value entered in {0}.{1}: {2}", ThisAction.Name, argInfo.displayName, attrValue.Text));
+                    MessageBox.Show(String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message, ThisAction.Name, argInfo.displayName, attrValue.Text));
                 }
             }
             else
@@ -243,12 +244,12 @@ namespace Centipede.Actions
             if (!AttributeTable.Visible)
             {
                 AttributeTable.Visible = true;
-                ExpandButton.Text = "-";
+                ExpandButton.Text = @"-";
             }
             else
             {
                 AttributeTable.Visible = false;
-                ExpandButton.Text = "+";
+                ExpandButton.Text = @"+";
             }
         }
 
@@ -256,16 +257,16 @@ namespace Centipede.Actions
 
         /// <summary>
         /// Sets the displayed state of the action.
-        /// <see cref="ActionState"/>
+        /// <seealso cref="T:Centipede.Actions.ActionState"/>
         /// </summary>
         public ActionState State
         {
-// ReSharper disable UnusedMember.Global
+            // ReSharper disable UnusedMember.Global
             get
-// ReSharper restore UnusedMember.Global
             {
                 return _state;
             }
+            // ReSharper restore UnusedMember.Global
             set
             {
                 switch (value)
@@ -275,15 +276,15 @@ namespace Centipede.Actions
                         BackColor = SystemColors.Control;
                         break;
                     case ActionState.Running:
-                        StatusIconBox.Image = StatusIcons.Images["Run.png"];
+                        StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
                         BackColor = Color.DarkGray;
                         break;
                     case ActionState.Error:
-                        StatusIconBox.Image = StatusIcons.Images["Error.png"];
+                        StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
                         BackColor = Color.DarkRed;
                         break;
                     case ActionState.Completed:
-                        StatusIconBox.Image = StatusIcons.Images["OK.png"];
+                        StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
                         BackColor = SystemColors.Control;
                         break;
                 }
@@ -291,16 +292,16 @@ namespace Centipede.Actions
             }
         }
 
+        // ReSharper disable VirtualMemberNeverOverriden.Global
         /// <summary>
-        /// 
+        /// The <see cref="T:Centipede.Action"/> this control is displaying.
         /// </summary>
-// ReSharper disable VirtualMemberNeverOverriden.Global
         public virtual Action ThisAction
-// ReSharper restore VirtualMemberNeverOverriden.Global
         {
             get;
             protected set;
         }
+        // ReSharper restore VirtualMemberNeverOverriden.Global
 
         private readonly ToolTip _statusToolTip;
 
@@ -346,22 +347,22 @@ namespace Centipede.Actions
     }
 
     /// <summary>
-    /// 
+    /// The state of the <see cref="T:Centipede.Action"/> stored in <see cref="P:Centipede.Actions.ActionDisplayControl.ThisAction"/>
     /// </summary>
     public enum ActionState
     {
         /// <summary>
-        /// 
+        /// Action has not been executed yet 
         /// </summary>
         None = -1,
 
         /// <summary>
-        /// 
+        /// Action is currently being executed
         /// </summary>
         Running = 0,
 
         /// <summary>
-        /// 
+        /// Actiion has been completed
         /// </summary>
         Completed = 1,
 
@@ -371,8 +372,45 @@ namespace Centipede.Actions
         Error = 2
     }
 
-    class FieldAndPropertyWrapper
+    /// <summary>
+    /// Wrapper to allow uniform access to <see cref="T:System.Reflection.FieldInfo"/> and <see cref="T:System.Reflection.PropertyInfo"/>
+    /// </summary>
+    public class FieldAndPropertyWrapper : IDisposable
     {
+        /// <summary>
+        /// Creates a new <see cref="FieldAndPropertyWrapper"/>
+        /// </summary>
+        /// <param name="prop">The <see cref="PropertyInfo"/> to wrap</param>
+        /// <seealso cref="FieldAndPropertyWrapper(FieldInfo)"/>
+        public FieldAndPropertyWrapper(PropertyInfo prop)
+        {
+            _member = prop;
+            _getter = o => prop.GetValue(o, null);
+            _setter = (o, v) => prop.SetValue(o, v, null);
+            _memberType  = prop.PropertyType;
+
+            Cache[prop] = this;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="FieldAndPropertyWrapper"/>
+        /// </summary>
+        /// <param name="field">The <see cref="FieldInfo"/> to wrap</param>
+        /// <seealso cref="FieldAndPropertyWrapper(PropertyInfo)"/>
+        public FieldAndPropertyWrapper(FieldInfo field)
+        {
+            _member = field;
+            _getter = field.GetValue;
+            _setter = field.SetValue;
+            _memberType  = field.FieldType;
+
+            Cache[field] = this;
+        }
+
+
+        /// <value>
+        /// The <see cref="T:System.Type"/> that declares the member the <see cref="T:Centipede.Actions.FieldAndPropertyWrapper"/> is referencing
+        /// </value>
         public Type DeclaringType
         {
             get
@@ -380,25 +418,17 @@ namespace Centipede.Actions
                 return _member.DeclaringType;
             }
         }
-        public FieldAndPropertyWrapper(PropertyInfo prop)
-        {
-            _member = prop;
-            _getter = o => prop.GetValue(o, null);
-            _setter = (o, v) => prop.SetValue(o, v, null);
-            _memberType  = prop.PropertyType;
-        }
 
-        public FieldAndPropertyWrapper(FieldInfo field)
-        {
-            _member = field;
-            _getter = field.GetValue;
-            _setter = field.SetValue;
-            _memberType  = field.FieldType;
-        }
 
-        readonly MemberInfo _member;
-
+        private readonly MemberInfo _member;
         private readonly Func<object, object> _getter;
+        
+        /// <summary>
+        /// Gets the value of the wrapped member
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o">The instance to get the value of the member of</param>
+        /// <returns></returns>
         public T Get<T>(object o)
         {
             return (T)_getter(o);
@@ -406,18 +436,29 @@ namespace Centipede.Actions
         private readonly Action<object, object> _setter;
         private readonly Type _memberType;
 
-        public void Set<T>(object o, T v)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <param name="value"></param>
+        public void Set<T>(object o, T value)
         {
-            _setter(o, v);
+            _setter(o, value);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public ActionArgumentAttribute GetArguementAttribute()
         {
             return _member.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Cast<ActionArgumentAttribute>().SingleOrDefault();
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public string Name
         {
             get
@@ -426,6 +467,9 @@ namespace Centipede.Actions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Type MemberType
         {
             get
@@ -434,10 +478,31 @@ namespace Centipede.Actions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public enum FieldType
         {
             //first value listed is used for default()
-            Other, String, Numeric, Boolean,
+            /// <summary>
+            /// 
+            /// </summary>
+            Other, 
+            
+            /// <summary>
+            /// 
+            /// </summary>
+            String, 
+
+            /// <summary>
+            /// 
+            /// </summary>
+            Numeric, 
+            
+            /// <summary>
+            /// 
+            /// </summary>
+            Boolean,
         }
         private static readonly Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>
                                                                           {
@@ -457,6 +522,10 @@ namespace Centipede.Actions
             {typeof(string),    FieldType.String},
         };
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public FieldType GetFieldTypeCategory()
         {
 
@@ -468,23 +537,78 @@ namespace Centipede.Actions
             }
 
             FieldType fieldType;
-            if (!TypeMapping.TryGetValue(baseType, out fieldType))
-            {
-                return FieldType.Other;
-            }
-
-            return fieldType;
+            return TypeMapping.TryGetValue(baseType, out fieldType) ? fieldType : FieldType.Other;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
         public static implicit operator FieldAndPropertyWrapper(FieldInfo f)
         {
+            if (Cache.ContainsKey(f))
+            {
+                return Cache[f];
+            }
             return new FieldAndPropertyWrapper(f);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wrapped"></param>
+        /// <returns></returns>
+        public static explicit operator FieldInfo(FieldAndPropertyWrapper wrapped)
+        {
+            if (wrapped._member is FieldInfo)
+            {
+                return wrapped._member as FieldInfo;
+            }
+            throw new InvalidCastException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
         public static implicit operator FieldAndPropertyWrapper(PropertyInfo p)
         {
+            if (Cache.ContainsKey(p))
+            {
+                return Cache[p];
+            }
             return new FieldAndPropertyWrapper(p);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wrapped"></param>
+        /// <returns></returns>
+        public static explicit operator PropertyInfo(FieldAndPropertyWrapper wrapped)
+        {
+            if (wrapped._member is PropertyInfo)
+            {
+                return wrapped._member as PropertyInfo;
+            }
+            throw new InvalidCastException();
+        }
+
+        private static readonly Dictionary<MemberInfo, FieldAndPropertyWrapper> Cache = new Dictionary<MemberInfo, FieldAndPropertyWrapper>(); 
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
         public static explicit operator FieldAndPropertyWrapper(MemberInfo m)
         {
+            if (Cache.ContainsKey(m))
+            {
+                return Cache[m];
+            }
             if (m is FieldInfo)
             {
                 return new FieldAndPropertyWrapper(m as FieldInfo);
@@ -494,6 +618,23 @@ namespace Centipede.Actions
                 return new FieldAndPropertyWrapper(m as PropertyInfo);
             }
             throw new InvalidCastException();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="wrapped"></param>
+        /// <returns></returns>
+        public static implicit operator MemberInfo(FieldAndPropertyWrapper wrapped)
+        {
+            return wrapped._member;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            Cache.Clear();
         }
     }
 }
