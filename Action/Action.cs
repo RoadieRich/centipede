@@ -46,9 +46,19 @@ namespace Centipede
         public String Comment = "";
 
         /// <summary>
-        /// 
+        /// Gets or sets the object that contains data about the control.
         /// </summary>
-        public Object Tag;
+        /// <returns>
+        /// An Object that contains data about the control. The default is null.
+        /// </returns>
+        /// <example>In the GUI version of Centipede, <c>Tag</c> is used for a reference to the 
+        /// <see cref="ActionDisplayControl" /> displaying the action</example>
+        /// 
+        public Object Tag
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 
@@ -56,8 +66,8 @@ namespace Centipede
         public Action Next;
 
         /// <summary>
-        /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, 
-        /// converting an object from Variables to a specific type.
+        /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, converting an 
+        /// object from Variables to a specific type.
         /// </summary>
         /// <example>
         /// <code>
@@ -92,8 +102,10 @@ namespace Centipede
         }
 
         /// <summary>
-        /// In integer representing the complexity of the action, used to indicate progress in the job"
+        /// An <see cref="T:System.Int32"/> representing the complexity of the action, used to gauge progress in the 
+        /// Job
         /// </summary>
+        /// <value>Defaults to 1</value>
         public virtual Int32 Complexity
         {
             get
@@ -105,7 +117,8 @@ namespace Centipede
         /// <summary>
         /// Get the next action, can be overridden to allow custom flow control
         /// </summary>
-        /// <returns>Action</returns>
+        /// <returns>The next Action to be processed, or <see cref="null"/> if this is the last action in the 
+        /// job.</returns>
         public virtual Action GetNext()
         {
             return Next;
@@ -136,7 +149,8 @@ namespace Centipede
         /// <param name="title"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        protected AskEventEnums.DialogResult Ask(String message, String title = "Question", AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
+        protected AskEventEnums.DialogResult Ask(String message, String title = "Question",
+                                                 AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
         {
             var handler = OnAsk;
             if (handler != null)
@@ -175,18 +189,19 @@ namespace Centipede
         /// <param name="message"></param>
         /// <param name="title"></param>
         /// <param name="messageIcon"></param>
-        protected void Message(String message, String title = "Message", AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
+        protected void Message(String message, String title = "Message",
+                               AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
         {
             var handler = OnAsk;
             if (handler != null)
             {
                 var eventArgs = new AskActionEventArgs
-                                               {
-                                                       Icon = messageIcon,
-                                                       Message = message,
-                                                       Title = title,
-                                                       Type = AskEventEnums.AskType.OK
-                                               };
+                                {
+                                        Icon = messageIcon,
+                                        Message = message,
+                                        Title = title,
+                                        Type = AskEventEnums.AskType.OK
+                                };
                 OnAsk(this, eventArgs);
             }
         }
@@ -195,11 +210,12 @@ namespace Centipede
         /// 
         /// </summary>
         [Obsolete]
-        public static HashSet<String> TrueValues = new HashSet<string>(new[]{
-                                         "yes",
-                                         "true",
-                                         "1"
-                                     });
+        public static HashSet<String> TrueValues = new HashSet<string>(new[]
+                                                                       {
+                                                                               "yes",
+                                                                               "true",
+                                                                               "1"
+                                                                       });
 
         /// <summary>
         /// Append xml code for the action to the given parent element
@@ -212,22 +228,6 @@ namespace Centipede
             if (rootElement.OwnerDocument != null)
             {
                 XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
-
-                //foreach (
-                //        FieldInfo field in from f in thisType.GetFields()
-                //                           where f.GetCustomAttributes(typeof(ActionArgumentAttribute), true).Any()
-                //                           select f
-                //        )
-                //{
-                //    element.SetAttribute(field.Name, field.GetValue(this).ToString());
-                //}
-
-                //foreach (PropertyInfo prop in from p in thisType.GetProperties()
-                //                              where p.GetCustomAttributes(typeof (ActionArgumentAttribute), true).Any()
-                //                              select p)
-                //{
-                //    element.SetAttribute(prop.Name, prop.GetValue(this, null).ToString());
-                //}
 
                 foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
                                                       where member is FieldInfo || member is PropertyInfo
