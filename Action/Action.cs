@@ -231,7 +231,7 @@ namespace Centipede
 
                 foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
                                                       where member is FieldInfo || member is PropertyInfo
-                                                      select new FieldAndPropertyWrapper((dynamic)member)
+                                                      select (FieldAndPropertyWrapper)member
                                                           into wrapped
                                                           where wrapped.GetArguementAttribute() != null
                                                           select wrapped
@@ -315,10 +315,11 @@ namespace Centipede
         }
 
         
-
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void Dispose()
-        {
-        }
+        { }
     }
 
     /// <summary>
