@@ -174,7 +174,7 @@ namespace TestProject1
             var action = new TestAction(new Dictionary<string, object>());
             var target = new ActionDisplayControl_Accessor(action);
             var arg =
-                    new FieldAndPropertyWrapper_Accessor(action.GetType().GetField("FieldArgument"));
+                    new FieldAndPropertyWrapper(action.GetType().GetField("FieldArgument"));
 
             Control[] actual = target.GenerateFieldControls(arg);
             Assert.AreEqual(2, actual.Length);
@@ -196,7 +196,7 @@ namespace TestProject1
             var action = new TestAction(new Dictionary<string, object>());
             var target = new ActionDisplayControl_Accessor(action);
             var argument =
-                    new FieldAndPropertyWrapper_Accessor(typeof (TestAction).GetField("FieldArgument"));
+                    new FieldAndPropertyWrapper(typeof (TestAction).GetField("FieldArgument"));
 
             string actual = target.GetArgumentName(argument);
 
@@ -241,7 +241,7 @@ namespace TestProject1
         {
             var action = new ActionWithChangedHandler();
             var target = new ActionDisplayControl_Accessor(action);
-            FieldAndPropertyWrapper_Accessor arg = typeof (ActionWithChangedHandler).GetField("Argument");
+            FieldAndPropertyWrapper arg = typeof (ActionWithChangedHandler).GetField("Argument");
 
             EventHandler handler = target.GetChangedHandler(arg);
 
@@ -291,7 +291,7 @@ namespace TestProject1
         {
             var action = new ActionWithLeaveHandler();
             var target = new ActionDisplayControl_Accessor(action);
-            FieldAndPropertyWrapper_Accessor arg = action.GetType().GetField("Argument");
+            FieldAndPropertyWrapper arg = action.GetType().GetField("Argument");
 
             EventHandler handler = target.GetLeaveHandler(arg);
 

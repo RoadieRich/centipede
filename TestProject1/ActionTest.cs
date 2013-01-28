@@ -184,11 +184,9 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void ParseStringForVariableTest()
         {
-            PrivateObject param0 = null; // TODO: Initialize to an appropriate value
             //Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
             string str = string.Empty; // TODO: Initialize to an appropriate value
             string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
           //  actual = target.ParseStringForVariable(str);
             //Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");

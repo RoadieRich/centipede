@@ -36,7 +36,7 @@ namespace Centipede.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Centipede.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Centipede.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -78,21 +78,21 @@ namespace Centipede.Properties {
             }
         }
         
-        internal static System.Drawing.Icon Centipede {
+        public static System.Drawing.Icon Centipede {
             get {
                 object obj = ResourceManager.GetObject("Centipede", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap Complete_OK {
+        public static System.Drawing.Bitmap Complete_OK {
             get {
                 object obj = ResourceManager.GetObject("Complete_OK", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap CriticalError {
+        public static System.Drawing.Bitmap CriticalError {
             get {
                 object obj = ResourceManager.GetObject("CriticalError", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -102,20 +102,20 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Demo Action executed.
         /// </summary>
-        internal static string DemoAction_DoAction_Demo_Action_executed {
+        public static string DemoAction_DoAction_Demo_Action_executed {
             get {
                 return ResourceManager.GetString("DemoAction_DoAction_Demo_Action_executed", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Icon generic {
+        public static System.Drawing.Icon generic {
             get {
                 object obj = ResourceManager.GetObject("generic", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Icon If {
+        public static System.Drawing.Icon If {
             get {
                 object obj = ResourceManager.GetObject("If", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -125,7 +125,7 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Finished.
         /// </summary>
-        internal static string MainWindow_CompletedHandler_Finished {
+        public static string MainWindow_CompletedHandler_Finished {
             get {
                 return ResourceManager.GetString("MainWindow_CompletedHandler_Finished", resourceCulture);
             }
@@ -134,16 +134,43 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string MainWindow_ErrorHandler_Error {
+        public static string MainWindow_ErrorHandler_Error {
             get {
                 return ResourceManager.GetString("MainWindow_ErrorHandler_Error", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error:.
+        /// </summary>
+        public static string MainWindow_ErrorHandler_Error_ {
+            get {
+                return ResourceManager.GetString("MainWindow_ErrorHandler_Error_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred in .
+        /// </summary>
+        public static string MainWindow_ErrorHandler_Error_occurred_in_ {
+            get {
+                return ResourceManager.GetString("MainWindow_ErrorHandler_Error_occurred_in_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message was:.
+        /// </summary>
+        public static string MainWindow_ErrorHandler_Message_was_ {
+            get {
+                return ResourceManager.GetString("MainWindow_ErrorHandler_Message_was_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save changes?.
         /// </summary>
-        internal static string MainWindow_LoadBtn_Click_Save_changes_ {
+        public static string MainWindow_LoadBtn_Click_Save_changes_ {
             get {
                 return ResourceManager.GetString("MainWindow_LoadBtn_Click_Save_changes_", resourceCulture);
             }
@@ -152,27 +179,45 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unsaved Changes.
         /// </summary>
-        internal static string MainWindow_LoadBtn_Click_Unsaved_Changes {
+        public static string MainWindow_LoadBtn_Click_Unsaved_Changes {
             get {
                 return ResourceManager.GetString("MainWindow_LoadBtn_Click_Unsaved_Changes", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Icon pycon {
+        /// <summary>
+        ///   Looks up a localized string similar to Centipede.
+        /// </summary>
+        public static string MainWindow_Text_Centipede {
+            get {
+                return ResourceManager.GetString("MainWindow_Text_Centipede", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Centipede - {0}{1}.
+        /// </summary>
+        public static string MainWindow_Text_Centipede____0__1_ {
+            get {
+                return ResourceManager.GetString("MainWindow_Text_Centipede____0__1_", resourceCulture);
+            }
+        }
+        
+        public static System.Drawing.Icon pycon {
             get {
                 object obj = ResourceManager.GetObject("pycon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap StatusAnnotation_Run {
+        public static System.Drawing.Bitmap StatusAnnotation_Run {
             get {
                 object obj = ResourceManager.GetObject("StatusAnnotation_Run", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
         
-        internal static System.Drawing.Bitmap ThumbnailView {
+        public static System.Drawing.Bitmap ThumbnailView {
             get {
                 object obj = ResourceManager.GetObject("ThumbnailView", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
