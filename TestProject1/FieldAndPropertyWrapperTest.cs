@@ -94,14 +94,13 @@ namespace TestProject1
         /// <summary>
         ///A test for Get
         ///</summary>
-        public void GetTestHelper<T>()
+        private static void GetTestHelper<T>()
         {
             PropertyInfo prop = typeof(TestAction).GetProperty("PropertyArgument");
             FieldAndPropertyWrapper target = new FieldAndPropertyWrapper(prop);
             object o = new TestAction(new Dictionary<string, object>());
             T expected = default(T);
-            T actual;
-            actual = target.Get<T>(o);
+            T actual = target.Get<T>(o);
             Assert.AreEqual(expected, actual);
             //Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -123,8 +122,7 @@ namespace TestProject1
         {
             PropertyInfo prop = typeof(TestAction).GetProperty("PropertyArgument");
             FieldAndPropertyWrapper target = new FieldAndPropertyWrapper(prop);
-            ActionArgumentAttribute actual;
-            actual = target.GetArguementAttribute();
+            ActionArgumentAttribute actual = target.GetArguementAttribute();
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual, typeof (ActionArgumentAttribute));
         }
@@ -137,9 +135,8 @@ namespace TestProject1
         {
             PropertyInfo prop = typeof(TestAction).GetProperty("PropertyArgument");
             FieldAndPropertyWrapper target = new FieldAndPropertyWrapper(prop);
-            FieldAndPropertyWrapper.FieldType expected = FieldAndPropertyWrapper.FieldType.String;
-            FieldAndPropertyWrapper.FieldType actual;
-            actual = target.GetFieldTypeCategory();
+            const FieldAndPropertyWrapper.FieldType expected = FieldAndPropertyWrapper.FieldType.String;
+            FieldAndPropertyWrapper.FieldType actual = target.GetFieldTypeCategory();
             Assert.AreEqual(expected, actual);
         }
 
@@ -152,15 +149,14 @@ namespace TestProject1
             PropertyInfo prop = typeof(TestAction).GetProperty("PropertyArgument");
             FieldAndPropertyWrapper target = new FieldAndPropertyWrapper(prop); // TODO: Initialize to an appropriate value
             Type expected = typeof (string); // TODO: Initialize to an appropriate value
-            Type actual;
-            actual = target.MemberType;
+            Type actual = target.MemberType;
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
         ///A test for Set
         ///</summary>
-        public void SetTestHelper<T>()
+        private static void SetTestHelper<T>()
         {
             PropertyInfo prop = typeof (TestAction).GetProperty("PropertyArgument");
             FieldAndPropertyWrapper target = new FieldAndPropertyWrapper(prop);

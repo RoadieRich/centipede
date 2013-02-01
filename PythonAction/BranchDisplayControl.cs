@@ -14,14 +14,12 @@ namespace PyAction
     class BranchDisplayControl : ActionDisplayControl
 // ReSharper restore UnusedMember.Global
     {
-        public BranchDisplayControl(Action action)
+        public BranchDisplayControl(BranchAction action)
+                : base(action, false)
         {
-            base.ThisAction = action;
-
-            action.Tag = this;
-
             InitializeComponent();
-            var actionCombo = new ComboBox();
+            var actionCombo = new ComboBox { DisplayMember = @"Text", ValueMember = @"Action" };
+
             actionCombo.DropDown += actionCombo_DropDown;
             actionCombo.SelectionChangeCommitted +=
                     (sender, e) =>
@@ -31,7 +29,7 @@ namespace PyAction
                             {
                                 throw new ArgumentException();
                             }
-                            ThisAction.NextIfFalse = (combo.SelectedValue) as Action;
+                            ThisAction.NextIfTrue = (combo.SelectedValue) as Action;
                         };
             var actionComboLabel = new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Action_if_false };
             AttributeTable.Controls.Add(actionComboLabel);
@@ -66,18 +64,15 @@ namespace PyAction
             {
                 throw new ArgumentException();
             }
-            var actionIter = from Action a in Program.Actions
+            var actionIter = from Action a in Program.Instance.Actions
                              where a != ThisAction
                              select new
                                     {
-                                            S = String.Format("{0}: {1}",
+                                            Text = String.Format("{0}: {1}",
                                                               a.Name, a.Comment),
-                                            A = a
+                                            Action = a
                                     };
             combo.DataSource = actionIter.ToList();
-
-            combo.DisplayMember = "S";
-            combo.ValueMember = "A";
         }
 
         private new BranchAction ThisAction
@@ -91,8 +86,6 @@ namespace PyAction
         private new void InitializeComponent()
         {
             SuspendLayout();
-            base.InitializeComponent();
-            
             Name = "BranchDisplayControl";
             Size = new System.Drawing.Size(206, 107);
             NameLabel.Text = ThisAction.Name;

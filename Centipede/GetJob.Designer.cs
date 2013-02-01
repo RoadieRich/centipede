@@ -48,7 +48,6 @@
             resources.ApplyResources(this.FavouritesListbox, "FavouritesListbox");
             this.FavouritesListbox.DisplayMember = "Text";
             this.FavouritesListbox.Name = "FavouritesListbox";
-            this.FavouritesListbox.SelectedIndexChanged += new System.EventHandler(this.FavouritesListbox_SelectedIndexChanged);
             this.FavouritesListbox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FavouritesListbox_MouseDoubleClick);
             // 
             // LoadButton
@@ -123,7 +122,6 @@
             this.Name = "GetJob";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GetJob_FormClosing);
             this.Load += new System.EventHandler(this.GetJob_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

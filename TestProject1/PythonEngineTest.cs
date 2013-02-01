@@ -1,7 +1,6 @@
 ﻿//using PythonEngine;
 
 using System.Globalization;
-using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -19,29 +18,9 @@ namespace TestProject1
     ///This is a test class for PythonEngineTest and is intended
     ///to contain all PythonEngineTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestClass]
     public class PythonEngineTest
     {
-
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
         #region Additional test attributes
 
         // 
@@ -69,7 +48,7 @@ namespace TestProject1
         #endregion
 
         ///Use TestCleanup to run code after each test has run
-        [TestCleanup()]
+        [TestCleanup]
         public void MyTestCleanup()
         {
             PrivateType pt = new PrivateType(typeof (Engine));
@@ -80,7 +59,7 @@ namespace TestProject1
         /// <summary>
         ///A test for PythonEngine Constructor
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         [DeploymentItem("PythonEngine.dll")]
         public void PythonEngineConstructorTest()
         {
@@ -95,18 +74,18 @@ namespace TestProject1
         /// <summary>
         ///A test for Compile
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void CompileTest_EmptyString()
         {
             Engine target = Engine.Instance;
             string code = String.Empty;
-            SourceCodeKind kind = SourceCodeKind.Expression;
+            const SourceCodeKind kind = SourceCodeKind.Expression;
 
-            CompiledCode actual;
             bool thrown = false;
+            CompiledCode compiledCode = null;
             try
             {
-                actual = target.Compile(code, kind);
+                compiledCode = target.Compile(code, kind);
             }
             catch (Exception e)
             {
@@ -114,44 +93,45 @@ namespace TestProject1
                 Assert.IsInstanceOfType(e, typeof (SyntaxErrorException));
 
             }
+            Assert.IsNull(compiledCode);
             Assert.IsTrue(thrown, "Attempting to compile empty string didn't throw");
         }
 
         /// <summary>
         ///A test for Compile
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void CompileTest_PassStatementAsExpression()
         {
             Engine target = Engine.Instance;
-            string code = @"print 'hello world'";
-            SourceCodeKind kind = SourceCodeKind.Expression;
-            CompiledCode actual;
+            const string code = @"print 'hello world'";
+            const SourceCodeKind kind = SourceCodeKind.Expression;
             bool thrown = false;
+            CompiledCode compiledCode = null;
             try
             {
-                actual = target.Compile(code, kind);
+                compiledCode = target.Compile(code, kind);
             }
             catch (Exception e)
             {
                 thrown = true;
                 Assert.IsInstanceOfType(e, typeof (SyntaxErrorException));
-
             }
+
+            Assert.IsNull(compiledCode);
             Assert.IsTrue(thrown, "Attempting to compile empty string didn't throw");
         }
 
         /// <summary>
         ///A test for Compile
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void CompileTest()
         {
             PythonEngine.PythonEngine target = PythonEngine.PythonEngine.Instance;
-            string code = @"print 'hello world'";
-            SourceCodeKind kind = SourceCodeKind.SingleStatement;
-            CompiledCode actual;
-            actual = target.Compile(code, kind);
+            const string code = @"print 'hello world'";
+            const SourceCodeKind kind = SourceCodeKind.SingleStatement;
+            CompiledCode actual = target.Compile(code, kind);
             Assert.IsNotNull(actual);
 
         }
@@ -159,21 +139,20 @@ namespace TestProject1
         /// <summary>
         ///A test for Evaluate
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void EvaluateTestHelper()
         {
             Engine pye = Engine.Instance;
             int expected = TestHelpers.RandomInt;
             String expression = expected.ToString(CultureInfo.InvariantCulture);
-            int actual;
-            actual = pye.Evaluate<int>(expression);
+            int actual = pye.Evaluate<int>(expression);
             Assert.AreEqual(expected, actual);
         }
 
         /// <summary>
         ///A test for Evaluate
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void EvaluateTestHelperWithScope()
         {
             Engine pye = Engine.Instance;
@@ -181,11 +160,10 @@ namespace TestProject1
             string expression = name;
 
             int expected = TestHelpers.RandomInt;
-            int actual;
-            actual = pye.Evaluate<int>(expression, Engine.Instance.GetNewScope(new Dictionary<string, object>
-                                                                               {
-                                                                                       { name, expected }
-                                                                               }));
+            int actual = pye.Evaluate<int>(expression, Engine.Instance.GetNewScope(new Dictionary<string, object>
+                                                                                   {
+                                                                                           { name, expected }
+                                                                                   }));
             Assert.AreEqual(expected, actual);
         }
 
@@ -193,19 +171,16 @@ namespace TestProject1
         /// <summary>
         ///A test for Evaluate
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void EvaluateTestHelperWithOutOfScopeVariable()
         {
             Engine pye = Engine.Instance;
             string expression = TestHelpers.RandomName();
 
-            
-            
             bool thrown = false;
             try
             {
-                pye.Evaluate<int>(expression, Engine.Instance.GetNewScope(new Dictionary<string, object>
-                                                                          {}));
+                pye.Evaluate<int>(expression, Engine.Instance.GetNewScope(new Dictionary<string, object>()));
             }
             catch (Exception e)
             {
@@ -219,7 +194,7 @@ namespace TestProject1
         /// <summary>
         ///A test for Execute
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void ExecuteTest()
         {
             Engine engine = Engine.Instance;
@@ -236,10 +211,9 @@ namespace TestProject1
         /// <summary>
         ///A test for Execute
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void ExecuteEvaluateTest()
         {
-            int expected, actual;
             Engine engine = Engine.Instance;
             string fibsCode = String.Join("\n",
                                       new[]
@@ -254,8 +228,8 @@ namespace TestProject1
                                               @"    return a"
                                       });
             engine.Execute(fibsCode);
-            string fibsCall = "fibs({0})";
-            int runs = 10;
+            const string fibsCall = "fibs({0})";
+            const int runs = 10;
             Func<int, int> csFibs = n =>
                                         {
                                             int a = 0, b = 1;
@@ -271,29 +245,16 @@ namespace TestProject1
             for (int i = 1; i < runs; i++)
             {
                 string code = String.Format(fibsCall, i);
-                actual = engine.Evaluate<int>(code);
-                expected = csFibs(i);
+                int actual = engine.Evaluate<int>(code);
+                int expected = csFibs(i);
                 Assert.AreEqual(expected, actual, "Result for {0} incorrect, expected {1}, got {2}", i, expected,actual);
             }
         }
 
-        private int _csFibs(int n)
-        {
-            int a=0, b=1, c;
-            for (int i = 0; i < n; i++)
-            {
-                c = b;
-                b = a + b;
-                a = c;
-            }
-            return a;
-        }
-
-
         /// <summary>
         ///A test for GetNewScope
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void GetNewScopeTest()
         {
 
@@ -314,14 +275,13 @@ namespace TestProject1
         /// <summary>
         ///A test for GetVariable, getting var set from c#
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void GetVariableTest1()
         {
             string name = TestHelpers.RandomName();
-            object expected = TestHelpers.RandomString(10); ; // TODO: Initialize to an appropriate value
-            object actual;
+            object expected = TestHelpers.RandomString(10); // TODO: Initialize to an appropriate value
             Engine.Instance.SetVariable(name, expected);
-            actual = Engine.Instance.GetVariable(name);
+            object actual = Engine.Instance.GetVariable(name);
             Assert.AreEqual(expected, actual);
         }
 
@@ -329,24 +289,23 @@ namespace TestProject1
         /// <summary>
         ///A test for GetVariable, getting var set from python
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void GetVariableTest2()
         {
             string name = TestHelpers.RandomName(); 
             object expected = TestHelpers.RandomString(10);
-            object actual;
             Engine.Instance.Execute(String.Format(@"{0} = ""{1}""", name, expected));
-            actual = Engine.Instance.GetVariable(name);
+            object actual = Engine.Instance.GetVariable(name);
             Assert.AreEqual(expected, actual);
         }
         /// <summary>
         ///A test for SetVariable
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void SetVariableTest()
         {
             string name = TestHelpers.RandomName();
-            int expected = 42;
+            const int expected = 42;
             Engine.Instance.SetVariable(name, expected);
             int actual = Engine.Instance.Evaluate<int>(name);
             Assert.AreEqual(expected, actual);
@@ -355,7 +314,7 @@ namespace TestProject1
         /// <summary>
         ///A test for VariableExists using var set from c#
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void VariableExistsTest1()
         {
             string name = TestHelpers.RandomName();
@@ -366,7 +325,7 @@ namespace TestProject1
         /// <summary>
         ///A test for VariableExists using var set from python
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void VariableExistsTest2()
         {
             string name = TestHelpers.RandomName();
@@ -377,7 +336,7 @@ namespace TestProject1
         /// <summary>
         ///A test for VariableExists using var set from custom scope - shouldn't exist in engine afterwards
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void VariableExistsTest3()
         {
             string name = TestHelpers.RandomName();
@@ -390,10 +349,9 @@ namespace TestProject1
         /// <summary>
         ///A test for Instance
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void InstanceTest()
         {
-            PythonEngine.PythonEngine actual;
             PythonEngine.PythonEngine expected = PythonEngine.PythonEngine.Instance;
 
             for (int i = 0; i < 10; i++)
@@ -401,7 +359,7 @@ namespace TestProject1
 
                 Thread t = new Thread(() =>
                                           {
-                                              actual = PythonEngine.PythonEngine.Instance;
+                                              PythonEngine.PythonEngine actual = PythonEngine.PythonEngine.Instance;
                                               Assert.AreSame(expected,actual);
                                           });
                 t.Start();

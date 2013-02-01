@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using Centipede;
+﻿using Centipede;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Xml;
 using System.Collections.Generic;
 using Action = Centipede.Action;
 
@@ -18,24 +16,14 @@ namespace TestProject1
     [TestClass()]
     public class ActionTest
     {
-
-
-        private TestContext testContextInstance;
-
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
         ///</summary>
         public TestContext TestContext
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+            get;
+            set;
         }
 
         #region Additional test attributes
@@ -92,7 +80,6 @@ namespace TestProject1
         public void AskTest()
         {
             TestAction action = new TestAction(new Dictionary<string, object>());
-            PrivateObject po = new PrivateObject(action);
 
             String message = TestHelpers.RandomString(100);
             String title = TestHelpers.RandomString(10);
@@ -100,26 +87,31 @@ namespace TestProject1
             AskEventEnums.DialogResult actual = (AskEventEnums.DialogResult)(-1),
                                        expected = (AskEventEnums.DialogResult)Math.Abs(TestHelpers.RandomInt);
 
-
-            action.OnAsk += (sender, e) =>
-                                {
-                                    Assert.AreEqual(askType, e.Type);
-                                    Assert.AreEqual(message, e.Message);
-                                    Assert.AreEqual(title, e.Title);
-                                    e.Result = expected;
-                                };
+            Action.AskEvent actionOnOnAsk = (sender, e) =>
+                                                {
+                                                    Action thisAction = action;
+                                                    Assert.AreEqual(askType, e.Type);
+                                                    Assert.AreEqual(message, e.Message);
+                                                    Assert.AreEqual(title, e.Title);
+                                                    e.Result = expected;
+                                                };
+            action.OnAsk += actionOnOnAsk;
 
             
             //protected AskEventEnums.DialogResult Ask(String message,
             //String title = "Question", 
             //AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
-            action.TestFunctions = delegate
+            action.TestFunctions = () =>
                                        {
+                                           Action thisAction = action;
+                                           PrivateObject po = new PrivateObject(thisAction);
+
                                            actual =
                                                    (AskEventEnums.DialogResult)po.Invoke("Ask", message, title, askType);
                                        };
 
             action.Run();
+            action.OnAsk -= actionOnOnAsk;
             Assert.AreEqual(expected, actual);
         }
 
@@ -153,9 +145,8 @@ namespace TestProject1
             Action expected = new TestAction(null); // TODO: Initialize to an appropriate value
 
             target.Next = expected;
-            
-            Action actual;
-            actual = target.GetNext();
+
+            Action actual = target.GetNext();
             Assert.AreSame(expected, actual);
             
         }
@@ -167,12 +158,11 @@ namespace TestProject1
         [DeploymentItem("Action.dll")]
         public void MessageTest()
         {
-            ;
             PrivateObject param0 = null; // TODO: Initialize to an appropriate value
             Action_Accessor target = new Action_Accessor(param0); // TODO: Initialize to an appropriate value
             string message = string.Empty; // TODO: Initialize to an appropriate value
             string title = string.Empty; // TODO: Initialize to an appropriate value
-            AskEventEnums.MessageIcon messageIcon = new AskEventEnums.MessageIcon(); // TODO: Initialize to an appropriate value
+            const AskEventEnums.MessageIcon messageIcon = new AskEventEnums.MessageIcon(); // TODO: Initialize to an appropriate value
             target.Message(message, title, messageIcon);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }

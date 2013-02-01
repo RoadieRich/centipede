@@ -133,8 +133,8 @@ namespace TestProject1
         public void CompletedHandlerTest()
         {
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
-            bool success = false; // TODO: Initialize to an appropriate value
-            target.CompletedHandler(success);
+            const bool success = false; // TODO: Initialize to an appropriate value
+            //target.CompletedHandler(success);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
@@ -163,9 +163,9 @@ namespace TestProject1
             ActionException e = null; // TODO: Initialize to an appropriate value
             Action nextAction = null; // TODO: Initialize to an appropriate value
             Action nextActionExpected = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
-            bool actual;
-            actual = target.ErrorHandler(e, out nextAction);
+            const bool expected = false; // TODO: Initialize to an appropriate value
+
+            bool actual = target.ErrorHandler(e, out nextAction);
             Assert.AreEqual(nextActionExpected, nextAction);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
@@ -181,8 +181,7 @@ namespace TestProject1
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
             string category = string.Empty; // TODO: Initialize to an appropriate value
             ListView expected = null; // TODO: Initialize to an appropriate value
-            ListView actual;
-            actual = target.GenerateNewTabPage(category);
+            ListView actual = target.GenerateNewTabPage(category);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -235,7 +234,7 @@ namespace TestProject1
         public void LoadJobTest()
         {
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
-            target.LoadJob();
+            //target.LoadJob();
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
@@ -276,7 +275,7 @@ namespace TestProject1
         {
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
             Action action = null; // TODO: Initialize to an appropriate value
-            int index = 0; // TODO: Initialize to an appropriate value
+            const int index = 0; // TODO: Initialize to an appropriate value
             target.Program_ActionAdded(action, index);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
@@ -317,7 +316,7 @@ namespace TestProject1
         {
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
             Action action = null; // TODO: Initialize to an appropriate value
-            target.Program_BeforeAction(action);
+            //target.Program_BeforeAction(action);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
@@ -426,7 +425,7 @@ namespace TestProject1
             MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
             object sender = null; // TODO: Initialize to an appropriate value
             CentipedeEventArgs e = null; // TODO: Initialize to an appropriate value
-            target.adc_Deleted(sender, e);
+            //target.adc_Deleted(sender, e);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 

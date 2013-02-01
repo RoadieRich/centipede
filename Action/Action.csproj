@@ -57,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="AskEvent.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Attributes.cs" />
     <Compile Include="Actions\ActionDisplayControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -92,6 +95,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ResharperAnnotations\ResharperAnnotations.csproj">
+      <Project>{A2713710-3224-4905-93F4-6FB1A7259912}</Project>
+      <Name>ResharperAnnotations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

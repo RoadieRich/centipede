@@ -37,5 +37,5 @@ using System.Resources;
 [assembly: AssemblyFileVersion("0.1.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-GB")]
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("CentipedeTest")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("TestProject1")]
+[assembly: InternalsVisibleTo("CentipedeTest")]
+[assembly: InternalsVisibleTo("TestProject1")]

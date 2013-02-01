@@ -6,8 +6,8 @@ using System.Linq;
 using System.IO;
 using Centipede.Actions;
 using Centipede.StringInject;
+using ResharperAnnotations;
 
-// ReSharper disable UnusedMember.Global
 
 [assembly: CLSCompliant(true)]
 
@@ -17,6 +17,7 @@ namespace Centipede
     /// Base Action class: all actions will subclass this
     /// </summary>
     [Serializable]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class Action : IDisposable
     {
         /// <summary>
@@ -46,14 +47,15 @@ namespace Centipede
         public String Comment = "";
 
         /// <summary>
-        /// Gets or sets the object that contains data about the control.
+        /// Gets or sets the object that contains data associated with tje action.
         /// </summary>
+        /// <example>
+        /// In the GUI version of Centipede, <c>Tag</c> is used for a reference
+        /// to the <see cref="ActionDisplayControl" /> displaying the action
+        /// </example>
         /// <returns>
         /// An Object that contains data about the control. The default is null.
         /// </returns>
-        /// <example>In the GUI version of Centipede, <c>Tag</c> is used for a reference to the 
-        /// <see cref="ActionDisplayControl" /> displaying the action</example>
-        /// 
         public Object Tag
         {
             get;
@@ -66,8 +68,9 @@ namespace Centipede
         public Action Next;
 
         /// <summary>
-        /// Override in abstract subclasses to allow code to be executed to e.g. set up variables, converting an 
-        /// object from Variables to a specific type.
+        /// Override in <see langword="abstract" /> subclasses to allow code to
+        /// be executed to e.g. set up variables, converting an object from
+        /// <see cref="Centipede.Action.Variables" /> to a specific type.
         /// </summary>
         /// <example>
         /// <code>
@@ -83,10 +86,14 @@ namespace Centipede
         /// <summary>
         /// Perform the action
         /// </summary>
+        /// <exception cref="ActionException">
+        /// the action cannot be completed
+        /// </exception>
         protected abstract void DoAction();
 
         /// <summary>
-        /// Cleanup, e.g. saving local variables back into Variables
+        /// Cleanup, e.g. saving local variables back into
+        /// <see cref="Centipede.Action.Variables" />
         /// </summary>
         protected virtual void CleanupAction()
         { }
@@ -94,6 +101,7 @@ namespace Centipede
         /// <summary>
         /// Execute the action, performing init and cleanup as required
         /// </summary>
+        /// <exception cref="ActionException">if the action fails</exception>
         public void Run()
         {
             InitAction();
@@ -102,10 +110,12 @@ namespace Centipede
         }
 
         /// <summary>
-        /// An <see cref="T:System.Int32"/> representing the complexity of the action, used to gauge progress in the 
-        /// Job
+        /// An <see cref="Int32" /> representing the complexity of the action,
+        /// used to gauge progress in the Job
         /// </summary>
-        /// <value>Defaults to 1</value>
+        /// <value>
+        /// Defaults to 1
+        /// </value>
         public virtual Int32 Complexity
         {
             get
@@ -117,15 +127,18 @@ namespace Centipede
         /// <summary>
         /// Get the next action, can be overridden to allow custom flow control
         /// </summary>
-        /// <returns>The next Action to be processed, or <see cref="null"/> if this is the last action in the 
-        /// job.</returns>
+        /// <returns>
+        /// The next Action to be processed, or <see langword="null" /> if this
+        /// is the last action in the job.
+        /// </returns>
         public virtual Action GetNext()
         {
             return Next;
         }
 
         /// <summary>
-        /// Parse a string, injecting values from Variables as required
+        /// Parse a string, injecting values from
+        /// <see cref="Centipede.Action.Variables" /> as required
         /// </summary>
         /// <example>
         /// <code>
@@ -135,7 +148,9 @@ namespace Centipede
         /// </code>
         /// </example>
         /// <param name="str">The string to parse</param>
-        /// <returns>String</returns>
+        /// <returns>
+        /// String
+        /// </returns>
         protected String ParseStringForVariable(String str)
         {
             return str.Inject(Variables);
@@ -143,12 +158,14 @@ namespace Centipede
 
 
         /// <summary>
-        /// Ask a question
+        /// <see cref="Action.Ask" /> a question
         /// </summary>
         /// <param name="message"></param>
         /// <param name="title"></param>
         /// <param name="options"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// 
+        /// </returns>
         protected AskEventEnums.DialogResult Ask(String message, String title = "Question",
                                                  AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
         {
@@ -172,9 +189,9 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-// ReSharper disable EventNeverSubscribedTo.Global
         public event AskEvent OnAsk = delegate { };
-// ReSharper restore EventNeverSubscribedTo.Global
+
+        // ReSharper restore EventNeverSubscribedTo.Global
 
         /// <summary>
         /// 
@@ -205,64 +222,64 @@ namespace Centipede
                 OnAsk(this, eventArgs);
             }
         }
+    
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Obsolete]
-        public static HashSet<String> TrueValues = new HashSet<string>(new[]
-                                                                       {
-                                                                               "yes",
-                                                                               "true",
-                                                                               "1"
-                                                                       });
-
-        /// <summary>
+    /// <summary>
         /// Append xml code for the action to the given parent element
         /// </summary>
-        /// <param name="rootElement">The parent element to add the action to</param>
-        public void AddToXmlElement(XmlElement rootElement)
+        /// <param name="rootElement">
+        /// The parent element to add the action to
+        /// </param>
+        public virtual void AddToXmlElement(XmlElement rootElement)
         {
 
             Type thisType = GetType();
-            if (rootElement.OwnerDocument != null)
+            if (rootElement.OwnerDocument == null)
             {
-                XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
-
-                foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
-                                                      where member is FieldInfo || member is PropertyInfo
-                                                      select (FieldAndPropertyWrapper)member
-                                                          into wrapped
-                                                          where wrapped.GetArguementAttribute() != null
-                                                          select wrapped
-                        )
-                {
-                    element.SetAttribute(wrappedMember.Name, wrappedMember.Get<dynamic>(this).ToString());
-                }
-
-                String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
-
-                element.SetAttribute("Comment", Comment);
-                element.SetAttribute("Assembly", pluginFilePath);
-
-                rootElement.AppendChild(element);
+                return;
             }
+            XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
+
+            foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
+                                                              where member is FieldInfo || member is PropertyInfo
+                                                              select (FieldAndPropertyWrapper)member
+                                                              into wrapped
+                                                              where wrapped.GetArguementAttribute() != null
+                                                              select wrapped
+                    )
+            {
+                element.SetAttribute(wrappedMember.Name, wrappedMember.Get<dynamic>(this).ToString());
+            }
+
+            String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
+
+            element.SetAttribute("Comment", Comment);
+            element.SetAttribute("Assembly", pluginFilePath);
+
+            rootElement.AppendChild(element);
         }
 
         /// <summary>
         /// Loads an action from an XmlElement
         /// </summary>
         /// <param name="element">the xml to convert</param>
-        /// <param name="variables">Program.Variables, passed to the Action.ctor</param>
-        /// <returns></returns>
+        /// <param name="variables">
+        /// Program.Variables, passed to the Action.ctor
+        /// </param>
+        /// <returns>
+        /// 
+        /// </returns>
         public static Action FromXml(XmlElement element, Dictionary<String, Object> variables)
         {
+
+            //This is probably broken somewhere.
+
             Type[] constructorArgumentTypes = new[] { typeof (Dictionary<String, Object>) };
 
             Assembly asm;
 
             //if action is not a plugin:
-            if (element.LocalName.Count(c => c == '.') <= 1)
+            if (element.LocalName.StartsWith(@"Centipede"))
             {
                 asm = Assembly.GetEntryAssembly();
             }
@@ -284,385 +301,103 @@ namespace Centipede
 
             Type t = asm.GetType(element.LocalName);
 
-            Object instance = null;
-
-            MethodInfo customFromXmlMethod = t.GetMethod("CustomFromXml");
-            if (customFromXmlMethod != null)
+            Action instance = null;
+            ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
+            if (constructorInfo != null)
             {
-                instance = customFromXmlMethod.Invoke(t, new object[] { element, variables });
+                instance = (Action)constructorInfo.Invoke(new object[] { variables });
             }
-            else
-            {
-                ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
-                if (constructorInfo != null)
-                {
-                    instance = constructorInfo.Invoke(new object[] { variables });
-                }
 
-                element.Attributes.RemoveNamedItem("Assembly");
+            instance.PopulateMembersFromXml(element);
 
-                foreach (XmlAttribute attribute in element.Attributes)
-                {
-                    FieldAndPropertyWrapper field = t.GetField(attribute.Name);
-                    MethodInfo parseMethod = field.GetType().GetMethod("Parse", new[] { typeof(String) });
-                    field.Set(instance,
-                              parseMethod != null
-                                      ? parseMethod.Invoke(field, new object[] { attribute.Value })
-                                      : attribute.Value);
-                }
-            }
-            return instance as Action;
+            return instance;
         }
 
-        
         /// <summary>
         /// 
         /// </summary>
         public virtual void Dispose()
         { }
-    }
-
-    /// <summary>
-    /// Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public sealed class ActionArgumentAttribute : Attribute
-    {
-    // ReSharper disable InconsistentNaming
-    // ReSharper disable UnassignedField.Global
-     
-        /// <summary>
-        /// 
-        /// </summary>
-        public String displayName;
 
         /// <summary>
-        /// 
+        /// Populate members from the given Xml Element.
         /// </summary>
-        public String usage;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public String onLeaveHandlerName;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string onChangedHandlerName;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string setterMethodName;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string displayControl;
-
-        // ReSharper restore InconsistentNaming
-        // ReSharper restore UnassignedField.Global
-    }
-
-    /// <summary>
-    /// Marks a class as an Action, to be displayed in the GUI listbox
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public sealed class ActionCategoryAttribute : Attribute
-    {
-
-        // ReSharper disable InconsistentNaming
-        // ReSharper disable UnassignedField.Global
-        /// <summary>
-        /// Marks a class as an Action, to be displayed in the GUI listbox
-        /// </summary>
-        /// <param name="category"><see cref="ActionCategoryAttribute.category"/></param>
-        public ActionCategoryAttribute(String category)
+        /// <remarks>
+        /// Should be implemented if <see cref="Action.AddToXmlElement" /> is
+        /// non-trivially overridden.
+        /// </remarks>
+        /// <param name="element">The XmlElement describing the action</param>
+        protected virtual void PopulateMembersFromXml(XmlElement element)
         {
-            this.category = category;
+            
+            Type actionType = GetType();
+
+            element.Attributes.RemoveNamedItem("Assembly");
+
+            foreach (XmlAttribute attribute in element.Attributes)
+            {
+                FieldAndPropertyWrapper field = (FieldAndPropertyWrapper)actionType.GetMember(attribute.Name).First();
+                MethodInfo parseMethod = field.MemberType.GetMethod("Parse", new[] { typeof(String) });
+                field.Set(this,
+                          parseMethod != null
+                                  ? parseMethod.Invoke(field, new object[] { attribute.Value })
+                                  : attribute.Value);
+            }
         }
 
         /// <summary>
-        /// the category tab to add the action to
+        /// Allows programmers to specify jobs using arrow notaton
         /// </summary>
-        public readonly String category;
-
-        /// <summary>
-        /// helptext for the action, displayed as a tooltip
-        /// </summary>
-        public String helpText;
-
-        /// <summary>
-        /// The display name for the action, defaults to the classname
-        /// </summary>
-        public String displayName;
-
-        /// <summary>
-        /// name of a custom display control used to display the action on thr Actions listview
-        /// </summary>
-        public String displayControl;
-
-        /// <summary>
-        /// name of the icon in the resource file
-        /// </summary>
-        public String iconName;
-
-        // ReSharper restore InconsistentNaming
-        // ReSharper restore UnassignedField.Global
-    }
-
-    /// <summary>
-    /// Thrown when an action raises an exception
-    /// </summary>
-    public class ActionException : Exception
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="action"></param>
-        public ActionException(String message, Action action)
-            : base(message)
+        /// <example>
+        /// <code> action1 &gt; action2 &gt; action2 </code>
+        /// </example>
+        /// <param name="prev"></param>
+        /// <param name="next"></param>
+        public static Action operator >(Action prev, Action next)
         {
-            ErrorAction = action;
+            prev.Next = next;
+            return next;
         }
 
         /// <summary>
-        /// 
+        /// Allows programmers to specify jobs using arrow notaton
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// action3 &lt; action2 &lt; action1
+        /// </code>
+        /// </example>
+        /// <param name="prev"></param>
+        /// <param name="next"></param>
+        public static Action operator <(Action next, Action prev)
+        {
+            prev.Next = next;
+            return prev;
+        }
+
+        /// <summary>
+        /// Get the next <paramref name="action" />
         /// </summary>
         /// <param name="action"></param>
-        public ActionException(Action action)
+        /// <returns>
+        /// 
+        /// </returns>
+        public static Action operator ++(Action action)
         {
-            ErrorAction = action;
+            return action.GetNext();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="exception"></param>
-        /// <param name="action"></param>
-        public ActionException(string message, Exception exception, Action action)
-            : base(message, exception)
-        {
-            ErrorAction = action;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        public ActionException(string message)
-            : base(message) { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        /// <param name="action"></param>
-        public ActionException(Exception e, Action action)
-            : base(e.Message, e)
-        {
-            ErrorAction = action;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly Action ErrorAction;
     }
+
+    
 
     /// <summary>
-    /// 
+    /// <see cref="I18N" /> resources for a class
     /// </summary>
-    [Serializable]
-    public class ValidationException : Exception
+    public abstract class I18N
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public ValidationException()
-        { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        public ValidationException(string message)
-            : base(message)
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
-        public ValidationException(string message, Exception inner)
-            : base(message, inner)
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        protected ValidationException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
-            : base(info, context)
-        { }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class AskActionEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-// ReSharper disable NotAccessedField.Global
-        public String Message;
-        /// <summary>
-        /// 
-        /// </summary>
-        public String Title;
-        /// <summary>
-        /// 
-        /// </summary>
-        public AskEventEnums.AskType Type;
-// ReSharper disable ConvertToConstant.Global
-        /// <summary>
-        /// 
-        /// </summary>
-// ReSharper disable FieldCanBeMadeReadOnly.Global
-        public AskEventEnums.DialogResult Result = AskEventEnums.DialogResult.None;
-// ReSharper restore FieldCanBeMadeReadOnly.Global
-// ReSharper restore ConvertToConstant.Global
-        /// <summary>
-        /// 
-        /// </summary>
-        public AskEventEnums.MessageIcon Icon = AskEventEnums.MessageIcon.Information;
-// ReSharper restore NotAccessedField.Global
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class AskEventEnums
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public enum AskType
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            AbortRetryIgnore = System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore,
-            /// <summary>
-            /// 
-            /// </summary>
-            OK = System.Windows.Forms.MessageBoxButtons.OK,
-            /// <summary>
-            /// 
-            /// </summary>
-            OKCancel = System.Windows.Forms.MessageBoxButtons.OKCancel,
-            /// <summary>
-            /// 
-            /// </summary>
-            RetryCancel = System.Windows.Forms.MessageBoxButtons.RetryCancel,
-            /// <summary>
-            /// 
-            /// </summary>
-            YesNo = System.Windows.Forms.MessageBoxButtons.YesNo,
-            /// <summary>
-            /// 
-            /// </summary>
-            YesNoCancel = System.Windows.Forms.MessageBoxButtons.YesNoCancel
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        public enum DialogResult
-        { 
-            /// <summary>
-            /// 
-            /// </summary>
-            Abort = System.Windows.Forms.DialogResult.Abort,
-            /// <summary>
-            /// 
-            /// </summary>
-            Cancel = System.Windows.Forms.DialogResult.Cancel,
-            /// <summary>
-            /// 
-            /// </summary>
-            Ignore = System.Windows.Forms.DialogResult.Ignore,
-            /// <summary>
-            /// 
-            /// </summary>
-            No = System.Windows.Forms.DialogResult.No,
-            /// <summary>
-            /// 
-            /// </summary>
-            None = System.Windows.Forms.DialogResult.None,
-            /// <summary>
-            /// 
-            /// </summary>
-            OK = System.Windows.Forms.DialogResult.OK,
-            /// <summary>
-            /// 
-            /// </summary>
-            Retry = System.Windows.Forms.DialogResult.Retry,
-            /// <summary>
-            /// 
-            /// </summary>
-            Yes = System.Windows.Forms.DialogResult.Yes
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public enum MessageIcon
-        {
-            /// <summary>
-            /// 
-            /// </summary>
-            Asterisk = System.Windows.Forms.MessageBoxIcon.Asterisk,
-            /// <summary>
-            /// 
-            /// </summary>
-            Error = System.Windows.Forms.MessageBoxIcon.Error,
-            /// <summary>
-            /// 
-            /// </summary>
-            Exclamation = System.Windows.Forms.MessageBoxIcon.Exclamation,
-            /// <summary>
-            /// 
-            /// </summary>
-            Hand = System.Windows.Forms.MessageBoxIcon.Hand,
-            /// <summary>
-            /// 
-            /// </summary>
-            Information = System.Windows.Forms.MessageBoxIcon.Information,
-            /// <summary>
-            /// 
-            /// </summary>
-            None = System.Windows.Forms.MessageBoxIcon.None,
-            /// <summary>
-            /// 
-            /// </summary>
-            Question = System.Windows.Forms.MessageBoxIcon.Question,
-            /// <summary>
-            /// 
-            /// </summary>
-            Stop = System.Windows.Forms.MessageBoxIcon.Stop,
-            /// <summary>
-            /// 
-            /// </summary>
-            Warning = System.Windows.Forms.MessageBoxIcon.Warning
-        }
-    }
 }
-// ReSharper restore UnusedMember.Global

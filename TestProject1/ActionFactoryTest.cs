@@ -1,4 +1,5 @@
-﻿using Centipede;
+﻿using System.Diagnostics;
+using Centipede;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Action = Centipede.Action;
@@ -12,29 +13,9 @@ namespace TestProject1
     ///This is a test class for ActionFactoryTest and is intended
     ///to contain all ActionFactoryTest Unit Tests
     ///</summary>
-    [TestClass()]
+    [TestClass]
     public class ActionFactoryTest
     {
-
-
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
         #region Additional test attributes
         // 
         //You can use the following additional attributes as you write your tests:
@@ -69,13 +50,13 @@ namespace TestProject1
         /// <summary>
         ///A test for ActionFactory Constructor
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void ActionFactoryConstructorTest()
         {
-            string category = "category";
-            string helpTextValue = "help text";
-            string iconNameValue = "icon name";
-            string displayNameValue = "display name";
+            const string category = "category";
+            const string helpTextValue = "help text";
+            const string iconNameValue = "icon name";
+            const string displayNameValue = "display name";
             ActionCategoryAttribute catAttribute = new ActionCategoryAttribute(category)
                                                    {
                                                            helpText = helpTextValue,
@@ -93,10 +74,10 @@ namespace TestProject1
         /// <summary>
         ///A test for ActionFactory Constructor
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void ActionFactoryConstructorTest1()
         {
-            string displayNameValue = "display name";
+            const string displayNameValue = "display name";
             Type actionType = typeof(TestAction);
             ActionFactory target = new ActionFactory(displayNameValue, actionType);
             
@@ -108,7 +89,7 @@ namespace TestProject1
         /// <summary>
         ///A test for Generate
         ///</summary>
-        [TestMethod()]
+        [TestMethod]
         public void GenerateTest()
         {
             ActionFactory target = new ActionFactory("DisplayName", typeof (TestAction));
@@ -116,6 +97,7 @@ namespace TestProject1
             Assert.IsInstanceOfType(actual, typeof(TestAction), "Wrong type returned from Generate()");
             TestAction ta = actual as TestAction;
 
+            Debug.Assert(ta != null, "ta != null");
             Assert.AreEqual(1, ta.CtorCalled, "Ctor called {0} times, expected 1", ta.CtorCalled);
             Assert.AreEqual(0,
                             ta.CleanupActionCalled + ta.DisposeCalled + ta.DoActionCalled + ta.GetNextCalled +

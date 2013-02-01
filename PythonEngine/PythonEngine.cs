@@ -21,7 +21,7 @@ namespace PythonEngine
             {
                 _pyEngine = Python.CreateEngine();
                 _pyScope = _pyEngine.CreateScope();
-                _pyScope.ImportModule("sys");
+                _pyScope.ImportModule(@"sys");
             }
         }
 
@@ -33,7 +33,7 @@ namespace PythonEngine
         /// <exception cref="PythonException"></exception>
         public void Execute(String code, PythonScope scope = null)
         {
-            ScriptScope myscope = scope == null ? _pyScope : scope._scope;
+            ScriptScope myscope = scope == null ? _pyScope : scope.Scope;
 
             ScriptSource source = _pyEngine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
             try
@@ -58,7 +58,7 @@ namespace PythonEngine
         // ReSharper disable UnusedMember.Global
         public T Evaluate<T>(String expression, PythonScope scope = null)
         {
-            ScriptScope myscope = scope == null ? _pyScope : scope._scope;
+            ScriptScope myscope = scope == null ? _pyScope : scope.Scope;
             try
             {
                 ScriptSource source = _pyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
@@ -114,6 +114,11 @@ namespace PythonEngine
             return _pyEngine.CreateScriptSourceFromString(code, kind).Compile();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public Boolean VariableExists(String name)
         {
             return _pyScope.ContainsVariable(name);
@@ -132,6 +137,11 @@ namespace PythonEngine
             return pyEngine._pyScope;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
         public PythonScope GetNewScope(IDictionary<String, Object> variables = null)
         {
             return new PythonScope(_pyEngine.CreateScope(variables));
@@ -166,72 +176,98 @@ namespace PythonEngine
         #endregion
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class PythonException : Exception
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         public PythonException(Exception e)
-                : base(String.Format("{0}: {1}", e.GetType().Name, e.Message), e)
+                : base(String.Format(@"{0}: {1}", e.GetType().Name, e.Message), e)
         { }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class PythonScope
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="scope"></param>
         public PythonScope(ScriptScope scope)
         {
-            _scope = scope;
+            Scope = scope;
         }
-        internal readonly ScriptScope _scope;
+        internal readonly ScriptScope Scope;
         
-        // Summary:
-        //     Determines if this context or any outer scope contains the defined name.
-        //
-        // Exceptions:
-        //   System.ArgumentNullException:
-        //     name is a null reference.
+        // 
+        /// <summary>
+        /// Determines if this context or any outer scope contains the defined name.
+        /// </summary>
+        /// <exception cref="T:System.ArgumentNullException">name is a null reference. </exception>
+        /// <param name="name">The variable name to look for</param>
+        /// <returns><see cref="bool"/> indicating whether the variable exists</returns>
         public bool ContainsVariable(string name)
         {
-            return _scope.ContainsVariable(name);
+            return Scope.ContainsVariable(name);
         }
-        //
-        // Summary:
-        //     Gets an array of variable names and their values stored in the scope.
+
+        /// <summary>
+        /// Gets an array of variable names and their values stored in the scope.
+        /// </summary>
+        /// <returns><see cref="KeyValuePair{TKey,TValue}">KeyValuePairs</see> of variable names and values. 
+        /// </returns>
         public IEnumerable<KeyValuePair<string, dynamic>> GetItems()
         {
-            return _scope.GetItems();
+            return Scope.GetItems();
         }
-        //
-        // Summary:
-        //     Gets a value stored in the scope under the given name.
-        //
-        // Exceptions:
-        //   System.MissingMemberException:
-        //     The specified name is not defined in the scope.
-        //
-        //   System.ArgumentNullException:
-        //     name is a null reference.
+        /// <summary>
+        /// Gets a value stored in the scope under the given name.
+        /// </summary>
+        /// <typeparam name="T">blah blah blah</typeparam>
+        /// <exception cref="System.MissingMemberException">The specified name is not defined in the scope.</exception>
+        /// <exception cref="System.ArgumentNullException">name is a null reference</exception>   
         public T GetVariable<T>(string name)
         {
-            return _scope.GetVariable(name);
+            return Scope.GetVariable(name);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public bool RemoveVariable(string name)
         {
-            return _scope.RemoveVariable(name);
-        }
-        //
-        // Summary:
-        //     Sets the name to the specified value.
-        //
-        // Exceptions:
-        //   System.ArgumentNullException:
-        //     name is a null reference.
-        public void SetVariable(string name, object value)
-        {
-            _scope.SetVariable(name, value);
+            return Scope.RemoveVariable(name);
         }
 
+        /// <summary>
+        /// Sets the name to the specified value.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">name is a null reference.</exception>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void SetVariable(string name, object value)
+        {
+            Scope.SetVariable(name, value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool TryGetVariable<T>(string name, out T value)
         {
-            return _scope.TryGetVariable(name, out value);
+            return Scope.TryGetVariable(name, out value);
         }
 
     }

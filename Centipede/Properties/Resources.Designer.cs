@@ -61,6 +61,53 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to False.
+        /// </summary>
+        public static string BranchAction_ConditionSource_False {
+            get {
+                return ResourceManager.GetString("BranchAction_ConditionSource_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next action if condition returns true (otherwise, proceed normally).
+        /// </summary>
+        public static string BranchAction_Usage {
+            get {
+                return ResourceManager.GetString("BranchAction_Usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action if True
+        ///.
+        /// </summary>
+        public static string BranchActionDisplayName {
+            get {
+                return ResourceManager.GetString("BranchActionDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition
+        ///.
+        /// </summary>
+        public static string BranchActionI18N_Condition_DisplayName {
+            get {
+                return ResourceManager.GetString("BranchActionI18N_Condition_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BranchActionUsage.
+        /// </summary>
+        public static string BranchActionUsage {
+            get {
+                return ResourceManager.GetString("BranchActionUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action if false.
         /// </summary>
         public static string BranchDisplayControl_BranchDisplayControl_Action_if_false {
@@ -128,6 +175,24 @@ namespace Centipede.Properties {
         public static string MainWindow_CompletedHandler_Finished {
             get {
                 return ResourceManager.GetString("MainWindow_CompletedHandler_Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job did not finish..
+        /// </summary>
+        public static string MainWindow_CompletedHandler_Job_did_not_finish_ {
+            get {
+                return ResourceManager.GetString("MainWindow_CompletedHandler_Job_did_not_finish_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job finished successfully..
+        /// </summary>
+        public static string MainWindow_CompletedHandler_Job_finished_successfully_ {
+            get {
+                return ResourceManager.GetString("MainWindow_CompletedHandler_Job_finished_successfully_", resourceCulture);
             }
         }
         
@@ -200,6 +265,15 @@ namespace Centipede.Properties {
         public static string MainWindow_Text_Centipede____0__1_ {
             get {
                 return ResourceManager.GetString("MainWindow_Text_Centipede____0__1_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string MainWindow_UpdateHandlerDone_Completed {
+            get {
+                return ResourceManager.GetString("MainWindow_UpdateHandlerDone_Completed", resourceCulture);
             }
         }
         

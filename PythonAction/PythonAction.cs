@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Xml;
 using Centipede;
-using Centipede.Actions;
 using PythonEngine;
 using Action = Centipede.Action;
 
@@ -9,24 +11,24 @@ using Action = Centipede.Action;
 namespace PyAction
 {
 
-    [ActionCategory("Other Actions", 
-        iconName="pycon", 
-        displayName="Python Action", 
-        displayControl="PythonDisplayControl"
-        )]
-// ReSharper disable ClassNeverInstantiated.Global
+    [ActionCategory("Other Actions",
+            iconName = @"pycon",
+            displayName = "Python Action",
+            displayControl = @"PythonDisplayControl"
+            )]
+    // ReSharper disable ClassNeverInstantiated.Global
     public class PythonAction : Centipede.Action
-// ReSharper restore ClassNeverInstantiated.Global
+            // ReSharper restore ClassNeverInstantiated.Global
     {
 
         public PythonAction(Dictionary<String, Object> v)
-            : base("Python Action", v)
+                : base("Python Action", v)
         { }
 
         [ActionArgument(usage = "Source code to be executed")]
         public String Source
         {
-// ReSharper disable MemberCanBePrivate.Global
+            // ReSharper disable MemberCanBePrivate.Global
             get
             {
                 return _source;
@@ -37,23 +39,25 @@ namespace PyAction
                 _complexity = value.Split(Environment.NewLine.ToCharArray()).Length;
             }
         }
+
         private int _complexity;
         private string _source;
 
-/*
-        public void UpdateSource(object sender, EventArgs e)
-        {
-            ScintillaNET.Scintilla control = sender as ScintillaNET.Scintilla;
-            Source = control.Text;
-            this._complexity = Source.Split(System.Environment.NewLine.ToCharArray()).Length;
-        }
-*/
+        /*
+                public void UpdateSource(object sender, EventArgs e)
+                {
+                    ScintillaNET.Scintilla control = sender as ScintillaNET.Scintilla;
+                    Source = control.Text;
+                    this._complexity = Source.Split(System.Environment.NewLine.ToCharArray()).Length;
+                }
+        */
+
         protected override void DoAction()
         {
             PythonEngine.PythonEngine engine = PythonEngine.PythonEngine.Instance;
-            if (!engine.VariableExists("variables"))
+            if (!engine.VariableExists(@"variables"))
             {
-                engine.SetVariable("variables", Variables);
+                engine.SetVariable(@"variables", Variables);
             }
             try
             {
@@ -64,6 +68,7 @@ namespace PyAction
                 throw new ActionException(e, this);
             }
         }
+
         public override int Complexity
         {
             get
@@ -72,25 +77,28 @@ namespace PyAction
             }
         }
 
-    }
-/*
-    public class PythonCondition : BranchCondition
-    {
-        public PythonCondition(Action action)
-                : base(action)
-        { }
-
-        public String Source = @"true";
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override bool Test()
+        public override void AddToXmlElement(XmlElement rootElement)
         {
-            PythonEngine.PythonEngine pyEngine = PythonEngine.PythonEngine.Instance;
-            return pyEngine.Evaluate<Boolean>(Source);
+            XmlDocument ownerDocument = rootElement.OwnerDocument;
+            Type thisType = GetType();
+
+            XmlElement element = ownerDocument.CreateElement(thisType.FullName);
+            XmlText sourceText = ownerDocument.CreateTextNode(Source);
+
+            element.AppendChild(sourceText);
+            String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
+
+            element.SetAttribute("Comment", Comment);
+            element.SetAttribute("Assembly", pluginFilePath);
+            element.SetAttribute("Complexity", Complexity.ToString(CultureInfo.InvariantCulture));
+
+            rootElement.AppendChild(element);
+        }
+
+        protected override void PopulateMembersFromXml(XmlElement element)
+        {
+            Source = element.InnerText;
+            Comment = element.GetAttribute("Comment");
         }
     }
-*/
 }

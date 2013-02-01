@@ -36,16 +36,17 @@ namespace PyAction
             // 
             // NameLabel
             // 
-            this.NameLabel.Size = new System.Drawing.Size(2489, 16);
+            this.NameLabel.Size = new System.Drawing.Size(2435, 16);
             // 
             // PythonDisplayControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "PythonDisplayControl";
-            this.Size = new System.Drawing.Size(1299, 231);
+            this.Size = new System.Drawing.Size(1245, 105);
             this.ResumeLayout(false);
             this.PerformLayout();
+            base.InitializeComponent();
 
         }
 

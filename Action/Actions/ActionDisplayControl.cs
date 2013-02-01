@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -38,7 +39,7 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        protected void SetProperties()
+        private void SetProperties()
         {
             Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             BackColor = SystemColors.Control;
@@ -53,7 +54,8 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         /// <param name="action"></param>
-        public ActionDisplayControl(Action action)
+        /// <param name="generateArgumentFields"></param>
+        public ActionDisplayControl(Action action, bool generateArgumentFields = true)
         {
             Selected = false;
             InitializeComponent();
@@ -66,7 +68,11 @@ namespace Centipede.Actions
             _statusToolTip = new ToolTip();
             _statusToolTip.SetToolTip(StatusIconBox, "");
 
-            GenerateArguments();
+            if (generateArgumentFields)
+            {
+                GenerateArguments();    
+            }
+            
 
         }
 
@@ -106,7 +112,7 @@ namespace Centipede.Actions
                                     Anchor = AnchorStyles.Top | AnchorStyles.Left,
                                         Checked = arg.Get<Boolean>(ThisAction)
                                   };
-                    cb.CheckedChanged += GetChangedHandler(arg) ?? ((sender, e) => arg.Set(ThisAction, (sender as CheckBox).Checked));
+                    cb.CheckedChanged += GetChangedHandler(arg) ?? ((sender, e) => arg.Set(ThisAction, ((CheckBox)sender).Checked));
 
                     attrValue = cb;
 
@@ -167,9 +173,7 @@ namespace Centipede.Actions
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
-
-
-        String GetArgumentName(FieldAndPropertyWrapper argument)
+        static String GetArgumentName(FieldAndPropertyWrapper argument)
         {
             ActionArgumentAttribute argAttr = argument.GetArguementAttribute();
             return argAttr.displayName ?? argument.Name;
@@ -177,27 +181,31 @@ namespace Centipede.Actions
 
         void attrValue_TextChanged(object sender, EventArgs e)
         {
-            var attrValue = sender as TextBox;
-            var f = attrValue.Tag as FieldAndPropertyWrapper;
-            ActionArgumentAttribute argInfo = f.GetArguementAttribute();
+            TextBox attrValue = sender as TextBox;
+            
+                Debug.Assert(attrValue != null, "attrValue != null");
+                Debug.Assert(attrValue.Tag != null, "attrValue.Tag != null");
+                FieldAndPropertyWrapper f = (FieldAndPropertyWrapper)attrValue.Tag;
+                ActionArgumentAttribute argInfo = f.GetArguementAttribute();
 
-            var value = f.Get<Object>(ThisAction);
-            MethodInfo parser = f.MemberType.GetMethod("Parse", new[] { typeof(String) });
-            if (parser != null)
-            {
-                try
+                object value = f.Get<Object>(ThisAction);
+                MethodInfo parser = f.MemberType.GetMethod("Parse", new[] { typeof(String) });
+                if (parser != null)
                 {
-                    value = parser.Invoke(f, new object[] { attrValue.Text });
+                    try
+                    {
+                        value = parser.Invoke(f, new object[] { attrValue.Text });
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show(String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message, ThisAction.Name, argInfo.displayName, attrValue.Text));
+                    }
                 }
-                catch (Exception)
+                else
                 {
-                    MessageBox.Show(String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message, ThisAction.Name, argInfo.displayName, attrValue.Text));
+                    value = attrValue.Text;
                 }
-            }
-            else
-            {
-                value = attrValue.Text;
-            }
+            
 
             f.Set(ThisAction, value);
 
@@ -315,7 +323,9 @@ namespace Centipede.Actions
 
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
-            ThisAction.Comment = (sender as TextBox).Text;
+            TextBox textBox = sender as TextBox;
+            Debug.Assert(textBox != null, @"textBox != null");
+            ThisAction.Comment = textBox.Text;
         }
 
         //private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
@@ -542,11 +552,7 @@ namespace Centipede.Actions
         /// <returns></returns>
         public static implicit operator FieldAndPropertyWrapper(FieldInfo f)
         {
-            if (Cache.ContainsKey(f))
-            {
-                return Cache[f];
-            }
-            return new FieldAndPropertyWrapper(f);
+            return Cache.ContainsKey(f) ? Cache[f] : new FieldAndPropertyWrapper(f);
         }
 
         /// <summary>
@@ -570,11 +576,7 @@ namespace Centipede.Actions
         /// <returns></returns>
         public static implicit operator FieldAndPropertyWrapper(PropertyInfo p)
         {
-            if (Cache.ContainsKey(p))
-            {
-                return Cache[p];
-            }
-            return new FieldAndPropertyWrapper(p);
+            return Cache.ContainsKey(p) ? Cache[p] : new FieldAndPropertyWrapper(p);
         }
 
         /// <summary>
@@ -604,15 +606,17 @@ namespace Centipede.Actions
             {
                 return Cache[m];
             }
-            if (m is FieldInfo)
+            FieldInfo field = m as FieldInfo;
+            if (field == null)
             {
-                return new FieldAndPropertyWrapper(m as FieldInfo);
+                PropertyInfo prop = m as PropertyInfo;
+                if (prop == null)
+                {
+                    throw new InvalidCastException();
+                }
+                return new FieldAndPropertyWrapper(prop);
             }
-            if (m is PropertyInfo)
-            {
-                return new FieldAndPropertyWrapper(m as PropertyInfo);
-            }
-            throw new InvalidCastException();
+            return new FieldAndPropertyWrapper(field);
         }
         /// <summary>
         /// 
