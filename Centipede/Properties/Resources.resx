@@ -178,4 +178,30 @@
   <data name="MainWindow_ErrorHandler_Error_" xml:space="preserve">
     <value>Error:</value>
   </data>
+  <data name="MainWindow_UpdateHandlerDone_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="MainWindow_CompletedHandler_Job_finished_successfully_" xml:space="preserve">
+    <value>Job finished successfully.</value>
+  </data>
+  <data name="MainWindow_CompletedHandler_Job_did_not_finish_" xml:space="preserve">
+    <value>Job did not finish.</value>
+  </data>
+  <data name="BranchAction_ConditionSource_False" xml:space="preserve">
+    <value>False</value>
+  </data>
+  <data name="BranchAction_Usage" xml:space="preserve">
+    <value>Next action if condition returns true (otherwise, proceed normally)</value>
+  </data>
+  <data name="BranchActionUsage" xml:space="preserve">
+    <value>BranchActionUsage</value>
+  </data>
+  <data name="BranchActionDisplayName" xml:space="preserve">
+    <value>Action if True
+</value>
+  </data>
+  <data name="BranchActionI18N_Condition_DisplayName" xml:space="preserve">
+    <value>Condition
+</value>
+  </data>
 </root>

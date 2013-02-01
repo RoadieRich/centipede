@@ -65,7 +65,7 @@ namespace TextFile
         // ReSharper restore MemberCanBePrivate.Global
         protected override void DoAction()
         {
-            var fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
+            var fs = (FileStream)Variables[ParseStringForVariable(FileVarName)];
             
             fs.Flush();
 
@@ -102,7 +102,7 @@ namespace TextFile
 
         protected override void DoAction()
         {
-            var fs = Variables[ParseStringForVariable(FileVarName)] as FileStream;
+            var fs = (FileStream)Variables[ParseStringForVariable(FileVarName)];
             var sr = new EasyFileStream(fs);
 
             if (!Sequential)

@@ -14,32 +14,46 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="program"></param>
         /// <param name="actions"></param>
         /// <param name="variables"></param>
-        public CentipedeEventArgs(Type program, List<Action> actions, Dictionary<String, Object> variables)
+        public CentipedeEventArgs(List<Action> actions, Dictionary<String, Object> variables)
         {
-            Program = program;
-            Actions = actions;
-            Variables = variables;
+            _actions = actions;
+            _variables = variables;
+        }
+
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly List<Action> _actions;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly Dictionary<string, object> _variables;
+
+// ReSharper restore MemberCanBePrivate.Global
+        /// <summary>
+        /// 
+        /// </summary>
+        public Dictionary<string, object> Variables
+        {
+            get
+            {
+                return _variables;
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-// ReSharper disable MemberCanBePrivate.Global
-        public readonly Type Program;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly List<Action> Actions;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly Dictionary<string, object> Variables;
-
-// ReSharper restore MemberCanBePrivate.Global
+        public List<Action> Actions
+        {
+            get
+            {
+                return _actions;
+            }
+        }
     }
 }

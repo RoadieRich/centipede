@@ -16,14 +16,7 @@ namespace Centipede.Actions
         }
 
         [ActionArgument]
-// ReSharper disable ConvertToConstant.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable FieldCanBeMadeReadOnly.Global
         public String DestinationVariable = "Filename";
-// ReSharper restore FieldCanBeMadeReadOnly.Global
-// ReSharper restore MemberCanBePrivate.Global
-// ReSharper restore ConvertToConstant.Global
-
 
         private delegate DialogResult ShowGetFileDialog();
         private readonly CancelEventHandler _handler;

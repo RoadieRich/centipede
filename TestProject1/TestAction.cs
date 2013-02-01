@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Centipede;
 using Action = Centipede.Action;
 
 
 namespace TestProject1
 {
-    class TestAction : Centipede.Action
+    class TestAction : Action
     {
-        protected bool Equals(TestAction other)
+        private bool Equals(TestAction other)
         {
             return string.Equals(FieldArgument, other.FieldArgument) && string.Equals(PropertyArgument, other.PropertyArgument);
         }
@@ -24,19 +22,10 @@ namespace TestProject1
         /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-            return Equals((TestAction)obj);
+            return !ReferenceEquals(null, obj) &&
+                   (ReferenceEquals(this, obj) ||
+                    obj.GetType() == GetType() &&
+                    Equals((TestAction)obj));
         }
 
         /// <summary>
@@ -47,10 +36,12 @@ namespace TestProject1
         /// </returns>
         public override int GetHashCode()
         {
+            // ReSharper disable NonReadonlyFieldInGetHashCode
             unchecked
             {
                 return ((FieldArgument != null ? FieldArgument.GetHashCode() : 0) * 397) ^ (PropertyArgument != null ? PropertyArgument.GetHashCode() : 0) ^ ((Comment!=null?Comment.GetHashCode() : 0) * 1559);
             }
+            // ReSharper restore NonReadonlyFieldInGetHashCode
         }
 
         public static bool operator ==(TestAction left, TestAction right)
@@ -63,12 +54,12 @@ namespace TestProject1
             return !Equals(left, right);
         }
 
-        public int CtorCalled = 0;
-        public int DoActionCalled = 0;
-        public int InitActionCalled = 0;
-        public int CleanupActionCalled = 0;
-        public int GetNextCalled = 0;
-        public int DisposeCalled = 0;
+        public readonly int CtorCalled;
+        public int DoActionCalled;
+        public int InitActionCalled;
+        public int CleanupActionCalled;
+        public int GetNextCalled;
+        public int DisposeCalled;
 
         /// <summary>
         /// 
@@ -77,6 +68,7 @@ namespace TestProject1
         public TestAction(Dictionary<string, object> v)
                 : base("TestAction", v)
         {
+            FieldArgument = "field argument value";
             CtorCalled++;
         }
 
@@ -132,13 +124,14 @@ namespace TestProject1
         /// </summary>
         public override void Dispose()
         {
-            this.DisposeCalled++;
+            DisposeCalled++;
             base.Dispose();
         }
 
-
+        // ReSharper disable MemberCanBePrivate.Global
         [ActionArgument(displayName = "Field Argument")]
-        public String FieldArgument = "field argument value";
+        public readonly String FieldArgument;
+
 
 
         [ActionArgument(displayName = "Property Argument")]
@@ -147,5 +140,6 @@ namespace TestProject1
             get;
             set;
         }
+        // ReSharper restore MemberCanBePrivate.Global
     }
 }

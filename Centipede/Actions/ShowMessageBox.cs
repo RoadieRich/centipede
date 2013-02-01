@@ -13,17 +13,11 @@ namespace Centipede.Actions
         { }
 
         [ActionArgument]
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable ConvertToConstant.Global
-// ReSharper disable FieldCanBeMadeReadOnly.Global
         public String Title = "Message";
 
         [ActionArgument(displayName="Message")]
         public String MessageText = "";
 
-        // ReSharper restore FieldCanBeMadeReadOnly.Global
-        // ReSharper restore ConvertToConstant.Global
-        // ReSharper restore MemberCanBePrivate.Global
         private delegate void ShowMessageBoxDelegate();
 
         protected override void DoAction()

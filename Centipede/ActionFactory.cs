@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Centipede
@@ -14,8 +15,7 @@ namespace Centipede
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType)
         {
-            String displayName;
-            displayName = catAttribute.displayName != string.Empty ? catAttribute.displayName : pluginType.Name;
+            string displayName = catAttribute.displayName != string.Empty ? catAttribute.displayName : pluginType.Name;
             Text = displayName;
             ToolTipText = catAttribute.helpText;
             _actionType = pluginType;
@@ -29,8 +29,13 @@ namespace Centipede
 
             var typeArray = new Type[1];
             typeArray[0] = typeof(Dictionary<String, Object>);
-        
-            return _actionType.GetConstructor(new[] {typeof(Dictionary<String, Object>)}).Invoke(new object[]{Program.Variables}) as Action;
+
+            ConstructorInfo constructorInfo = _actionType.GetConstructor(new[] { typeof (Dictionary<String, Object>) });
+            if (constructorInfo != null)
+            {
+                return constructorInfo.Invoke(new object[]{Program.Instance.Variables}) as Action;
+            }
+            return null;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace Centipede
 {
-    public static class Program
+    public class Program : IDisposable
     {
         public delegate void ActionRemovedHandler(Action action);
 
@@ -41,15 +41,20 @@ namespace Centipede
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
         ///     I can't figure a way of doing it easily.
         /// </summary>
-        public static readonly Dictionary<String, Object> Variables = new Dictionary<String, Object>();
+        public readonly Dictionary<String, Object> Variables = new Dictionary<String, Object>();
 
-        public static string JobFileName = "";
-        public static string JobName = "";
+        public string JobFileName = "";
+        public string JobName = "";
 
-        public static readonly List<Action> Actions = new List<Action>();
-        private static MainWindow _mainForm;
+        public readonly List<Action> Actions = new List<Action>();
+        private MainWindow _mainForm;
+        private static volatile Program _instance;
+        private static readonly object LockObject = new object();
 
-        public static Int32 JobComplexity
+        protected Program()
+        { }
+
+        public Int32 JobComplexity
         {
             get
             {
@@ -66,10 +71,25 @@ namespace Centipede
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            _mainForm = new MainWindow();
-            if (!_mainForm.IsDisposed)
+            Instance._mainForm = new MainWindow();
+            Application.Run(Instance._mainForm);
+        }
+
+        public static Program Instance
+        {
+            get
             {
-                Application.Run(_mainForm);
+                if (_instance == null)
+                {
+                    lock (LockObject)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new Program();
+                        }
+                    }
+                }
+                return _instance;
             }
         }
 
@@ -77,7 +97,7 @@ namespace Centipede
         ///     Run the job, starting with the first action added.
         /// </summary>
         [STAThread]
-        public static void RunJob()
+        public void RunJob()
         {
             Action currentAction;
 
@@ -126,14 +146,16 @@ namespace Centipede
                     }
 
                     ErrorHandler handler = ActionErrorOccurred;
-                    if (handler != null)
+                    if (handler == null)
                     {
-                        if (!handler(ae, out currentAction))
-                        {
-                            completed = false;
-                            break;
-                        }
+                        continue;
                     }
+                    if (handler(ae, out currentAction))
+                    {
+                        continue;
+                    }
+                    completed = false;
+                    break;
                 }
             }
 
@@ -144,20 +166,20 @@ namespace Centipede
             }
         }
 
-        public static event ActionUpdateCallback ActionCompleted = delegate { };
-        public static event ActionUpdateCallback BeforeAction = delegate { };
+        public  event ActionUpdateCallback ActionCompleted = delegate { };
+        public  event ActionUpdateCallback BeforeAction = delegate { };
 
-        public static event ActionRemovedHandler ActionRemoved = delegate { };
+        public  event ActionRemovedHandler ActionRemoved = delegate { };
 
-        public static event CompletedHandler JobCompleted = delegate { };
+        public  event CompletedHandler JobCompleted = delegate { };
 
-        public static event ErrorHandler ActionErrorOccurred = delegate(ActionException e, out Action nextAction)
+        public  event ErrorHandler ActionErrorOccurred = delegate(ActionException e, out Action nextAction)
                                                                    {
                                                                        nextAction = null;
                                                                        return false;
                                                                    };
 
-        public static event AddActionCallback ActionAdded;
+        public  event AddActionCallback ActionAdded;
         //{
         //    add
         //    {
@@ -177,29 +199,28 @@ namespace Centipede
         /// </summary>
         /// <param name="action">Action to add</param>
         /// <param name="index">(Optional) Index to add action at.  Defaults to end (-1).</param>
-        public static void AddAction(Action action, Int32 index = -1)
+        public void AddAction(Action action, Int32 index = -1)
         {
-            if (index == -1)
+            switch (index)
             {
+            case -1:
                 if (Actions.Count > 0)
                 {
                     Action last = Actions[Actions.Count - 1];
 
                     last.Next = action;
                 }
-
                 Actions.Add(action);
                 index = Actions.Count - 1;
-            }
-            else
-            {
-                if (index == 0) //add at start of list
+                break;
+            case 0:
                 {
                     Action oldFirst = Actions[0];
                     Actions.Insert(0, action);
                     action.Next = oldFirst;
                 }
-                else
+                break;
+            default:
                 {
                     Action prevAction = Actions[index - 1];
                     Action nextAction = Actions[index];
@@ -207,6 +228,7 @@ namespace Centipede
                     action.Next = nextAction;
                     Actions.Insert(index, action);
                 }
+                break;
             }
             AddActionCallback handler = ActionAdded;
             if (handler != null)
@@ -215,11 +237,13 @@ namespace Centipede
             }
         }
 
-        internal static void RemoveAction(Action action)
+        internal void RemoveAction(Action action)
         {
             Action prevAction = Actions.SingleOrDefault(a => a.Next == action);
 
             Action nextAction = action.Next;
+
+            
 
             if (prevAction != null)
             {
@@ -240,7 +264,7 @@ namespace Centipede
         }
 */
 
-        internal static void SaveJob(String filename)
+        internal void SaveJob(String filename)
         {
             var xmlDoc = new XmlDocument();
             XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
@@ -265,62 +289,71 @@ namespace Centipede
             }
             xmlRoot.AppendChild(varsElement);
 
-            using (XmlWriter w = XmlWriter.Create(filename))
+            XmlWriterSettings settings = new XmlWriterSettings
+                                         {
+                                                 Indent = true,
+                                                 IndentChars = "  ",
+                                                 NewLineChars = "\r\n",
+                                                 NewLineHandling = NewLineHandling.Replace
+                                         };
+
+            using (XmlWriter w = XmlWriter.Create(filename, settings))
             {
                 xmlDoc.WriteTo(w);
             }
             JobFileName = filename;
         }
 
-        public static event AfterLoadEventHandler AfterLoad = delegate { };
+        public  event AfterLoadEventHandler AfterLoad = delegate { };
 
         /// <summary>
         ///     Load a job with a given name
         /// </summary>
         /// <param name="jobFileName">Name of the job to load</param>
-        internal static void LoadJob(String jobFileName)
+        internal void LoadJob(String jobFileName)
         {
             Clear();
 
             var xmlDoc = new XmlDocument();
-            if (File.Exists(jobFileName))
+            if (!File.Exists(jobFileName))
             {
-                xmlDoc.Load(jobFileName);
-                JobName = (xmlDoc.ChildNodes[1] as XmlElement).GetAttribute("Title");
-                foreach (
-                        XmlElement actionElement in
-                                xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
-                {
-                    AddAction(Action.FromXml(actionElement, Variables));
-                }
+                return;
+            }
+            xmlDoc.Load(jobFileName);
+            JobName = ((XmlElement)xmlDoc.ChildNodes[1]).GetAttribute("Title");
+            foreach (
+                    XmlElement actionElement in
+                            xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
+            {
+                AddAction(Action.FromXml(actionElement, Variables));
+            }
 
-                Assembly asm = Assembly.GetExecutingAssembly();
+            Assembly asm = Assembly.GetExecutingAssembly();
 
-                foreach (
-                        XmlElement variableElement in
-                                xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
-                {
-                    String name = variableElement.GetAttribute("name");
-                    Type type = asm.GetType(variableElement.LocalName);
+            foreach (
+                    XmlElement variableElement in
+                            xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
+            {
+                String name = variableElement.GetAttribute("name");
+                Type type = asm.GetType(variableElement.LocalName);
 
-                    MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof (String) });
+                MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof (String) });
 
-                    object value = parseMethod == null
-                                           ? variableElement.GetAttribute("Value")
-                                           : parseMethod.Invoke(type,
-                                                                new object[] { variableElement.GetAttribute("Value") });
-                    Variables.Add(name, value);
-                }
-                AfterLoadEventHandler handler = AfterLoad;
-                if (handler != null)
-                {
-                    handler(typeof (Program), EventArgs.Empty);
-                }
+                object value = parseMethod == null
+                                       ? variableElement.GetAttribute("Value")
+                                       : parseMethod.Invoke(type,
+                                                            new object[] { variableElement.GetAttribute("Value") });
+                Variables.Add(name, value);
+            }
+            AfterLoadEventHandler handler = AfterLoad;
+            if (handler != null)
+            {
+                handler(typeof (Program), EventArgs.Empty);
             }
         }
 
         
-        public static Int32 JobLength
+        public Int32 JobLength
         {
             get
             {
@@ -329,7 +362,7 @@ namespace Centipede
         }
 
 
-        internal static void Clear()
+        internal void Clear()
         {
             Variables.Clear();
             while (Actions.Count > 0)
@@ -338,15 +371,12 @@ namespace Centipede
             }
         }
 
-        public static void Dispose(bool disposing)
+        public void Dispose()
         {
-            if (disposing)
+            foreach (IDisposable action in Actions)
             {
-                foreach (IDisposable action in Actions)
-                {
-                    action.Dispose();
+                action.Dispose();
                     
-                }
             }
         }
     }

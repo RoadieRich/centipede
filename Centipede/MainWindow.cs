@@ -19,7 +19,7 @@ namespace Centipede
     {
         public static MainWindow Instance;
         private readonly JobDataSet _dataSet = new JobDataSet();
-        
+
         private bool _dirty;
 
         public MainWindow()
@@ -51,7 +51,7 @@ namespace Centipede
             set
             {
                 _dirty = value;
-                Text = Program.JobName;
+                Text = Program.Instance.JobName;
             }
         }
 
@@ -62,7 +62,8 @@ namespace Centipede
             if (e.ErrorAction != null)
             {
                 //UpdateHandlerDone(e.ErrorAction);
-                var adc = e.ErrorAction.Tag as ActionDisplayControl;
+                var adc = (ActionDisplayControl)e.ErrorAction.Tag;
+
                 SetState(adc, ActionState.Error, e.Message);
 
                 if (ActionContainer.InvokeRequired)
@@ -73,7 +74,7 @@ namespace Centipede
                 {
                     ActionContainer.ScrollControlIntoView(adc);
                 }
-                
+
                 messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Error_occurred_in_);
                 messageBuilder.Append(e.ErrorAction.Name).Append(@" (");
                 messageBuilder.Append(e.ErrorAction.Comment).AppendLine(@")");
@@ -119,7 +120,7 @@ namespace Centipede
 
         private void UpdateHandlerDone(Action currentAction)
         {
-            foreach (var v in Program.Variables.ToArray())
+            foreach (var v in Program.Instance.Variables.ToArray())
             {
                 if (v.Key.StartsWith(@"_"))
                 {
@@ -136,41 +137,39 @@ namespace Centipede
                     _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
                 }
             }
-            var adc = currentAction.Tag as ActionDisplayControl;
-            SetState(adc, ActionState.Completed, "Completed");
+            var adc = (ActionDisplayControl)currentAction.Tag;
+            SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
             //this is supposed to be a percentage, but this works.
             backgroundWorker1.ReportProgress(currentAction.Complexity);
         }
 
-        private void SetState(ActionDisplayControl adc, ActionState state, String message)
+        private static void SetState([ResharperAnnotations.NotNull] ActionDisplayControl adc, ActionState state,
+                                     String message)
         {
-            if (adc == null)
-            {
-                throw new ArgumentNullException();
-            }
             if (adc.InvokeRequired)
             {
-                adc.Invoke(new Action<ActionDisplayControl, ActionState, string>(_setActionDisplayedState), adc, state, message);
+                adc.Invoke(new Action<ActionDisplayControl, ActionState, string>(_setActionDisplayedState), adc, state,
+                           message);
             }
             else
             {
-                _setActionDisplayedState(adc,state,message);
+                _setActionDisplayedState(adc, state, message);
             }
         }
 
-        private void CompletedHandler(Boolean success)
+        private static void CompletedHandler(Boolean success)
         {
             String message;
             MessageBoxIcon icon;
             if (success)
             {
-                message = "Job finished successfully.";
+                message = Resources.MainWindow_CompletedHandler_Job_finished_successfully_;
                 icon = MessageBoxIcon.Information;
             }
             else
             {
-                message = "Job did not finish.";
+                message = Resources.MainWindow_CompletedHandler_Job_did_not_finish_;
                 icon = MessageBoxIcon.Error;
             }
             MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
@@ -178,22 +177,16 @@ namespace Centipede
 
         private void ItemActivate(object sender, EventArgs e)
         {
-            var sendingListView = sender as ListView;
-            if (sendingListView == null)
-            {
-                throw new ArgumentNullException("sender");
-            }
-
-            var sendingActionFactory = sendingListView.SelectedItems[0] as ActionFactory;
-            if (sendingActionFactory == null)
-            {
-                throw new ArgumentNullException("sender");
-            }
-
-            Program.AddAction(sendingActionFactory.Generate());
+            
+            var sendingListView =  (ListView)sender;
+            
+            var sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
+            
+            Program.Instance.AddAction(sendingActionFactory.Generate());
         }
 
-        private void _setActionDisplayedState(ActionDisplayControl adc, ActionState state, String message)
+        private static void _setActionDisplayedState([ResharperAnnotations.NotNull] ActionDisplayControl adc,
+                                                     ActionState state, String message)
         {
             lock (adc)
             {
@@ -220,7 +213,11 @@ namespace Centipede
             af = new ActionFactory("Show Messagebox", typeof (ShowMessageBox));
 
             UIActListBox.Items.Add(af);
-            
+
+            af = new ActionFactory("Ask For Values", typeof(AskValues));
+
+            UIActListBox.Items.Add(af);
+
             GetActionPlugins();
 
             VarDataGridView.DataSource = _dataSet.Variables;
@@ -233,22 +230,22 @@ namespace Centipede
                 s.SizeType = SizeType.AutoSize;
             }
 
-            Program.ActionCompleted += UpdateHandlerDone;
-            Program.BeforeAction += Program_BeforeAction;
-            Program.JobCompleted += CompletedHandler;
-            Program.ActionErrorOccurred += ErrorHandler;
-            Program.ActionAdded += Program_ActionAdded;
-            Program.ActionRemoved += Program_ActionRemoved;
-            Program.AfterLoad += Program_AfterLoad;
+            Program.Instance.ActionCompleted += UpdateHandlerDone;
+            Program.Instance.BeforeAction += Program_BeforeAction;
+            Program.Instance.JobCompleted += CompletedHandler;
+            Program.Instance.ActionErrorOccurred += ErrorHandler;
+            Program.Instance.ActionAdded += Program_ActionAdded;
+            Program.Instance.ActionRemoved += Program_ActionRemoved;
+            Program.Instance.AfterLoad += Program_AfterLoad;
 
-            if (Program.JobFileName.Length <= 0)
+            if (Program.Instance.JobFileName.Length <= 0)
             {
                 LoadJob();
             }
             Dirty = false;
         }
 
-        private void LoadJob()
+        private static void LoadJob()
         {
             var startWindow = new GetJob();
             startWindow.ShowDialog();
@@ -258,13 +255,13 @@ namespace Centipede
             case GetJobResult.Open:
                 String fileName = startWindow.GetJobFileName();
 
-                Program.LoadJob(fileName);
+                Program.Instance.LoadJob(fileName);
                 break;
 
             case GetJobResult.New:
-                Program.JobFileName = "";
-                Program.JobName = "";
-                Program.Clear();
+                Program.Instance.JobFileName = "";
+                Program.Instance.JobName = "";
+                Program.Instance.Clear();
                 break;
             }
         }
@@ -273,7 +270,7 @@ namespace Centipede
         {
             var di = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
 
-            IEnumerable<FileInfo> dlls = di.EnumerateFiles("*.dll", SearchOption.AllDirectories);
+            IEnumerable<FileInfo> dlls = di.EnumerateFiles(@"*.dll", SearchOption.AllDirectories);
 
             foreach (FileInfo fi in dlls)
             {
@@ -290,17 +287,12 @@ namespace Centipede
                     continue;
                 }
                 Type[] pluginsInFile = asm.GetExportedTypes();
-                foreach (Type pluginType in pluginsInFile)
+                foreach (Type pluginType in from type in pluginsInFile
+                                            where !type.IsAbstract
+                                            where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Any()
+                                            select type)
                 {
-                    if (pluginType.IsAbstract)
-                    {
-                        continue;
-                    }
-
-                    if (pluginType.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Any())
-                    {
-                        AddToActionTab(pluginType);
-                    }
+                    AddToActionTab(pluginType);
                 }
             }
         }
@@ -322,8 +314,7 @@ namespace Centipede
             ListView catListView;
             if (tabPage != null)
             {
-                catListView = tabPage.Tag as ListView;
-                
+                catListView = (ListView)tabPage.Tag;
             }
             else
             {
@@ -352,7 +343,7 @@ namespace Centipede
         private void Program_AfterLoad(object sender, EventArgs e)
         {
             Dirty = false;
-            Text = Program.JobName;
+            Text = Program.Instance.JobName;
         }
 
         private void Program_ActionRemoved(Action action)
@@ -360,11 +351,12 @@ namespace Centipede
             ActionDisplayControl adc = ActionContainer.Controls
                                                       .Cast<ActionDisplayControl>()
                                                       .FirstOrDefault(a => a.ThisAction == action);
-            if (adc != null)
+            if (adc == null)
             {
-                ActionContainer.Controls.Remove(adc);
-                Dirty = true;
+                return;
             }
+            ActionContainer.Controls.Remove(adc);
+            Dirty = true;
         }
 
         private ListView GenerateNewTabPage(String category)
@@ -382,7 +374,7 @@ namespace Centipede
             return lv;
         }
 
-        private void Program_BeforeAction(Action action)
+        private static void Program_BeforeAction(Action action)
         {
             var adc = action.Tag as ActionDisplayControl;
             SetState(adc, ActionState.Running, "Running");
@@ -395,12 +387,19 @@ namespace Centipede
             ActionDisplayControl adc;
             if (actionAttribute != null && actionAttribute.displayControl != null)
             {
-                ConstructorInfo constructor = actionType.Assembly.GetType(string.Format("{0}.{1}",
-                                                                                        action.GetType().Namespace,
-                                                                                        actionAttribute.displayControl))
-                                                        .GetConstructor(new[] { typeof (Action) });
+                Type customADCType =
+                        actionType.Assembly.GetType(string.Format(@"{0}.{1}", actionType.Namespace,
+                                                                  actionAttribute.displayControl));
+                ConstructorInfo constructor = customADCType.GetConstructor(new[] { actionType });
 
-                adc = constructor.Invoke(new object[] { action }) as ActionDisplayControl;
+                if (constructor != null)
+                {
+                    adc = (ActionDisplayControl)constructor.Invoke(new object[] { action });
+                }
+                else
+                {
+                    adc = new ActionDisplayControl(action);
+                }
             }
             else
             {
@@ -414,25 +413,25 @@ namespace Centipede
             Dirty = true;
         }
 
-        private void adc_Deleted(object sender, CentipedeEventArgs e)
+        private static void adc_Deleted(object sender, CentipedeEventArgs e)
         {
-            var adc = sender as ActionDisplayControl;
-            Program.RemoveAction(adc.ThisAction);
+            var adc = (ActionDisplayControl)sender;
+            Program.Instance.RemoveAction(adc.ThisAction);
         }
 
         private void DataStore_Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            IEnumerable<string> varsToDelete = from kvp in Program.Variables
+            IEnumerable<string> varsToDelete = from kvp in Program.Instance.Variables
                                                where !_dataSet.Variables.Rows.Contains(kvp.Key)
                                                select kvp.Key
                                                into k
-                                               where !k.StartsWith("_")
+                                               where !k.StartsWith(@"_")
                                                select k;
 
             // ReSharper disable PossibleMultipleEnumeration
             if (varsToDelete.Any())
             {
-                Program.Variables.Remove(varsToDelete.First());
+                Program.Instance.Variables.Remove(varsToDelete.First());
             }
             // ReSharper restore PossibleMultipleEnumeration
         }
@@ -441,37 +440,37 @@ namespace Centipede
         {
             JobDataSet.VariablesRow row = e.Row;
 
-            if (!Program.Variables.ContainsKey(row.Name))
+            if (!Program.Instance.Variables.ContainsKey(row.Name))
             {
-                IEnumerable<string> it = from kvp in Program.Variables
+                IEnumerable<string> it = from kvp in Program.Instance.Variables
                                          where !_dataSet.Variables.Rows.Contains(kvp.Key)
                                          select kvp.Key
                                          into k
-                                         where !k.StartsWith("_")
+                                         where !k.StartsWith(@"_")
                                          select k;
 
                 foreach (String key in it)
                 {
-                    Program.Variables.Remove(key);
+                    Program.Instance.Variables.Remove(key);
                     break;
                 }
             }
 
-            Program.Variables[row.Name] = row.Value;
+            Program.Instance.Variables[row.Name] = row.Value;
         }
 
         private void VarMenuDelete_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
             {
-                _dataSet.Variables.RemoveVariablesRow((r.DataBoundItem as DataRowView).Row as JobDataSet.VariablesRow);
+                _dataSet.Variables.RemoveVariablesRow(((DataRowView)r.DataBoundItem).Row as JobDataSet.VariablesRow);
             }
         }
 
         private void VarDataGridView_CellContextMenuStripNeeded(object sender,
                                                                 DataGridViewCellContextMenuStripNeededEventArgs e)
         {
-            var view = sender as DataGridView;
+            var view = (DataGridView)sender;
             view.ClearSelection();
             view.Rows[e.RowIndex].Selected = true;
             e.ContextMenuStrip = VarsContextMenu;
@@ -509,14 +508,14 @@ namespace Centipede
                 SetState(adc, ActionState.None, String.Empty);
             }
             progressBar1.Value = 0;
-            progressBar1.Maximum = Program.JobComplexity;
+            progressBar1.Maximum = Program.Instance.JobComplexity;
             backgroundWorker1.RunWorkerAsync();
         }
 
         [STAThread]
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            Program.RunJob();
+            Program.Instance.RunJob();
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -534,8 +533,8 @@ namespace Centipede
             {
                 index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
-            object data = e.Data.GetData("WindowsForms10PersistentObject");
-            Program.AddAction((data as ActionFactory).Generate(), index);
+            object data = e.Data.GetData(@"WindowsForms10PersistentObject");
+            Program.Instance.AddAction(((ActionFactory)data).Generate(), index);
         }
 
         private void BeginDrag(object sender, ItemDragEventArgs e)
@@ -545,7 +544,7 @@ namespace Centipede
 
         private void ActionContainer_DragEnter(object sender, DragEventArgs e)
         {
-            //TODO: Check type in here?
+            //Fixme: Should type be checked in here?
             e.Effect = DragDropEffects.Move;
         }
 
@@ -556,7 +555,7 @@ namespace Centipede
 
         private void SaveJob()
         {
-            if (Program.JobName == "")
+            if (Program.Instance.JobName == "")
             {
                 var askJobTitle = new AskJobTitle();
                 DialogResult result = askJobTitle.ShowDialog(this);
@@ -565,13 +564,13 @@ namespace Centipede
                     return;
                 }
             }
-            saveFileDialog1.FileName = Program.JobFileName;
+            saveFileDialog1.FileName = Program.Instance.JobFileName;
             saveFileDialog1.ShowDialog(this);
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Program.SaveJob(saveFileDialog1.FileName);
+            Program.Instance.SaveJob(saveFileDialog1.FileName);
             Dirty = false;
         }
 
@@ -585,7 +584,7 @@ namespace Centipede
         {
             base.Dispose(disposing);
 
-            Program.Dispose(disposing);
+            Program.Instance.Dispose();
         }
     }
 }

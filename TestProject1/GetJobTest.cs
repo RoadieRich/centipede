@@ -103,7 +103,7 @@ namespace TestProject1
             GetJob_Accessor target = new GetJob_Accessor(); // TODO: Initialize to an appropriate value
             object sender = null; // TODO: Initialize to an appropriate value
             EventArgs e = null; // TODO: Initialize to an appropriate value
-            target.FavouritesListbox_SelectedIndexChanged(sender, e);
+            //target.FavouritesListbox_SelectedIndexChanged(sender, e);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
@@ -143,8 +143,7 @@ namespace TestProject1
         public void GetFaveFilenameTest()
         {
             string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = GetJob_Accessor.GetFaveFilename();
+            string actual = GetJob_Accessor.GetFaveFilename();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -157,8 +156,7 @@ namespace TestProject1
         {
             GetJob target = new GetJob(); // TODO: Initialize to an appropriate value
             string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = target.GetJobFileName();
+            string actual = target.GetJobFileName();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -173,7 +171,7 @@ namespace TestProject1
             GetJob_Accessor target = new GetJob_Accessor(); // TODO: Initialize to an appropriate value
             object sender = null; // TODO: Initialize to an appropriate value
             FormClosingEventArgs e = null; // TODO: Initialize to an appropriate value
-            target.GetJob_FormClosing(sender, e);
+            //target.GetJob_FormClosing(sender, e);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 

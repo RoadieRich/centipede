@@ -91,8 +91,13 @@ namespace TestProject1
 
         public static String RandomSentence(int wordCount, int maxWordLength=10, int minWordLength=1)
         {
-            List<String> words = new List<string>(wordCount);
-            words.Add(string.Format("{0}{1}", Rand.Choice(Uppercase), RandomString(maxWordLength-1, minWordLength, CharSet.Lowercase)));
+            List<String> words = new List<string>(wordCount)
+                                 {
+                                         string.Format("{0}{1}", Rand.Choice(Uppercase),
+                                                       RandomString(maxWordLength - 1,
+                                                                    minWordLength,
+                                                                    CharSet.Lowercase))
+                                 };
             for (int i = 0; i < wordCount; i++)
             {
                 words.Add(RandomString(maxWordLength, minWordLength, CharSet.Lowercase));

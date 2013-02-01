@@ -9,19 +9,17 @@ namespace PyAction
     public partial class PythonDisplayControl : Centipede.Actions.ActionDisplayControl
 // ReSharper restore UnusedMember.Global
     {
-        public PythonDisplayControl(Centipede.Action action)
+        public PythonDisplayControl(PythonAction action)
+                : base(action, false)
         {
             InitializeComponent();
-            ThisAction = action as PythonAction;
-            SetProperties();
-
-            NameLabel.Text = action.Name;
-
+            
             var scintilla = new Scintilla
                             {
                                     ConfigurationManager = { Language = @"python" },
                                     Dock = DockStyle.Fill,
-                                    Margins = { Margin0 = { Width = 20 } }
+                                    Margins = { Margin0 = { Width = 20 } },
+                                    Text = action.Source
                             };
             //scintilla.Margins[0].Width = 20;
             scintilla.TextChanged += sourceControl_TextChanged;

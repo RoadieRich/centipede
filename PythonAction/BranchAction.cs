@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Centipede;
+using Centipede.Properties;
 using Action = Centipede.Action;
 
 
@@ -10,7 +11,7 @@ namespace PyAction
     /// 
     /// </summary>
 
-    [ActionCategory("Flow Control", displayName="Branch", displayControl="BranchDisplayControl", iconName="branch")]
+    [ActionCategory("Flow Control", displayName = "Branch", displayControl = @"BranchDisplayControl", iconName = @"branch")]
     // ReSharper disable ClassNeverInstantiated.Global
     public class BranchAction : Action
     {
@@ -31,17 +32,17 @@ namespace PyAction
         /// <summary>
         /// 
         /// </summary>
-        [ActionArgument]
-        public String ConditionSource = "True";
+        [ActionArgument(displayName = @"Condition")]
+        public String ConditionSource = @"False";
 
         /// <summary>
         /// 
         /// </summary>
         [ActionArgument(
-            usage = "Next action if condition returns false",
-            displayName = "Next Action if False"
+            usage = @"Next action if condition returns true (otherwise, proceed normally)",
+            displayName = @"Next Action if True"
         )]
-        public Action NextIfFalse;
+        public Action NextIfTrue;
 
         private Boolean _result;
 
@@ -62,9 +63,35 @@ namespace PyAction
         /// <returns></returns>
         public override Action GetNext()
         {
-            return _result ? Next : NextIfFalse;
+            return _result ? NextIfTrue : Next;
         }
     }
+
+    public class BranchActionI18N
+    {
+        public String Base = @"Resources";
+        public static Dictionary<String, String> NextIfTrue = new Dictionary<String, String>
+                                                              {
+                                                                      {
+                                                                              @"Usage",
+                                                                              @"BranchActionUsage"
+                                                                      },
+                                                                      {
+                                                                              @"Display Name",
+                                                                              @"BranchActionDisplayName"
+                                                                      }
+                                                              };
+
+        public static Dictionary<String, String> Condition = new Dictionary<string, string>
+                                                             {
+                                                                     {
+                                                                             @"Display Name",
+                                                                             @"BranchActionI18N_Condition_DisplayName"
+                                                                     }
+                                                             };
+    }
+
+
     // ReSharper restore ClassNeverInstantiated.Global
     
 }

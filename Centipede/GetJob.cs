@@ -20,17 +20,19 @@ namespace Centipede
         {
             switch (Result)
             {
-                case GetJobResult.New:
-                    return "";
-                case GetJobResult.Open:
-                    var selectedJob = FavouritesListbox.SelectedItem as JobControl;
+            case GetJobResult.New:
+                return "";
+            case GetJobResult.Open:
+                var selectedJob = FavouritesListbox.SelectedItem as JobControl;
                 if (selectedJob == null)
                 {
                     throw new NullReferenceException("selectedJob");
                 }
                 return selectedJob.Filename;
-                default:
-                    return null;
+            case GetJobResult.Other:
+                return OtherOpenDialogue.FileName;
+            default:
+                return null;
             }
         }
 
@@ -84,17 +86,18 @@ namespace Centipede
             {
                 xmlDoc.Load(xmlFile);
 
-                if (xmlDoc.HasChildNodes)
+                if (!xmlDoc.HasChildNodes)
                 {
-                    var faveXmlStoreElement = xmlDoc.GetElementsByTagName("favourites")[0] as XmlElement;
-                    if (faveXmlStoreElement == null)
-                    {
-                        throw new ArgumentNullException("sender");
-                    }
-                    foreach (XmlElement favouriteItem in faveXmlStoreElement.ChildNodes)
-                    {
-                        FavouritesListbox.Items.Add(new JobControl(favouriteItem.GetAttribute("Filename")));
-                    }
+                    return;
+                }
+                XmlElement faveXmlStoreElement = xmlDoc.GetElementsByTagName("favourites")[0] as XmlElement;
+                if (faveXmlStoreElement == null)
+                {
+                    throw new ArgumentNullException("sender");
+                }
+                foreach (XmlElement favouriteItem in faveXmlStoreElement.ChildNodes)
+                {
+                    FavouritesListbox.Items.Add(new JobControl(favouriteItem.GetAttribute("Filename")));
                 }
             }
         }
@@ -133,10 +136,6 @@ namespace Centipede
             AddFavourite(dialog.FileName);
         }
 
-        private void GetJob_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
-
         private void OtherOpenDialogue_FileOk(object sender, CancelEventArgs e)
         {
             var dialogue = sender as FileDialog;
@@ -144,18 +143,17 @@ namespace Centipede
             {
                 throw new ArgumentNullException("sender");
             }
-            Program.LoadJob(dialogue.FileName);
-        }
-
-        private void FavouritesListbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
+            Program.Instance.LoadJob(dialogue.FileName);
+            Result = GetJobResult.Other;
+            Close();
         }
 
         private void FavouritesListbox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Result = GetJobResult.Open;
-            Close();
+
+
+            
+            //Close();
         }
     }
 
@@ -165,7 +163,8 @@ namespace Centipede
         Cancel,
 */
         New,
-        Open
+        Open,
+        Other
     }
 
     sealed class JobControl : Control

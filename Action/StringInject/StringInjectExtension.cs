@@ -44,7 +44,7 @@ namespace Centipede.StringInject
         /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
         /// <param name="attributes">A <see cref="Hashtable"/> with keys and values to inject into the string</param>
         /// <returns>A version of the formatString string with hastable keys replaced by (formatted) key values.</returns>
-        public static string Inject(this string formatString, Hashtable attributes)
+        private static string Inject(this string formatString, Hashtable attributes)
         {
             string result = formatString;
             if (attributes == null || formatString == null)
@@ -66,7 +66,7 @@ namespace Centipede.StringInject
         /// <param name="key">The key name (foo)</param>
         /// <param name="replacementValue">The replacement value; if null is replaced with an empty string</param>
         /// <returns>The input string with any instances of the key replaced with the replacement value</returns>
-        public static string InjectSingleValue(this string formatString, string key, object replacementValue)
+        private static string InjectSingleValue(this string formatString, string key, object replacementValue)
         {
             string result = formatString;
             //regex replacement of key with value, where the generic key format is:
@@ -80,7 +80,7 @@ namespace Centipede.StringInject
                 if (m.Groups[2].Length > 0) //matched {foo:SomeFormat}
                 {
                     //do a double string.Format - first to build the proper format string, and then to format the replacement value
-                    string attributeFormatString = string.Format(CultureInfo.InvariantCulture, "{{0:{0}}}", m.Groups[2]);
+                    string attributeFormatString = string.Format(CultureInfo.InvariantCulture, @"{{0:{0}}}", m.Groups[2]);
                     replacement = string.Format(CultureInfo.CurrentCulture, attributeFormatString, replacementValue);
                 }
                 else //matched {foo}
