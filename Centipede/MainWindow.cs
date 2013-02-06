@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,12 +7,31 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 using Centipede.Actions;
 using Centipede.Properties;
 
+//     \,,/
+//     (..)
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      ##
+// ''=={##}==''
+//      \/
 
 namespace Centipede
 {
@@ -20,6 +40,7 @@ namespace Centipede
         public static MainWindow Instance;
         private readonly JobDataSet _dataSet = new JobDataSet();
 
+        private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
         private bool _dirty;
 
         public MainWindow()
@@ -29,7 +50,7 @@ namespace Centipede
             Instance = this;
         }
 
-        private new String Text
+        public override String Text
         {
             set
             {
@@ -140,6 +161,15 @@ namespace Centipede
             var adc = (ActionDisplayControl)currentAction.Tag;
             SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
+            if (ActionContainer.InvokeRequired)
+            {
+                ActionContainer.Invoke(new Action<Control>(ActionContainer.ScrollControlIntoView), adc);
+            }
+            else
+            {
+                ActionContainer.ScrollControlIntoView(adc);
+            }
+
             //this is supposed to be a percentage, but this works.
             backgroundWorker1.ReportProgress(currentAction.Complexity);
         }
@@ -177,11 +207,10 @@ namespace Centipede
 
         private void ItemActivate(object sender, EventArgs e)
         {
-            
-            var sendingListView =  (ListView)sender;
-            
+            var sendingListView = (ListView)sender;
+
             var sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
-            
+
             Program.Instance.AddAction(sendingActionFactory.Generate());
         }
 
@@ -191,7 +220,7 @@ namespace Centipede
             lock (adc)
             {
                 adc.State = state;
-                if (message != "")
+                if (message != String.Empty)
                 {
                     adc.StatusMessage = message;
                 }
@@ -202,19 +231,19 @@ namespace Centipede
         {
             UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
 
-            var af = new ActionFactory("Demo Action", typeof (DemoAction));
+            var af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Demo_Action, typeof (DemoAction));
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Get Filename", typeof (GetFileNameAction));
+            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Get_Filename, typeof (GetFileNameAction));
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Show Messagebox", typeof (ShowMessageBox));
+            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Show_Messagebox, typeof (ShowMessageBox));
 
             UIActListBox.Items.Add(af);
 
-            af = new ActionFactory("Ask For Values", typeof(AskValues));
+            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Ask_For_Values, typeof (AskValues));
 
             UIActListBox.Items.Add(af);
 
@@ -237,33 +266,47 @@ namespace Centipede
             Program.Instance.ActionAdded += Program_ActionAdded;
             Program.Instance.ActionRemoved += Program_ActionRemoved;
             Program.Instance.AfterLoad += Program_AfterLoad;
-
-            if (Program.Instance.JobFileName.Length <= 0)
-            {
-                LoadJob();
+            using (var file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
+                {
+                _favouriteJobsDataStore.Favourites.ReadXml(file);
             }
+            UpdateFavourites();
+
             Dirty = false;
         }
 
-        private static void LoadJob()
+/*
+        private class FaveMenuItems
         {
-            var startWindow = new GetJob();
-            startWindow.ShowDialog();
+            public ToolStripDropDownItem EditFavourites;
+            public ToolStripSeparator Separator;
+        }
+*/
 
-            switch (startWindow.Result)
+        private void UpdateFavourites()
+        {   
+            FavouritesMenu.DropDownItems.Clear();
+
+            foreach (
+                    ToolStripMenuItem item in
+                            _favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
+                                                                             {
+                                                                                     Tag = job.Filename
+                                                                             }))
             {
-            case GetJobResult.Open:
-                String fileName = startWindow.GetJobFileName();
-
-                Program.Instance.LoadJob(fileName);
-                break;
-
-            case GetJobResult.New:
-                Program.Instance.JobFileName = "";
-                Program.Instance.JobName = "";
-                Program.Instance.Clear();
-                break;
+                item.Click += ItemOnClick;
+                FavouritesMenu.DropDownItems.Add(item);
             }
+
+            FavouritesMenu.DropDownItems.Add(FaveMenuSeparator);
+            FavouritesMenu.DropDownItems.Add(EditFavouritesMenuItem);
+        }
+
+        private void ItemOnClick(object sender, EventArgs eventArgs)
+        {
+            ToolStripDropDownItem item = (ToolStripDropDownItem)sender;
+            AskSave();
+            Program.Instance.LoadJob((String)item.Tag);
         }
 
         private void GetActionPlugins()
@@ -302,14 +345,10 @@ namespace Centipede
             Assembly asm = pluginType.Assembly;
             Object[] customAttributes = pluginType.GetCustomAttributes(typeof (ActionCategoryAttribute), true);
 
-            var catAttribute = customAttributes[0] as ActionCategoryAttribute;
-            if (catAttribute == null)
-            {
-                throw new ArgumentNullException("pluginType");
-            }
+            ActionCategoryAttribute catAttribute = customAttributes.Cast<ActionCategoryAttribute>().First();
 
-            TabPage tabPage = AddActionTabs.TabPages.Cast<TabPage>()
-                                           .FirstOrDefault(tp => tp.Text == catAttribute.category);
+            TabPage tabPage =
+                    AddActionTabs.TabPages.Cast<TabPage>().SingleOrDefault(tp => tp.Text == catAttribute.category);
 
             ListView catListView;
             if (tabPage != null)
@@ -325,7 +364,7 @@ namespace Centipede
 
             if (!string.IsNullOrEmpty(catAttribute.iconName))
             {
-                Type t = asm.GetType(pluginType.Namespace + ".Properties.Resources");
+                Type t = asm.GetType(pluginType.Namespace + @".Properties.Resources");
                 if (t != null)
                 {
                     var icon = t.GetProperty(catAttribute.iconName, typeof (Icon)).GetValue(t, null) as Icon;
@@ -376,8 +415,8 @@ namespace Centipede
 
         private static void Program_BeforeAction(Action action)
         {
-            var adc = action.Tag as ActionDisplayControl;
-            SetState(adc, ActionState.Running, "Running");
+            var adc = (ActionDisplayControl)action.Tag;
+            SetState(adc, ActionState.Running, Resources.MainWindow_Program_ActionStatus_Running);
         }
 
         private void Program_ActionAdded(Action action, int index)
@@ -428,12 +467,11 @@ namespace Centipede
                                                where !k.StartsWith(@"_")
                                                select k;
 
-            // ReSharper disable PossibleMultipleEnumeration
-            if (varsToDelete.Any())
+            IList<string> toDelete = varsToDelete as IList<string> ?? varsToDelete.ToList();
+            if (toDelete.Any())
             {
-                Program.Instance.Variables.Remove(varsToDelete.First());
+                Program.Instance.Variables.Remove(toDelete.First());
             }
-            // ReSharper restore PossibleMultipleEnumeration
         }
 
         private void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
@@ -476,29 +514,26 @@ namespace Centipede
             e.ContextMenuStrip = VarsContextMenu;
             e.ContextMenuStrip.Show();
         }
-
-        private void LoadBtn_Click(object sender, EventArgs e)
+        
+        private void DoLoad()
         {
-            if (Dirty)
+            try
             {
-                DialogResult result = MessageBox.Show(this,
-                                                      Resources.MainWindow_LoadBtn_Click_Save_changes_,
-                                                      Resources.MainWindow_LoadBtn_Click_Unsaved_Changes,
-                                                      MessageBoxButtons.YesNoCancel);
-                switch (result)
-                {
-                case DialogResult.Yes:
-                    SaveJob();
-                    break;
-                case DialogResult.No:
-                    // do nothing
-                    break;
-                default:
-                    return;
-                }
+                AskSave();
+            }
+            catch (AbortOperationException)
+            { }
+
+            
+            DialogResult result = OpenFileDialog.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                return;
             }
 
-            LoadJob();
+
+            Program.Instance.LoadJob(OpenFileDialog.FileName);
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -548,14 +583,9 @@ namespace Centipede
             e.Effect = DragDropEffects.Move;
         }
 
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            SaveJob();
-        }
-
         private void SaveJob()
         {
-            if (Program.Instance.JobName == "")
+            if (String.IsNullOrEmpty(Program.Instance.JobName))
             {
                 var askJobTitle = new AskJobTitle();
                 DialogResult result = askJobTitle.ShowDialog(this);
@@ -563,6 +593,7 @@ namespace Centipede
                 {
                     return;
                 }
+                Program.Instance.JobName = askJobTitle.JobName;
             }
             saveFileDialog1.FileName = Program.Instance.JobFileName;
             saveFileDialog1.ShowDialog(this);
@@ -585,6 +616,268 @@ namespace Centipede
             base.Dispose(disposing);
 
             Program.Instance.Dispose();
+        }
+
+        private void AskSave()
+        {
+            if (!Dirty)
+            {
+                return;
+            }
+
+            DialogResult dialogResult = MessageBox.Show(Resources.MainWindow_AskSave_Do_you_wish_to_save,
+                                                        Resources.MainWindow_AskSave_Unsaved_Changes,
+                                                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                SaveJob();
+                return;
+            }
+
+            if (dialogResult == DialogResult.No)
+            {
+                return;
+            }
+            throw new AbortOperationException();
+        }
+
+        private void newToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            {
+                return;
+            }
+
+            Program.Instance.Clear();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DoLoad();
+        }
+
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(Program.Instance.JobFileName))
+            {
+                SaveJob();
+            }
+            else
+            {
+                Program.Instance.SaveJob(Program.Instance.JobFileName);
+            }
+            Dirty = false;
+        }
+
+        private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveJob();
+        }
+
+        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            {
+                return;
+            }
+
+            Close();
+        }
+
+        private void EditFavouritesMenuItem_Click(object sender, EventArgs e)
+        {
+            EditFavourites editFavourites = new EditFavourites(_favouriteJobsDataStore);
+            
+            editFavourites.ShowDialog();
+
+            UpdateFavourites();
+
+        }
+        
+    }
+
+    [Serializable]
+    internal class AbortOperationException : Exception
+    {
+        //
+        // For guidelines regarding the creation of new exception types, see
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+        // and
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+        //
+
+        public AbortOperationException()
+        { }
+
+        [ResharperAnnotations.UsedImplicitly]
+        public AbortOperationException(string message)
+                : base(message)
+        { }
+
+        [ResharperAnnotations.UsedImplicitly]
+        public AbortOperationException(string message, Exception inner)
+                : base(message, inner)
+        { }
+
+        protected AbortOperationException(
+                SerializationInfo info,
+                StreamingContext context)
+                : base(info, context)
+        { }
+    }
+
+    [ResharperAnnotations.UsedImplicitly(ResharperAnnotations.ImplicitUseTargetFlags.WithMembers)]
+    public static partial class Extensions
+    {
+        public static void RemoveRange(this IList list, IEnumerable items)
+        {
+            foreach (var item in items)
+            {
+                list.Remove(item);
+            }
+        }
+
+        public static bool RemoveRange<T>(this IList<T> list, IEnumerable<T> items)
+        {
+            return items.All(list.Remove);
+        }
+
+        public static void AddRange<T>(this IList<T> list, IEnumerable<T> items)
+        {
+            foreach (var item in items)
+            {
+                list.Add(item);
+            }
+        }
+
+        public static void AddRange(this IList list, IEnumerable items)
+        {
+            foreach (var item in items)
+            {
+                list.Remove(item);
+            }
+        }
+
+        public static IList<T> Synchronise<T>(this IList<T> left, IList<T> right) where T: IComparable, IEquatable<T>
+        {
+
+            List<MyStruct<T>> leftDecorated = new List<MyStruct<T>>(left.Count);
+            int[] i = { 0 };
+            leftDecorated.AddRange(left.Select(v => new MyStruct<T>(v) { Index = i[0]++ }));
+
+            List<MyStruct<T>> rightDecorated = new List<MyStruct<T>>(right.Count);
+            i[0] = 0;
+            rightDecorated.AddRange(right.Select(v => new MyStruct<T>(v) { Index = i[0]++ }));
+
+            //var leftDecorated = left.Select(item => new MyStruct<T>(item)).OrderBy(item => item.Item);
+            //var rightDecorated = right.Select(item => new MyStruct<T>(item)).OrderBy(item => item.Item);
+
+            var leftEnum = leftDecorated.GetEnumerator();
+            var rightEnum = rightDecorated.GetEnumerator();
+            
+            IList<MyStruct<T>> result = new List<MyStruct<T>>();
+
+            bool hasItems = leftEnum.MoveNext() && rightEnum.MoveNext();
+
+            //while both lists have items
+            while (hasItems)
+            {
+                //if left item == right item
+                if (leftEnum.Current.Equals(rightEnum.Current))
+                {
+                    //append left item to result
+                    result.Add(leftEnum.Current);
+                    //advance both
+                    hasItems = leftEnum.MoveNext() && rightEnum.MoveNext();
+                }
+                //else 
+                else
+                {
+                    if (leftEnum.Current.CompareTo(rightEnum.Current) > 0)
+                    {
+                        //append right item to result
+                        result.Add(rightEnum.Current);
+                        //advance right
+                        hasItems = rightEnum.MoveNext();
+                    }
+                    else
+                    {
+                        //advance left
+                        hasItems = leftEnum.MoveNext();
+                    }
+                }
+            }
+            //if left is empty
+            if (!leftEnum.MoveNext())
+            {
+                //append rest of right to result
+                while (rightEnum.MoveNext())
+                {
+                    result.Add(rightEnum.Current);
+                }
+            }
+            //
+            //return result
+            return result.OrderBy(item => item.Index).Select(item => item.Item) as IList<T>;
+            
+        }
+        
+        class MyStruct<T> : IComparable<MyStruct<T>>, IEquatable<MyStruct<T>> where T: IComparable, IEquatable<T>
+        {
+            private readonly T _item;
+
+            public T Item
+            {
+                get
+                {
+                    return _item;
+                }
+            }
+
+            public int Index
+            {
+                get;
+                set;
+            }
+
+            public MyStruct(T item)
+            {
+                _item = item;
+            }
+
+            
+            /// <summary>
+            /// Compares the current object with another object of the same type.
+            /// </summary>
+            /// <returns>
+            /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
+            /// </returns>
+            /// <param name="other">An object to compare with this object.</param>
+            public int CompareTo(MyStruct<T> other)
+            {
+                return ((IComparable<T>)Item).CompareTo(other.Item);
+            }
+
+            /// <summary>
+            /// Indicates whether the current object is equal to another object of the same type.
+            /// </summary>
+            /// <returns>
+            /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+            /// </returns>
+            /// <param name="other">An object to compare with this object.</param>
+            public bool Equals(MyStruct<T> other)
+            {
+                return Item.CompareTo(other.Item) == 0;
+            }
         }
     }
 }

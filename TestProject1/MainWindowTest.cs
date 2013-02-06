@@ -215,16 +215,16 @@ namespace TestProject1
         /// <summary>
         ///A test for LoadBtn_Click
         ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Centipede.exe")]
-        public void LoadBtn_ClickTest()
-        {
-            MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
-            target.LoadBtn_Click(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
+        //[TestMethod()]
+        //[DeploymentItem("Centipede.exe")]
+        //public void LoadBtn_ClickTest()
+        //{
+        //    MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
+        //    object sender = null; // TODO: Initialize to an appropriate value
+        //    EventArgs e = null; // TODO: Initialize to an appropriate value
+        //    target.LoadBtn_Click(sender, e);
+        //    Assert.Inconclusive("A method that does not return a value cannot be verified.");
+        //}
 
         /// <summary>
         ///A test for LoadJob
@@ -331,20 +331,6 @@ namespace TestProject1
             object sender = null; // TODO: Initialize to an appropriate value
             EventArgs e = null; // TODO: Initialize to an appropriate value
             target.RunButton_Click(sender, e);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for SaveButton_Click
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("Centipede.exe")]
-        public void SaveButton_ClickTest()
-        {
-            MainWindow_Accessor target = new MainWindow_Accessor(); // TODO: Initialize to an appropriate value
-            object sender = null; // TODO: Initialize to an appropriate value
-            EventArgs e = null; // TODO: Initialize to an appropriate value
-            target.SaveButton_Click(sender, e);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 

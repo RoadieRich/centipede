@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using Centipede.Properties;
 
-//
+
+//  LINQ
+//   \o/
+// All the
+// things
 
 namespace Centipede
 {
@@ -52,7 +58,7 @@ namespace Centipede
         private static volatile Program _instance;
         private static readonly object LockObject = new object();
 
-        protected Program()
+        private Program()
         { }
 
         public Int32 JobComplexity
@@ -106,7 +112,7 @@ namespace Centipede
             {
                 if (ActionErrorOccurred != null)
                 {
-                    ActionErrorOccurred(new ActionException("No Actions Added"), out currentAction);
+                    ActionErrorOccurred(new ActionException(Resources.Program_RunJob_No_Actions_Added), out currentAction);
                 }
                 return;
             }
@@ -136,7 +142,20 @@ namespace Centipede
                 }
                 catch (Exception e)
                 {
-                    ActionException ae;
+                      ActionException ae;
+                    if (e is FatalActionException)
+                    {
+                        completed = false;
+                        ErrorHandler handler = ActionErrorOccurred;
+                        if (handler != null)
+                        {
+                            ae = new ActionException(string.Format("Fatal error: cannot continue\n{0}", e.Message, e));
+                            handler(e as FatalActionException, out currentAction);
+
+                        }
+                        break;
+                    }
+                  
                     if (e is ActionException)
                     {
                         ae = e as ActionException;
@@ -145,18 +164,17 @@ namespace Centipede
                     {
                         ae = new ActionException(e, currentAction);
                     }
-
-                    ErrorHandler handler = ActionErrorOccurred;
-                    if (handler == null)
                     {
-                        continue;
+                        ErrorHandler handler = ActionErrorOccurred;
+                        if (handler != null)
+                        {
+                            if (!handler(ae, out currentAction))
+                            {
+                                completed = false;
+                                break;
+                            }
+                        }
                     }
-                    if (handler(ae, out currentAction))
-                    {
-                        continue;
-                    }
-                    completed = false;
-                    break;
                 }
             }
 
@@ -265,6 +283,7 @@ namespace Centipede
         }
 */
 
+        [Localizable(false)]
         internal void SaveJob(String filename)
         {
             var xmlDoc = new XmlDocument();
@@ -280,15 +299,15 @@ namespace Centipede
                 action.AddToXmlElement(actionsElement);
             }
 
-            XmlElement varsElement = xmlDoc.CreateElement("Variables");
-            foreach (var variableEntry in Variables)
-            {
-                XmlElement curVarElement = xmlDoc.CreateElement(variableEntry.Value.GetType().Name);
-                curVarElement.SetAttribute("Name", variableEntry.Key);
-                curVarElement.SetAttribute("Value", variableEntry.Value.ToString());
-                varsElement.AppendChild(curVarElement);
-            }
-            xmlRoot.AppendChild(varsElement);
+            //XmlElement varsElement = xmlDoc.CreateElement("Variables");
+            //foreach (var variableEntry in Variables)
+            //{
+            //    XmlElement curVarElement = xmlDoc.CreateElement(variableEntry.Value.GetType().Name);
+            //    curVarElement.SetAttribute("Name", variableEntry.Key);
+            //    curVarElement.SetAttribute("Value", variableEntry.Value.ToString());
+            //    varsElement.AppendChild(curVarElement);
+            //}
+            //xmlRoot.AppendChild(varsElement);
 
             XmlWriterSettings settings = new XmlWriterSettings
                                          {
@@ -311,6 +330,7 @@ namespace Centipede
         ///     Load a job with a given name
         /// </summary>
         /// <param name="jobFileName">Name of the job to load</param>
+        [Localizable(false)]
         internal void LoadJob(String jobFileName)
         {
             Clear();
@@ -331,22 +351,23 @@ namespace Centipede
 
             Assembly asm = Assembly.GetExecutingAssembly();
 
-            foreach (
-                    XmlElement variableElement in
-                            xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
-            {
-                String name = variableElement.GetAttribute("name");
-                Type type = asm.GetType(variableElement.LocalName);
+            //foreach (
+            //        XmlElement variableElement in
+            //                xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
+            //{
+            //    String name = variableElement.GetAttribute("name");
+            //    Type type = asm.GetType(variableElement.LocalName);
 
-                MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof (String) });
+            //    MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof (String) });
 
-                object value = parseMethod == null
-                                       ? variableElement.GetAttribute("Value")
-                                       : parseMethod.Invoke(type,
-                                                            new object[] { variableElement.GetAttribute("Value") });
-                Variables.Add(name, value);
-            }
+            //    object value = parseMethod == null
+            //                           ? variableElement.GetAttribute("Value")
+            //                           : parseMethod.Invoke(type,
+            //                                                new object[] { variableElement.GetAttribute("Value") });
+            //    Variables.Add(name, value);
+            //}
             AfterLoadEventHandler handler = AfterLoad;
+            MessageBox.Show(handler.ToString());
             if (handler != null)
             {
                 handler(typeof (Program), EventArgs.Empty);
@@ -354,6 +375,7 @@ namespace Centipede
         }
 
         
+/*
         public Int32 JobLength
         {
             get
@@ -361,6 +383,7 @@ namespace Centipede
                 return Actions.Sum(a=>a.Complexity);
             }
         }
+*/
 
 
         internal void Clear()

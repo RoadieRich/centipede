@@ -349,6 +349,21 @@ namespace Centipede.Actions
             }
 
         }
+
+        public virtual void UpdateControls()
+        {
+            foreach (Control control in AttributeTable.Controls)
+            {
+                if ((control is TextBox))
+                {
+                    control.Text = ((FieldAndPropertyWrapper)control.Tag).Get<Object>(ThisAction).ToString();
+                }
+                if (control is CheckBox)
+                {
+                    (control as CheckBox).Checked = ((FieldAndPropertyWrapper)control.Tag).Get<bool>(ThisAction);
+                }
+            }
+        }
     }
 
     /// <summary>

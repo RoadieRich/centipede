@@ -170,6 +170,24 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you wand to save?.
+        /// </summary>
+        public static string MainWindow_AskSave_Do_you_wish_to_save {
+            get {
+                return ResourceManager.GetString("MainWindow_AskSave_Do_you_wish_to_save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string MainWindow_AskSave_Unsaved_Changes {
+            get {
+                return ResourceManager.GetString("MainWindow_AskSave_Unsaved_Changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finished.
         /// </summary>
         public static string MainWindow_CompletedHandler_Finished {
@@ -251,6 +269,51 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ask For Values.
+        /// </summary>
+        public static string MainWindow_MainWindow_ActionName_Ask_For_Values {
+            get {
+                return ResourceManager.GetString("MainWindow_MainWindow_ActionName_Ask_For_Values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Demo Action.
+        /// </summary>
+        public static string MainWindow_MainWindow_ActionName_Demo_Action {
+            get {
+                return ResourceManager.GetString("MainWindow_MainWindow_ActionName_Demo_Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Filename.
+        /// </summary>
+        public static string MainWindow_MainWindow_ActionName_Get_Filename {
+            get {
+                return ResourceManager.GetString("MainWindow_MainWindow_ActionName_Get_Filename", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Messagebox.
+        /// </summary>
+        public static string MainWindow_MainWindow_ActionName_Show_Messagebox {
+            get {
+                return ResourceManager.GetString("MainWindow_MainWindow_ActionName_Show_Messagebox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        public static string MainWindow_Program_ActionStatus_Running {
+            get {
+                return ResourceManager.GetString("MainWindow_Program_ActionStatus_Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Centipede.
         /// </summary>
         public static string MainWindow_Text_Centipede {
@@ -274,6 +337,15 @@ namespace Centipede.Properties {
         public static string MainWindow_UpdateHandlerDone_Completed {
             get {
                 return ResourceManager.GetString("MainWindow_UpdateHandlerDone_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Actions Added.
+        /// </summary>
+        public static string Program_RunJob_No_Actions_Added {
+            get {
+                return ResourceManager.GetString("Program_RunJob_No_Actions_Added", resourceCulture);
             }
         }
         
