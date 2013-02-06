@@ -117,115 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MainWindow_CompletedHandler_Finished" xml:space="preserve">
-    <value>Finished</value>
-  </data>
-  <data name="MainWindow_Text_Centipede____0__1_" xml:space="preserve">
-    <value>Centipede - {0}{1}</value>
-  </data>
-  <data name="MainWindow_ErrorHandler_Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="MainWindow_MainWindow_ActionName_Get_Filename" xml:space="preserve">
-    <value>Get Filename</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Complete_OK" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Complete_OK.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainWindow_LoadBtn_Click_Save_changes_" xml:space="preserve">
-    <value>Save changes?</value>
-  </data>
-  <data name="DemoAction_DoAction_Demo_Action_executed" xml:space="preserve">
-    <value>Demo Action executed</value>
-  </data>
-  <data name="MainWindow_CompletedHandler_Job_did_not_finish_" xml:space="preserve">
-    <value>Job did not finish.</value>
-  </data>
-  <data name="MainWindow_Program_ActionStatus_Running" xml:space="preserve">
-    <value>Running</value>
-  </data>
-  <data name="MainWindow_LoadBtn_Click_Unsaved_Changes" xml:space="preserve">
-    <value>Unsaved Changes</value>
-  </data>
-  <data name="BranchAction_ConditionSource_False" xml:space="preserve">
-    <value>False</value>
-  </data>
-  <data name="ThumbnailView" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ThumbnailView.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BranchDisplayControl_BranchDisplayControl_Action_if_false" xml:space="preserve">
-    <value>Action if false</value>
-  </data>
-  <data name="MainWindow_ErrorHandler_Error_" xml:space="preserve">
-    <value>Error:</value>
-  </data>
-  <data name="BranchActionUsage" xml:space="preserve">
-    <value>BranchActionUsage</value>
-  </data>
-  <data name="If" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\If.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainWindow_MainWindow_ActionName_Ask_For_Values" xml:space="preserve">
-    <value>Ask For Values</value>
-  </data>
-  <data name="Program_RunJob_No_Actions_Added" xml:space="preserve">
-    <value>No Actions Added</value>
-  </data>
-  <data name="MainWindow_ErrorHandler_Message_was_" xml:space="preserve">
-    <value>Message was:</value>
-  </data>
-  <data name="MainWindow_UpdateHandlerDone_Completed" xml:space="preserve">
-    <value>Completed</value>
-  </data>
-  <data name="BranchActionI18N_Condition_DisplayName" xml:space="preserve">
-    <value>Condition
+  <metadata name="imageList1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="imageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACO
+        CQAAAk1TRnQBSQFMAgEBBQEAAQkBAAEEAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
+        AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
+        AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
+        AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
+        AZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMCAAHM
+        AWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQABZgEA
+        ATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8BAAEz
+        AWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQABMwGZ
+        AWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQABMwLM
+        AQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQABMwEA
+        AWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMBmQEA
+        AWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQABZgGZ
+        AWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYBzAH/
+        AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMBmQEA
+        AZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgABmQFm
+        ATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwBAAKZ
+        Af8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB/wEz
+        AQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQABmQEA
+        AcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYCAAHM
+        AWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYBAAHM
+        ApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8CAAHM
+        Af8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQABmQEA
+        AcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMBAAHM
+        AmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB/wGZ
+        AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
+        AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
+        AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
+        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD//8ACQACAz4AAno+AAJ6
+        OwABUgZ6AQM4AAFSBaABmgFROwACoD4AAqA+AAJS/wCmAAH/NQAB/xMAAQcOAAMHCwABbQFDAewBvAwA
+        Af8HAAH/CQABBwEAAQcMAAEHAwABBwoAARQBAAEQAewBvAsAAf8GAAH/CQABBwMAAQcLAAEHAwABBwoA
+        AZIBQwEAARAB7AG8CwAB/wUAAf8IAAEHBQABBwoAAQcDAAEHCwABkgFDAQABEAHsAbwLAAH/AwAB/wgA
+        AQcHAAEHCQABBwMAAQcMAAHtAUMBAAEQAewBvA0AAf8IAAEHCQABBwUAAQcJAAEHCQABkgEVAQABEAHs
+        AbwMAAH/DAABBwMAAQcJAAEHBwABBwkAAfcBFQEAARAB6wG8DgAB/wsAAQcDAAEHCgABBwUAAQcJAAH3
+        AUMBAAEPAewBvAwAAf8CAAH/CwABBwMAAQcLAAEHAwABBwoAARQBAAEPAewBvAwAAf8FAAH/CQABBwMA
+        AQcMAAEHAQABBwsAAeoBEQHsAbwMAAH/BwAB/wkAAwcOAAEHGgAB/woAAf+RAAFCAU0BPgcAAT4DAAEo
+        AwABQAMAASADAAEBAQABAQYAAQEWAAP/AQAC/wYAAv8GAAL/BgAC/wYAAf4BfwYAAf4BfwYAAf4BfwYA
+        AfABDwYAAfABDwYAAf4BfwYAAf4BfwYAAf4BfwYAAv8GAAL/BgAC/wYAAv8GAA3/AfkG/wHnAv8BfwH+
+        AT8B+AF/AcMB8wH+AT8B/AEfAfgBPwHDAecB/AEfAfwBHwH4AR8B4QHHAfgBDwH8AR8B/AEPAfABjwHw
+        AQcB/AEfAf4BBwH4AR8B4AEDAeABAwH+AQcB/AE/AfwBHwHwAQcB/AEPAfgBHwH8AR8B+AEPAfgBHwHw
+        AZ8B/AEfAfwBHwH4AT8BwQHHAfwBHwH+AT8B+AF/AYMB4wH+AT8B/wF/Av8BjwHxEv8L
 </value>
   </data>
-  <data name="MainWindow_MainWindow_ActionName_Show_Messagebox" xml:space="preserve">
-    <value>Show Messagebox</value>
-  </data>
-  <data name="BranchDisplayControl_BranchDisplayControl_Condition" xml:space="preserve">
-    <value>Condition</value>
-  </data>
-  <data name="MainWindow_AskSave_Unsaved_Changes" xml:space="preserve">
-    <value>Unsaved Changes</value>
-  </data>
-  <data name="StatusAnnotation_Run" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\StatusAnnotation_Run.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Centipede" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Centipede.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainWindow_MainWindow_ActionName_Demo_Action" xml:space="preserve">
-    <value>Demo Action</value>
-  </data>
-  <data name="BranchActionDisplayName" xml:space="preserve">
-    <value>Action if True
-</value>
-  </data>
-  <data name="MainWindow_CompletedHandler_Job_finished_successfully_" xml:space="preserve">
-    <value>Job finished successfully.</value>
-  </data>
-  <data name="generic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\generic.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="pycon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pycon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CriticalError" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CriticalError.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="MainWindow_Text_Centipede" xml:space="preserve">
-    <value>Centipede</value>
-  </data>
-  <data name="BranchAction_Usage" xml:space="preserve">
-    <value>Next action if condition returns true (otherwise, proceed normally)</value>
-  </data>
-  <data name="MainWindow_ErrorHandler_Error_occurred_in_" xml:space="preserve">
-    <value>Error occurred in </value>
-  </data>
-  <data name="MainWindow_AskSave_Do_you_wish_to_save" xml:space="preserve">
-    <value>Do you wand to save?</value>
-  </data>
+  <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>122, 17</value>
+  </metadata>
+  <metadata name="favouritesBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>265, 16</value>
+  </metadata>
 </root>

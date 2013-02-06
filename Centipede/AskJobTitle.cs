@@ -12,7 +12,13 @@ namespace Centipede
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.JobName = textBox1.Text;
+        }
 
+        internal string JobName
+        {
+            get;
+            set;
         }
     }
 }

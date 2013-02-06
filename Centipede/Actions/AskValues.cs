@@ -15,7 +15,7 @@ namespace Centipede.Actions
         /// </summary>
         /// <param name="name"></param>
         /// <param name="v"></param>
-        public AskValues(string name, Dictionary<string, object> v)
+        public AskValues(Dictionary<string, object> v)
                 : base("Ask For Values", v)
         { }
 
@@ -31,44 +31,74 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            Form form = new Form();
-            TableLayoutPanel table = new TableLayoutPanel { 
-                ColumnCount = 2,
-                GrowStyle=TableLayoutPanelGrowStyle.AddRows,
-                Anchor = AnchorStyles.Top|AnchorStyles.Right|AnchorStyles.Left
-            };
+            Form form = new Form
+                        {
+                                AutoSize = true,
+                                AutoSizeMode = AutoSizeMode.GrowAndShrink
+                        };
+            TableLayoutPanel table = new TableLayoutPanel
+                                     {
+
+                                             ColumnCount = 2,
+                                             GrowStyle = TableLayoutPanelGrowStyle.AddRows,
+                                             Dock = DockStyle.Fill,
+                                             AutoSize = true,
+                                             AutoSizeMode = AutoSizeMode.GrowAndShrink
+
+                                     };
 
             form.Controls.Add(table);
-
+            if (String.IsNullOrEmpty(VariablesToSet))
+            {
+                throw new ActionException("No variables listed", this);
+            }
             foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
             {
                 Label lbl = new Label
                             {
                                     Text = varName
                             };
+                Object value;
+                Variables.TryGetValue(varName, out value);
+
                 TextBox tb = new TextBox
                              {
-                                     Text = Variables[varName].ToString(),
+                                     Text = (value ?? "").ToString(),
                                      Tag = varName
                              };
                 table.Controls.Add(lbl);
                 table.Controls.Add(tb);
             }
 
-            form.Controls.Add(new Button
-                              {
-                                      Text = "OK",
-                                      DialogResult=DialogResult.OK
-                              });
+            table.Controls.AddRange(new Control[]
+                                    {
+                                            new Button
+                                            {
+                                                    Text = "Cancel",
+                                                    DialogResult = DialogResult.Cancel,
+                                                    Dock = DockStyle.Fill
+                                            },
+                                            new Button
+                                            {
+                                                    Text = "OK",
+                                                    DialogResult = DialogResult.OK,
+                                                    Dock = DockStyle.Fill
+
+                                            }
+                                    });
 
             form.FormClosed += delegate
                                    {
-                                       if (form.DialogResult == DialogResult.OK)
+                                       switch (form.DialogResult)
                                        {
+                                       case DialogResult.OK:
                                            foreach (TextBox tb in table.Controls.OfType<TextBox>())
                                            {
                                                Variables[(string)tb.Tag] = tb.Text;
                                            }
+                                           break;
+                                       case DialogResult.Cancel:
+                                           throw new FatalActionException("Cancel Clicked", this);
                                        }
                                    };
 

@@ -64,6 +64,53 @@ namespace Centipede
         public readonly Action ErrorAction;
     }
 
+    public class FatalActionException : ActionException
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="action"></param>
+        public FatalActionException(string message, Action action)
+                : base(message, action)
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        public FatalActionException(Action action)
+                : base(action)
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="exception"></param>
+        /// <param name="action"></param>
+        public FatalActionException(string message, Exception exception, Action action)
+                : base(message, exception, action)
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        public FatalActionException(string message)
+                : base(message)
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="action"></param>
+        public FatalActionException(Exception e, Action action)
+                : base(e, action)
+        { }
+    }
+
     /// <summary>
     /// 
     /// </summary>

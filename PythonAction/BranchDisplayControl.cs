@@ -14,14 +14,17 @@ namespace PyAction
     class BranchDisplayControl : ActionDisplayControl
 // ReSharper restore UnusedMember.Global
     {
+        private ComboBox _actionCombo;
+        private Scintilla _conditionControl;
+
         public BranchDisplayControl(BranchAction action)
                 : base(action, false)
         {
             InitializeComponent();
-            var actionCombo = new ComboBox { DisplayMember = @"Text", ValueMember = @"Action" };
+            _actionCombo = new ComboBox { DisplayMember = @"Text", ValueMember = @"Action" };
 
-            actionCombo.DropDown += actionCombo_DropDown;
-            actionCombo.SelectionChangeCommitted +=
+            _actionCombo.DropDown += actionCombo_DropDown;
+            _actionCombo.SelectionChangeCommitted +=
                     (sender, e) =>
                         {
                             ComboBox combo = sender as ComboBox;
@@ -33,17 +36,17 @@ namespace PyAction
                         };
             var actionComboLabel = new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Action_if_false };
             AttributeTable.Controls.Add(actionComboLabel);
-            AttributeTable.Controls.Add(actionCombo);
+            AttributeTable.Controls.Add(_actionCombo);
 
-            Scintilla conditionControl = new Scintilla
-                                         {
-                                                 ConfigurationManager = { Language = @"python" },
-                                                 Height = 20,
-                                                 AcceptsReturn = false,
-                                                 Text = ThisAction.ConditionSource,
-                                                 Dock = DockStyle.Fill
-                                         };
-            conditionControl.TextChanged += (sender, e) =>
+            _conditionControl = new Scintilla
+                                {
+                                        ConfigurationManager = { Language = @"python" },
+                                        Height = 20,
+                                        AcceptsReturn = false,
+                                        Text = ThisAction.ConditionSource,
+                                        Dock = DockStyle.Fill
+                                };
+            _conditionControl.TextChanged += (sender, e) =>
                                                 {
                                                     Scintilla scintilla = sender as Scintilla;
                                                     if (scintilla == null)
@@ -54,7 +57,7 @@ namespace PyAction
                                                 };
 
             AttributeTable.Controls.Add(new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Condition });
-            AttributeTable.Controls.Add(conditionControl);
+            AttributeTable.Controls.Add(_conditionControl);
         }
         
         void actionCombo_DropDown(object sender, EventArgs e)
@@ -64,15 +67,29 @@ namespace PyAction
             {
                 throw new ArgumentException();
             }
+            PopulateComboBox();
+        }
+
+        private void PopulateComboBox()
+        {
+            
             var actionIter = from Action a in Program.Instance.Actions
                              where a != ThisAction
                              select new
                                     {
                                             Text = String.Format("{0}: {1}",
-                                                              a.Name, a.Comment),
+                                                                 a.Name, a.Comment),
                                             Action = a
                                     };
-            combo.DataSource = actionIter.ToList();
+            _actionCombo.DataSource = actionIter.ToList();
+        }
+
+        public override void UpdateControls()
+        {
+            Action a = ThisAction.NextIfTrue;
+            PopulateComboBox();
+            _actionCombo.SelectedIndex = Program.Instance.Actions.IndexOf(ThisAction.NextIfTrue);
+            _conditionControl.Text = ThisAction.ConditionSource;
         }
 
         private new BranchAction ThisAction

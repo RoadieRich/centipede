@@ -76,8 +76,6 @@
     <Compile Include="AskJobTitleTest.cs" />
     <Compile Include="FieldAndPropertyWrapperTest.cs" />
     <Compile Include="GetFileNameActionTest.cs" />
-    <Compile Include="GetJobTest.cs" />
-    <Compile Include="JobControlTest.cs" />
     <Compile Include="MainWindowTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -108,6 +108,30 @@
     <Compile Include="AskJobTitle.Designer.cs">
       <DependentUpon>AskJobTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OpenFileDialogEx.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\OpenFileDialogEx.Designer.cs">
+      <DependentUpon>OpenFileDialogEx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OS\Enums.cs" />
+    <Compile Include="Controls\OS\structs.cs" />
+    <Compile Include="Controls\OS\Win32.cs" />
+    <Compile Include="EditFavourites.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditFavourites.Designer.cs">
+      <DependentUpon>EditFavourites.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FavouriteJobs.cs">
+      <DependentUpon>FavouriteJobs.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FavouriteJobs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FavouriteJobs.xsd</DependentUpon>
+    </Compile>
     <Compile Include="JobDataSet.cs">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -125,16 +149,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GetJob.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GetJob.Designer.cs">
-      <DependentUpon>GetJob.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="ResharperAttributes.cs" />
     <EmbeddedResource Include="AskJobTitle.resx">
       <DependentUpon>AskJobTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\OpenFileDialogEx.resx">
+      <DependentUpon>OpenFileDialogEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditFavourites.resx">
+      <DependentUpon>EditFavourites.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.en-GB.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -154,10 +179,18 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="GetJob.resx">
-      <DependentUpon>GetJob.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="FavouriteJobs.xsc">
+      <DependentUpon>FavouriteJobs.xsd</DependentUpon>
+    </None>
+    <None Include="FavouriteJobs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>FavouriteJobs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="FavouriteJobs.xss">
+      <DependentUpon>FavouriteJobs.xsd</DependentUpon>
+    </None>
     <None Include="Properties\app.config">
       <SubType>Designer</SubType>
     </None>
@@ -251,8 +284,7 @@
     <None Include="Resources\generic.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks"/>
-
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

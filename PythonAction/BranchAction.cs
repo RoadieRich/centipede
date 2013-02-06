@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Threading;
+using System.Xml;
 using Centipede;
+using Centipede.Actions;
 using Centipede.Properties;
 using Action = Centipede.Action;
 
@@ -64,6 +69,32 @@ namespace PyAction
         public override Action GetNext()
         {
             return _result ? NextIfTrue : Next;
+        }
+
+        [Localizable(false)]
+        public override void AddToXmlElement(System.Xml.XmlElement rootElement)
+        {
+            Type thisType = GetType();
+            XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
+            element.SetAttribute("Comment", Comment);
+            element.SetAttribute("Target", Program.Instance.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
+            element.InnerText = ConditionSource;
+            rootElement.AppendChild(element);
+        }
+
+        [Localizable(false)]
+        protected override void PopulateMembersFromXml(XmlElement element)
+        {
+            Comment = element.GetAttribute("Comment");
+            ConditionSource = element.InnerText;
+            int index = int.Parse(element.GetAttribute("Target"));
+            Program.AfterLoadEventHandler instanceOnAfterLoad = null;
+            instanceOnAfterLoad = delegate(object sender, EventArgs e) { 
+                this.NextIfTrue = Program.Instance.Actions[index];
+                Program.Instance.AfterLoad -= instanceOnAfterLoad;
+                ((ActionDisplayControl)this.Tag).UpdateControls();
+            };
+            Program.Instance.AfterLoad += instanceOnAfterLoad;
         }
     }
 
