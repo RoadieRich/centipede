@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Centipede.Properties;
+using ResharperAnnotations;
 
 
 namespace Centipede.Actions
@@ -39,7 +40,7 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        private void SetProperties()
+        protected void SetProperties()
         {
             Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             BackColor = SystemColors.Control;
@@ -65,8 +66,11 @@ namespace Centipede.Actions
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
             SetProperties();
 
-            _statusToolTip = new ToolTip();
-            _statusToolTip.SetToolTip(StatusIconBox, "");
+            StatusToolTip = new ToolTip();
+            StatusToolTip.SetToolTip(StatusIconBox, "");
+
+            ActionIcon.Image = GetActionIcon(action);
+
 
             if (generateArgumentFields)
             {
@@ -74,6 +78,29 @@ namespace Centipede.Actions
             }
             
 
+        }
+
+        private Image GetActionIcon(Action action)
+        {
+            Type actionType = action.GetType();
+
+            ActionCategoryAttribute categoryAttribute = (ActionCategoryAttribute)actionType.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Single();
+
+            Image image = null;
+            
+            if (!String.IsNullOrEmpty(categoryAttribute.iconName))
+            {
+                Type t = actionType.Assembly.GetType(actionType.Namespace + @".Properties.Resources");
+                if (t != null)
+                {
+                    var icon = t.GetProperty(categoryAttribute.iconName, typeof(Icon)).GetValue(t, null) as Icon;
+                    if (icon != null)
+                    {
+                        image = icon.ToBitmap();
+                    }
+                }
+            }
+            return image;
         }
 
         private void GenerateArguments()
@@ -113,7 +140,7 @@ namespace Centipede.Actions
                                         Checked = arg.Get<Boolean>(ThisAction)
                                   };
                     cb.CheckedChanged += GetChangedHandler(arg) ?? ((sender, e) => arg.Set(ThisAction, ((CheckBox)sender).Checked));
-
+                    cb.CheckedChanged += SetDirty;
                     attrValue = cb;
 
                     break;
@@ -128,6 +155,7 @@ namespace Centipede.Actions
                     object obj = arg.Get<Object>(ThisAction);//.ToString();
                     attrValue.Text = (obj ?? "").ToString();
                     attrValue.TextChanged += GetChangedHandler(arg);
+                    attrValue.TextChanged += SetDirty;
                     break;
                 }
 
@@ -183,13 +211,13 @@ namespace Centipede.Actions
         {
             TextBox attrValue = sender as TextBox;
             
-                Debug.Assert(attrValue != null, "attrValue != null");
-                Debug.Assert(attrValue.Tag != null, "attrValue.Tag != null");
+                Debug.Assert(attrValue != null, @"attrValue != null");
+                Debug.Assert(attrValue.Tag != null, @"attrValue.Tag != null");
                 FieldAndPropertyWrapper f = (FieldAndPropertyWrapper)attrValue.Tag;
                 ActionArgumentAttribute argInfo = f.GetArguementAttribute();
 
                 object value = f.Get<Object>(ThisAction);
-                MethodInfo parser = f.MemberType.GetMethod("Parse", new[] { typeof(String) });
+                MethodInfo parser = f.MemberType.GetMethod(@"Parse", new[] { typeof(String) });
                 if (parser != null)
                 {
                     try
@@ -306,7 +334,12 @@ namespace Centipede.Actions
         }
         // ReSharper restore VirtualMemberNeverOverriden.Global
 
-        private readonly ToolTip _statusToolTip;
+        protected ToolTip StatusToolTip;
+        /// <summary>
+        /// 
+        /// </summary>
+        [UsedImplicitly]
+        public static EventHandler SetDirty;
 
         /// <summary>
         /// 
@@ -350,6 +383,9 @@ namespace Centipede.Actions
 
         }
 
+        /// <summary>
+        /// Refresh the values displayed in Argument controls
+        /// </summary>
         public virtual void UpdateControls()
         {
             foreach (Control control in AttributeTable.Controls)
@@ -363,6 +399,11 @@ namespace Centipede.Actions
                     (control as CheckBox).Checked = ((FieldAndPropertyWrapper)control.Tag).Get<bool>(ThisAction);
                 }
             }
+        }
+
+        private void ActionDisplayControl_Load(object sender, EventArgs e)
+        {
+
         }
     }
 

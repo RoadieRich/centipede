@@ -2,15 +2,9 @@
 {
     partial class MainWindow
     {
-        private System.Windows.Forms.TabControl ActionsVarsTabControl;
-        private System.Windows.Forms.TabPage ActionsTab;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TabControl AddActionTabs;
         private System.Windows.Forms.ImageList ActionIcons;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ImageList OtherActIcons;
-        private System.Windows.Forms.TabPage VarsTab;
-        private System.Windows.Forms.DataGridView VarDataGridView;
         private System.Windows.Forms.ContextMenuStrip VarsContextMenu;
         private System.Windows.Forms.ToolStripMenuItem VarMenuUndo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -20,8 +14,6 @@
         private System.Windows.Forms.ToolStripMenuItem VarMenuDelete;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem VarMenuSelectAll;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button RunButton;
         private System.Windows.Forms.Timer updateTimer;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
@@ -31,17 +23,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
-            this.AddActionTabs = new System.Windows.Forms.TabControl();
-            this.UIActTab = new System.Windows.Forms.TabPage();
-            this.UIActListBox = new System.Windows.Forms.ListView();
-            this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.ActionsVarsTabControl = new System.Windows.Forms.TabControl();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.EditTabs = new System.Windows.Forms.TabControl();
+            this.InfoTabPage = new System.Windows.Forms.TabPage();
             this.ActionsTab = new System.Windows.Forms.TabPage();
-            this.VarsTab = new System.Windows.Forms.TabPage();
-            this.VarDataGridView = new System.Windows.Forms.DataGridView();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
             this.VarsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.VarMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -51,8 +39,30 @@
             this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.AddActionTabs = new System.Windows.Forms.TabControl();
+            this.UIActTab = new System.Windows.Forms.TabPage();
+            this.UIActListBox = new System.Windows.Forms.ListView();
+            this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
+            this.RunTabs = new System.Windows.Forms.TabControl();
+            this.OutputTab = new System.Windows.Forms.TabPage();
+            this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
+            this.MessageDataGridView = new System.Windows.Forms.DataGridView();
+            this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.messagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.jobDataSet1 = new Centipede.JobDataSet();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.ErrorsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.WarningsToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.MessagesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.NoticesToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.VariableChangesToolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.VarsTab = new System.Windows.Forms.TabPage();
+            this.VarDataGridView = new System.Windows.Forms.DataGridView();
             this.RunButton = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,90 +99,52 @@
             this.FavouritesToolStripMenuPlaceholder = new System.Windows.Forms.ToolStripMenuItem();
             this.FaveMenuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.EditFavouritesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.OtherActIcons = new System.Windows.Forms.ImageList(this.components);
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.jobDataSet1 = new Centipede.JobDataSet();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.GetFileNameDialogue = new System.Windows.Forms.OpenFileDialog();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
+            this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
+            this.miniToolStrip = new System.Windows.Forms.MenuStrip();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.EditTabs.SuspendLayout();
+            this.ActionsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.VarsContextMenu.SuspendLayout();
             this.AddActionTabs.SuspendLayout();
             this.UIActTab.SuspendLayout();
-            this.toolStripContainer1.ContentPanel.SuspendLayout();
-            this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
-            this.toolStripContainer1.SuspendLayout();
-            this.ActionsVarsTabControl.SuspendLayout();
-            this.ActionsTab.SuspendLayout();
+            this.RunTabs.SuspendLayout();
+            this.OutputTab.SuspendLayout();
+            this.toolStripContainer3.ContentPanel.SuspendLayout();
+            this.toolStripContainer3.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MessageDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.messagesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
-            this.VarsContextMenu.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).BeginInit();
+            this.toolStripContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // splitContainer1
-            // 
-            resources.ApplyResources(this.splitContainer1, "splitContainer1");
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.ActionContainer);
-            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel2.Controls.Add(this.AddActionTabs);
-            // 
-            // ActionContainer
-            // 
-            this.ActionContainer.AllowDrop = true;
-            resources.ApplyResources(this.ActionContainer, "ActionContainer");
-            this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ActionContainer.Name = "ActionContainer";
-            this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
-            this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
-            // 
-            // AddActionTabs
-            // 
-            this.AddActionTabs.Controls.Add(this.UIActTab);
-            resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
-            this.AddActionTabs.HotTrack = true;
-            this.AddActionTabs.Multiline = true;
-            this.AddActionTabs.Name = "AddActionTabs";
-            this.AddActionTabs.SelectedIndex = 0;
-            // 
-            // UIActTab
-            // 
-            this.UIActTab.BackColor = System.Drawing.SystemColors.Window;
-            this.UIActTab.Controls.Add(this.UIActListBox);
-            resources.ApplyResources(this.UIActTab, "UIActTab");
-            this.UIActTab.Name = "UIActTab";
-            // 
-            // UIActListBox
-            // 
-            resources.ApplyResources(this.UIActListBox, "UIActListBox");
-            this.UIActListBox.LargeImageList = this.ActionIcons;
-            this.UIActListBox.Name = "UIActListBox";
-            this.UIActListBox.SmallImageList = this.ActionIcons;
-            this.UIActListBox.UseCompatibleStateImageBehavior = false;
-            this.UIActListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
-            this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
-            // 
-            // ActionIcons
-            // 
-            this.ActionIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ActionIcons.ImageStream")));
-            this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
-            this.ActionIcons.Images.SetKeyName(1, "If.ico");
             // 
             // toolStripContainer1
             // 
@@ -180,9 +152,7 @@
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.RunButton);
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.progressBar1);
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.ActionsVarsTabControl);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
             resources.ApplyResources(this.toolStripContainer1.ContentPanel, "toolStripContainer1.ContentPanel");
             resources.ApplyResources(this.toolStripContainer1, "toolStripContainer1");
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
@@ -193,37 +163,67 @@
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.menuStrip1);
             // 
-            // ActionsVarsTabControl
+            // splitContainer1
             // 
-            this.ActionsVarsTabControl.Controls.Add(this.ActionsTab);
-            this.ActionsVarsTabControl.Controls.Add(this.VarsTab);
-            resources.ApplyResources(this.ActionsVarsTabControl, "ActionsVarsTabControl");
-            this.ActionsVarsTabControl.HotTrack = true;
-            this.ActionsVarsTabControl.Name = "ActionsVarsTabControl";
-            this.ActionsVarsTabControl.SelectedIndex = 0;
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.splitContainer1, "splitContainer1");
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.EditTabs);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.RunTabs);
+            this.splitContainer1.Panel2.Controls.Add(this.RunButton);
+            this.splitContainer1.Panel2.Controls.Add(this.progressBar1);
+            // 
+            // EditTabs
+            // 
+            this.EditTabs.Controls.Add(this.InfoTabPage);
+            this.EditTabs.Controls.Add(this.ActionsTab);
+            resources.ApplyResources(this.EditTabs, "EditTabs");
+            this.EditTabs.HotTrack = true;
+            this.EditTabs.Name = "EditTabs";
+            this.EditTabs.SelectedIndex = 0;
+            // 
+            // InfoTabPage
+            // 
+            resources.ApplyResources(this.InfoTabPage, "InfoTabPage");
+            this.InfoTabPage.Name = "InfoTabPage";
+            this.InfoTabPage.UseVisualStyleBackColor = true;
             // 
             // ActionsTab
             // 
             this.ActionsTab.BackColor = System.Drawing.SystemColors.Window;
-            this.ActionsTab.Controls.Add(this.splitContainer1);
+            this.ActionsTab.Controls.Add(this.splitContainer2);
             resources.ApplyResources(this.ActionsTab, "ActionsTab");
             this.ActionsTab.Name = "ActionsTab";
             // 
-            // VarsTab
+            // splitContainer2
             // 
-            this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
-            this.VarsTab.Controls.Add(this.VarDataGridView);
-            resources.ApplyResources(this.VarsTab, "VarsTab");
-            this.VarsTab.Name = "VarsTab";
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.splitContainer2, "splitContainer2");
+            this.splitContainer2.Name = "splitContainer2";
             // 
-            // VarDataGridView
+            // splitContainer2.Panel1
             // 
-            this.VarDataGridView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VarDataGridView.ContextMenuStrip = this.VarsContextMenu;
-            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
-            this.VarDataGridView.Name = "VarDataGridView";
-            this.VarDataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(this.VarDataGridView_CellContextMenuStripNeeded);
+            this.splitContainer2.Panel1.Controls.Add(this.ActionContainer);
+            resources.ApplyResources(this.splitContainer2.Panel1, "splitContainer2.Panel1");
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer2.Panel2.Controls.Add(this.AddActionTabs);
+            // 
+            // ActionContainer
+            // 
+            this.ActionContainer.AllowDrop = true;
+            resources.ApplyResources(this.ActionContainer, "ActionContainer");
+            this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ActionContainer.ContextMenuStrip = this.VarsContextMenu;
+            this.ActionContainer.Name = "ActionContainer";
             // 
             // VarsContextMenu
             // 
@@ -282,11 +282,185 @@
             this.VarMenuSelectAll.Name = "VarMenuSelectAll";
             resources.ApplyResources(this.VarMenuSelectAll, "VarMenuSelectAll");
             // 
-            // progressBar1
+            // AddActionTabs
             // 
-            resources.ApplyResources(this.progressBar1, "progressBar1");
-            this.progressBar1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.progressBar1.Name = "progressBar1";
+            this.AddActionTabs.Controls.Add(this.UIActTab);
+            resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
+            this.AddActionTabs.HotTrack = true;
+            this.AddActionTabs.Multiline = true;
+            this.AddActionTabs.Name = "AddActionTabs";
+            this.AddActionTabs.SelectedIndex = 0;
+            // 
+            // UIActTab
+            // 
+            this.UIActTab.BackColor = System.Drawing.SystemColors.Window;
+            this.UIActTab.Controls.Add(this.UIActListBox);
+            resources.ApplyResources(this.UIActTab, "UIActTab");
+            this.UIActTab.Name = "UIActTab";
+            // 
+            // UIActListBox
+            // 
+            resources.ApplyResources(this.UIActListBox, "UIActListBox");
+            this.UIActListBox.LargeImageList = this.ActionIcons;
+            this.UIActListBox.Name = "UIActListBox";
+            this.UIActListBox.SmallImageList = this.ActionIcons;
+            this.UIActListBox.UseCompatibleStateImageBehavior = false;
+            this.UIActListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
+            this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
+            // 
+            // ActionIcons
+            // 
+            this.ActionIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ActionIcons.ImageStream")));
+            this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
+            this.ActionIcons.Images.SetKeyName(1, "If.ico");
+            // 
+            // RunTabs
+            // 
+            resources.ApplyResources(this.RunTabs, "RunTabs");
+            this.RunTabs.Controls.Add(this.OutputTab);
+            this.RunTabs.Controls.Add(this.VarsTab);
+            this.RunTabs.Name = "RunTabs";
+            this.RunTabs.SelectedIndex = 0;
+            // 
+            // OutputTab
+            // 
+            this.OutputTab.Controls.Add(this.toolStripContainer3);
+            resources.ApplyResources(this.OutputTab, "OutputTab");
+            this.OutputTab.Name = "OutputTab";
+            this.OutputTab.UseVisualStyleBackColor = true;
+            // 
+            // toolStripContainer3
+            // 
+            this.toolStripContainer3.BottomToolStripPanelVisible = false;
+            // 
+            // toolStripContainer3.ContentPanel
+            // 
+            this.toolStripContainer3.ContentPanel.Controls.Add(this.MessageDataGridView);
+            resources.ApplyResources(this.toolStripContainer3.ContentPanel, "toolStripContainer3.ContentPanel");
+            resources.ApplyResources(this.toolStripContainer3, "toolStripContainer3");
+            this.toolStripContainer3.LeftToolStripPanelVisible = false;
+            this.toolStripContainer3.Name = "toolStripContainer3";
+            this.toolStripContainer3.RightToolStripPanelVisible = false;
+            // 
+            // toolStripContainer3.TopToolStripPanel
+            // 
+            this.toolStripContainer3.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            // 
+            // MessageDataGridView
+            // 
+            this.MessageDataGridView.AllowUserToAddRows = false;
+            this.MessageDataGridView.AllowUserToDeleteRows = false;
+            this.MessageDataGridView.AllowUserToOrderColumns = true;
+            this.MessageDataGridView.AutoGenerateColumns = false;
+            this.MessageDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.MessageDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MessageDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.timestampDataGridViewTextBoxColumn,
+            this.actionDataGridViewTextBoxColumn,
+            this.levelDataGridViewTextBoxColumn,
+            this.messageDataGridViewTextBoxColumn});
+            this.MessageDataGridView.DataSource = this.messagesBindingSource;
+            resources.ApplyResources(this.MessageDataGridView, "MessageDataGridView");
+            this.MessageDataGridView.Name = "MessageDataGridView";
+            this.MessageDataGridView.RowHeadersVisible = false;
+            this.MessageDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.MessageDataGridView_RowsAdded);
+            // 
+            // timestampDataGridViewTextBoxColumn
+            // 
+            this.timestampDataGridViewTextBoxColumn.DataPropertyName = "Timestamp";
+            resources.ApplyResources(this.timestampDataGridViewTextBoxColumn, "timestampDataGridViewTextBoxColumn");
+            this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
+            // 
+            // actionDataGridViewTextBoxColumn
+            // 
+            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
+            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
+            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
+            // 
+            // levelDataGridViewTextBoxColumn
+            // 
+            this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
+            resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
+            this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
+            // 
+            // messageDataGridViewTextBoxColumn
+            // 
+            this.messageDataGridViewTextBoxColumn.DataPropertyName = "Message";
+            resources.ApplyResources(this.messageDataGridViewTextBoxColumn, "messageDataGridViewTextBoxColumn");
+            this.messageDataGridViewTextBoxColumn.Name = "messageDataGridViewTextBoxColumn";
+            // 
+            // messagesBindingSource
+            // 
+            this.messagesBindingSource.DataMember = "Messages";
+            this.messagesBindingSource.DataSource = this.jobDataSet1;
+            // 
+            // jobDataSet1
+            // 
+            this.jobDataSet1.DataSetName = "VarDataSet";
+            this.jobDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // toolStrip1
+            // 
+            resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ErrorsToolStripButton,
+            this.WarningsToolStripButton,
+            this.MessagesToolStripButton,
+            this.NoticesToolStripButton,
+            this.VariableChangesToolStripButton5});
+            this.toolStrip1.Name = "toolStrip1";
+            // 
+            // ErrorsToolStripButton
+            // 
+            this.ErrorsToolStripButton.CheckOnClick = true;
+            this.ErrorsToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.ErrorsToolStripButton, "ErrorsToolStripButton");
+            this.ErrorsToolStripButton.Name = "ErrorsToolStripButton";
+            this.ErrorsToolStripButton.Click += new System.EventHandler(this.ErrorsToolStripButton_Click);
+            // 
+            // WarningsToolStripButton
+            // 
+            this.WarningsToolStripButton.CheckOnClick = true;
+            this.WarningsToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.WarningsToolStripButton, "WarningsToolStripButton");
+            this.WarningsToolStripButton.Name = "WarningsToolStripButton";
+            // 
+            // MessagesToolStripButton
+            // 
+            this.MessagesToolStripButton.CheckOnClick = true;
+            this.MessagesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.MessagesToolStripButton, "MessagesToolStripButton");
+            this.MessagesToolStripButton.Name = "MessagesToolStripButton";
+            // 
+            // NoticesToolStripButton
+            // 
+            this.NoticesToolStripButton.CheckOnClick = true;
+            this.NoticesToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.NoticesToolStripButton, "NoticesToolStripButton");
+            this.NoticesToolStripButton.Name = "NoticesToolStripButton";
+            // 
+            // VariableChangesToolStripButton5
+            // 
+            this.VariableChangesToolStripButton5.CheckOnClick = true;
+            this.VariableChangesToolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            resources.ApplyResources(this.VariableChangesToolStripButton5, "VariableChangesToolStripButton5");
+            this.VariableChangesToolStripButton5.Name = "VariableChangesToolStripButton5";
+            // 
+            // VarsTab
+            // 
+            this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
+            this.VarsTab.Controls.Add(this.VarDataGridView);
+            resources.ApplyResources(this.VarsTab, "VarsTab");
+            this.VarsTab.Name = "VarsTab";
+            // 
+            // VarDataGridView
+            // 
+            this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.VarDataGridView.ContextMenuStrip = this.VarsContextMenu;
+            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
+            this.VarDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.VarDataGridView.Name = "VarDataGridView";
             // 
             // RunButton
             // 
@@ -294,6 +468,12 @@
             this.RunButton.Name = "RunButton";
             this.RunButton.UseVisualStyleBackColor = true;
             this.RunButton.Click += new System.EventHandler(this.RunButton_Click);
+            // 
+            // progressBar1
+            // 
+            resources.ApplyResources(this.progressBar1, "progressBar1");
+            this.progressBar1.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.progressBar1.Name = "progressBar1";
             // 
             // menuStrip1
             // 
@@ -450,7 +630,6 @@
             this.abortToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             resources.ApplyResources(this.runToolStripMenuItem, "runToolStripMenuItem");
-            
             // 
             // runToolStripMenuItem1
             // 
@@ -526,6 +705,16 @@
             resources.ApplyResources(this.EditFavouritesMenuItem, "EditFavouritesMenuItem");
             this.EditFavouritesMenuItem.Click += new System.EventHandler(this.EditFavouritesMenuItem_Click);
             // 
+            // toolStripContainer2
+            // 
+            this.toolStripContainer2.BottomToolStripPanelVisible = false;
+            // 
+            // toolStripContainer2.ContentPanel
+            // 
+            resources.ApplyResources(this.toolStripContainer2.ContentPanel, "toolStripContainer2.ContentPanel");
+            resources.ApplyResources(this.toolStripContainer2, "toolStripContainer2");
+            this.toolStripContainer2.Name = "toolStripContainer2";
+            // 
             // OtherActIcons
             // 
             this.OtherActIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("OtherActIcons.ImageStream")));
@@ -548,11 +737,6 @@
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             // 
-            // jobDataSet1
-            // 
-            this.jobDataSet1.DataSetName = "VarDataSet";
-            this.jobDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // saveFileDialog1
             // 
             resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
@@ -573,37 +757,92 @@
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // BottomToolStripPanel
+            // 
+            resources.ApplyResources(this.BottomToolStripPanel, "BottomToolStripPanel");
+            this.BottomToolStripPanel.Name = "BottomToolStripPanel";
+            this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            // 
+            // TopToolStripPanel
+            // 
+            resources.ApplyResources(this.TopToolStripPanel, "TopToolStripPanel");
+            this.TopToolStripPanel.Name = "TopToolStripPanel";
+            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            // 
+            // RightToolStripPanel
+            // 
+            resources.ApplyResources(this.RightToolStripPanel, "RightToolStripPanel");
+            this.RightToolStripPanel.Name = "RightToolStripPanel";
+            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            // 
+            // LeftToolStripPanel
+            // 
+            resources.ApplyResources(this.LeftToolStripPanel, "LeftToolStripPanel");
+            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
+            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            // 
+            // ContentPanel
+            // 
+            resources.ApplyResources(this.ContentPanel, "ContentPanel");
+            // 
+            // miniToolStrip
+            // 
+            resources.ApplyResources(this.miniToolStrip, "miniToolStrip");
+            this.miniToolStrip.Name = "miniToolStrip";
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.Controls.Add(this.toolStripContainer1);
+            this.Controls.Add(this.toolStripContainer2);
             this.KeyPreview = true;
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.miniToolStrip;
             this.Name = "MainWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainWindow_PreviewKeyDown);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.AddActionTabs.ResumeLayout(false);
-            this.UIActTab.ResumeLayout(false);
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.TopToolStripPanel.PerformLayout();
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
-            this.ActionsVarsTabControl.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.EditTabs.ResumeLayout(false);
             this.ActionsTab.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.VarsContextMenu.ResumeLayout(false);
+            this.AddActionTabs.ResumeLayout(false);
+            this.UIActTab.ResumeLayout(false);
+            this.RunTabs.ResumeLayout(false);
+            this.OutputTab.ResumeLayout(false);
+            this.toolStripContainer3.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer3.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer3.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer3.ResumeLayout(false);
+            this.toolStripContainer3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MessageDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.messagesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
-            this.VarsContextMenu.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.jobDataSet1)).EndInit();
+            this.toolStripContainer2.ResumeLayout(false);
+            this.toolStripContainer2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs1)).EndInit();
             this.ResumeLayout(false);
 
@@ -612,11 +851,26 @@
         #endregion
 
         private JobDataSet jobDataSet1;
-        private System.Windows.Forms.TableLayoutPanel ActionContainer;
-        private System.Windows.Forms.TabPage UIActTab;
-        private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         internal System.Windows.Forms.OpenFileDialog GetFileNameDialogue;
+        private System.Windows.Forms.OpenFileDialog OpenFileDialog;
+        internal FavouriteJobs favouriteJobs1;
+        private System.Windows.Forms.BindingSource messagesBindingSource;
+        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TabControl RunTabs;
+        private System.Windows.Forms.TabPage OutputTab;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer3;
+        private System.Windows.Forms.DataGridView MessageDataGridView;
+        private System.Windows.Forms.TabPage VarsTab;
+        private System.Windows.Forms.DataGridView VarDataGridView;
+        private System.Windows.Forms.Button RunButton;
+        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem1;
@@ -628,6 +882,8 @@
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
@@ -647,15 +903,30 @@
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem FavouritesMenu;
         private System.Windows.Forms.ToolStripMenuItem FavouritesToolStripMenuPlaceholder;
         private System.Windows.Forms.ToolStripSeparator FaveMenuSeparator;
         private System.Windows.Forms.ToolStripMenuItem EditFavouritesMenuItem;
-        private System.Windows.Forms.OpenFileDialog OpenFileDialog;
-        internal FavouriteJobs favouriteJobs1;
+        private System.Windows.Forms.MenuStrip miniToolStrip;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer2;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton ErrorsToolStripButton;
+        private System.Windows.Forms.ToolStripButton WarningsToolStripButton;
+        private System.Windows.Forms.ToolStripButton MessagesToolStripButton;
+        private System.Windows.Forms.ToolStripButton NoticesToolStripButton;
+        private System.Windows.Forms.ToolStripButton VariableChangesToolStripButton5;
+        private System.Windows.Forms.TabControl EditTabs;
+        private System.Windows.Forms.TabPage InfoTabPage;
+        private System.Windows.Forms.TabPage ActionsTab;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.TableLayoutPanel ActionContainer;
+        private System.Windows.Forms.TabControl AddActionTabs;
+        private System.Windows.Forms.TabPage UIActTab;
+        private System.Windows.Forms.ListView UIActListBox;
+        private System.Windows.Forms.DataGridViewTextBoxColumn timestampDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn actionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn messageDataGridViewTextBoxColumn;
     }
 }
 
