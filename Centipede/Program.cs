@@ -404,4 +404,15 @@ namespace Centipede
             }
         }
     }
+
+    [Flags]
+    public enum MessageLevel : ushort
+    {
+        Error = 0x1,
+        Warning = 0x2,
+        Message = 0x4,
+        Notice = 0x8,
+        VariableChange = 0x10,
+        All = Error| Warning | Message | Notice | VariableChange
+    }
 }

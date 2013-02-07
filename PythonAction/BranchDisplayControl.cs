@@ -14,13 +14,24 @@ namespace PyAction
     class BranchDisplayControl : ActionDisplayControl
 // ReSharper restore UnusedMember.Global
     {
-        private ComboBox _actionCombo;
-        private Scintilla _conditionControl;
+        private readonly ComboBox _actionCombo;
+        private readonly Scintilla _conditionControl;
 
-        public BranchDisplayControl(BranchAction action)
+        public BranchDisplayControl(Action action)
                 : base(action, false)
         {
             InitializeComponent();
+
+            base.ThisAction = action;
+
+            // ReSharper restore DoNotCallOverridableMethodsInConstructor
+            SetProperties();
+
+            StatusToolTip = new ToolTip();
+            StatusToolTip.SetToolTip(StatusIconBox, "");
+
+            
+            
             _actionCombo = new ComboBox { DisplayMember = @"Text", ValueMember = @"Action" };
 
             _actionCombo.DropDown += actionCombo_DropDown;
@@ -72,7 +83,6 @@ namespace PyAction
 
         private void PopulateComboBox()
         {
-            
             var actionIter = from Action a in Program.Instance.Actions
                              where a != ThisAction
                              select new
@@ -109,6 +119,7 @@ namespace PyAction
             
             ResumeLayout(false);
             PerformLayout();
+            base.InitializeComponent();
 
         }
     }

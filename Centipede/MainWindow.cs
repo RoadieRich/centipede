@@ -273,6 +273,8 @@ namespace Centipede
             UpdateFavourites();
 
             Dirty = false;
+
+            ActionDisplayControl.SetDirty = delegate { Dirty = true; };
         }
 
 /*
@@ -652,7 +654,7 @@ namespace Centipede
             {
                 return;
             }
-
+            ActionContainer.Controls.Clear();
             Program.Instance.Clear();
         }
 
@@ -702,7 +704,33 @@ namespace Centipede
             UpdateFavourites();
 
         }
-        
+
+        private MessageLevel _messageLevelsShown = MessageLevel.All;
+
+        private void ErrorsToolStripButton_Click(object sender, EventArgs e)
+        {
+            ToolStripButton button = (ToolStripButton)sender;
+            _messageLevelsShown = _messageLevelsShown ^ MessageLevel.Error;
+
+            UpdateOutputWindow();
+        }
+
+        private void UpdateOutputWindow()
+        {
+            foreach (var row in MessageDataGridView.Rows.Cast<DataGridViewRow>())
+            {
+                JobDataSet.MessagesRow messageRow = (JobDataSet.MessagesRow)row.DataBoundItem;
+                row.Visible = _messageLevelsShown.HasFlag(messageRow.Level);
+            }
+        }
+
+        private void MessageDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            DataGridViewRow row = MessageDataGridView.Rows[e.RowIndex];
+            JobDataSet.MessagesRow messageRow = (JobDataSet.MessagesRow)jobDataSet1.Messages.Rows[e.RowIndex];
+            row.Visible = _messageLevelsShown.HasFlag(messageRow.Level);
+        }
+
     }
 
     [Serializable]

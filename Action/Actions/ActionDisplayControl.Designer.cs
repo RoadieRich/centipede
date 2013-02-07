@@ -55,8 +55,10 @@ namespace Centipede.Actions
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.StatusTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.ArgumentTooltips = new System.Windows.Forms.ToolTip(this.components);
+            this.ActionIcon = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.ActionContextMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ActionIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // NameLabel
@@ -65,19 +67,19 @@ namespace Centipede.Actions
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.NameLabel.AutoEllipsis = true;
             this.NameLabel.BackColor = System.Drawing.Color.Transparent;
-            this.NameLabel.Location = new System.Drawing.Point(55, 8);
+            this.NameLabel.Location = new System.Drawing.Point(30, 8);
             this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(1341, 16);
+            this.NameLabel.Size = new System.Drawing.Size(413, 16);
             this.NameLabel.TabIndex = 0;
             this.NameLabel.Text = "<NAME>";
             // 
             // ExpandButton
             // 
             this.ExpandButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ExpandButton.Location = new System.Drawing.Point(4, 4);
+            this.ExpandButton.Location = new System.Drawing.Point(4, 31);
             this.ExpandButton.Margin = new System.Windows.Forms.Padding(0);
             this.ExpandButton.Name = "ExpandButton";
-            this.ExpandButton.Size = new System.Drawing.Size(48, 48);
+            this.ExpandButton.Size = new System.Drawing.Size(20, 20);
             this.ExpandButton.TabIndex = 1;
             this.ExpandButton.Text = "+";
             this.ExpandButton.UseVisualStyleBackColor = true;
@@ -98,7 +100,7 @@ namespace Centipede.Actions
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(1446, 283);
+            this.AttributeTable.Size = new System.Drawing.Size(493, 41);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -115,7 +117,7 @@ namespace Centipede.Actions
             this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusIconBox.BackColor = System.Drawing.Color.Transparent;
             this.StatusIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.StatusIconBox.Location = new System.Drawing.Point(1402, 4);
+            this.StatusIconBox.Location = new System.Drawing.Point(449, 4);
             this.StatusIconBox.Name = "StatusIconBox";
             this.StatusIconBox.Size = new System.Drawing.Size(48, 48);
             this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -223,12 +225,21 @@ namespace Centipede.Actions
             // 
             this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.CommentTextBox.Location = new System.Drawing.Point(55, 32);
+            this.CommentTextBox.Location = new System.Drawing.Point(27, 32);
             this.CommentTextBox.Name = "CommentTextBox";
-            this.CommentTextBox.Size = new System.Drawing.Size(1341, 20);
+            this.CommentTextBox.Size = new System.Drawing.Size(416, 20);
             this.CommentTextBox.TabIndex = 4;
             this.CommentTextBox.WordWrap = false;
             this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
+            // 
+            // ActionIcon
+            // 
+            this.ActionIcon.Location = new System.Drawing.Point(4, 4);
+            this.ActionIcon.Name = "ActionIcon";
+            this.ActionIcon.Size = new System.Drawing.Size(20, 20);
+            this.ActionIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.ActionIcon.TabIndex = 5;
+            this.ActionIcon.TabStop = false;
             // 
             // ActionDisplayControl
             // 
@@ -240,15 +251,18 @@ namespace Centipede.Actions
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
+            this.Controls.Add(this.ActionIcon);
             this.Controls.Add(this.NameLabel);
             this.Controls.Add(this.CommentTextBox);
-            this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.AttributeTable);
+            this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.StatusIconBox);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(1453, 342);
+            this.Size = new System.Drawing.Size(500, 100);
+            this.Load += new System.EventHandler(this.ActionDisplayControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ActionIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,7 +272,7 @@ namespace Centipede.Actions
 
         private System.Windows.Forms.Button ExpandButton;
         private System.Windows.Forms.ImageList StatusIcons;
-        private System.Windows.Forms.PictureBox StatusIconBox;
+        protected System.Windows.Forms.PictureBox StatusIconBox;
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
@@ -283,6 +297,7 @@ namespace Centipede.Actions
         /// </summary>
         protected Label NameLabel;
         private ToolStripSeparator toolStripSeparator1;
+        private PictureBox ActionIcon;
 
 
     }
