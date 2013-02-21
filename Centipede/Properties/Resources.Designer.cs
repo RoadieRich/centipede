@@ -61,6 +61,15 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Branch.
+        /// </summary>
+        public static string BranchAction_BranchAction_Branch {
+            get {
+                return ResourceManager.GetString("BranchAction_BranchAction_Branch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to False.
         /// </summary>
         public static string BranchAction_ConditionSource_False {

@@ -7,6 +7,9 @@ namespace Centipede
 {
     class ActionFactory : ListViewItem
     {
+        [ResharperAnnotations.UsedImplicitly]
+        public static volatile Action.MessageHandlerDelegate MessageHandlerDelegate;
+
         internal ActionFactory(String displayName, Type actionType) : base(displayName)
         {
             _actionType = actionType;
@@ -15,7 +18,7 @@ namespace Centipede
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType)
         {
-            string displayName = String.IsNullOrEmpty(catAttribute.displayName) ? catAttribute.displayName : pluginType.Name;
+            string displayName = !String.IsNullOrEmpty(catAttribute.displayName) ? catAttribute.displayName : pluginType.Name;
             Text = displayName;
             ToolTipText = catAttribute.helpText;
             _actionType = pluginType;
@@ -27,15 +30,19 @@ namespace Centipede
         public Action Generate()
         {
 
-            var typeArray = new Type[1];
-            typeArray[0] = typeof(Dictionary<String, Object>);
+            var ctorTypes = new Type[1];
+            ctorTypes[0] = typeof (IDictionary<String, Object>);
 
-            ConstructorInfo constructorInfo = _actionType.GetConstructor(new[] { typeof (Dictionary<String, Object>) });
-            if (constructorInfo != null)
+            ConstructorInfo constructorInfo = _actionType.GetConstructor(ctorTypes);
+            Action instance = (Action)constructorInfo.Invoke(new object[] { MainWindow.Instance.Core.Variables });
+            
+            if (MessageHandlerDelegate != null)
             {
-                return constructorInfo.Invoke(new object[]{Program.Instance.Variables}) as Action;
+                instance.MessageHandler += MessageHandlerDelegate;
             }
-            return null;
+            
+            return instance;
         }
+
     }
 }

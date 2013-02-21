@@ -8,7 +8,7 @@ namespace Centipede.Actions
     [ActionCategory("UI", displayName="Show Messagebox")]
     class ShowMessageBox : Action
     {
-        public ShowMessageBox(Dictionary<String,Object> v)
+        public ShowMessageBox(IDictionary<string, object> v)
             : base("Show message box", v)
         { }
 

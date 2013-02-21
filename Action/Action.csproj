@@ -78,6 +78,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ResharperAttributes.cs" />
     <Compile Include="StringInject\StringInjectExtension.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,12 +96,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ResharperAnnotations\ResharperAnnotations.csproj">
-      <Project>{A2713710-3224-4905-93F4-6FB1A7259912}</Project>
-      <Name>ResharperAnnotations</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

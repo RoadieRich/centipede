@@ -14,24 +14,24 @@ using System.Windows.Forms;
 using Centipede.Actions;
 using Centipede.Properties;
 
-//     \,,/
-//     (..)
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      ##
-// ''=={##}==''
-//      \/
+//      \,,/
+//      (..)
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       ##
+//  ''=={##}==''
+//       \/
 
 namespace Centipede
 {
@@ -43,11 +43,15 @@ namespace Centipede
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
         private bool _dirty;
 
-        public MainWindow()
+        public MainWindow(CentipedeCore centipedeCore)
         {
             InitializeComponent();
-
+            Core = centipedeCore;
             Instance = this;
+            ActionFactory.MessageHandlerDelegate = (sender, e) => jobDataSet1.Messages.AddMessagesRow(DateTime.Now,
+                                                                                                      sender as Action,
+                                                                                                      e.Message,
+                                                                                                      e.Level);
         }
 
         public override String Text
@@ -72,8 +76,16 @@ namespace Centipede
             set
             {
                 _dirty = value;
-                Text = Program.Instance.JobName;
+                Text = Core.JobName;
             }
+        }
+
+        public CentipedeCore Core
+        {
+            get;
+            
+            [ResharperAnnotations.UsedImplicitly]
+            set;
         }
 
         private Boolean ErrorHandler(ActionException e, out Action nextAction)
@@ -141,7 +153,7 @@ namespace Centipede
 
         private void UpdateHandlerDone(Action currentAction)
         {
-            foreach (var v in Program.Instance.Variables.ToArray())
+            foreach (var v in Core.Variables.ToArray())
             {
                 if (v.Key.StartsWith(@"_"))
                 {
@@ -211,7 +223,7 @@ namespace Centipede
 
             var sendingActionFactory = (ActionFactory)sendingListView.SelectedItems[0];
 
-            Program.Instance.AddAction(sendingActionFactory.Generate());
+            Core.AddAction(sendingActionFactory.Generate());
         }
 
         private static void _setActionDisplayedState([ResharperAnnotations.NotNull] ActionDisplayControl adc,
@@ -231,22 +243,20 @@ namespace Centipede
         {
             UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
 
-            var af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Demo_Action, typeof (DemoAction));
+            UIActTab.Tag = UIActListBox;
 
-            UIActListBox.Items.Add(af);
+            AddToActionTab(typeof(DemoAction));
+            AddToActionTab(typeof (GetFileNameAction));
+            AddToActionTab(typeof(ShowMessageBox));
+            AddToActionTab(typeof(AskValues));
+            AddToActionTab(typeof(ExitAction));
+            AddToActionTab(typeof(SubJob));
 
-            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Get_Filename, typeof (GetFileNameAction));
-
-            UIActListBox.Items.Add(af);
-
-            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Show_Messagebox, typeof (ShowMessageBox));
-
-            UIActListBox.Items.Add(af);
-
-            af = new ActionFactory(Resources.MainWindow_MainWindow_ActionName_Ask_For_Values, typeof (AskValues));
-
-            UIActListBox.Items.Add(af);
-
+            _urlTextbox = new ToolStripSpringTextBox();
+            _urlTextbox.KeyUp += UrlTextbox_KeyUp;
+            NavigationToolbar.Stretch = true;
+            NavigationToolbar.Items.Add(_urlTextbox);
+            _urlTextbox.MergeIndex = NavigationToolbar.Items.Count - 2;
             GetActionPlugins();
 
             VarDataGridView.DataSource = _dataSet.Variables;
@@ -259,15 +269,17 @@ namespace Centipede
                 s.SizeType = SizeType.AutoSize;
             }
 
-            Program.Instance.ActionCompleted += UpdateHandlerDone;
-            Program.Instance.BeforeAction += Program_BeforeAction;
-            Program.Instance.JobCompleted += CompletedHandler;
-            Program.Instance.ActionErrorOccurred += ErrorHandler;
-            Program.Instance.ActionAdded += Program_ActionAdded;
-            Program.Instance.ActionRemoved += Program_ActionRemoved;
-            Program.Instance.AfterLoad += Program_AfterLoad;
+            Core.ActionCompleted += UpdateHandlerDone;
+            Core.BeforeAction += Program_BeforeAction;
+            Core.JobCompleted += CompletedHandler;
+            Core.ActionErrorOccurred += ErrorHandler;
+            Core.ActionAdded += Program_ActionAdded;
+            Core.ActionRemoved += Program_ActionRemoved;
+            Core.AfterLoad += Program_AfterLoad;
+            Core.Variables.OnUpdate += VariablesOnOnUpdate;
+
             using (var file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
-                {
+            {
                 _favouriteJobsDataStore.Favourites.ReadXml(file);
             }
             UpdateFavourites();
@@ -277,7 +289,18 @@ namespace Centipede
             ActionDisplayControl.SetDirty = delegate { Dirty = true; };
         }
 
-/*
+        private void VariablesOnOnUpdate(string message, string key, object value)
+        {
+            if (Core.CurrentAction == null)
+            {
+                return;
+            }
+            string msg = string.Format("Variable {0}: {1} - {2}", value, key, message);
+            jobDataSet1.Messages.AddMessagesRow(DateTime.Now, Core.CurrentAction, msg,
+                                                MessageLevel.VariableChange);
+        }
+
+        /*
         private class FaveMenuItems
         {
             public ToolStripDropDownItem EditFavourites;
@@ -308,7 +331,7 @@ namespace Centipede
         {
             ToolStripDropDownItem item = (ToolStripDropDownItem)sender;
             AskSave();
-            Program.Instance.LoadJob((String)item.Tag);
+            Core.LoadJob((String)item.Tag);
         }
 
         private void GetActionPlugins()
@@ -384,7 +407,9 @@ namespace Centipede
         private void Program_AfterLoad(object sender, EventArgs e)
         {
             Dirty = false;
-            Text = Program.Instance.JobName;
+            Text = Core.JobName;
+
+            WebBrowser.Navigate(Core.InfoUrl);
         }
 
         private void Program_ActionRemoved(Action action)
@@ -454,15 +479,15 @@ namespace Centipede
             Dirty = true;
         }
 
-        private static void adc_Deleted(object sender, CentipedeEventArgs e)
+        private void adc_Deleted(object sender, CentipedeEventArgs e)
         {
             var adc = (ActionDisplayControl)sender;
-            Program.Instance.RemoveAction(adc.ThisAction);
+            Core.RemoveAction(adc.ThisAction);
         }
 
         private void DataStore_Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
         {
-            IEnumerable<string> varsToDelete = from kvp in Program.Instance.Variables
+            IEnumerable<string> varsToDelete = from kvp in Core.Variables
                                                where !_dataSet.Variables.Rows.Contains(kvp.Key)
                                                select kvp.Key
                                                into k
@@ -472,7 +497,7 @@ namespace Centipede
             IList<string> toDelete = varsToDelete as IList<string> ?? varsToDelete.ToList();
             if (toDelete.Any())
             {
-                Program.Instance.Variables.Remove(toDelete.First());
+                Core.Variables.Remove(toDelete.First());
             }
         }
 
@@ -480,23 +505,23 @@ namespace Centipede
         {
             JobDataSet.VariablesRow row = e.Row;
 
-            if (!Program.Instance.Variables.ContainsKey(row.Name))
+            if (!Core.Variables.ContainsKey(row.Name))
             {
-                IEnumerable<string> it = from kvp in Program.Instance.Variables
+                IEnumerable<string> nonHiddenVariableNames = from kvp in Core.Variables
                                          where !_dataSet.Variables.Rows.Contains(kvp.Key)
                                          select kvp.Key
                                          into k
                                          where !k.StartsWith(@"_")
                                          select k;
 
-                foreach (String key in it)
+                foreach (String key in nonHiddenVariableNames)
                 {
-                    Program.Instance.Variables.Remove(key);
+                    Core.Variables.Remove(key);
                     break;
                 }
             }
 
-            Program.Instance.Variables[row.Name] = row.Value;
+            Core.Variables[row.Name] = row.Value;
         }
 
         private void VarMenuDelete_Click(object sender, EventArgs e)
@@ -535,7 +560,7 @@ namespace Centipede
             }
 
 
-            Program.Instance.LoadJob(OpenFileDialog.FileName);
+            Core.LoadJob(OpenFileDialog.FileName);
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -545,14 +570,14 @@ namespace Centipede
                 SetState(adc, ActionState.None, String.Empty);
             }
             progressBar1.Value = 0;
-            progressBar1.Maximum = Program.Instance.JobComplexity;
+            progressBar1.Maximum = Core.JobComplexity;
             backgroundWorker1.RunWorkerAsync();
         }
 
         [STAThread]
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            Program.Instance.RunJob();
+            Core.RunJob();
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -571,7 +596,7 @@ namespace Centipede
                 index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
             object data = e.Data.GetData(@"WindowsForms10PersistentObject");
-            Program.Instance.AddAction(((ActionFactory)data).Generate(), index);
+            Core.AddAction(((ActionFactory)data).Generate(), index);
         }
 
         private void BeginDrag(object sender, ItemDragEventArgs e)
@@ -587,7 +612,7 @@ namespace Centipede
 
         private void SaveJob()
         {
-            if (String.IsNullOrEmpty(Program.Instance.JobName))
+            if (String.IsNullOrEmpty(Core.JobName))
             {
                 var askJobTitle = new AskJobTitle();
                 DialogResult result = askJobTitle.ShowDialog(this);
@@ -595,15 +620,15 @@ namespace Centipede
                 {
                     return;
                 }
-                Program.Instance.JobName = askJobTitle.JobName;
+                Core.JobName = askJobTitle.JobName;
             }
-            saveFileDialog1.FileName = Program.Instance.JobFileName;
+            saveFileDialog1.FileName = Core.JobFileName;
             saveFileDialog1.ShowDialog(this);
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Program.Instance.SaveJob(saveFileDialog1.FileName);
+            Core.SaveJob(saveFileDialog1.FileName);
             Dirty = false;
         }
 
@@ -617,7 +642,7 @@ namespace Centipede
         {
             base.Dispose(disposing);
 
-            Program.Instance.Dispose();
+            Core.Dispose();
         }
 
         private void AskSave()
@@ -655,7 +680,7 @@ namespace Centipede
                 return;
             }
             ActionContainer.Controls.Clear();
-            Program.Instance.Clear();
+            Core.Clear();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -665,13 +690,13 @@ namespace Centipede
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(Program.Instance.JobFileName))
+            if (String.IsNullOrEmpty(Core.JobFileName))
             {
                 SaveJob();
             }
             else
             {
-                Program.Instance.SaveJob(Program.Instance.JobFileName);
+                Core.SaveJob(Core.JobFileName);
             }
             Dirty = false;
         }
@@ -706,6 +731,7 @@ namespace Centipede
         }
 
         private MessageLevel _messageLevelsShown = MessageLevel.All;
+        private ToolStripSpringTextBox _urlTextbox;
 
         private void ErrorsToolStripButton_Click(object sender, EventArgs e)
         {
@@ -730,7 +756,53 @@ namespace Centipede
             JobDataSet.MessagesRow messageRow = (JobDataSet.MessagesRow)jobDataSet1.Messages.Rows[e.RowIndex];
             row.Visible = _messageLevelsShown.HasFlag(messageRow.Level);
         }
+        
+        private void UrlTextbox_KeyUp(object sender, KeyEventArgs e)
+        {
+            ToolStripTextBox textBox = ((ToolStripTextBox)sender);
+            string url = textBox.Text;
 
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (e.Control)
+                {
+                    url = string.Format(@"http://www.{0}.com", url);
+                }
+
+                WebBrowser.Navigate(url, e.Shift);
+
+                textBox.Text = url;
+
+                e.Handled = true;
+            }
+            else
+            {
+                e.Handled = false;
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            WebBrowser.GoBack();
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            WebBrowser.GoForward();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            WebBrowser.Refresh();
+        }
+
+        private void WebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (WebBrowser.ReadyState == WebBrowserReadyState.Complete)
+            {
+                _urlTextbox.Text = e.Url.AbsoluteUri;
+            }
+        }
     }
 
     [Serializable]

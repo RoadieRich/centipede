@@ -1,4 +1,5 @@
 ﻿using System;
+using ResharperAnnotations;
 
 
 namespace Centipede
@@ -11,7 +12,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        // ReSharper disable NotAccessedField.Global
+        [ResharperAnnotations.PublicAPI]
         public String Message;
         /// <summary>
         /// 
@@ -21,19 +22,16 @@ namespace Centipede
         /// 
         /// </summary>
         public AskEventEnums.AskType Type;
-        // ReSharper disable ConvertToConstant.Global
         /// <summary>
         /// 
         /// </summary>
-        // ReSharper disable FieldCanBeMadeReadOnly.Global
+        [PublicAPI]
         public AskEventEnums.DialogResult Result = AskEventEnums.DialogResult.None;
-        // ReSharper restore FieldCanBeMadeReadOnly.Global
-        // ReSharper restore ConvertToConstant.Global
         /// <summary>
         /// 
         /// </summary>
+        [PublicAPI]
         public AskEventEnums.MessageIcon Icon = AskEventEnums.MessageIcon.Information;
-        // ReSharper restore NotAccessedField.Global
     }
 
     /// <summary>

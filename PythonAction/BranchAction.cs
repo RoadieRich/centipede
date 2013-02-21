@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Threading;
 using System.Xml;
 using Centipede;
 using Centipede.Actions;
@@ -16,8 +15,7 @@ namespace PyAction
     /// 
     /// </summary>
 
-    [ActionCategory("Flow Control", displayName = "Branch", displayControl = @"BranchDisplayControl", iconName = @"branch")]
-    // ReSharper disable ClassNeverInstantiated.Global
+    [ActionCategory(@"Flow Control", displayName = "Branch", displayControl = @"BranchDisplayControl", iconName = @"branch")]
     public class BranchAction : Action
     {
         /// <summary>
@@ -29,8 +27,8 @@ namespace PyAction
         /// Condition is a simple python expression, which is evalutated in a "safe" scope: 
         /// changes made to any (python) variables will be lost.
         /// </remarks>
-        public BranchAction(Dictionary<String, Object> v)
-            : base("Branch", v)
+        public BranchAction(IDictionary<String, Object> v)
+            : base(Resources.BranchAction_BranchAction_Branch, v)
         {
         }
 
@@ -72,12 +70,12 @@ namespace PyAction
         }
 
         [Localizable(false)]
-        public override void AddToXmlElement(System.Xml.XmlElement rootElement)
+        public override void AddToXmlElement(XmlElement rootElement)
         {
             Type thisType = GetType();
             XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
             element.SetAttribute("Comment", Comment);
-            element.SetAttribute("Target", Program.Instance.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
+            element.SetAttribute("Target", MainWindow.Instance.Core.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
             element.InnerText = ConditionSource;
             rootElement.AppendChild(element);
         }
@@ -88,16 +86,17 @@ namespace PyAction
             Comment = element.GetAttribute("Comment");
             ConditionSource = element.InnerText;
             int index = int.Parse(element.GetAttribute("Target"));
-            Program.AfterLoadEventHandler instanceOnAfterLoad = null;
-            instanceOnAfterLoad = delegate(object sender, EventArgs e) { 
-                this.NextIfTrue = Program.Instance.Actions[index];
-                Program.Instance.AfterLoad -= instanceOnAfterLoad;
-                ((ActionDisplayControl)this.Tag).UpdateControls();
+            CentipedeCore.AfterLoadEventHandler instanceOnAfterLoad = null;
+            instanceOnAfterLoad = delegate{ 
+                NextIfTrue = MainWindow.Instance.Core.Actions[index];
+                MainWindow.Instance.Core.AfterLoad -= instanceOnAfterLoad;
+                ((ActionDisplayControl)Tag).UpdateControls();
             };
-            Program.Instance.AfterLoad += instanceOnAfterLoad;
+            MainWindow.Instance.Core.AfterLoad += instanceOnAfterLoad;
         }
     }
 
+/*
     public class BranchActionI18N
     {
         public String Base = @"Resources";
@@ -121,8 +120,5 @@ namespace PyAction
                                                                      }
                                                              };
     }
-
-
-    // ReSharper restore ClassNeverInstantiated.Global
-    
+*/  
 }

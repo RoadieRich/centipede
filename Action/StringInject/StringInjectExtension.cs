@@ -50,7 +50,6 @@ namespace Centipede.StringInject
             if (attributes == null || formatString == null)
                 return result;
 
-// ReSharper disable LoopCanBeConvertedToQuery
             foreach (string attributeKey in attributes.Keys)
 
             {

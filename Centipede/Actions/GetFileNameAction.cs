@@ -9,7 +9,7 @@ namespace Centipede.Actions
     [ActionCategory("UI", displayName="Get Filename")]
     class GetFileNameAction : Action
     {
-        public GetFileNameAction(Dictionary<String, Object> v)
+        public GetFileNameAction(IDictionary<string, object> v)
             : base("Get Filename", v)
         {
             _handler = GetFileNameDialogue_FileOk;

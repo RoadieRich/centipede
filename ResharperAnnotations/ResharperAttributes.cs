@@ -16,6 +16,12 @@
 
 using System;
 
+// ReSharper disable CheckNamespace
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedParameter.Local
 
 namespace ResharperAnnotations
 {
@@ -25,21 +31,20 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [LocalizationRequiredAttribute(true)]
-    /// public class Foo
+    /// internal class Foo
     /// {
     ///   private string str = "my string"; // Warning: Localizable string
     /// }
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
-    
-    public sealed class LocalizationRequiredAttribute : Attribute
+    internal sealed class LocalizationRequiredAttribute : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute"/> class with
         /// <see cref="Required"/> set to <see langword="true"/>.
         /// </summary>
-        public LocalizationRequiredAttribute()
+        internal LocalizationRequiredAttribute()
             : this(true)
         {
         }
@@ -48,7 +53,7 @@ namespace ResharperAnnotations
         /// Initializes a new instance of the <see cref="LocalizationRequiredAttribute"/> class.
         /// </summary>
         /// <param name="required"><c>true</c> if a element should be localized; otherwise, <c>false</c>.</param>
-        public LocalizationRequiredAttribute(bool required)
+        internal LocalizationRequiredAttribute(bool required)
         {
             Required = required;
         }
@@ -58,7 +63,7 @@ namespace ResharperAnnotations
         /// <value><c>true</c> if a element should be localized; otherwise, <c>false</c>.</value>
         /// </summary>
         [UsedImplicitly]
-        public bool Required { get; private set; }
+        internal bool Required { get; private set; }
 
         /// <summary>
         /// Returns whether the value of the given object is equal to the current <see cref="LocalizationRequiredAttribute"/>.
@@ -91,24 +96,24 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [StringFormatMethod("message")]
-    /// public void ShowError(string message, params object[] args)
+    /// internal void ShowError(string message, params object[] args)
     /// {
     ///   //Do something
     /// }
-    /// public void Foo()
+    /// internal void Foo()
     /// {
     ///   ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
     /// }
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public sealed class StringFormatMethodAttribute : Attribute
+    internal sealed class StringFormatMethodAttribute : Attribute
     {
         /// <summary>
         /// Initializes new instance of StringFormatMethodAttribute
         /// </summary>
         /// <param name="formatParameterName">Specifies which parameter of an annotated method should be treated as format-string</param>
-        public StringFormatMethodAttribute(string formatParameterName)
+        internal StringFormatMethodAttribute(string formatParameterName)
         {
             FormatParameterName = formatParameterName;
         }
@@ -117,7 +122,7 @@ namespace ResharperAnnotations
         /// Gets format parameter name
         /// </summary>
         [UsedImplicitly]
-        public string FormatParameterName { get; private set; }
+        internal string FormatParameterName { get; private set; }
     }
 
     /// <summary>
@@ -127,7 +132,7 @@ namespace ResharperAnnotations
     /// </summary>
     /// <example>
     /// <code>
-    /// public void Foo(string param)
+    /// internal void Foo(string param)
     /// {
     ///   if (param == null)
     ///     throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
@@ -135,7 +140,8 @@ namespace ResharperAnnotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
-    public sealed class InvokerParameterNameAttribute : Attribute { }
+
+    internal sealed class InvokerParameterNameAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the method is contained in a type that implements
@@ -154,16 +160,16 @@ namespace ResharperAnnotations
     /// </remarks>
     /// <example>
     /// <code>
-    /// public class Foo : INotifyPropertyChanged
+    /// internal class Foo : INotifyPropertyChanged
     /// {
-    ///   public event PropertyChangedEventHandler PropertyChanged;
+    ///   internal event PropertyChangedEventHandler PropertyChanged;
     ///
     ///   [NotifyPropertyChangedInvocator]
     ///   protected virtual void NotifyChanged(string propertyName)
     ///   {}
     ///
     ///   private string _name;
-    ///   public string Name
+    ///   internal string Name
     ///   {
     ///     get { return _name; }
     ///     set
@@ -183,16 +189,16 @@ namespace ResharperAnnotations
     /// </list>
     /// </example>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
+    internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
     {
-        public NotifyPropertyChangedInvocatorAttribute() { }
-        public NotifyPropertyChangedInvocatorAttribute(string parameterName)
+        internal NotifyPropertyChangedInvocatorAttribute() { }
+        internal NotifyPropertyChangedInvocatorAttribute(string parameterName)
         {
             ParameterName = parameterName;
         }
 
         [UsedImplicitly]
-        public string ParameterName { get; private set; }
+        internal string ParameterName { get; private set; }
     }
 
     /// <summary>
@@ -202,12 +208,12 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [CanBeNull]
-    /// public object Test()
+    /// internal object Test()
     /// {
     ///   return null;
     /// }
     /// 
-    /// public void UseTest()
+    /// internal void UseTest()
     /// {
     ///   var p = Test(); 
     ///   var s = p.ToString(); // Warning: Possible 'System.NullReferenceException' 
@@ -215,7 +221,7 @@ namespace ResharperAnnotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public sealed class CanBeNullAttribute : Attribute { }
+    internal sealed class CanBeNullAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the value of the marked element could never be <c>null</c>
@@ -223,14 +229,14 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [NotNull]
-    /// public object Foo()
+    /// internal object Foo()
     /// {
     ///   return null; // Warning: Possible 'null' assignment
     /// } 
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-    public sealed class NotNullAttribute : Attribute { }
+    internal sealed class NotNullAttribute : Attribute { }
 
     /// <summary>
     /// Describes dependency between method input and output.
@@ -253,43 +259,42 @@ namespace ResharperAnnotations
     /// <list>
     /// <item><code>
     /// [ContractAnnotation("=> halt")]
-    /// public void TerminationMethod()
+    /// internal void TerminationMethod()
     /// </code></item>
     /// <item><code>
     /// [ContractAnnotation("halt &lt;= condition: false")]
-    /// public void Assert(bool condition, string text) // Regular Assertion method
+    /// internal void Assert(bool condition, string text) // Regular Assertion method
     /// </code></item>
     /// <item><code>
     /// [ContractAnnotation("s:null => true")]
-    /// public bool IsNullOrEmpty(string s) // String.IsNullOrEmpty
+    /// internal bool IsNullOrEmpty(string s) // String.IsNullOrEmpty
     /// </code></item>
     /// <item><code>
     /// // A method that returns null if the parameter is null, and not null if the parameter is not null
     /// [ContractAnnotation("null => null; notnull => notnull")]
-    /// public object Transform(object data) 
+    /// internal object Transform(object data) 
     /// </code></item>
     /// <item><code>
     /// [ContractAnnotation("s:null=>false; =>true,result:notnull; =>false, result:null")]
-    /// public bool TryParse(string s, out Person result)
+    /// internal bool TryParse(string s, out Person result)
     /// </code></item>
     /// </list>
     /// </examples>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class ContractAnnotationAttribute : Attribute
+    internal sealed class ContractAnnotationAttribute : Attribute
     {
-        public ContractAnnotationAttribute([NotNull] string fdt)
-            : this(fdt, false)
-        {
-        }
-
-        public ContractAnnotationAttribute([NotNull] string fdt, bool forceFullStates)
+        internal ContractAnnotationAttribute([NotNull] string fdt, bool forceFullStates = false)
         {
             FDT = fdt;
             ForceFullStates = forceFullStates;
         }
 
-        public string FDT { get; private set; }
-        public bool ForceFullStates { get; private set; }
+
+
+        internal string FDT { get; private set; }
+
+        internal bool ForceFullStates { get; private set; }
+
     }
 
     /// <summary>
@@ -306,7 +311,7 @@ namespace ResharperAnnotations
     /// 
     /// class UsesNoEquality
     /// {
-    ///   public void Test()
+    ///   internal void Test()
     ///   {
     ///     var ca1 = new NoEquality();
     ///     var ca2 = new NoEquality();
@@ -320,7 +325,7 @@ namespace ResharperAnnotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = true)]
-    public sealed class CannotApplyEqualityOperatorAttribute : Attribute { }
+    internal sealed class CannotApplyEqualityOperatorAttribute : Attribute { }
 
     /// <summary>
     /// When applied to a target attribute, specifies a requirement for any type marked with 
@@ -329,23 +334,23 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [BaseTypeRequired(typeof(IComponent)] // Specify requirement
-    /// public class ComponentAttribute : Attribute 
+    /// internal class ComponentAttribute : Attribute 
     /// {}
     /// 
     /// [Component] // ComponentAttribute requires implementing IComponent interface
-    /// public class MyComponent : IComponent
+    /// internal class MyComponent : IComponent
     /// {}
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     [BaseTypeRequired(typeof(Attribute))]
-    public sealed class BaseTypeRequiredAttribute : Attribute
+    internal sealed class BaseTypeRequiredAttribute : Attribute
     {
         /// <summary>
         /// Initializes new instance of BaseTypeRequiredAttribute
         /// </summary>
         /// <param name="baseType">Specifies which types are required</param>
-        public BaseTypeRequiredAttribute(Type baseType)
+        internal BaseTypeRequiredAttribute(Type baseType)
         {
             BaseTypes = new[] { baseType };
         }
@@ -353,7 +358,7 @@ namespace ResharperAnnotations
         /// <summary>
         /// Gets enumerations of specified base types
         /// </summary>
-        public Type[] BaseTypes { get; private set; }
+        internal Type[] BaseTypes { get; private set; }
     }
 
     /// <summary>
@@ -361,35 +366,31 @@ namespace ResharperAnnotations
     /// so this symbol will not be marked as unused (as well as by other usage inspections)
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
-    public sealed class UsedImplicitlyAttribute : Attribute
+    internal sealed class UsedImplicitlyAttribute : Attribute
     {
         [UsedImplicitly]
-        public UsedImplicitlyAttribute()
-            : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
+        internal UsedImplicitlyAttribute()
+            : this(ImplicitUseKindFlags.Default) { }
 
         [UsedImplicitly]
-        public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
+        internal UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags = ImplicitUseTargetFlags.Default)
         {
             UseKindFlags = useKindFlags;
             TargetFlags = targetFlags;
         }
 
         [UsedImplicitly]
-        public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags)
-            : this(useKindFlags, ImplicitUseTargetFlags.Default) { }
-
-        [UsedImplicitly]
-        public UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags)
+        internal UsedImplicitlyAttribute(ImplicitUseTargetFlags targetFlags)
             : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         [UsedImplicitly]
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        internal ImplicitUseKindFlags UseKindFlags { get; private set; }
 
         /// <summary>
         /// Gets value indicating what is meant to be used
         /// </summary>
         [UsedImplicitly]
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        internal ImplicitUseTargetFlags TargetFlags { get; private set; }
     }
 
     /// <summary>
@@ -397,41 +398,35 @@ namespace ResharperAnnotations
     /// to not mark symbols marked with such attributes as unused (as well as by other usage inspections)
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public sealed class MeansImplicitUseAttribute : Attribute
+    internal sealed class MeansImplicitUseAttribute : Attribute
     {
         [UsedImplicitly]
-        public MeansImplicitUseAttribute()
-            : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.Default) { }
+        internal MeansImplicitUseAttribute()
+            : this(ImplicitUseKindFlags.Default) { }
 
         [UsedImplicitly]
-        public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
+        internal MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags = ImplicitUseTargetFlags.Default)
         {
             UseKindFlags = useKindFlags;
             TargetFlags = targetFlags;
         }
 
         [UsedImplicitly]
-        public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags)
-            : this(useKindFlags, ImplicitUseTargetFlags.Default)
-        {
-        }
-
-        [UsedImplicitly]
-        public MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags)
+        internal MeansImplicitUseAttribute(ImplicitUseTargetFlags targetFlags)
             : this(ImplicitUseKindFlags.Default, targetFlags) { }
 
         [UsedImplicitly]
-        public ImplicitUseKindFlags UseKindFlags { get; private set; }
+        internal ImplicitUseKindFlags UseKindFlags { get; private set; }
 
         /// <summary>
         /// Gets value indicating what is meant to be used
         /// </summary>
         [UsedImplicitly]
-        public ImplicitUseTargetFlags TargetFlags { get; private set; }
+        internal ImplicitUseTargetFlags TargetFlags { get; private set; }
     }
 
     [Flags]
-    public enum ImplicitUseKindFlags
+    internal enum ImplicitUseKindFlags
     {
         Default = Access | Assign | InstantiatedWithFixedConstructorSignature,
 
@@ -461,7 +456,7 @@ namespace ResharperAnnotations
     /// Specify what is considered used implicitly when marked with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>
     /// </summary>
     [Flags]
-    public enum ImplicitUseTargetFlags
+    internal enum ImplicitUseTargetFlags
     {
         Default = Itself,
 
@@ -479,13 +474,14 @@ namespace ResharperAnnotations
     }
 
     /// <summary>
-    /// This attribute is intended to mark publicly available API which should not be removed and so is treated as used.
+    /// This attribute is intended to mark internally available API which should not be removed and so is treated as used.
     /// </summary>
     [MeansImplicitUse]
-    public sealed class PublicAPIAttribute : Attribute
+    internal sealed class internalAPIAttribute : Attribute
     {
-        public PublicAPIAttribute() { }
-        public PublicAPIAttribute(string comment) { }
+        internal internalAPIAttribute() { }
+
+        internal internalAPIAttribute(string comment) { }
     }
 
     /// <summary>
@@ -494,7 +490,7 @@ namespace ResharperAnnotations
     /// If the parameter is an enumerable, indicates that it is enumerated while the method is executed.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = true)]
-    public sealed class InstantHandleAttribute : Attribute { }
+    internal sealed class InstantHandleAttribute : Attribute { }
 
 
     /// <summary>
@@ -509,7 +505,7 @@ namespace ResharperAnnotations
     ///   return x*y;
     /// }
     ///
-    /// public void Foo()
+    /// internal void Foo()
     /// {
     ///   const int a=2, b=2;
     ///   Multiply(a, b); // Waring: Return value of pure method is not used
@@ -517,29 +513,29 @@ namespace ResharperAnnotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
-    public sealed class PureAttribute : Attribute { }
+    internal sealed class PureAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that a parameter is a path to a file or a folder within a web project.
     /// Path can be relative or absolute, starting from web root (~).
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class PathReferenceAttribute : Attribute
+    internal class PathReferenceAttribute : Attribute
     {
-        public PathReferenceAttribute() { }
+        internal PathReferenceAttribute() { }
 
         [UsedImplicitly]
-        public PathReferenceAttribute([PathReference] string basePath)
+        internal PathReferenceAttribute([PathReference] string basePath)
         {
             BasePath = basePath;
         }
 
         [UsedImplicitly]
-        public string BasePath { get; private set; }
+        internal string BasePath { get; private set; }
     }
 
     // ASP.NET MVC attributes
-
+    #pragma warning disable 1584,1711,1572,1581,1580
     /// <summary>
     /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC action.
     /// If applied to a method, the MVC action name is calculated implicitly from the context.
@@ -547,14 +543,14 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-    public sealed class AspMvcActionAttribute : Attribute
+    internal sealed class AspMvcActionAttribute : Attribute
     {
         [UsedImplicitly]
-        public string AnonymousProperty { get; private set; }
+        internal string AnonymousProperty { get; private set; }
 
-        public AspMvcActionAttribute() { }
+        internal AspMvcActionAttribute() { }
 
-        public AspMvcActionAttribute(string anonymousProperty)
+        internal AspMvcActionAttribute(string anonymousProperty)
         {
             AnonymousProperty = anonymousProperty;
         }
@@ -566,15 +562,15 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class AspMvcAreaAttribute : PathReferenceAttribute
+    internal sealed class AspMvcAreaAttribute : PathReferenceAttribute
     {
         [UsedImplicitly]
-        public string AnonymousProperty { get; private set; }
+        internal string AnonymousProperty { get; private set; }
 
         [UsedImplicitly]
-        public AspMvcAreaAttribute() { }
+        internal AspMvcAreaAttribute() { }
 
-        public AspMvcAreaAttribute(string anonymousProperty)
+        internal AspMvcAreaAttribute(string anonymousProperty)
         {
             AnonymousProperty = anonymousProperty;
         }
@@ -587,14 +583,14 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)"/> 
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-    public sealed class AspMvcControllerAttribute : Attribute
+    internal sealed class AspMvcControllerAttribute : Attribute
     {
         [UsedImplicitly]
-        public string AnonymousProperty { get; private set; }
+        internal string AnonymousProperty { get; private set; }
 
-        public AspMvcControllerAttribute() { }
+        internal AspMvcControllerAttribute() { }
 
-        public AspMvcControllerAttribute(string anonymousProperty)
+        internal AspMvcControllerAttribute(string anonymousProperty)
         {
             AnonymousProperty = anonymousProperty;
         }
@@ -606,7 +602,7 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Controller.View(String, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class AspMvcMasterAttribute : Attribute { }
+    internal sealed class AspMvcMasterAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. Indicates that a parameter is an MVC model type.
@@ -614,7 +610,7 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Controller.View(String, Object)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class AspMvcModelTypeAttribute : Attribute { }
+    internal sealed class AspMvcModelTypeAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC partial view.
@@ -623,13 +619,13 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-    public sealed class AspMvcPartialViewAttribute : PathReferenceAttribute { }
+    internal sealed class AspMvcPartialViewAttribute : PathReferenceAttribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. Allows disabling all inspections for MVC views within a class or a method.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public sealed class AspMvcSupressViewErrorAttribute : Attribute { }
+    internal sealed class AspMvcSupressViewErrorAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. Indicates that a parameter is an MVC display template.
@@ -637,7 +633,7 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class AspMvcDisplayTemplateAttribute : Attribute { }
+    internal sealed class AspMvcDisplayTemplateAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. Indicates that a parameter is an MVC editor template.
@@ -645,7 +641,7 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class AspMvcEditorTemplateAttribute : Attribute { }
+    internal sealed class AspMvcEditorTemplateAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC view.
@@ -654,7 +650,7 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.Mvc.Controller.View(Object)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-    public sealed class AspMvcViewAttribute : PathReferenceAttribute { }
+    internal sealed class AspMvcViewAttribute : PathReferenceAttribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. When applied to a parameter of an attribute,
@@ -663,7 +659,7 @@ namespace ResharperAnnotations
     /// <example>
     /// <code>
     /// [ActionName("Foo")]
-    /// public ActionResult Login(string returnUrl)
+    /// internal ActionResult Login(string returnUrl)
     /// {
     ///   ViewBag.ReturnUrl = Url.Action("Foo"); // OK
     ///   return RedirectToAction("Bar"); // Error: Cannot resolve action
@@ -671,7 +667,7 @@ namespace ResharperAnnotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    public sealed class AspMvcActionSelectorAttribute : Attribute { }
+    internal sealed class AspMvcActionSelectorAttribute : Attribute { }
 
     // Razor attributes
 
@@ -681,6 +677,6 @@ namespace ResharperAnnotations
     /// <see cref="System.Web.WebPages.WebPageBase.RenderSection(String)"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, Inherited = true)]
-    public sealed class RazorSectionAttribute : Attribute { }
+    internal sealed class RazorSectionAttribute : Attribute { }
 
 }

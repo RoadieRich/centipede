@@ -8,11 +8,11 @@ using Centipede.Properties;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI")]
+    [ActionCategory("UI", displayName="Demo Action")]
     public class DemoAction : Action
     {
         [Localizable(false)]
-        public DemoAction(Dictionary<String, Object> v)
+        public DemoAction(IDictionary<string, object> v)
             : base("Demo Action", v)
         {
             Test2 = "Text";
@@ -35,6 +35,11 @@ namespace Centipede.Actions
         )]
         public Int32 Test1 = 1;
 
+        
+        [ActionArgument(displayName = "Message")]
+        public String MessageText = "This is sent as a message";
+
+
         public void Test1Set(Object sender, EventArgs e)
         {
 
@@ -46,6 +51,8 @@ namespace Centipede.Actions
             }
             textBox.Text = oldVal.ToString(CultureInfo.InvariantCulture);
             Test1 = oldVal;
+
+            OnMessage(new MessageEventArgs(MessageText, MessageLevel.Message));
         }
 
         [ActionArgument(

@@ -6,13 +6,12 @@ using Centipede.Actions;
 using Centipede.Properties;
 using ScintillaNET;
 using Action = Centipede.Action;
-
+using ResharperAnnotations;
 
 namespace PyAction
 {
-// ReSharper disable UnusedMember.Global
+    [UsedImplicitly]
     class BranchDisplayControl : ActionDisplayControl
-// ReSharper restore UnusedMember.Global
     {
         private readonly ComboBox _actionCombo;
         private readonly Scintilla _conditionControl;
@@ -83,7 +82,7 @@ namespace PyAction
 
         private void PopulateComboBox()
         {
-            var actionIter = from Action a in Program.Instance.Actions
+            var actionIter = from Action a in MainWindow.Instance.Core.Actions
                              where a != ThisAction
                              select new
                                     {
@@ -98,7 +97,7 @@ namespace PyAction
         {
             Action a = ThisAction.NextIfTrue;
             PopulateComboBox();
-            _actionCombo.SelectedIndex = Program.Instance.Actions.IndexOf(ThisAction.NextIfTrue);
+            _actionCombo.SelectedIndex = MainWindow.Instance.Core.Actions.IndexOf(ThisAction.NextIfTrue);
             _conditionControl.Text = ThisAction.ConditionSource;
         }
 

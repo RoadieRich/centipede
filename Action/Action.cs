@@ -6,7 +6,7 @@ using System.Linq;
 using System.IO;
 using Centipede.Actions;
 using Centipede.StringInject;
-using ResharperAnnotations;
+
 
 
 [assembly: CLSCompliant(true)]
@@ -17,7 +17,7 @@ namespace Centipede
     /// Base Action class: all actions will subclass this
     /// </summary>
     [Serializable]
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [ResharperAnnotations.UsedImplicitly(ResharperAnnotations.ImplicitUseTargetFlags.WithMembers)]
     public abstract class Action : IDisposable
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace Centipede
         /// </summary>
         /// <param name="name"></param>
         /// <param name="v"></param>
-        protected Action(String name, Dictionary<String, Object> v)
+        protected Action(String name, IDictionary<String, Object> v)
         {
             Name = name;
             Variables = v;
@@ -34,7 +34,7 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        protected readonly Dictionary<String, Object> Variables;
+        protected readonly IDictionary<string, object> Variables;
 
         /// <summary>
         /// 
@@ -104,9 +104,13 @@ namespace Centipede
         /// <exception cref="ActionException">if the action fails</exception>
         public void Run()
         {
+            OnMessage(new MessageEventArgs{
+                Message = string.Format("Processing action {0}", this.Name), 
+                Level = MessageLevel.Notice});
             InitAction();
             DoAction();
             CleanupAction();
+            OnMessage(new MessageEventArgs(string.Format("Finished action {0}", this.Name), MessageLevel.Notice));
         }
 
         /// <summary>
@@ -191,8 +195,6 @@ namespace Centipede
         /// </summary>
         public event AskEvent OnAsk = delegate { };
 
-        // ReSharper restore EventNeverSubscribedTo.Global
-
         /// <summary>
         /// 
         /// </summary>
@@ -204,27 +206,19 @@ namespace Centipede
         /// 
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="title"></param>
-        /// <param name="messageIcon"></param>
-        protected void Message(String message, String title = "Message",
-                               AskEventEnums.MessageIcon messageIcon = AskEventEnums.MessageIcon.Information)
-        {
-            var handler = OnAsk;
-            if (handler != null)
-            {
-                var eventArgs = new AskActionEventArgs
-                                {
-                                        Icon = messageIcon,
-                                        Message = message,
-                                        Title = title,
-                                        Type = AskEventEnums.AskType.OK
-                                };
-                OnAsk(this, eventArgs);
-            }
-        }
-    
+        /// <param name="level"></param>
+        protected void Message(String message,
+                               MessageLevel level)
+        { }
 
-    /// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void MessageHandlerDelegate(object sender, MessageEventArgs e);
+
+        /// <summary>
         /// Append xml code for the action to the given parent element
         /// </summary>
         /// <param name="rootElement">
@@ -253,8 +247,8 @@ namespace Centipede
 
             String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
 
-            element.SetAttribute("Comment", Comment);
-            element.SetAttribute("Assembly", pluginFilePath);
+            element.SetAttribute(@"Comment", Comment);
+            element.SetAttribute(@"Assembly", pluginFilePath);
 
             rootElement.AppendChild(element);
         }
@@ -269,12 +263,12 @@ namespace Centipede
         /// <returns>
         /// 
         /// </returns>
-        public static Action FromXml(XmlElement element, Dictionary<String, Object> variables)
+        public static Action FromXml(XmlElement element, IDictionary<String, Object> variables)
         {
 
             //This is probably broken somewhere.
 
-            Type[] constructorArgumentTypes = new[] { typeof (Dictionary<String, Object>) };
+            Type[] constructorArgumentTypes = new[] { typeof (IDictionary<String, Object>) };
 
             Assembly asm;
 
@@ -290,7 +284,7 @@ namespace Centipede
                 {
                     String asmPath = Path.Combine(location,
                                                   Path.Combine(Properties.Settings.Default.PluginFolder,
-                                                               element.GetAttribute("Assembly")));
+                                                               element.GetAttribute(@"Assembly")));
                     asm = Assembly.LoadFile(asmPath);
                 }
                 else
@@ -306,6 +300,11 @@ namespace Centipede
             if (constructorInfo != null)
             {
                 instance = (Action)constructorInfo.Invoke(new object[] { variables });
+            }
+
+            if (instance == null)
+            {
+                throw new ApplicationException();
             }
 
             instance.PopulateMembersFromXml(element);
@@ -329,15 +328,15 @@ namespace Centipede
         /// <param name="element">The XmlElement describing the action</param>
         protected virtual void PopulateMembersFromXml(XmlElement element)
         {
-            
+
             Type actionType = GetType();
 
-            element.Attributes.RemoveNamedItem("Assembly");
+            element.Attributes.RemoveNamedItem(@"Assembly");
 
             foreach (XmlAttribute attribute in element.Attributes)
             {
                 FieldAndPropertyWrapper field = (FieldAndPropertyWrapper)actionType.GetMember(attribute.Name).First();
-                MethodInfo parseMethod = field.MemberType.GetMethod("Parse", new[] { typeof(String) });
+                MethodInfo parseMethod = field.MemberType.GetMethod(@"Parse", new[] { typeof (String) });
                 field.Set(this,
                           parseMethod != null
                                   ? parseMethod.Invoke(field, new object[] { attribute.Value })
@@ -387,9 +386,64 @@ namespace Centipede
             return action.GetNext();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public event MessageHandlerDelegate MessageHandler;
+
+        [ResharperAnnotations.PublicAPI]
+        protected void OnMessage(MessageEventArgs e)
+        {
+            MessageHandlerDelegate handlerDelegate = MessageHandler;
+            if (handlerDelegate != null)
+            {
+                handlerDelegate(this, e);
+            }
+        }
     }
 
+
     
+    /// <summary>
+    /// 
+    /// </summary>
+    public class MessageEventArgs : EventArgs
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public String Message
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public MessageLevel Level
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public MessageEventArgs()
+        { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="level"></param>
+        public MessageEventArgs(string message, MessageLevel level)
+        {
+            Message = message;
+            Level = level;
+        }
+    }
 
     /// <summary>
     /// <see cref="I18N" /> resources for a class
@@ -399,5 +453,40 @@ namespace Centipede
 
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    [Flags]
+    public enum MessageLevel
+    {
+        /// <summary>
+        /// Error
+        /// </summary>
+        Error = 0x1,
 
+        /// <summary>
+        /// Warning
+        /// </summary>
+        Warning = 0x2,
+
+        /// <summary>
+        /// Message
+        /// </summary>
+        Message = 0x4,
+
+        /// <summary>
+        /// Notice
+        /// </summary>
+        Notice = 0x8,
+
+        /// <summary>
+        /// Variable Changed
+        /// </summary>
+        VariableChange = 0x10,
+
+        /// <summary>
+        /// All levels
+        /// </summary>
+        All = Error | Warning | Message | Notice | VariableChange
+    }
 }

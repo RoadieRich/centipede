@@ -15,7 +15,7 @@ namespace Centipede.Actions
         /// </summary>
         /// <param name="name"></param>
         /// <param name="v"></param>
-        public AskValues(Dictionary<string, object> v)
+        public AskValues(IDictionary<string, object> v)
                 : base("Ask For Values", v)
         { }
 
