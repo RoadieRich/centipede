@@ -33,7 +33,6 @@ namespace Centipede.Actions
         protected ActionDisplayControl()
         {
             Selected = false;
-            // ReSharper disable DoNotCallOverridableMethodsInConstructor
             InitializeComponent();
         }
 
@@ -63,7 +62,6 @@ namespace Centipede.Actions
 
             ThisAction = action;
 
-            // ReSharper restore DoNotCallOverridableMethodsInConstructor
             SetProperties();
 
             StatusToolTip = new ToolTip();
@@ -262,9 +260,8 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-// ReSharper disable MemberCanBePrivate.Global
+        [PublicAPI]
         public bool Selected
-// ReSharper restore MemberCanBePrivate.Global
         {
             get;
             private set;
@@ -290,14 +287,13 @@ namespace Centipede.Actions
         /// Sets the displayed state of the action.
         /// <seealso cref="T:Centipede.Actions.ActionState"/>
         /// </summary>
+        [UsedImplicitly]
         public ActionState State
         {
-            // ReSharper disable UnusedMember.Global
             get
             {
                 return _state;
             }
-            // ReSharper restore UnusedMember.Global
             set
             {
                 switch (value)
@@ -323,16 +319,15 @@ namespace Centipede.Actions
             }
         }
 
-        // ReSharper disable VirtualMemberNeverOverriden.Global
         /// <summary>
         /// The <see cref="T:Centipede.Action"/> this control is displaying.
         /// </summary>
+        
         public virtual Action ThisAction
         {
             get;
             protected set;
         }
-        // ReSharper restore VirtualMemberNeverOverriden.Global
 
         protected ToolTip StatusToolTip;
         /// <summary>

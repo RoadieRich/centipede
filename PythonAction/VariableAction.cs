@@ -16,7 +16,7 @@ namespace PyAction
         /// 
         /// </summary>
         /// <param name="v"></param>
-        public VariableAction(Dictionary<string, object> v)
+        public VariableAction(IDictionary<string, object> v)
                 : base("Variable", v)
         { }
 

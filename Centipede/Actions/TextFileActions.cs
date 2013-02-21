@@ -7,7 +7,7 @@ namespace Centipede.Actions
 {
     abstract class BaseTextFileAction : Action
     {
-        protected BaseTextFileAction(String name, Dictionary<String, Object> v)
+        protected BaseTextFileAction(String name, IDictionary<string, object> v)
             : base(name, v)
         { }
 
@@ -15,7 +15,7 @@ namespace Centipede.Actions
 
     class OpenTextFileAction : BaseTextFileAction
     {
-        public OpenTextFileAction(Dictionary<String, Object> v)
+        public OpenTextFileAction(IDictionary<string, object> v)
             : base("Open Text File", v)
         { }
 
@@ -39,7 +39,7 @@ namespace Centipede.Actions
             FileAccess access = Read ? FileAccess.Read : 0;
             access |= Write ? FileAccess.Write : 0;
 
-            Program.Instance.Variables[FileVar] = File.Open(Filename, FileMode.OpenOrCreate, access);
+            Variables[FileVar] = File.Open(Filename, FileMode.OpenOrCreate, access);
         }
 
 

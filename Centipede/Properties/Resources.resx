@@ -228,4 +228,7 @@
   <data name="MainWindow_AskSave_Do_you_wish_to_save" xml:space="preserve">
     <value>Do you wand to save?</value>
   </data>
+  <data name="BranchAction_BranchAction_Branch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
 </root>

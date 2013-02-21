@@ -12,7 +12,7 @@ namespace TextFile
     public class OpenTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        public OpenTextFile(Dictionary<String, Object> v) 
+        public OpenTextFile(IDictionary<string, object> v) 
             : base("Open Text File", v)
         { }
 

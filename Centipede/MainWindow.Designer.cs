@@ -27,6 +27,12 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.EditTabs = new System.Windows.Forms.TabControl();
             this.InfoTabPage = new System.Windows.Forms.TabPage();
+            this.toolStripContainer4 = new System.Windows.Forms.ToolStripContainer();
+            this.WebBrowser = new System.Windows.Forms.WebBrowser();
+            this.NavigationToolbar = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.ActionsTab = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
@@ -48,9 +54,9 @@
             this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
             this.MessageDataGridView = new System.Windows.Forms.DataGridView();
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.jobDataSet1 = new Centipede.JobDataSet();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -114,6 +120,7 @@
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -122,6 +129,11 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.EditTabs.SuspendLayout();
+            this.InfoTabPage.SuspendLayout();
+            this.toolStripContainer4.ContentPanel.SuspendLayout();
+            this.toolStripContainer4.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer4.SuspendLayout();
+            this.NavigationToolbar.SuspendLayout();
             this.ActionsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -190,9 +202,66 @@
             // 
             // InfoTabPage
             // 
+            this.InfoTabPage.Controls.Add(this.toolStripContainer4);
             resources.ApplyResources(this.InfoTabPage, "InfoTabPage");
             this.InfoTabPage.Name = "InfoTabPage";
             this.InfoTabPage.UseVisualStyleBackColor = true;
+            // 
+            // toolStripContainer4
+            // 
+            this.toolStripContainer4.BottomToolStripPanelVisible = false;
+            // 
+            // toolStripContainer4.ContentPanel
+            // 
+            this.toolStripContainer4.ContentPanel.Controls.Add(this.WebBrowser);
+            resources.ApplyResources(this.toolStripContainer4.ContentPanel, "toolStripContainer4.ContentPanel");
+            resources.ApplyResources(this.toolStripContainer4, "toolStripContainer4");
+            this.toolStripContainer4.LeftToolStripPanelVisible = false;
+            this.toolStripContainer4.Name = "toolStripContainer4";
+            this.toolStripContainer4.RightToolStripPanelVisible = false;
+            // 
+            // toolStripContainer4.TopToolStripPanel
+            // 
+            this.toolStripContainer4.TopToolStripPanel.Controls.Add(this.NavigationToolbar);
+            // 
+            // WebBrowser
+            // 
+            resources.ApplyResources(this.WebBrowser, "WebBrowser");
+            this.WebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.WebBrowser.Name = "WebBrowser";
+            this.WebBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.WebBrowser_Navigating);
+            // 
+            // NavigationToolbar
+            // 
+            resources.ApplyResources(this.NavigationToolbar, "NavigationToolbar");
+            this.NavigationToolbar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.NavigationToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
+            this.toolStripButton3,
+            this.toolStripButton2});
+            this.NavigationToolbar.Name = "NavigationToolbar";
+            this.NavigationToolbar.Stretch = true;
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.toolStripButton1, "toolStripButton1");
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.toolStripButton3, "toolStripButton3");
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            resources.ApplyResources(this.toolStripButton2, "toolStripButton2");
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // ActionsTab
             // 
@@ -357,9 +426,9 @@
             this.MessageDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MessageDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timestampDataGridViewTextBoxColumn,
-            this.actionDataGridViewTextBoxColumn,
             this.levelDataGridViewTextBoxColumn,
-            this.messageDataGridViewTextBoxColumn});
+            this.messageDataGridViewTextBoxColumn,
+            this.actionDataGridViewTextBoxColumn});
             this.MessageDataGridView.DataSource = this.messagesBindingSource;
             resources.ApplyResources(this.MessageDataGridView, "MessageDataGridView");
             this.MessageDataGridView.Name = "MessageDataGridView";
@@ -372,12 +441,6 @@
             resources.ApplyResources(this.timestampDataGridViewTextBoxColumn, "timestampDataGridViewTextBoxColumn");
             this.timestampDataGridViewTextBoxColumn.Name = "timestampDataGridViewTextBoxColumn";
             // 
-            // actionDataGridViewTextBoxColumn
-            // 
-            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
-            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
-            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
-            // 
             // levelDataGridViewTextBoxColumn
             // 
             this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
@@ -389,6 +452,12 @@
             this.messageDataGridViewTextBoxColumn.DataPropertyName = "Message";
             resources.ApplyResources(this.messageDataGridViewTextBoxColumn, "messageDataGridViewTextBoxColumn");
             this.messageDataGridViewTextBoxColumn.Name = "messageDataGridViewTextBoxColumn";
+            // 
+            // actionDataGridViewTextBoxColumn
+            // 
+            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
+            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
+            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
             // 
             // messagesBindingSource
             // 
@@ -456,11 +525,18 @@
             // 
             // VarDataGridView
             // 
+            this.VarDataGridView.AllowUserToAddRows = false;
+            this.VarDataGridView.AllowUserToDeleteRows = false;
+            this.VarDataGridView.AllowUserToResizeRows = false;
+            this.VarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.VarDataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VarDataGridView.ContextMenuStrip = this.VarsContextMenu;
+            this.VarDataGridView.ColumnHeadersVisible = false;
             resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
             this.VarDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.VarDataGridView.Name = "VarDataGridView";
+            this.VarDataGridView.ReadOnly = true;
+            this.VarDataGridView.RowHeadersVisible = false;
             // 
             // RunButton
             // 
@@ -794,6 +870,12 @@
             resources.ApplyResources(this.miniToolStrip, "miniToolStrip");
             this.miniToolStrip.Name = "miniToolStrip";
             // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Action";
+            resources.ApplyResources(this.dataGridViewTextBoxColumn1, "dataGridViewTextBoxColumn1");
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -817,6 +899,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.EditTabs.ResumeLayout(false);
+            this.InfoTabPage.ResumeLayout(false);
+            this.toolStripContainer4.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer4.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer4.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer4.ResumeLayout(false);
+            this.toolStripContainer4.PerformLayout();
+            this.NavigationToolbar.ResumeLayout(false);
+            this.NavigationToolbar.PerformLayout();
             this.ActionsTab.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -856,11 +946,6 @@
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
         internal FavouriteJobs favouriteJobs1;
         private System.Windows.Forms.BindingSource messagesBindingSource;
-        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
-        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TabControl RunTabs;
@@ -927,6 +1012,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn actionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn messageDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer4;
+        private System.Windows.Forms.WebBrowser WebBrowser;
+        private System.Windows.Forms.ToolStrip NavigationToolbar;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     }
 }
 

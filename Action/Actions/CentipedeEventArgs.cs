@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ResharperAnnotations;
 
 
 namespace Centipede.Actions
@@ -7,9 +8,7 @@ namespace Centipede.Actions
     /// <summary>
     /// 
     /// </summary>
-// ReSharper disable ClassNeverInstantiated.Global
     public class CentipedeEventArgs : EventArgs
-// ReSharper restore ClassNeverInstantiated.Global
     {
         /// <summary>
         /// 
@@ -33,10 +32,10 @@ namespace Centipede.Actions
         /// </summary>
         private readonly Dictionary<string, object> _variables;
 
-// ReSharper restore MemberCanBePrivate.Global
         /// <summary>
         /// 
         /// </summary>
+        [PublicAPI]
         public Dictionary<string, object> Variables
         {
             get

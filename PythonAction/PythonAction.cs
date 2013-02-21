@@ -21,7 +21,7 @@ namespace PyAction
             // ReSharper restore ClassNeverInstantiated.Global
     {
 
-        public PythonAction(Dictionary<String, Object> v)
+        public PythonAction(IDictionary<String, Object> v)
                 : base("Python Action", v)
         { }
 

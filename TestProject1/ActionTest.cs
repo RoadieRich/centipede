@@ -163,7 +163,7 @@ namespace TestProject1
             string message = string.Empty; // TODO: Initialize to an appropriate value
             string title = string.Empty; // TODO: Initialize to an appropriate value
             const AskEventEnums.MessageIcon messageIcon = new AskEventEnums.MessageIcon(); // TODO: Initialize to an appropriate value
-            target.Message(message, title, messageIcon);
+            //target.Message(message, title, messageIcon);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 

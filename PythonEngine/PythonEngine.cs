@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
+using ResharperAnnotations;
 
 
 namespace PythonEngine
@@ -10,6 +11,7 @@ namespace PythonEngine
     /// <summary>
     ///     The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
     /// </summary>
+    //[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class PythonEngine
     {
         private readonly ScriptEngine _pyEngine;
@@ -55,7 +57,7 @@ namespace PythonEngine
         /// <param name="scope">(Optional) the scope to evaluate the action in</param>
         /// <exception cref="PythonException"></exception>
         /// <returns>The result of the expression, coerced to type T</returns>
-        // ReSharper disable UnusedMember.Global
+        
         public T Evaluate<T>(String expression, PythonScope scope = null)
         {
             ScriptScope myscope = scope == null ? _pyScope : scope.Scope;
@@ -193,6 +195,7 @@ namespace PythonEngine
     /// <summary>
     /// 
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class PythonScope
     {
         /// <summary>

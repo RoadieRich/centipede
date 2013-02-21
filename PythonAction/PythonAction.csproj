@@ -86,6 +86,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PythonDisplayControl.resx</DependentUpon>
     </Compile>
+    <Compile Include="ResharperAttributes.cs" />
     <Compile Include="VariableAction.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +99,7 @@
     <ProjectReference Include="..\Centipede\Centipede.csproj">
       <Project>{3985334B-E51C-4F9A-A80A-B419E1AEF523}</Project>
       <Name>Centipede</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\PythonEngine\PythonEngine.csproj">
       <Project>{A67D27AC-3393-42F7-9FE8-179751FCE732}</Project>

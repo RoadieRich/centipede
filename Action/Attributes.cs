@@ -11,11 +11,13 @@ namespace Centipede
     [MeansImplicitUse]
     public sealed class ActionArgumentAttribute : Attribute
     {
-        // ReSharper disable InconsistentNaming        
+
+        // ReSharper disable InconsistentNaming
         /// <summary>
         /// </summary>
         [CanBeNull]
         [UsedImplicitly]
+        [PublicAPI]
         public string displayControl;
 
         /// <summary>
@@ -60,7 +62,6 @@ namespace Centipede
     public sealed class ActionCategoryAttribute : Attribute
     {
         // ReSharper disable InconsistentNaming
-        // ReSharper disable UnassignedField.Global
 
         /// <summary>
         ///     the category tab to add the action to
