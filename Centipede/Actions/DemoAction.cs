@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using Centipede.Properties;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -12,8 +13,8 @@ namespace Centipede.Actions
     public class DemoAction : Action
     {
         [Localizable(false)]
-        public DemoAction(IDictionary<string, object> v)
-            : base("Demo Action", v)
+        public DemoAction(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Demo Action", v, c)
         {
             Test2 = "Text";
         }
@@ -26,6 +27,7 @@ namespace Centipede.Actions
                            ),
                            Resources.DemoAction_DoAction_Demo_Action_executed
             );
+            OnMessage(new MessageEventArgs(MessageText, MessageLevel.Message));
         }
 
         [ActionArgument(

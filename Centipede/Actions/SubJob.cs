@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -16,8 +15,9 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         /// <param name="v"></param>
-        public SubJob(IDictionary<string, object> v)
-                : base("Subjob", v)
+        /// <param name="c"></param>
+        public SubJob(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Subjob", v,c)
         { }
 
         
@@ -39,17 +39,17 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            CentipedeCore core = new CentipedeCore();
+            CentipedeCore core = new CentipedeCore(null);
 
             foreach (String inputVarName in InputVars.Split(',').Select(s => s.Trim()))
             {
-                core.Variables.Add(inputVarName, Variables[inputVarName]);
+                core.Variables.AddVariablesTableRow(inputVarName, Variables[inputVarName]);
             }
 
-            core.LoadJob(ParseStringForVariable(JobFileName));
+            core.Job = core.LoadJob(ParseStringForVariable(JobFileName));
 
             MainWindow newMain = new MainWindow(core);
-            newMain.FormClosed += delegate(object sender, FormClosedEventArgs args)
+            newMain.FormClosed += delegate
                                   {
                                       foreach (var outputVar in OutputVars.Split(',').Select(s => s.Trim()))
                                       {

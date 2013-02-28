@@ -226,9 +226,19 @@
     <value>Error occurred in </value>
   </data>
   <data name="MainWindow_AskSave_Do_you_wish_to_save" xml:space="preserve">
-    <value>Do you wand to save?</value>
+    <value>Do you want to save?</value>
   </data>
   <data name="BranchAction_BranchAction_Branch" xml:space="preserve">
     <value>Branch</value>
+  </data>
+  <data name="CentipedeCore_RunJob_FatalError" xml:space="preserve">
+    <value>Fatal error: cannot continue
+{0}</value>
+  </data>
+  <data name="MainWindow_VariableUpdated" xml:space="preserve">
+    <value>Variable {0}: {1} - {2}</value>
+    <comment>{0}: Message
+{1}: Var name
+{2}: value</comment>
   </data>
 </root>

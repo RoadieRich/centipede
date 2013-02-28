@@ -146,7 +146,9 @@ namespace PythonEngine
         /// <returns></returns>
         public PythonScope GetNewScope(IDictionary<String, Object> variables = null)
         {
-            return new PythonScope(_pyEngine.CreateScope(variables));
+            return variables != null && variables.Count < 1
+                           ? new PythonScope(this._pyScope)
+                           : new PythonScope(this._pyEngine.CreateScope(variables));
         }
 
         #region Singleton handling code

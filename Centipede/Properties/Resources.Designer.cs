@@ -141,6 +141,16 @@ namespace Centipede.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Fatal error: cannot continue
+        ///{0}.
+        /// </summary>
+        public static string CentipedeCore_RunJob_FatalError {
+            get {
+                return ResourceManager.GetString("CentipedeCore_RunJob_FatalError", resourceCulture);
+            }
+        }
+        
         public static System.Drawing.Bitmap Complete_OK {
             get {
                 object obj = ResourceManager.GetObject("Complete_OK", resourceCulture);
@@ -179,7 +189,7 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you wand to save?.
+        ///   Looks up a localized string similar to Do you want to save?.
         /// </summary>
         public static string MainWindow_AskSave_Do_you_wish_to_save {
             get {
@@ -346,6 +356,15 @@ namespace Centipede.Properties {
         public static string MainWindow_UpdateHandlerDone_Completed {
             get {
                 return ResourceManager.GetString("MainWindow_UpdateHandlerDone_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable {0}: {1} - {2}.
+        /// </summary>
+        public static string MainWindow_VariableUpdated {
+            get {
+                return ResourceManager.GetString("MainWindow_VariableUpdated", resourceCulture);
             }
         }
         

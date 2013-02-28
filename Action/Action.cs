@@ -4,9 +4,10 @@ using System.Xml;
 using System.Reflection;
 using System.Linq;
 using System.IO;
+using System.Xml.XPath;
 using Centipede.Actions;
 using Centipede.StringInject;
-
+using CentipedeInterfaces;
 
 
 [assembly: CLSCompliant(true)]
@@ -18,17 +19,19 @@ namespace Centipede
     /// </summary>
     [Serializable]
     [ResharperAnnotations.UsedImplicitly(ResharperAnnotations.ImplicitUseTargetFlags.WithMembers)]
-    public abstract class Action : IDisposable
+    public abstract class Action : IDisposable, IAction
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="v"></param>
-        protected Action(String name, IDictionary<String, Object> v)
+        /// <param name="core"></param>
+        protected Action(String name, IDictionary<String, Object> v, ICentipedeCore core)
         {
             Name = name;
             Variables = v;
+            _core = core;
         }
 
         /// <summary>
@@ -36,15 +39,12 @@ namespace Centipede
         /// </summary>
         protected readonly IDictionary<string, object> Variables;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public readonly String Name;
+        private ICentipedeCore _core;
 
         /// <summary>
         /// 
         /// </summary>
-        public String Comment = "";
+        public String Comment { get; set; }
 
         /// <summary>
         /// Gets or sets the object that contains data associated with tje action.
@@ -65,7 +65,12 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public Action Next;
+        public IAction Next { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// Override in <see langword="abstract" /> subclasses to allow code to
@@ -89,6 +94,7 @@ namespace Centipede
         /// <exception cref="ActionException">
         /// the action cannot be completed
         /// </exception>
+        /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected abstract void DoAction();
 
         /// <summary>
@@ -105,12 +111,12 @@ namespace Centipede
         public void Run()
         {
             OnMessage(new MessageEventArgs{
-                Message = string.Format("Processing action {0}", this.Name), 
+                Message = string.Format("Processing action {0}", Name), 
                 Level = MessageLevel.Notice});
             InitAction();
             DoAction();
             CleanupAction();
-            OnMessage(new MessageEventArgs(string.Format("Finished action {0}", this.Name), MessageLevel.Notice));
+            OnMessage(new MessageEventArgs(string.Format("Finished action {0}", Name), MessageLevel.Notice));
         }
 
         /// <summary>
@@ -135,7 +141,7 @@ namespace Centipede
         /// The next Action to be processed, or <see langword="null" /> if this
         /// is the last action in the job.
         /// </returns>
-        public virtual Action GetNext()
+        public virtual IAction GetNext()
         {
             return Next;
         }
@@ -193,14 +199,8 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public event AskEvent OnAsk = delegate { };
+        public event AskEvent OnAsk;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void AskEvent(object sender, AskActionEventArgs e);
 
         /// <summary>
         /// 
@@ -211,12 +211,6 @@ namespace Centipede
                                MessageLevel level)
         { }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public delegate void MessageHandlerDelegate(object sender, MessageEventArgs e);
 
         /// <summary>
         /// Append xml code for the action to the given parent element
@@ -260,15 +254,22 @@ namespace Centipede
         /// <param name="variables">
         /// Program.Variables, passed to the Action.ctor
         /// </param>
+        /// <param name="core"></param>
         /// <returns>
         /// 
         /// </returns>
-        public static Action FromXml(XmlElement element, IDictionary<String, Object> variables)
+        public static Action FromXml(XmlElement element, IDictionary<String, Object> variables, ICentipedeCore core)
+        {
+
+            return FromXml(element.CreateNavigator(), variables, core);
+        }
+
+        public static Action FromXml(XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
         {
 
             //This is probably broken somewhere.
 
-            Type[] constructorArgumentTypes = new[] { typeof (IDictionary<String, Object>) };
+            Type[] constructorArgumentTypes = new[] { typeof(IDictionary<String, Object>), typeof(ICentipedeCore) };
 
             Assembly asm;
 
@@ -284,7 +285,7 @@ namespace Centipede
                 {
                     String asmPath = Path.Combine(location,
                                                   Path.Combine(Properties.Settings.Default.PluginFolder,
-                                                               element.GetAttribute(@"Assembly")));
+                                                               element.SelectSingleNode("@Assembly").Value));
                     asm = Assembly.LoadFile(asmPath);
                 }
                 else
@@ -299,7 +300,7 @@ namespace Centipede
             ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
             if (constructorInfo != null)
             {
-                instance = (Action)constructorInfo.Invoke(new object[] { variables });
+                instance = (Action)constructorInfo.Invoke(new object[] { variables, core });
             }
 
             if (instance == null)
@@ -326,15 +327,19 @@ namespace Centipede
         /// non-trivially overridden.
         /// </remarks>
         /// <param name="element">The XmlElement describing the action</param>
-        protected virtual void PopulateMembersFromXml(XmlElement element)
+        protected virtual void PopulateMembersFromXml(XPathNavigator element)
         {
 
             Type actionType = GetType();
 
-            element.Attributes.RemoveNamedItem(@"Assembly");
+            //element.Attributes.RemoveNamedItem(@"Assembly");
 
-            foreach (XmlAttribute attribute in element.Attributes)
+            foreach (XPathNavigator attribute in element.Select(@"./@*"))
             {
+                if (attribute.Name == "Assembly")
+                {
+                    continue;
+                }
                 FieldAndPropertyWrapper field = (FieldAndPropertyWrapper)actionType.GetMember(attribute.Name).First();
                 MethodInfo parseMethod = field.MemberType.GetMethod(@"Parse", new[] { typeof (String) });
                 field.Set(this,
@@ -383,7 +388,7 @@ namespace Centipede
         /// </returns>
         public static Action operator ++(Action action)
         {
-            return action.GetNext();
+            return action.GetNext() as Action;
         }
 
         /// <summary>
@@ -400,51 +405,28 @@ namespace Centipede
                 handlerDelegate(this, e);
             }
         }
+
+        /// <summary>
+        /// Returns the core that contains the <see cref="Action"/>.
+        /// </summary>
+        /// <returns></returns>
+        public ICentipedeCore GetCurrentCore()
+        {
+            return _core;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override String ToString()
+        {
+            return String.IsNullOrWhiteSpace(Comment) ? Name : String.Format("{0} ({1})", Name, Comment);
+        }
     }
 
 
     
-    /// <summary>
-    /// 
-    /// </summary>
-    public class MessageEventArgs : EventArgs
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public String Message
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public MessageLevel Level
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public MessageEventArgs()
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="level"></param>
-        public MessageEventArgs(string message, MessageLevel level)
-        {
-            Message = message;
-            Level = level;
-        }
-    }
-
     /// <summary>
     /// <see cref="I18N" /> resources for a class
     /// </summary>
@@ -453,40 +435,4 @@ namespace Centipede
 
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    [Flags]
-    public enum MessageLevel
-    {
-        /// <summary>
-        /// Error
-        /// </summary>
-        Error = 0x1,
-
-        /// <summary>
-        /// Warning
-        /// </summary>
-        Warning = 0x2,
-
-        /// <summary>
-        /// Message
-        /// </summary>
-        Message = 0x4,
-
-        /// <summary>
-        /// Notice
-        /// </summary>
-        Notice = 0x8,
-
-        /// <summary>
-        /// Variable Changed
-        /// </summary>
-        VariableChange = 0x10,
-
-        /// <summary>
-        /// All levels
-        /// </summary>
-        All = Error | Warning | Message | Notice | VariableChange
-    }
 }

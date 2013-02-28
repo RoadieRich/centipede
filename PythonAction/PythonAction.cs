@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Xml;
+using System.Xml.XPath;
 using Centipede;
+using CentipedeInterfaces;
 using PythonEngine;
 using Action = Centipede.Action;
 
@@ -17,12 +19,12 @@ namespace PyAction
             displayControl = @"PythonDisplayControl"
             )]
     // ReSharper disable ClassNeverInstantiated.Global
-    public class PythonAction : Centipede.Action
+    public class PythonAction : Action
             // ReSharper restore ClassNeverInstantiated.Global
     {
 
-        public PythonAction(IDictionary<String, Object> v)
-                : base("Python Action", v)
+        public PythonAction(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Python Action", v, c)
         { }
 
         [ActionArgument(usage = "Source code to be executed")]
@@ -95,10 +97,10 @@ namespace PyAction
             rootElement.AppendChild(element);
         }
 
-        protected override void PopulateMembersFromXml(XmlElement element)
+        protected override void PopulateMembersFromXml(XPathNavigator element)
         {
-            Source = element.InnerText;
-            Comment = element.GetAttribute("Comment");
+            Source = element.Value;
+            Comment = element.SelectSingleNode("@Comment").Value;
         }
     }
 }

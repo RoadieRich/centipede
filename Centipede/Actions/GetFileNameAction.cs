@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.ComponentModel;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -9,8 +10,8 @@ namespace Centipede.Actions
     [ActionCategory("UI", displayName="Get Filename")]
     class GetFileNameAction : Action
     {
-        public GetFileNameAction(IDictionary<string, object> v)
-            : base("Get Filename", v)
+        public GetFileNameAction(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Get Filename", v, c)
         {
             _handler = GetFileNameDialogue_FileOk;
         }

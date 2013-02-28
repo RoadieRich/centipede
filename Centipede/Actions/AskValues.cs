@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -13,10 +13,10 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="v"></param>
-        public AskValues(IDictionary<string, object> v)
-                : base("Ask For Values", v)
+        /// <param name="c"></param>
+        public AskValues(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Ask For Values", v, c)
         { }
 
 
@@ -58,8 +58,7 @@ namespace Centipede.Actions
                             {
                                     Text = varName
                             };
-                Object value;
-                Variables.TryGetValue(varName, out value);
+                Object value = Variables[varName];
 
                 TextBox tb = new TextBox
                              {

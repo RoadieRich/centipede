@@ -477,11 +477,11 @@ namespace ResharperAnnotations
     /// This attribute is intended to mark internally available API which should not be removed and so is treated as used.
     /// </summary>
     [MeansImplicitUse]
-    internal sealed class internalAPIAttribute : Attribute
+    internal sealed class PublicAPIAttribute : Attribute
     {
-        internal internalAPIAttribute() { }
+        internal PublicAPIAttribute() { }
 
-        internal internalAPIAttribute(string comment) { }
+        internal PublicAPIAttribute(string comment) { }
     }
 
     /// <summary>

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Win32;
 
 
 namespace Centipede
@@ -32,18 +29,19 @@ namespace Centipede
         private void AddButton_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = openFileDialog1.ShowDialog(this);
-            if (dialogResult == DialogResult.OK)
+            if (dialogResult != DialogResult.OK)
             {
-                foreach (string fileName in openFileDialog1.FileNames)
-                {
-                    AddFavourite(fileName);
-                }
+                return;
+            }
+            foreach (string fileName in this.openFileDialog1.FileNames)
+            {
+                AddFavourite(fileName);
             }
         }
 
         private void AddFavourite(string fileName)
         {
-            _favouriteJobs.Favourites.AddFavouritesRow(GetJobName(fileName), fileName);
+            this._favouriteJobs.Favourites.AddFavouritesRow(GetJobName(fileName), fileName);
         }
 
         private static string GetJobName(string fileName)
@@ -75,13 +73,7 @@ namespace Centipede
 
         public static String GetFaveFilename()
         {
-            var filename = Registry.CurrentUser.GetValue(@"Chemineer\Centipede\FavouriteFile") as String;
-
-            if (filename == null)
-            {
-                Registry.CurrentUser.SetValue(@"Chemineer\Centipede\FavouriteFile", @"%APPDATA%\Centipede\favourites.xml");
-                filename = Environment.ExpandEnvironmentVariables(@"%APPDATA%\Centipede\favourites.xml");
-            }
+            String filename = Properties.Settings.Default.FavouritesFile;
             return Environment.ExpandEnvironmentVariables(filename);
         }
 
@@ -130,46 +122,5 @@ namespace Centipede
                                  .MoveUp();
         }
 
-    }
-
-    public struct Job
-    {
-        public String Filename;
-        public String Name;
-    }
-
-    partial class Extensions
-    {
-        public static void MoveUp(this FavouriteJobs.FavouritesRow row)
-        {
-            row.Move(1);
-        }
-
-        public static void MoveDown(this FavouriteJobs.FavouritesRow row)
-        {
-            row.Move(-1);
-        }
-
-        public static void Move(this FavouriteJobs.FavouritesRow row, int delta)
-        {
-            FavouriteJobs.FavouritesDataTable table = (FavouriteJobs.FavouritesDataTable)row.Table;
-
-            int oldIndex = table.Rows.IndexOf(row);
-            if (oldIndex <= 0)
-            {
-                return;
-            }
-            table.Rows.Remove(row);
-            int newIndex = oldIndex + delta;
-            table.Rows.InsertAt(row, newIndex.Clamp(0, table.Rows.Count));
-
-        }
-
-
-
-        private static int Clamp(this int i, int min, int max)
-        {
-            return Math.Min(Math.Max(i, min), max);
-        }
     }
 }
