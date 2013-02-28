@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Centipede;
 using Centipede.Actions;
 using Centipede.Properties;
+using CentipedeInterfaces;
 using ScintillaNET;
 using Action = Centipede.Action;
 using ResharperAnnotations;
@@ -16,7 +17,7 @@ namespace PyAction
         private readonly ComboBox _actionCombo;
         private readonly Scintilla _conditionControl;
 
-        public BranchDisplayControl(Action action)
+        public BranchDisplayControl(IAction action)
                 : base(action, false)
         {
             InitializeComponent();
@@ -82,7 +83,7 @@ namespace PyAction
 
         private void PopulateComboBox()
         {
-            var actionIter = from Action a in MainWindow.Instance.Core.Actions
+            var actionIter = from Action a in MainWindow.Instance.Core.Job.Actions
                              where a != ThisAction
                              select new
                                     {
@@ -97,7 +98,7 @@ namespace PyAction
         {
             Action a = ThisAction.NextIfTrue;
             PopulateComboBox();
-            _actionCombo.SelectedIndex = MainWindow.Instance.Core.Actions.IndexOf(ThisAction.NextIfTrue);
+            _actionCombo.SelectedIndex = MainWindow.Instance.Core.Job.Actions.IndexOf(ThisAction.NextIfTrue);
             _conditionControl.Text = ThisAction.ConditionSource;
         }
 

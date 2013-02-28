@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -14,8 +13,9 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         /// <param name="v"></param>
-        public ExitAction(IDictionary<string, object> v)
-                : base("Exit Centipede", v)
+        /// <param name="c"></param>
+        public ExitAction(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Exit Centipede", v, c)
         { }
 
         /// <summary>

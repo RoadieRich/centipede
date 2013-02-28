@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
@@ -8,8 +9,8 @@ namespace Centipede.Actions
     [ActionCategory("UI", displayName="Show Messagebox")]
     class ShowMessageBox : Action
     {
-        public ShowMessageBox(IDictionary<string, object> v)
-            : base("Show message box", v)
+        public ShowMessageBox(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Show message box", v,c)
         { }
 
         [ActionArgument]

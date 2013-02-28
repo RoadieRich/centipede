@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Centipede;
+using CentipedeInterfaces;
 using Action = Centipede.Action;
 
 // ReSharper disable UnusedMember.Global
@@ -16,8 +17,9 @@ namespace PyAction
         /// 
         /// </summary>
         /// <param name="v"></param>
-        public VariableAction(IDictionary<string, object> v)
-                : base("Variable", v)
+        /// <param name="c"></param>
+        public VariableAction(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Variable", v, c)
         { }
 
         [ActionArgument]

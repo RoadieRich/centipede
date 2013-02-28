@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
 {
     abstract class BaseTextFileAction : Action
     {
-        protected BaseTextFileAction(String name, IDictionary<string, object> v)
-            : base(name, v)
+        protected BaseTextFileAction(String name, IDictionary<string, object> v, ICentipedeCore c)
+            : base(name, v, c)
         { }
 
     }
 
     class OpenTextFileAction : BaseTextFileAction
     {
-        public OpenTextFileAction(IDictionary<string, object> v)
-            : base("Open Text File", v)
+        public OpenTextFileAction(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Open Text File", v, c)
         { }
 
         [ActionArgument(usage="Filename to open")]

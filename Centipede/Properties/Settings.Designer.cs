@@ -31,5 +31,137 @@ namespace Centipede.Properties {
                 return ((string)(this["PluginFolder"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultAuthor {
+            get {
+                return ((string)(this["DefaultAuthor"]));
+            }
+            set {
+                this["DefaultAuthor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DefaultContact {
+            get {
+                return ((string)(this["DefaultContact"]));
+            }
+            set {
+                this["DefaultContact"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("%APPDATA%\\Centipede\\favourites.xml")]
+        public string FavouritesFile {
+            get {
+                return ((string)(this["FavouritesFile"]));
+            }
+            set {
+                this["FavouritesFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("972")]
+        public int MainWindowWidth {
+            get {
+                return ((int)(this["MainWindowWidth"]));
+            }
+            set {
+                this["MainWindowWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("909")]
+        public int MainWindowHeight {
+            get {
+                return ((int)(this["MainWindowHeight"]));
+            }
+            set {
+                this["MainWindowHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("577")]
+        public int SplitContainer1Point {
+            get {
+                return ((int)(this["SplitContainer1Point"]));
+            }
+            set {
+                this["SplitContainer1Point"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("364")]
+        public int SplitContainer3Point {
+            get {
+                return ((int)(this["SplitContainer3Point"]));
+            }
+            set {
+                this["SplitContainer3Point"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("320")]
+        public int SplitContainer2Point {
+            get {
+                return ((int)(this["SplitContainer2Point"]));
+            }
+            set {
+                this["SplitContainer2Point"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point MainWindowLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["MainWindowLocation"]));
+            }
+            set {
+                this["MainWindowLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Maximized")]
+        public global::System.Windows.Forms.FormWindowState MainWindowState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["MainWindowState"]));
+            }
+            set {
+                this["MainWindowState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public global::CentipedeInterfaces.MessageLevel MessageFilterSetting {
+            get {
+                return ((global::CentipedeInterfaces.MessageLevel)(this["MessageFilterSetting"]));
+            }
+            set {
+                this["MessageFilterSetting"] = value;
+            }
+        }
     }
 }

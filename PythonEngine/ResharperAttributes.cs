@@ -289,8 +289,6 @@ namespace ResharperAnnotations
             ForceFullStates = forceFullStates;
         }
 
-
-
         internal string FDT { get; private set; }
 
         internal bool ForceFullStates { get; private set; }

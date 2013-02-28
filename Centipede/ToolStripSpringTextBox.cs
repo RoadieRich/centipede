@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Centipede
@@ -31,11 +32,8 @@ namespace Centipede
             // items currently displayed in the owning ToolStrip. 
             Int32 springBoxCount = 0;
 
-            foreach (ToolStripItem item in Owner.Items)
+            foreach (ToolStripItem item in Owner.Items.Cast<ToolStripItem>().Where(item => !item.IsOnOverflow))
             {
-                // Ignore items on the overflow menu. 
-                if (item.IsOnOverflow) continue;
-
                 if (item is ToolStripSpringTextBox)
                 {
                     // For ToolStripSpringTextBox items, increment the count and  

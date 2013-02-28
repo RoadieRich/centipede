@@ -51,6 +51,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
@@ -65,6 +66,11 @@
     <ProjectReference Include="..\Action\Action.csproj">
       <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
       <Name>Action</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CentipedeCore\CentipedeInterfaces.csproj">
+      <Project>{D34FC450-055E-4C4E-8293-C324EF5216FD}</Project>
+      <Name>CentipedeInterfaces</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

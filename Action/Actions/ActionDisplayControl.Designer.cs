@@ -298,7 +298,5 @@ namespace Centipede.Actions
         protected Label NameLabel;
         private ToolStripSeparator toolStripSeparator1;
         private PictureBox ActionIcon;
-
-
     }
 }

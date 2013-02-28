@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +10,13 @@ using System.Runtime.Serialization;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using Centipede.Actions;
 using Centipede.Properties;
+
+using CentipedeInterfaces;
+using ResharperAnnotations;
+
 
 //      \,,/
 //      (..)
@@ -38,20 +42,61 @@ namespace Centipede
     public partial class MainWindow : Form
     {
         public static MainWindow Instance;
-        private readonly JobDataSet _dataSet = new JobDataSet();
+        //private readonly JobDataSet _dataSet = new JobDataSet();
 
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-        private bool _dirty;
 
-        public MainWindow(CentipedeCore centipedeCore)
+        [UsedImplicitly]
+        private Dictionary<string, string> _arguments;
+
+        private bool _dirty;
+        private ToolStripSpringTextBox _urlTextbox;
+        private MessageLevel _displayedLevels;
+
+        public MainWindow(CentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
             InitializeComponent();
             Core = centipedeCore;
             Instance = this;
-            ActionFactory.MessageHandlerDelegate = (sender, e) => jobDataSet1.Messages.AddMessagesRow(DateTime.Now,
-                                                                                                      sender as Action,
-                                                                                                      e.Message,
-                                                                                                      e.Level);
+            ActionFactory.MessageHandlerDelegate = OnMessageHandlerDelegate;
+
+            this._arguments = arguments;
+
+            Core.Variables.RowChanged += OnVariablesOnRowChanged;
+
+
+
+            _dataSet.Messages.RowChanged += delegate
+                                            {
+                                                this.MessageDataGridView.Invalidate();
+                                                this.MessageDataGridView.Update();
+                                            };
+
+            MessageDataGridView.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs args)
+                                                  {
+                                                      if (args.Value is IAction)
+                                                          args.Value = args.Value.ToString();
+                                                  };
+
+            DisplayedLevels = Settings.Default.MessageFilterSetting;
+        }
+
+        private void OnVariablesOnRowChanged(object sender, DataRowChangeEventArgs args)
+        {
+            DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
+            String message = string.Format("{1} variable {{{0}}} : {2}", row.Name, args.Action.ToString(), row.Value);
+            System.Action action =
+                    () => this._dataSet.Messages.AddMessagesRow(DateTime.Now, message, this.Core.CurrentAction,
+                                                                MessageLevel.VariableChange,
+                                                                DisplayedLevels.HasFlag(MessageLevel.VariableChange));
+
+            Invoke(action);
+        }
+
+        private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
+        {
+            this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
+                                                  DisplayedLevels.HasFlag(e.Level));
         }
 
         public override String Text
@@ -65,61 +110,59 @@ namespace Centipede
                 }
                 base.Text = String.Format(@"{2} - {0}{1}", value, dirtyMarker, Resources.MainWindow_Text_Centipede);
             }
+            get
+            {
+                return base.Text;
+            }
         }
 
         private bool Dirty
         {
             get
             {
-                return _dirty;
+                return this._dirty;
             }
             set
             {
-                _dirty = value;
-                Text = Core.JobName;
+                this._dirty = value;
+                Text = Core.Job.Name;
             }
         }
 
-        public CentipedeCore Core
-        {
-            get;
-            
-            [ResharperAnnotations.UsedImplicitly]
-            set;
-        }
+        public CentipedeCore Core { get; private set; }
 
-        private Boolean ErrorHandler(ActionException e, out Action nextAction)
+        private void ErrorHandler(object sender, ActionErrorEventArgs e)
         {
             var messageBuilder = new StringBuilder();
-
-            if (e.ErrorAction != null)
+            ActionException exception = (ActionException)e.Exception;
+            if (exception.ErrorAction != null)
             {
                 //UpdateHandlerDone(e.ErrorAction);
-                var adc = (ActionDisplayControl)e.ErrorAction.Tag;
+                var adc = (ActionDisplayControl)exception.ErrorAction.Tag;
 
-                SetState(adc, ActionState.Error, e.Message);
+                SetState(adc, ActionState.Error, exception.Message);
 
-                if (ActionContainer.InvokeRequired)
+                if (this.ActionContainer.InvokeRequired)
                 {
-                    ActionContainer.Invoke(new Action<Control>(ActionContainer.ScrollControlIntoView), adc);
+                    this.ActionContainer.Invoke(new Action<Control>(this.ActionContainer.ScrollControlIntoView), adc);
                 }
                 else
                 {
-                    ActionContainer.ScrollControlIntoView(adc);
+                    this.ActionContainer.ScrollControlIntoView(adc);
                 }
 
                 messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Error_occurred_in_);
-                messageBuilder.Append(e.ErrorAction.Name).Append(@" (");
-                messageBuilder.Append(e.ErrorAction.Comment).AppendLine(@")");
+                messageBuilder.Append(exception.ErrorAction.Name).Append(@" (");
+                messageBuilder.Append(exception.ErrorAction.Comment).AppendLine(@")");
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Message_was_);
-                messageBuilder.AppendLine(e.Message);
+                messageBuilder.AppendLine(exception.Message);
             }
             else
             {
                 messageBuilder.AppendLine(Resources.MainWindow_ErrorHandler_Error_);
                 messageBuilder.AppendLine();
-                messageBuilder.AppendLine(e.Message);
+                messageBuilder.AppendLine(exception.Message);
             }
 
             DialogResult result = MessageBox.Show(
@@ -129,64 +172,72 @@ namespace Centipede
                                                   MessageBoxIcon.Exclamation
                     );
 
-            if (e.ErrorAction == null)
+            if (exception.ErrorAction == null)
             {
-                nextAction = null;
-                return false;
+                e.NextAction = null;
+                e.Continue = false;
+                return;
             }
             switch (result)
             {
-            case DialogResult.Abort:
-                nextAction = null;
-                return false;
-            case DialogResult.Retry:
-                nextAction = e.ErrorAction;
-                return true;
-            case DialogResult.Ignore:
-                nextAction = e.ErrorAction.GetNext();
-                return true;
-            default:
-                nextAction = null;
-                return false;
+                case DialogResult.Abort:
+                    e.NextAction = null;
+                    e.Continue = false;
+                    break;
+                case DialogResult.Retry:
+                    e.NextAction = exception.ErrorAction;
+                    e.Continue = true;
+                    break;
+                case DialogResult.Ignore:
+                    e.NextAction = exception.ErrorAction.GetNext();
+                    e.Continue = true;
+                    break;
+                default:
+                    e.NextAction = null;
+                    e.Continue = false;
+                    break;
             }
         }
 
-        private void UpdateHandlerDone(Action currentAction)
+        private void UpdateHandlerDone(object sender, ActionEventArgs actionEventArgs)
         {
-            foreach (var v in Core.Variables.ToArray())
-            {
-                if (v.Key.StartsWith(@"_"))
-                {
-                    continue;
-                }
-                JobDataSet.VariablesRow row = _dataSet.Variables.FindByName(v.Key);
-                if (row != null)
-                {
-                    row.Value = v.Value;
-                    //row.SetModified();
-                }
-                else
-                {
-                    _dataSet.Variables.AddVariablesRow(v.Key, v.Value, 0);
-                }
-            }
-            var adc = (ActionDisplayControl)currentAction.Tag;
+            //foreach (var v in Core.Variables.ToArray())
+            //{
+            //    if (v.Key.StartsWith(@"_"))
+            //    {
+            //        continue;
+            //    }
+            //    KeyValuePair<string, object> v1 = v;
+            //    JobDataSet.VariablesRow row = this._dataSet.Variables.Rows
+            //                                      .OfType<JobDataSet.VariablesRow>()
+            //                                      .First(r => r.Name == v1.Key);
+            //    if (row != null)
+            //    {
+            //        row.Value = v.Value;
+            //    }
+            //    else
+            //    {
+            //        this._dataSet.Variables.AddVariablesRow(v.Key, v.Value);
+            //    }
+            //}
+            var adc = (ActionDisplayControl)Core.CurrentAction.Tag;
             SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
-            if (ActionContainer.InvokeRequired)
+            if (this.ActionContainer.InvokeRequired)
             {
-                ActionContainer.Invoke(new Action<Control>(ActionContainer.ScrollControlIntoView), adc);
+                this.ActionContainer.Invoke(new Action<Control>(this.ActionContainer.ScrollControlIntoView), adc);
             }
             else
             {
-                ActionContainer.ScrollControlIntoView(adc);
+                this.ActionContainer.ScrollControlIntoView(adc);
             }
 
             //this is supposed to be a percentage, but this works.
-            backgroundWorker1.ReportProgress(currentAction.Complexity);
+            this.backgroundWorker1.ReportProgress(Core.CurrentAction.Complexity);
+            //UpdateOutputWindow();
         }
 
-        private static void SetState([ResharperAnnotations.NotNull] ActionDisplayControl adc, ActionState state,
+        private static void SetState([NotNull] ActionDisplayControl adc, ActionState state,
                                      String message)
         {
             if (adc.InvokeRequired)
@@ -226,7 +277,7 @@ namespace Centipede
             Core.AddAction(sendingActionFactory.Generate());
         }
 
-        private static void _setActionDisplayedState([ResharperAnnotations.NotNull] ActionDisplayControl adc,
+        private static void _setActionDisplayedState([NotNull] ActionDisplayControl adc,
                                                      ActionState state, String message)
         {
             lock (adc)
@@ -241,33 +292,58 @@ namespace Centipede
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
+            foreach (ToolStripButton button in from MessageLevel value in Enum.GetValues(typeof(MessageLevel))
+                                               where value != MessageLevel.All
+                                               select new ToolStripButton(Enum.GetName(typeof(MessageLevel), value))
+                                                      {
+                                                          CheckOnClick = true,
+                                                          Checked = DisplayedLevels.HasFlag(value),
+                                                          Tag = value
+                                                      })
+            {
+                button.Click += delegate(object sender1, EventArgs e1)
+                                {
+                                    ToolStripButton btn = (ToolStripButton)sender1;
+                                    DisplayedLevels = DisplayedLevels.SetFlag((MessageLevel)btn.Tag,
+                                                                              btn.Checked);
+                                    UpdateOutputWindow();
+                                };
+                this.MessageFilterToolStrip.Items.Add(button);
+            }
 
-            UIActTab.Tag = UIActListBox;
+            this.UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
+
+            this.UIActTab.Tag = this.UIActListBox;
 
             AddToActionTab(typeof(DemoAction));
-            AddToActionTab(typeof (GetFileNameAction));
+            AddToActionTab(typeof(GetFileNameAction));
             AddToActionTab(typeof(ShowMessageBox));
             AddToActionTab(typeof(AskValues));
             AddToActionTab(typeof(ExitAction));
             AddToActionTab(typeof(SubJob));
 
-            _urlTextbox = new ToolStripSpringTextBox();
-            _urlTextbox.KeyUp += UrlTextbox_KeyUp;
-            NavigationToolbar.Stretch = true;
-            NavigationToolbar.Items.Add(_urlTextbox);
-            _urlTextbox.MergeIndex = NavigationToolbar.Items.Count - 2;
+            this._urlTextbox = new ToolStripSpringTextBox();
+            this._urlTextbox.KeyUp += UrlTextbox_KeyUp;
+            this.NavigationToolbar.Stretch = true;
+            this.NavigationToolbar.Items.Add(this._urlTextbox);
+            this._urlTextbox.MergeIndex = this.NavigationToolbar.Items.Count - 2;
             GetActionPlugins();
 
-            VarDataGridView.DataSource = _dataSet.Variables;
-            _dataSet.Variables.VariablesRowChanged += Variables_VariablesRowChanged;
-            _dataSet.Variables.RowDeleted += DataStore_Variables_RowDeleted;
+            this.VarDataGridView.DataSource = Core.Variables;
 
-            foreach (RowStyle s in ActionContainer.RowStyles)
+            //this.VarDataGridView.Columns.Add
+
+
+            //this._dataSet.Variables.VariablesRowChanged += Variables_VariablesRowChanged;
+            //this._dataSet.Variables.RowDeleted += DataStore_Variables_RowDeleted;
+
+            foreach (RowStyle s in this.ActionContainer.RowStyles)
             {
                 s.Height = 20f;
                 s.SizeType = SizeType.AutoSize;
             }
+
+            MessageDataGridView.DataSource = this.messagesBindingSource; //this._messageFilterBindingSource;
 
             Core.ActionCompleted += UpdateHandlerDone;
             Core.BeforeAction += Program_BeforeAction;
@@ -276,69 +352,70 @@ namespace Centipede
             Core.ActionAdded += Program_ActionAdded;
             Core.ActionRemoved += Program_ActionRemoved;
             Core.AfterLoad += Program_AfterLoad;
-            Core.Variables.OnUpdate += VariablesOnOnUpdate;
+            //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
-            using (var file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
+
+
+            using (FileStream file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
             {
-                _favouriteJobsDataStore.Favourites.ReadXml(file);
+                try
+                {
+                    this._favouriteJobsDataStore.Favourites.ReadXml(file);
+                }
+                catch (XmlException)
+                { }
             }
             UpdateFavourites();
 
             Dirty = false;
 
             ActionDisplayControl.SetDirty = delegate { Dirty = true; };
-        }
 
-        private void VariablesOnOnUpdate(string message, string key, object value)
-        {
-            if (Core.CurrentAction == null)
-            {
-                return;
-            }
-            string msg = string.Format("Variable {0}: {1} - {2}", value, key, message);
-            jobDataSet1.Messages.AddMessagesRow(DateTime.Now, Core.CurrentAction, msg,
-                                                MessageLevel.VariableChange);
+            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
+            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
+            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
+            Height = Settings.Default.MainWindowHeight;
+            Width = Settings.Default.MainWindowWidth;
+            Location = Settings.Default.MainWindowLocation;
+            WindowState = Settings.Default.MainWindowState;
         }
-
-        /*
-        private class FaveMenuItems
-        {
-            public ToolStripDropDownItem EditFavourites;
-            public ToolStripSeparator Separator;
-        }
-*/
 
         private void UpdateFavourites()
-        {   
-            FavouritesMenu.DropDownItems.Clear();
+        {
+            this.FavouritesMenu.DropDownItems.Clear();
 
             foreach (
                     ToolStripMenuItem item in
-                            _favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
-                                                                             {
-                                                                                     Tag = job.Filename
-                                                                             }))
+                            this._favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
+                                                                                  {
+                                                                                      Tag = job.Filename
+                                                                                  }))
             {
                 item.Click += ItemOnClick;
-                FavouritesMenu.DropDownItems.Add(item);
+                this.FavouritesMenu.DropDownItems.Add(item);
             }
 
-            FavouritesMenu.DropDownItems.Add(FaveMenuSeparator);
-            FavouritesMenu.DropDownItems.Add(EditFavouritesMenuItem);
+            this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
+            this.FavouritesMenu.DropDownItems.Add(this.EditFavouritesMenuItem);
         }
 
         private void ItemOnClick(object sender, EventArgs eventArgs)
         {
-            ToolStripDropDownItem item = (ToolStripDropDownItem)sender;
-            AskSave();
-            Core.LoadJob((String)item.Tag);
+            var item = (ToolStripDropDownItem)sender;
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            { }
+            Core.Job = Core.LoadJob((String)item.Tag);
         }
 
         private void GetActionPlugins()
         {
-            var di = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
+            var dir = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
 
-            IEnumerable<FileInfo> dlls = di.EnumerateFiles(@"*.dll", SearchOption.AllDirectories);
+            IEnumerable<FileInfo> dlls = dir.EnumerateFiles(@"*.dll", SearchOption.AllDirectories);
 
             foreach (FileInfo fi in dlls)
             {
@@ -357,7 +434,7 @@ namespace Centipede
                 Type[] pluginsInFile = asm.GetExportedTypes();
                 foreach (Type pluginType in from type in pluginsInFile
                                             where !type.IsAbstract
-                                            where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Any()
+                                            where type.GetCustomAttributes(typeof(ActionCategoryAttribute), true).Any()
                                             select type)
                 {
                     AddToActionTab(pluginType);
@@ -368,12 +445,12 @@ namespace Centipede
         private void AddToActionTab(Type pluginType)
         {
             Assembly asm = pluginType.Assembly;
-            Object[] customAttributes = pluginType.GetCustomAttributes(typeof (ActionCategoryAttribute), true);
+            Object[] customAttributes = pluginType.GetCustomAttributes(typeof(ActionCategoryAttribute), true);
 
             ActionCategoryAttribute catAttribute = customAttributes.Cast<ActionCategoryAttribute>().First();
 
             TabPage tabPage =
-                    AddActionTabs.TabPages.Cast<TabPage>().SingleOrDefault(tp => tp.Text == catAttribute.category);
+                    this.AddActionTabs.TabPages.Cast<TabPage>().SingleOrDefault(tp => tp.Text == catAttribute.category);
 
             ListView catListView;
             if (tabPage != null)
@@ -385,14 +462,14 @@ namespace Centipede
                 catListView = GenerateNewTabPage(catAttribute.category);
             }
 
-            var af = new ActionFactory(catAttribute, pluginType);
+            var af = new ActionFactory(catAttribute, pluginType, Core);
 
             if (!string.IsNullOrEmpty(catAttribute.iconName))
             {
                 Type t = asm.GetType(pluginType.Namespace + @".Properties.Resources");
                 if (t != null)
                 {
-                    var icon = t.GetProperty(catAttribute.iconName, typeof (Icon)).GetValue(t, null) as Icon;
+                    var icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t, null) as Icon;
                     if (icon != null)
                     {
                         catListView.LargeImageList.Images.Add(pluginType.Name, icon);
@@ -407,27 +484,28 @@ namespace Centipede
         private void Program_AfterLoad(object sender, EventArgs e)
         {
             Dirty = false;
-            Text = Core.JobName;
+            Text = Core.Job.Name;
 
-            WebBrowser.Navigate(Core.InfoUrl);
+            this.WebBrowser.Navigate(Core.Job.InfoUrl);
         }
 
-        private void Program_ActionRemoved(Action action)
+        private void Program_ActionRemoved(object sender, ActionEventArgs e)
         {
-            ActionDisplayControl adc = ActionContainer.Controls
-                                                      .Cast<ActionDisplayControl>()
-                                                      .FirstOrDefault(a => a.ThisAction == action);
+            IAction action = e.Action;
+            ActionDisplayControl adc = this.ActionContainer.Controls
+                                           .Cast<ActionDisplayControl>()
+                                           .FirstOrDefault(a => a.ThisAction == action);
             if (adc == null)
             {
                 return;
             }
-            ActionContainer.Controls.Remove(adc);
+            this.ActionContainer.Controls.Remove(adc);
             Dirty = true;
         }
 
         private ListView GenerateNewTabPage(String category)
         {
-            var lv = new ListView { LargeImageList = ActionIcons, SmallImageList = ActionIcons };
+            var lv = new ListView { LargeImageList = this.ActionIcons, SmallImageList = this.ActionIcons };
 
             var tabPage = new TabPage(category);
             tabPage.Controls.Add(lv);
@@ -435,19 +513,21 @@ namespace Centipede
             tabPage.Tag = lv;
             lv.ItemDrag += BeginDrag;
             lv.ItemActivate += ItemActivate;
-            AddActionTabs.TabPages.Add(tabPage);
+            this.AddActionTabs.TabPages.Add(tabPage);
 
             return lv;
         }
 
-        private static void Program_BeforeAction(Action action)
+        private static void Program_BeforeAction(object sender, ActionEventArgs e)
         {
+            IAction action = e.Action;
             var adc = (ActionDisplayControl)action.Tag;
             SetState(adc, ActionState.Running, Resources.MainWindow_Program_ActionStatus_Running);
         }
 
-        private void Program_ActionAdded(Action action, int index)
+        private void Program_ActionAdded(object sender, ActionEventArgs e)
         {
+            IAction action = e.Action;
             Type actionType = action.GetType();
             var actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
             ActionDisplayControl adc;
@@ -474,8 +554,8 @@ namespace Centipede
             adc.Deleted += adc_Deleted;
             adc.DragEnter += ActionContainer_DragEnter;
             adc.DragDrop += ActionContainer_DragDrop;
-            ActionContainer.Controls.Add(adc, 0, index);
-            ActionContainer.SetRow(adc, index);
+            this.ActionContainer.Controls.Add(adc, 0, e.Index);
+            this.ActionContainer.SetRow(adc, e.Index);
             Dirty = true;
         }
 
@@ -485,63 +565,9 @@ namespace Centipede
             Core.RemoveAction(adc.ThisAction);
         }
 
-        private void DataStore_Variables_RowDeleted(object sender, DataRowChangeEventArgs e)
-        {
-            IEnumerable<string> varsToDelete = from kvp in Core.Variables
-                                               where !_dataSet.Variables.Rows.Contains(kvp.Key)
-                                               select kvp.Key
-                                               into k
-                                               where !k.StartsWith(@"_")
-                                               select k;
-
-            IList<string> toDelete = varsToDelete as IList<string> ?? varsToDelete.ToList();
-            if (toDelete.Any())
-            {
-                Core.Variables.Remove(toDelete.First());
-            }
-        }
-
-        private void Variables_VariablesRowChanged(object sender, JobDataSet.VariablesRowChangeEvent e)
-        {
-            JobDataSet.VariablesRow row = e.Row;
-
-            if (!Core.Variables.ContainsKey(row.Name))
-            {
-                IEnumerable<string> nonHiddenVariableNames = from kvp in Core.Variables
-                                         where !_dataSet.Variables.Rows.Contains(kvp.Key)
-                                         select kvp.Key
-                                         into k
-                                         where !k.StartsWith(@"_")
-                                         select k;
-
-                foreach (String key in nonHiddenVariableNames)
-                {
-                    Core.Variables.Remove(key);
-                    break;
-                }
-            }
-
-            Core.Variables[row.Name] = row.Value;
-        }
-
         private void VarMenuDelete_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow r in VarDataGridView.SelectedRows)
-            {
-                _dataSet.Variables.RemoveVariablesRow(((DataRowView)r.DataBoundItem).Row as JobDataSet.VariablesRow);
-            }
-        }
+        { }
 
-        private void VarDataGridView_CellContextMenuStripNeeded(object sender,
-                                                                DataGridViewCellContextMenuStripNeededEventArgs e)
-        {
-            var view = (DataGridView)sender;
-            view.ClearSelection();
-            view.Rows[e.RowIndex].Selected = true;
-            e.ContextMenuStrip = VarsContextMenu;
-            e.ContextMenuStrip.Show();
-        }
-        
         private void DoLoad()
         {
             try
@@ -551,27 +577,25 @@ namespace Centipede
             catch (AbortOperationException)
             { }
 
-            
-            DialogResult result = OpenFileDialog.ShowDialog();
+            DialogResult result = this.OpenFileDialog.ShowDialog();
 
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-
-            Core.LoadJob(OpenFileDialog.FileName);
+            Core.Job = Core.LoadJob(this.OpenFileDialog.FileName);
         }
 
         private void RunButton_Click(object sender, EventArgs e)
         {
-            foreach (ActionDisplayControl adc in ActionContainer.Controls)
+            foreach (ActionDisplayControl adc in this.ActionContainer.Controls)
             {
                 SetState(adc, ActionState.None, String.Empty);
             }
-            progressBar1.Value = 0;
-            progressBar1.Maximum = Core.JobComplexity;
-            backgroundWorker1.RunWorkerAsync();
+            this.progressBar1.Value = 0;
+            this.progressBar1.Maximum = Core.Job.Complexity;
+            this.backgroundWorker1.RunWorkerAsync();
         }
 
         [STAThread]
@@ -584,7 +608,7 @@ namespace Centipede
         {
             if (e.KeyData == Keys.F5)
             {
-                RunButton.PerformClick();
+                this.RunButton.PerformClick();
             }
         }
 
@@ -593,7 +617,7 @@ namespace Centipede
             Int32 index = -1;
             if (sender is ActionDisplayControl)
             {
-                index = ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
+                index = this.ActionContainer.GetPositionFromControl(sender as ActionDisplayControl).Row;
             }
             object data = e.Data.GetData(@"WindowsForms10PersistentObject");
             Core.AddAction(((ActionFactory)data).Generate(), index);
@@ -604,7 +628,7 @@ namespace Centipede
             DoDragDrop(e.Item, DragDropEffects.Move);
         }
 
-        private void ActionContainer_DragEnter(object sender, DragEventArgs e)
+        private static void ActionContainer_DragEnter(object sender, DragEventArgs e)
         {
             //Fixme: Should type be checked in here?
             e.Effect = DragDropEffects.Move;
@@ -612,30 +636,33 @@ namespace Centipede
 
         private void SaveJob()
         {
-            if (String.IsNullOrEmpty(Core.JobName))
+            if (String.IsNullOrEmpty(Core.Job.Name))
             {
-                var askJobTitle = new AskJobTitle();
-                DialogResult result = askJobTitle.ShowDialog(this);
+                var jobPropertyForm = new JobPropertyForm(Core);
+                DialogResult result = jobPropertyForm.ShowDialog(this);
                 if (result == DialogResult.Cancel)
                 {
-                    return;
+                    throw new AbortOperationException();
                 }
-                Core.JobName = askJobTitle.JobName;
             }
-            saveFileDialog1.FileName = Core.JobFileName;
-            saveFileDialog1.ShowDialog(this);
+            this.saveFileDialog1.FileName = Core.Job.FileName;
+            if (this.saveFileDialog1.ShowDialog(this) == DialogResult.Cancel)
+            {
+                throw new AbortOperationException();
+            }
+
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Core.SaveJob(saveFileDialog1.FileName);
+            Core.SaveJob(this.saveFileDialog1.FileName);
             Dirty = false;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
-            progressBar1.Increment(e.ProgressPercentage);
+            this.progressBar1.Increment(e.ProgressPercentage);
         }
 
         protected override void Dispose(bool disposing)
@@ -679,7 +706,7 @@ namespace Centipede
             {
                 return;
             }
-            ActionContainer.Controls.Clear();
+            this.ActionContainer.Controls.Clear();
             Core.Clear();
         }
 
@@ -690,76 +717,92 @@ namespace Centipede
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(Core.JobFileName))
+            if (String.IsNullOrEmpty(Core.Job.FileName))
             {
-                SaveJob();
+                try
+                {
+                    SaveJob();
+                }
+                catch (AbortOperationException)
+                {
+                    return;
+                }
             }
             else
             {
-                Core.SaveJob(Core.JobFileName);
+                Core.SaveJob(Core.Job.FileName);
             }
             Dirty = false;
         }
 
         private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveJob();
+            try
+            {
+                SaveJob();
+            }
+            catch (AbortOperationException)
+            {
+
+            }
         }
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                AskSave();
-            }
-            catch (AbortOperationException)
-            {
-                return;
-            }
-
             Close();
         }
 
         private void EditFavouritesMenuItem_Click(object sender, EventArgs e)
         {
-            EditFavourites editFavourites = new EditFavourites(_favouriteJobsDataStore);
-            
+            var editFavourites = new EditFavourites(this._favouriteJobsDataStore);
+
             editFavourites.ShowDialog();
 
             UpdateFavourites();
-
         }
 
-        private MessageLevel _messageLevelsShown = MessageLevel.All;
-        private ToolStripSpringTextBox _urlTextbox;
-
-        private void ErrorsToolStripButton_Click(object sender, EventArgs e)
+        private MessageLevel DisplayedLevels
         {
-            ToolStripButton button = (ToolStripButton)sender;
-            _messageLevelsShown = _messageLevelsShown ^ MessageLevel.Error;
-
-            UpdateOutputWindow();
+            get
+            {
+                return this._displayedLevels;
+            }
+            set
+            {
+                this._displayedLevels = value;
+                UpdateOutputWindow();
+            }
         }
 
         private void UpdateOutputWindow()
         {
-            foreach (var row in MessageDataGridView.Rows.Cast<DataGridViewRow>())
+            foreach (JobDataSet.MessagesRow row in _dataSet.Messages)
             {
-                JobDataSet.MessagesRow messageRow = (JobDataSet.MessagesRow)row.DataBoundItem;
-                row.Visible = _messageLevelsShown.HasFlag(messageRow.Level);
+                row.Visible = DisplayedLevels.HasFlag(row.Level);
             }
+
+            // return;
+
+            //MessageDataGridView.CurrentCell = null;
+            //foreach (DataGridViewRow row in MessageDataGridView.Rows)
+            //{
+            //    row.Visible = DisplayedLevels.HasFlag((MessageLevel)row.Cells[3].Value);
+            //}
+            ////MessageDataGridView.Show();
+            ////MessageDataGridView.PerformLayout();
+            //MessageDataGridView.Focus();
         }
 
         private void MessageDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            DataGridViewRow row = MessageDataGridView.Rows[e.RowIndex];
-            JobDataSet.MessagesRow messageRow = (JobDataSet.MessagesRow)jobDataSet1.Messages.Rows[e.RowIndex];
-            row.Visible = _messageLevelsShown.HasFlag(messageRow.Level);
+            //DataGridViewRow row = this.MessageDataGridView.Rows[e.RowIndex];
+            //var messageRow = (JobDataSet.MessagesRow)this.jobDataSet1.Messages.Rows[e.RowIndex];
+            //row.Visible = this._messageLevelsShown.HasFlag(messageRow.Level);
         }
-        
+
         private void UrlTextbox_KeyUp(object sender, KeyEventArgs e)
         {
-            ToolStripTextBox textBox = ((ToolStripTextBox)sender);
+            var textBox = ((ToolStripTextBox)sender);
             string url = textBox.Text;
 
             if (e.KeyCode == Keys.Enter)
@@ -769,7 +812,7 @@ namespace Centipede
                     url = string.Format(@"http://www.{0}.com", url);
                 }
 
-                WebBrowser.Navigate(url, e.Shift);
+                this.WebBrowser.Navigate(url, e.Shift);
 
                 textBox.Text = url;
 
@@ -783,24 +826,96 @@ namespace Centipede
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            WebBrowser.GoBack();
+            this.WebBrowser.GoBack();
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            WebBrowser.GoForward();
+            this.WebBrowser.GoForward();
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            WebBrowser.Refresh();
+            this.WebBrowser.Refresh();
         }
 
         private void WebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (WebBrowser.ReadyState == WebBrowserReadyState.Complete)
+            if (this.WebBrowser.ReadyState == WebBrowserReadyState.Complete)
             {
-                _urlTextbox.Text = e.Url.AbsoluteUri;
+                this._urlTextbox.Text = e.Url.AbsoluteUri;
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var form = new JobPropertyForm(Core);
+            form.ShowDialog(this);
+        }
+
+        private void SplitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            
+        }
+
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Core.Dispose();
+
+            Settings.Default.MainWindowState = WindowState;
+            Settings.Default.MessageFilterSetting = DisplayedLevels;
+            Settings.Default.MainWindowHeight = Height;
+            Settings.Default.MainWindowWidth = Width;
+            Settings.Default.MainWindowLocation = Location;
+            Settings.Default.SplitContainer1Point = SplitContainer1.SplitterDistance;
+            Settings.Default.SplitContainer2Point = SplitContainer2.SplitterDistance;
+            Settings.Default.SplitContainer3Point = SplitContainer3.SplitterDistance;
+            
+            Settings.Default.Save();
+
+            base.Dispose();
+        }
+
+        private void MainWindow_Resize(object sender, EventArgs e)
+        {
+        }
+
+        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (String.IsNullOrEmpty(Core.Job.Name))
+            {
+                try
+                {
+                    SaveJob();
+                }
+                catch (AbortOperationException)
+                {
+                    return;
+                }
+            }
+            _favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
+            UpdateFavourites();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            _dataSet.Messages.Clear();
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            {
+                e.Cancel = true;
             }
         }
     }
@@ -818,166 +933,20 @@ namespace Centipede
         public AbortOperationException()
         { }
 
-        [ResharperAnnotations.UsedImplicitly]
+        [UsedImplicitly]
         public AbortOperationException(string message)
-                : base(message)
+            : base(message)
         { }
 
-        [ResharperAnnotations.UsedImplicitly]
+        [UsedImplicitly]
         public AbortOperationException(string message, Exception inner)
-                : base(message, inner)
+            : base(message, inner)
         { }
 
         protected AbortOperationException(
                 SerializationInfo info,
                 StreamingContext context)
-                : base(info, context)
+            : base(info, context)
         { }
-    }
-
-    [ResharperAnnotations.UsedImplicitly(ResharperAnnotations.ImplicitUseTargetFlags.WithMembers)]
-    public static partial class Extensions
-    {
-        public static void RemoveRange(this IList list, IEnumerable items)
-        {
-            foreach (var item in items)
-            {
-                list.Remove(item);
-            }
-        }
-
-        public static bool RemoveRange<T>(this IList<T> list, IEnumerable<T> items)
-        {
-            return items.All(list.Remove);
-        }
-
-        public static void AddRange<T>(this IList<T> list, IEnumerable<T> items)
-        {
-            foreach (var item in items)
-            {
-                list.Add(item);
-            }
-        }
-
-        public static void AddRange(this IList list, IEnumerable items)
-        {
-            foreach (var item in items)
-            {
-                list.Remove(item);
-            }
-        }
-
-        public static IList<T> Synchronise<T>(this IList<T> left, IList<T> right) where T: IComparable, IEquatable<T>
-        {
-
-            List<MyStruct<T>> leftDecorated = new List<MyStruct<T>>(left.Count);
-            int[] i = { 0 };
-            leftDecorated.AddRange(left.Select(v => new MyStruct<T>(v) { Index = i[0]++ }));
-
-            List<MyStruct<T>> rightDecorated = new List<MyStruct<T>>(right.Count);
-            i[0] = 0;
-            rightDecorated.AddRange(right.Select(v => new MyStruct<T>(v) { Index = i[0]++ }));
-
-            //var leftDecorated = left.Select(item => new MyStruct<T>(item)).OrderBy(item => item.Item);
-            //var rightDecorated = right.Select(item => new MyStruct<T>(item)).OrderBy(item => item.Item);
-
-            var leftEnum = leftDecorated.GetEnumerator();
-            var rightEnum = rightDecorated.GetEnumerator();
-            
-            IList<MyStruct<T>> result = new List<MyStruct<T>>();
-
-            bool hasItems = leftEnum.MoveNext() && rightEnum.MoveNext();
-
-            //while both lists have items
-            while (hasItems)
-            {
-                //if left item == right item
-                if (leftEnum.Current.Equals(rightEnum.Current))
-                {
-                    //append left item to result
-                    result.Add(leftEnum.Current);
-                    //advance both
-                    hasItems = leftEnum.MoveNext() && rightEnum.MoveNext();
-                }
-                //else 
-                else
-                {
-                    if (leftEnum.Current.CompareTo(rightEnum.Current) > 0)
-                    {
-                        //append right item to result
-                        result.Add(rightEnum.Current);
-                        //advance right
-                        hasItems = rightEnum.MoveNext();
-                    }
-                    else
-                    {
-                        //advance left
-                        hasItems = leftEnum.MoveNext();
-                    }
-                }
-            }
-            //if left is empty
-            if (!leftEnum.MoveNext())
-            {
-                //append rest of right to result
-                while (rightEnum.MoveNext())
-                {
-                    result.Add(rightEnum.Current);
-                }
-            }
-            //
-            //return result
-            return result.OrderBy(item => item.Index).Select(item => item.Item) as IList<T>;
-            
-        }
-        
-        class MyStruct<T> : IComparable<MyStruct<T>>, IEquatable<MyStruct<T>> where T: IComparable, IEquatable<T>
-        {
-            private readonly T _item;
-
-            public T Item
-            {
-                get
-                {
-                    return _item;
-                }
-            }
-
-            public int Index
-            {
-                get;
-                set;
-            }
-
-            public MyStruct(T item)
-            {
-                _item = item;
-            }
-
-            
-            /// <summary>
-            /// Compares the current object with another object of the same type.
-            /// </summary>
-            /// <returns>
-            /// A value that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the <paramref name="other"/> parameter.Zero This object is equal to <paramref name="other"/>. Greater than zero This object is greater than <paramref name="other"/>. 
-            /// </returns>
-            /// <param name="other">An object to compare with this object.</param>
-            public int CompareTo(MyStruct<T> other)
-            {
-                return ((IComparable<T>)Item).CompareTo(other.Item);
-            }
-
-            /// <summary>
-            /// Indicates whether the current object is equal to another object of the same type.
-            /// </summary>
-            /// <returns>
-            /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-            /// </returns>
-            /// <param name="other">An object to compare with this object.</param>
-            public bool Equals(MyStruct<T> other)
-            {
-                return Item.CompareTo(other.Item) == 0;
-            }
-        }
     }
 }

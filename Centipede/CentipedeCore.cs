@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
 using System.Xml;
+using System.Xml.XPath;
 using Centipede.Properties;
+using CentipedeInterfaces;
 using ResharperAnnotations;
-
 
 //  LINQ
 //   \o/
@@ -17,56 +16,62 @@ using ResharperAnnotations;
 
 namespace Centipede
 {
-    public class CentipedeCore : IDisposable
+    public class CentipedeCore : ICentipedeCore
     {
-        public delegate void ActionRemovedHandler(Action action);
+        #region Constructors
 
-        /// <summary>
-        ///     Called after executing an action
-        /// </summary>
-        /// <param name="action">The action that has just been executed.</param>
-        public delegate void ActionUpdateCallback(Action action);
+        public CentipedeCore(Dictionary<string, string> arguments)
+        {
+            Variables = new VariablesTable();
+            
+            Job = new CentipedeJob();
+            this._arguments = arguments;
+        }
 
-        public delegate void AddActionCallback(Action action, Int32 index);
+        #endregion Constructors
 
-        public delegate void AfterLoadEventHandler(CentipedeCore sender, EventArgs e);
+        #region Events
 
-        /// <summary>
-        ///     Handler for job completion
-        /// </summary>
-        /// <param name="succeeded">True if all actions completed successfully.</param>
-        public delegate void CompletedHandler(Boolean succeeded);
+        //public event AddActionCallback ActionAdded;
+       // public event ActionUpdateCallback ActionCompleted;
+        public event ActionErrorEvent ActionErrorOccurred;
+        //public event ActionRemovedHandler ActionRemoved;
+        public event AfterLoadEventHandler AfterLoad;
+        //public event ActionUpdateCallback BeforeAction;
+        public event CompletedHandler JobCompleted;
 
-        /// <summary>
-        ///     Handler delegate for errors occuring in actions
-        /// </summary>
-        /// <param name="e">The exception that caused the error</param>
-        /// <param name="nextAction">Set to the next action - useful for repeating actions</param>
-        /// <returns>True if execution of Job should continue, false to halt</returns>
-        public delegate Boolean ErrorHandler(ActionException e, out Action nextAction);
+        #endregion
 
+        #region Fields
+
+        internal IAction CurrentAction;
+
+        [UsedImplicitly]
+        private Dictionary<string, string> _arguments;
+
+        #endregion
+
+        #region Properties
+
+        public CentipedeJob Job { get; set; }
+        
         /// <summary>
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
         ///     I can't figure a way of doing it easily.
         /// </summary>
-        public readonly ListenedDict<String, Object> Variables = new ListenedDict<string, object>();
+        public VariablesTable Variables { get; private set; }
 
-        public string JobFileName = "";
-        public string JobName = "";
+        #endregion
 
-        public readonly List<Action> Actions = new List<Action>();
+        #region Methods
 
-        internal Action CurrentAction;
-
-        public Int32 JobComplexity
+        public void Dispose()
         {
-            get
+            foreach (IDisposable action in Job.Actions)
             {
-                return Actions.Sum(action => action.Complexity);
+                action.Dispose();
             }
         }
-
-        public String InfoUrl = @"about:blank";
 
         /// <summary>
         ///     Run the job, starting with the first action added.
@@ -74,50 +79,77 @@ namespace Centipede
         [STAThread]
         public void RunJob()
         {
-            if (Actions.Count < 1)
+            if (!Job.Actions.Any())
             {
-                if (ActionErrorOccurred != null)
+                ActionErrorEvent @event = ActionErrorOccurred;
+                if (@event != null)
                 {
-                    ActionErrorOccurred(new ActionException(Resources.Program_RunJob_No_Actions_Added), out CurrentAction);
+                    ActionErrorEventArgs args = new ActionErrorEventArgs
+                                                {
+                                                        Action = this.CurrentAction,
+                                                        Exception =
+                                                                new ActionException(
+                                                                Resources.Program_RunJob_No_Actions_Added)
+                                                };
+                    @event(this, args);
                 }
                 return;
             }
 
-            CurrentAction = Actions[0];
+            this.CurrentAction = Job.Actions.First();
 
             Boolean completed = true;
 
-            while (CurrentAction != null)
+            while (this.CurrentAction != null)
             {
                 try
                 {
-                    ActionUpdateCallback beforeActionHandler = BeforeAction;
-                    if (beforeActionHandler != null)
                     {
-                        beforeActionHandler(CurrentAction);
+                        ActionEvent handler = BeforeAction;
+                        if (handler != null)
+                        {
+                            ActionEventArgs e = new ActionEventArgs
+                                                {
+                                                    Action = this.CurrentAction
+                                                };
+                            handler(this, e);
+                        }
                     }
-
-                    CurrentAction.Run();
-
-                    ActionUpdateCallback afterActionHandler = ActionCompleted;
-                    if (afterActionHandler != null)
+                    this.CurrentAction.Run();
                     {
-                        afterActionHandler(CurrentAction);
+                        ActionEvent handler = ActionCompleted;
+                        if (handler != null)
+                        {
+                            ActionEventArgs e = new ActionEventArgs
+                                                {
+                                                        Action = this.CurrentAction
+                                                };
+                            handler(this, e);
+                        }
                     }
-                    CurrentAction = CurrentAction.GetNext();
+                    this.CurrentAction = this.CurrentAction.GetNext();
                 }
                 catch (Exception e)
                 {
                     ActionException ae;
-                    ErrorHandler handler = ActionErrorOccurred;
+                    ActionErrorEvent handler = ActionErrorOccurred;
                     if (e is FatalActionException)
                     {
+                        
                         completed = false;
-                        if (handler != null)
                         {
-                            ae = new FatalActionException(string.Format("Fatal error: cannot continue\n{0}",
-                                                                        e.Message, e));
-                            handler(ae, out CurrentAction);
+                            if (handler != null)
+                            {
+                                ae = new FatalActionException(string.Format(Resources.CentipedeCore_RunJob_FatalError,
+                                                                            e.Message, e));
+
+                                ActionErrorEventArgs args = new ActionErrorEventArgs()
+                                                            {
+                                                                    Action = this.CurrentAction,
+                                                                    Exception = ae
+                                                            };
+                                handler(this, args);
+                            }
                         }
                     }
 
@@ -129,262 +161,252 @@ namespace Centipede
                         }
                         else
                         {
-                            ae = new ActionException(e, CurrentAction);
+                            ae = new ActionException(e, this.CurrentAction);
                         }
                         if (handler != null)
                         {
-                            if (!handler(ae, out CurrentAction))
+                            ActionErrorEventArgs args = new ActionErrorEventArgs()
+                                                        {
+                                                                Action = this.CurrentAction,
+                                                                Exception = ae
+                                                        };
+                            handler(this, args);
+                            if (!args.Continue)
                             {
                                 completed = false;
                                 break;
                             }
-
+                            CurrentAction = args.NextAction;
                         }
                     }
                 }
             }
 
-            CompletedHandler jobCompletedHandler = JobCompleted;
-            if (jobCompletedHandler != null)
             {
-                jobCompletedHandler(completed);
+                CompletedHandler handler = JobCompleted;
+                if (handler != null)
+                {
+                    handler(completed);
+                }
             }
         }
 
-        public  event ActionUpdateCallback ActionCompleted = delegate { };
-        public  event ActionUpdateCallback BeforeAction = delegate { };
-
-        public  event ActionRemovedHandler ActionRemoved = delegate { };
-
-        public  event CompletedHandler JobCompleted = delegate { };
-
-        public  event ErrorHandler ActionErrorOccurred = delegate(ActionException e, out Action nextAction)
-                                                             {
-                                                                 nextAction = null;
-                                                                 return false;
-                                                             };
-
-        public  event AddActionCallback ActionAdded;
-        //{
-        //    add
-        //    {
-        //        AddActionCallbacks.Add(value);
-        //    }
-        //    remove
-        //    {
-        //        AddActionCallbacks.Remove(value);
-        //    }
-            
-        //}
-
-        //private static List<AddActionCallback> AddActionCallbacks = new List<AddActionCallback>(); 
+        #region Action Methods
 
         /// <summary>
         ///     Add action to the job queue.  By default, it is added as the last action in the job.
         /// </summary>
+        /// <param name="job"></param>
         /// <param name="action">Action to add</param>
         /// <param name="index">(Optional) Index to add action at.  Defaults to end (-1).</param>
-        public void AddAction(Action action, Int32 index = -1)
+        public void AddAction(CentipedeJob job, IAction action, Int32 index = -1)
         {
             switch (index)
             {
             case -1:
-                if (Actions.Count > 0)
+                if (job.Actions.Count > 0)
                 {
-                    Action last = Actions[Actions.Count - 1];
+                    IAction last = job.Actions[job.Actions.Count - 1];
 
                     last.Next = action;
                 }
-                Actions.Add(action);
-                index = Actions.Count - 1;
+                job.Actions.Add(action);
+                index = Job.Actions.Count - 1;
                 break;
             case 0:
                 {
-                    Action oldFirst = Actions[0];
-                    Actions.Insert(0, action);
+                    IAction oldFirst = job.Actions[0];
+                    job.Actions.Insert(0, action);
                     action.Next = oldFirst;
                 }
                 break;
             default:
                 {
-                    Action prevAction = Actions[index - 1];
-                    Action nextAction = Actions[index];
+                    IAction prevAction = job.Actions[index - 1];
+                    IAction nextAction = job.Actions[index];
                     prevAction.Next = action;
                     action.Next = nextAction;
-                    Actions.Insert(index, action);
+                    job.Actions.Insert(index, action);
                 }
                 break;
             }
-            AddActionCallback handler = ActionAdded;
-            if (handler != null)
             {
-                handler(action, index);
+                ActionEvent handler = ActionAdded;
+                if (handler != null)
+                {
+                    ActionEventArgs args = new ActionEventArgs
+                                           {
+                                                   Action = action,
+                                                   Index = index
+                                           };
+                    handler(this, args);
+                }
             }
         }
 
-        internal void RemoveAction(Action action)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        public void RemoveAction(IAction action)
         {
-            Action prevAction = Actions.SingleOrDefault(a => a.Next == action);
+            IAction prevAction = Job.Actions.SingleOrDefault(a => a.Next == action);
 
-            Action nextAction = action.Next;
-
-            
+            IAction nextAction = action.Next;
 
             if (prevAction != null)
             {
                 prevAction.Next = nextAction;
             }
-            Actions.Remove(action);
-            ActionRemovedHandler handler = ActionRemoved;
-            if (handler != null)
+            Job.Actions.Remove(action);
             {
-                handler(action);
+                ActionEvent handler = ActionRemoved;
+                if (handler != null)
+                {
+                    ActionEventArgs args = new ActionEventArgs()
+                                           {
+                                                   Action = action
+                                           };
+                    handler(this, args);
+                }
             }
         }
 
-        /*
-        internal static int GetIndexOf(Action action)
+        public void Clear()
         {
-            return Actions.IndexOf(action);
+            Variables.Clear();
+            while (Job.Actions.Count > 0)
+            {
+                RemoveAction(Job.Actions.First());
+            }
+            Job.Author = "";
+            Job.AuthorContact = "";
+            Job.FileName = "";
+            Job.InfoUrl = "";
+            Job.Name = "";
         }
-*/
 
+        #endregion
+
+        #region Save and Load methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
         [Localizable(false)]
-        internal void SaveJob(String filename)
+        public void SaveJob(String filename)
         {
             var xmlDoc = new XmlDocument();
             XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
-            xmlRoot.SetAttribute("Title", JobName);
+            XmlElement metaElement1 = xmlDoc.CreateElement("Metadata");
+            XmlElement metaElement2 = xmlDoc.CreateElement("Name");
+            
+            metaElement2.AppendChild(xmlDoc.CreateTextNode(Job.Name));
+            metaElement1.AppendChild(metaElement2);
+
+            metaElement2 = xmlDoc.CreateElement("Author");
+            XmlElement metaElement3 = xmlDoc.CreateElement("Name");
+            metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.Author));
+            metaElement2.AppendChild(metaElement3);
+            metaElement3 = xmlDoc.CreateElement("Contact");
+            metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.AuthorContact));
+            metaElement2.AppendChild(metaElement3);
+            metaElement1.AppendChild(metaElement2);
+
+            metaElement2 = xmlDoc.CreateElement("Info");
+            metaElement2.SetAttribute("Url", Job.InfoUrl);
+            metaElement1.AppendChild(metaElement2);
+
+            xmlRoot.AppendChild(metaElement1);
+            
             xmlDoc.AppendChild(xmlRoot);
 
             XmlElement actionsElement = xmlDoc.CreateElement("Actions");
             xmlRoot.AppendChild(actionsElement);
 
-            foreach (Action action in Actions)
+            foreach (Action action in Job.Actions)
             {
                 action.AddToXmlElement(actionsElement);
             }
-
-            //XmlElement varsElement = xmlDoc.CreateElement("Variables");
-            //foreach (var variableEntry in Variables)
-            //{
-            //    XmlElement curVarElement = xmlDoc.CreateElement(variableEntry.Value.GetType().Name);
-            //    curVarElement.SetAttribute("Name", variableEntry.Key);
-            //    curVarElement.SetAttribute("Value", variableEntry.Value.ToString());
-            //    varsElement.AppendChild(curVarElement);
-            //}
-            //xmlRoot.AppendChild(varsElement);
-
-            XmlElement infoElement = xmlDoc.CreateElement("info");
-            infoElement.SetAttribute("url", InfoUrl);
-
-            xmlRoot.AppendChild(infoElement);
-
-            XmlWriterSettings settings = new XmlWriterSettings
-                                         {
-                                                 Indent = true,
-                                                 IndentChars = "  ",
-                                                 NewLineChars = "\r\n",
-                                                 NewLineHandling = NewLineHandling.Replace
-                                         };
+            
+            var settings = new XmlWriterSettings
+                           {
+                                   Indent = true,
+                                   IndentChars = "  ",
+                                   NewLineChars = "\r\n",
+                                   NewLineHandling = NewLineHandling.Replace
+                           };
 
             using (XmlWriter w = XmlWriter.Create(filename, settings))
             {
                 xmlDoc.WriteTo(w);
             }
-            JobFileName = filename;
+            Job.FileName = filename;
         }
-
-        public  event AfterLoadEventHandler AfterLoad = delegate { };
 
         /// <summary>
         ///     Load a job with a given name
         /// </summary>
         /// <param name="jobFileName">Name of the job to load</param>
         [Localizable(false)]
-        internal void LoadJob(String jobFileName)
+        public CentipedeJob LoadJob(string jobFileName)
         {
-            Clear();
 
-            var xmlDoc = new XmlDocument();
+            Clear();
+            CentipedeJob job = new CentipedeJob();
+
+            //var xmlDoc = new XmlDocument();
             if (!File.Exists(jobFileName))
             {
-                return;
+                throw new FileNotFoundException();
             }
-            xmlDoc.Load(jobFileName);
-            JobName = ((XmlElement)xmlDoc.ChildNodes[1]).GetAttribute("Title");
-            foreach (
-                    XmlElement actionElement in
-                            xmlDoc.GetElementsByTagName("Actions").OfType<XmlElement>().Single().ChildNodes)
+
+
+            XPathDocument xPathDoc = new XPathDocument(jobFileName);
+            XPathNavigator nav = xPathDoc.CreateNavigator();
+
+            job.FileName = jobFileName;
+
+            job.Name = nav.SelectSingleNode("//Metadata/Name").Value;
+            job.Author = nav.SelectSingleNode("//Metadata/Author/Name").Value;
+            job.AuthorContact = nav.SelectSingleNode("//Metadata/Author/Contact").Value;
+            job.InfoUrl = nav.SelectSingleNode("//Metadata/Info/@Url").Value;
+
+
+            var it = nav.Select("//Actions/*");
+
+            foreach (XPathNavigator actionElement in it)
             {
-                AddAction(Action.FromXml(actionElement, Variables));
+                AddAction(job, Action.FromXml(actionElement, Variables, this));
             }
 
-            Assembly asm = Assembly.GetExecutingAssembly();
-
-            //foreach (
-            //        XmlElement variableElement in
-            //                xmlDoc.GetElementsByTagName("Variables").OfType<XmlElement>().Single())
-            //{
-            //    String name = variableElement.GetAttribute("name");
-            //    Type type = asm.GetType(variableElement.LocalName);
-
-            //    MethodInfo parseMethod = type.GetMethod("Parse", new[] { typeof (String) });
-
-            //    object value = parseMethod == null
-            //                           ? variableElement.GetAttribute("Value")
-            //                           : parseMethod.Invoke(type,
-            //                                                new object[] { variableElement.GetAttribute("Value") });
-            //    Variables.Add(name, value);
-            //}
-
-            XmlNodeList elementsByTagName = xmlDoc.GetElementsByTagName("info");
-
-            if (elementsByTagName.Count > 0)
             {
-
-                XmlElement infoTag = elementsByTagName.Cast<XmlElement>().First();
-
-                InfoUrl = infoTag.GetAttribute("url");
+                AfterLoadEventHandler handler = AfterLoad;
+                if (handler != null)
+                {
+                    handler(this, EventArgs.Empty);
+                }
             }
-            AfterLoadEventHandler handler = AfterLoad;
-            MessageBox.Show(handler.ToString());
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+
+            return job;
         }
 
-        
-        /*
-        public Int32 JobLength
-        {
-            get
-            {
-                return Actions.Sum(a=>a.Complexity);
-            }
-        }
-*/
+        #endregion
 
+        #endregion
 
-        internal void Clear()
-        {
-            Variables.Clear();
-            while (Actions.Count > 0)
-            {
-                RemoveAction(Actions.First());
-            }
-        }
+        public event ActionEvent ActionAdded;
 
-        public void Dispose()
+        public event ActionEvent ActionCompleted;
+
+        public event ActionEvent ActionRemoved;
+
+        public event ActionEvent BeforeAction;
+
+        public void AddAction(IAction action, Int32 index = -1)
         {
-            foreach (IDisposable action in Actions)
-            {
-                action.Dispose();
-                    
-            }
+            AddAction(this.Job, action, index);
         }
     }
-
-  
 }

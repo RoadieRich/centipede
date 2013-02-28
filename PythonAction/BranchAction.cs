@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml;
+using System.Xml.XPath;
 using Centipede;
 using Centipede.Actions;
 using Centipede.Properties;
+using CentipedeInterfaces;
 using Action = Centipede.Action;
 
 
@@ -23,12 +25,13 @@ namespace PyAction
         /// which are chosen according to condition.
         /// </summary>
         /// <param name="v"></param>
+        /// <param name="c"></param>
         /// <remarks>
         /// Condition is a simple python expression, which is evalutated in a "safe" scope: 
         /// changes made to any (python) variables will be lost.
         /// </remarks>
-        public BranchAction(IDictionary<String, Object> v)
-            : base(Resources.BranchAction_BranchAction_Branch, v)
+        public BranchAction(IDictionary<string, object> v, ICentipedeCore c)
+            : base(Resources.BranchAction_BranchAction_Branch, v, c)
         {
         }
 
@@ -64,7 +67,7 @@ namespace PyAction
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Action GetNext()
+        public override IAction GetNext()
         {
             return _result ? NextIfTrue : Next;
         }
@@ -75,20 +78,20 @@ namespace PyAction
             Type thisType = GetType();
             XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
             element.SetAttribute("Comment", Comment);
-            element.SetAttribute("Target", MainWindow.Instance.Core.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
+            element.SetAttribute("Target", GetCurrentCore().Job.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
             element.InnerText = ConditionSource;
             rootElement.AppendChild(element);
         }
 
         [Localizable(false)]
-        protected override void PopulateMembersFromXml(XmlElement element)
+        protected override void PopulateMembersFromXml(XPathNavigator element)
         {
-            Comment = element.GetAttribute("Comment");
-            ConditionSource = element.InnerText;
-            int index = int.Parse(element.GetAttribute("Target"));
-            CentipedeCore.AfterLoadEventHandler instanceOnAfterLoad = null;
-            instanceOnAfterLoad = delegate{ 
-                NextIfTrue = MainWindow.Instance.Core.Actions[index];
+            Comment = element.SelectSingleNode("@Comment").Value;
+            ConditionSource = element.Value;
+            int index = int.Parse(element.SelectSingleNode("@Target").Value);
+            AfterLoadEventHandler instanceOnAfterLoad = null;
+            instanceOnAfterLoad = delegate{
+                NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
                 MainWindow.Instance.Core.AfterLoad -= instanceOnAfterLoad;
                 ((ActionDisplayControl)Tag).UpdateControls();
             };

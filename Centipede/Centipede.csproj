@@ -101,23 +101,21 @@
     <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\SubJob.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
-    <Compile Include="AskJobTitle.cs">
+    <Compile Include="CentipedeCore.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FilterDataBindingSource.cs" />
+    <Compile Include="JobDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JobDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="JobPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AskJobTitle.Designer.cs">
-      <DependentUpon>AskJobTitle.cs</DependentUpon>
+    <Compile Include="JobPropertyForm.Designer.cs">
+      <DependentUpon>JobPropertyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CentipedeCore.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Controls\OpenFileDialogEx.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OpenFileDialogEx.Designer.cs">
-      <DependentUpon>OpenFileDialogEx.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OS\Enums.cs" />
-    <Compile Include="Controls\OS\structs.cs" />
-    <Compile Include="Controls\OS\Win32.cs" />
     <Compile Include="EditFavourites.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,16 +131,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FavouriteJobs.xsd</DependentUpon>
     </Compile>
-    <Compile Include="JobDataSet.cs">
-      <DependentUpon>JobDataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="JobDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>JobDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="ListenedDict.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,15 +146,12 @@
     <Compile Include="ToolStripSpringTextBox.Designer.cs">
       <DependentUpon>ToolStripSpringTextBox.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AskJobTitle.resx">
-      <DependentUpon>AskJobTitle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\OpenFileDialogEx.resx">
-      <DependentUpon>OpenFileDialogEx.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EditFavourites.resx">
       <DependentUpon>EditFavourites.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobPropertyForm.resx">
+      <DependentUpon>JobPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.en-GB.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -198,12 +183,9 @@
     <None Include="FavouriteJobs.xss">
       <DependentUpon>FavouriteJobs.xsd</DependentUpon>
     </None>
-    <None Include="Properties\app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="JobDataSet.xsc">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="JobDataSet.xsd">
       <SubType>Designer</SubType>
@@ -212,7 +194,12 @@
     </None>
     <None Include="JobDataSet.xss">
       <DependentUpon>JobDataSet.xsd</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Centipede_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\JobDataSet.datasource" />
     <None Include="Properties\DataSources\MainWindow.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
@@ -277,6 +264,12 @@
     <ProjectReference Include="..\Action\Action.csproj">
       <Project>{AA2CF479-1D03-4764-B206-594B76DFA970}</Project>
       <Name>Action</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CentipedeCore\CentipedeInterfaces.csproj">
+      <Project>{D34FC450-055E-4C4E-8293-C324EF5216FD}</Project>
+      <Name>CentipedeInterfaces</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

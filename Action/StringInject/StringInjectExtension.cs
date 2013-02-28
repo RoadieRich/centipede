@@ -11,6 +11,7 @@ namespace Centipede.StringInject
     /// <summary>
     /// From http://mo.notono.us/2008/07/c-stringinject-format-strings-by-key.html
     /// </summary>
+    [Localizable(false)]
     public static class StringInjectExtension
     {
         /// <summary>

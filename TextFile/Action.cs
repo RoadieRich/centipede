@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Centipede;
 using System.IO;
+using CentipedeInterfaces;
 using Action = Centipede.Action;
 
 
@@ -12,8 +13,8 @@ namespace TextFile
     public class OpenTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        public OpenTextFile(IDictionary<string, object> v) 
-            : base("Open Text File", v)
+        public OpenTextFile(IDictionary<string, object> v, ICentipedeCore c) 
+            : base("Open Text File", v, c)
         { }
 
         // ReSharper disable MemberCanBePrivate.Global
@@ -47,9 +48,11 @@ namespace TextFile
     public class SaveTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        SaveTextFile(Dictionary<String, Object> v)
-            : base("Save Text File", v)
-        { }
+        SaveTextFile(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Save Text File", v, c)
+        {
+            this.CloseAfter = false;
+        }
 
         // ReSharper disable MemberCanBePrivate.Global
         // ReSharper disable ConvertToConstant.Global
@@ -58,7 +61,7 @@ namespace TextFile
         public String FileVarName = "TextFile";
 
         [ActionArgument(displayName = "Close", usage = "Close file after saving")]
-        public Boolean CloseAfter = false;
+        public Boolean CloseAfter;
 
         // ReSharper restore FieldCanBeMadeReadOnly.Global
         // ReSharper restore ConvertToConstant.Global
@@ -81,8 +84,8 @@ namespace TextFile
     public class ReadLineFromTextFile : Action
 // ReSharper restore UnusedMember.Global
     {
-        public ReadLineFromTextFile(Dictionary<String, Object> v)
-            : base("Read Line", v)
+        public ReadLineFromTextFile(IDictionary<string, object> v, ICentipedeCore c)
+            : base("Read Line", v, c)
         { }
 
         // ReSharper disable MemberCanBePrivate.Global
@@ -95,7 +98,7 @@ namespace TextFile
         public Boolean Sequential = true;
 
         [ActionArgument(displayName = "Line number")]
-        public Int32 LineNumber = 0;
+        public Int32 LineNumber;
 
         [ActionArgument(displayName="Destination Variable", usage="Variable to store the read text in")]
         public String DestinationVariable = "Line";
