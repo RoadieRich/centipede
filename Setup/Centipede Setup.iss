@@ -24,7 +24,7 @@ OutputDir={#OutputDir}
 [Files]
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
@@ -49,21 +49,21 @@ Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Proje
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 [Run]
-Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe";   StatusMsg: "Installing the .NET framework";                                                                     Components: Centipede;                     Check: FrameworkIsNotInstalled
-Filename: "msiexec";                             StatusMsg: "Installing IronPython 2.7"; Parameters: "/i {tmp}\IronPython-2.7.3.msi"; Flags: shellexec;          Components: Actions\Python\Python_Engine;  Check: IronPythonNotInstalled
-Filename: "{app}\Centipede.exe";                 StatusMsg: "Starting Centipede"; Description: "Start Centipede";                     Flags: nowait postinstall; Components: Centipede
+Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
+Filename: "msiexec"; Parameters: "/i {tmp}\IronPython-2.7.3.msi"; Flags: shellexec; StatusMsg: "Installing IronPython 2.7"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
+Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede UserFiles
 
 [Dirs]
-Name: "{userappdata}\Centipede"
+Name: "{userappdata}\Centipede"; Components: UserFiles
 Name: "{app}\Resources"
 Name: "{app}\Plugins"
 Name: "{app}\Plugins\Resources"
 
 ; SDK items
-Name: "{code:GetSdkDir}\sdk";                             Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction";             Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction\Resources";   Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction\Properties";  Components: SDK
+Name: "{code:GetSdkDir}\sdk"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Components: SDK
 
 [Components]
 Name: "Centipede"; Description: "The Centipede application"; Types: Complete Custom Minimal; Flags: fixed
@@ -76,14 +76,16 @@ Name: "Actions\Xml"; Description: "Xml"; Types: Complete Custom
 Name: "Actions\Office"; Description: "Office"; Types: Complete Custom
 Name: "SDK"; Description: "CentipedeAction SDK"
 Name: "Actions\ShellActions"; Description: "Shell Actions"; Types: Complete Custom
+Name: "UserFiles"; Description: "User Configuration"; Types: UserSetup; Flags: fixed
 
 [InstallDelete]
 Type: dirifempty; Name: "{app}"
 
 [Types]
 Name: "Complete"; Description: "Install all components"
-Name: "Minimal";  Description: "Install only required items"
-Name: "Custom";   Description: "Customise the installation"; Flags: iscustom
+Name: "Minimal"; Description: "Install only required items"
+Name: "Custom"; Description: "Customise the installation"; Flags: iscustom
+Name: "UserSetup"; Description: "Setup pre-installed Centipede for local user"
 
 [UninstallRun]
 
@@ -92,8 +94,8 @@ Name: "Custom";   Description: "Customise the installation"; Flags: iscustom
 [Tasks]
 
 [Icons]
-Name: "{userprograms}\Centipede\Centipede";           Filename: "{app}\Centipede.exe"; IconFilename: "{app}\Centipede.exe"; Components: Centipede; Flags: useapppaths
-Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}";      IconFilename: "{uninstallexe}";      Components: Centipede
+Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"; Components: Centipede UserFiles
+Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
 [PostCompile]
 Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
