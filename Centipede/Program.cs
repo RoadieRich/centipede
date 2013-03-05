@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 
@@ -17,29 +18,30 @@ namespace Centipede
 
         private static Dictionary<string, string> ParseArguments(IEnumerable<string> argv)
         {
-            string key = null;
-            List<String> valueWords = new List<string>();
-            Dictionary<String, String> arguments = new Dictionary<string, string>();
-            foreach (string s in argv)
-            {
-                if (s.StartsWith(@"/") || s.StartsWith(@"-") || s.StartsWith(@"+"))
-                {
-                    if (key != null)
-                    {
-                        arguments.Add(key, valueWords.Count > 0 ? String.Join(@" ", valueWords) : null);
-                    }
+            IEnumerator<string> enumerator = argv.GetEnumerator();
 
-                    key = s.Substring(1);
-                    valueWords.Clear();
+            Dictionary<string,string> result = new Dictionary<string, string>();
+            
+            string lastKey = String.Empty;
+
+            while (enumerator.MoveNext())
+            {
+                
+                string trimmed = enumerator.Current.TrimStart('/', '-', '+');
+                if (trimmed != enumerator.Current)
+                {
+                    string flag = enumerator.Current.Substring(0, 1);
+                    lastKey = trimmed;
+                    result.Add(trimmed, flag == "/" ? null : flag);
                 }
                 else
                 {
-                    valueWords.Add(s);
+                    result[lastKey] = trimmed;
                 }
-
             }
 
-            return arguments;
+            return result;
+
         }
 
         private static void RunHeadless(Dictionary<string, string> argv)
@@ -75,7 +77,5 @@ namespace Centipede
             Application.Run(_mainForm);
         }
     }
-
-    
 }
 

@@ -32,13 +32,13 @@ namespace Centipede
 
         #region Events
 
-        //public event AddActionCallback ActionAdded;
-       // public event ActionUpdateCallback ActionCompleted;
         public event ActionErrorEvent ActionErrorOccurred;
-        //public event ActionRemovedHandler ActionRemoved;
-        public event AfterLoadEventHandler AfterLoad;
-        //public event ActionUpdateCallback BeforeAction;
-        public event CompletedHandler JobCompleted;
+        public event AfterLoadEvent AfterLoad;
+        public event JobCompletedEvent JobCompleted;
+        public event ActionEvent ActionAdded;
+        public event ActionEvent ActionCompleted;
+        public event ActionEvent ActionRemoved;
+        public event ActionEvent BeforeAction;
 
         #endregion
 
@@ -81,113 +81,103 @@ namespace Centipede
         {
             if (!Job.Actions.Any())
             {
-                ActionErrorEvent @event = ActionErrorOccurred;
-                if (@event != null)
-                {
-                    ActionErrorEventArgs args = new ActionErrorEventArgs
-                                                {
-                                                        Action = this.CurrentAction,
-                                                        Exception =
-                                                                new ActionException(
-                                                                Resources.Program_RunJob_No_Actions_Added)
-                                                };
-                    @event(this, args);
-                }
-                return;
+                ActionErrorEventArgs args = new ActionErrorEventArgs
+                                            {
+                                                Action = this.CurrentAction,
+                                                Exception =
+                                                        new ActionException(
+                                                        Resources.Program_RunJob_No_Actions_Added)
+                                            };
+                OnActionError(args);
+
             }
 
-            this.CurrentAction = Job.Actions.First();
-
             Boolean completed = true;
+
+            this.CurrentAction = Job.Actions.First();
 
             while (this.CurrentAction != null)
             {
                 try
                 {
+                    ActionEventArgs args = new ActionEventArgs
                     {
-                        ActionEvent handler = BeforeAction;
-                        if (handler != null)
-                        {
-                            ActionEventArgs e = new ActionEventArgs
-                                                {
-                                                    Action = this.CurrentAction
-                                                };
-                            handler(this, e);
-                        }
-                    }
+                        Action = this.CurrentAction
+                    };
+                 
+                    OnBeforeAction(args);
                     this.CurrentAction.Run();
-                    {
-                        ActionEvent handler = ActionCompleted;
-                        if (handler != null)
-                        {
-                            ActionEventArgs e = new ActionEventArgs
-                                                {
-                                                        Action = this.CurrentAction
-                                                };
-                            handler(this, e);
-                        }
-                    }
+                    OnAfterAction(args);
+
                     this.CurrentAction = this.CurrentAction.GetNext();
+                }
+                catch (FatalActionException e)
+                {
+                    completed = false;
+
+                    ActionErrorEventArgs args = new ActionErrorEventArgs
+                                                {
+                                                    Action = this.CurrentAction,
+                                                    Exception = new FatalActionException(string.Format(Resources.CentipedeCore_RunJob_FatalError,
+                                                                                                e.Message, e))
+                                                };
+                    OnActionError(args);
+                    break;
+
                 }
                 catch (Exception e)
                 {
-                    ActionException ae;
-                    ActionErrorEvent handler = ActionErrorOccurred;
-                    if (e is FatalActionException)
+                    ActionErrorEventArgs args = new ActionErrorEventArgs()
+                                                    {
+                                                        Action = this.CurrentAction,
+                                                        Exception = (e as ActionException) ?? new ActionException(e, this.CurrentAction)
+                                                    };
+                    OnActionError(args);
+                    if (!args.Continue)
                     {
-                        
                         completed = false;
-                        {
-                            if (handler != null)
-                            {
-                                ae = new FatalActionException(string.Format(Resources.CentipedeCore_RunJob_FatalError,
-                                                                            e.Message, e));
-
-                                ActionErrorEventArgs args = new ActionErrorEventArgs()
-                                                            {
-                                                                    Action = this.CurrentAction,
-                                                                    Exception = ae
-                                                            };
-                                handler(this, args);
-                            }
-                        }
+                        break;
                     }
-
-                    else
-                    {
-                        if (e is ActionException)
-                        {
-                            ae = e as ActionException;
-                        }
-                        else
-                        {
-                            ae = new ActionException(e, this.CurrentAction);
-                        }
-                        if (handler != null)
-                        {
-                            ActionErrorEventArgs args = new ActionErrorEventArgs()
-                                                        {
-                                                                Action = this.CurrentAction,
-                                                                Exception = ae
-                                                        };
-                            handler(this, args);
-                            if (!args.Continue)
-                            {
-                                completed = false;
-                                break;
-                            }
-                            CurrentAction = args.NextAction;
-                        }
-                    }
+                    CurrentAction = args.NextAction;
                 }
             }
 
+            OnCompleted(completed);
+        }
+
+        private void OnAfterAction(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionCompleted;
+            if (handler != null)
             {
-                CompletedHandler handler = JobCompleted;
-                if (handler != null)
-                {
-                    handler(completed);
-                }
+                handler(this, args);
+            }
+        }
+
+        private void OnBeforeAction(ActionEventArgs e)
+        {
+            ActionEvent handler = this.BeforeAction;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void OnCompleted(bool completed)
+        {
+            JobCompletedEvent handler = this.JobCompleted;
+            if (handler != null)
+            {
+                handler(this, new JobCompletedEventArgs { Completed = completed });
+            }
+        }
+
+        private void OnActionError(ActionErrorEventArgs args)
+        {
+            ActionErrorEvent handler = ActionErrorOccurred;
+            if (handler != null)
+            {
+                handler(this, args);
             }
         }
 
@@ -242,6 +232,11 @@ namespace Centipede
                     handler(this, args);
                 }
             }
+        }
+
+        public void AddAction(IAction action, Int32 index = -1)
+        {
+            AddAction(this.Job, action, index);
         }
 
         /// <summary>
@@ -382,7 +377,7 @@ namespace Centipede
             }
 
             {
-                AfterLoadEventHandler handler = AfterLoad;
+                AfterLoadEvent handler = AfterLoad;
                 if (handler != null)
                 {
                     handler(this, EventArgs.Empty);
@@ -396,17 +391,7 @@ namespace Centipede
 
         #endregion
 
-        public event ActionEvent ActionAdded;
 
-        public event ActionEvent ActionCompleted;
-
-        public event ActionEvent ActionRemoved;
-
-        public event ActionEvent BeforeAction;
-
-        public void AddAction(IAction action, Int32 index = -1)
-        {
-            AddAction(this.Job, action, index);
-        }
+        
     }
 }

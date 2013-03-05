@@ -174,6 +174,13 @@ namespace Centipede.Properties {
             }
         }
         
+        public static System.Drawing.Icon exit {
+            get {
+                object obj = ResourceManager.GetObject("exit", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         public static System.Drawing.Icon generic {
             get {
                 object obj = ResourceManager.GetObject("generic", resourceCulture);
@@ -395,6 +402,23 @@ namespace Centipede.Properties {
             get {
                 object obj = ResourceManager.GetObject("ThumbnailView", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html lang=&quot;en-gb&quot;&gt;
+        ///    &lt;head&gt;
+        ///        &lt;title&gt;Welcome To Centipede&lt;/title&gt;
+        ///    &lt;/head&gt;
+        ///    &lt;body&gt;
+        ///        &lt;h1&gt;Welcome to Centipede&lt;/h1&gt;
+        ///    &lt;/body&gt;
+        ///&lt;/html&gt;.
+        /// </summary>
+        public static string WelcomeScreen {
+            get {
+                return ResourceManager.GetString("WelcomeScreen", resourceCulture);
             }
         }
     }

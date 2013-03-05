@@ -508,7 +508,7 @@
     <value>0</value>
   </data>
   <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607,Absolute,607" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621,Absolute,621" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;SplitContainer3.Panel1.Name" xml:space="preserve">
     <value>SplitContainer3.Panel1</value>
@@ -537,19 +537,19 @@
         AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
         Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
         Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAANvAf8DbwH/A28B/wNvAf8DbwH/A28B/wwA
-        A28B/wNvAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAANv
-        Af8UAANvAf8DbwH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
-        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAANvAf8UAANvAf8DbwH/kAADZAH2
+        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN2Af8DdgH/A3YB/wN2Af8DdgH/A3YB/wwA
+        A3YB/wN2Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN2
+        Af8UAAN2Af8DdgH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
+        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN2Af8UAAN2Af8DdgH/kAADZAH2
         AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA28B/xQAA28B/wNvAf+QAAT/AaQCgQH/AZkCgQH/
-        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAANv
-        Af8UAANvAf8DbwH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
-        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA28B/wNvAf8DbwH/A28B/wwA
-        A28B/wNvAf8DbwH/A28B/wNvAf8DbwH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
-        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAANvAf8DbwH/lAADWwG4
-        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA28B/xQAA28B/wNvAf+gAAT/AZsCgQH/
-        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADbwH/GAADbwH/A28B/wNvAf8DbwH/lAADcgH1AaYCgQH/
+        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA3YB/xQAA3YB/wN2Af+QAAT/AaQCgQH/AZkCgQH/
+        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN2
+        Af8UAAN2Af8DdgH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
+        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA3YB/wN2Af8DdgH/A3YB/wwA
+        A3YB/wN2Af8DdgH/A3YB/wN2Af8DdgH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
+        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN2Af8DdgH/lAADWwG4
+        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA3YB/xQAA3YB/wN2Af+gAAT/AZsCgQH/
+        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADdgH/GAADdgH/A3YB/wN2Af8DdgH/lAADcgH1AaYCgQH/
         AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
         AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
         AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
@@ -612,7 +612,7 @@
     <value>636, 115</value>
   </data>
   <data name="AddActionTabs.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;AddActionTabs.Name" xml:space="preserve">
     <value>AddActionTabs</value>
@@ -744,7 +744,7 @@
     <value>0, 0</value>
   </data>
   <data name="MessageDataGridView.Size" type="System.Drawing.Size, System.Drawing">
-    <value>944, 150</value>
+    <value>944, 159</value>
   </data>
   <data name="MessageDataGridView.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -762,7 +762,7 @@
     <value>0</value>
   </data>
   <data name="toolStripContainer3.ContentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>944, 150</value>
+    <value>944, 159</value>
   </data>
   <data name="&gt;&gt;toolStripContainer3.ContentPanel.Name" xml:space="preserve">
     <value>toolStripContainer3.ContentPanel</value>
@@ -807,7 +807,7 @@
     <value>2</value>
   </data>
   <data name="toolStripContainer3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>944, 175</value>
+    <value>944, 184</value>
   </data>
   <data name="toolStripContainer3.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -819,7 +819,7 @@
     <value>134, 91</value>
   </metadata>
   <data name="MessageFilterToolStrip.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>None</value>
+    <value>Fill</value>
   </data>
   <data name="toolStripButton4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -897,7 +897,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="OutputTab.Size" type="System.Drawing.Size, System.Drawing">
-    <value>950, 181</value>
+    <value>950, 190</value>
   </data>
   <data name="OutputTab.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -972,7 +972,7 @@
     <value>4, 3</value>
   </data>
   <data name="RunTabs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>958, 207</value>
+    <value>958, 216</value>
   </data>
   <data name="RunTabs.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -996,7 +996,7 @@
     <value>NoControl</value>
   </data>
   <data name="RunButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>882, 216</value>
+    <value>882, 225</value>
   </data>
   <data name="RunButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>68, 23</value>
@@ -1026,7 +1026,7 @@
     <value>NoControl</value>
   </data>
   <data name="progressBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 216</value>
+    <value>12, 225</value>
   </data>
   <data name="progressBar1.Size" type="System.Drawing.Size, System.Drawing">
     <value>864, 23</value>

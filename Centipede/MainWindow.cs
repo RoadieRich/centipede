@@ -55,7 +55,22 @@ namespace Centipede
 
         public MainWindow(CentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
+            //Visible = false;
+
             InitializeComponent();
+
+            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
+            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
+            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
+            Height = Settings.Default.MainWindowHeight;
+            Width = Settings.Default.MainWindowWidth;
+            Location = Settings.Default.MainWindowLocation;
+            WindowState = Settings.Default.MainWindowState;
+
+            WebBrowser.DocumentText = Resources.WelcomeScreen;
+
+            //Visible = true;
+
             Core = centipedeCore;
             Instance = this;
             ActionFactory.MessageHandlerDelegate = OnMessageHandlerDelegate;
@@ -165,12 +180,17 @@ namespace Centipede
                 messageBuilder.AppendLine(exception.Message);
             }
 
-            DialogResult result = MessageBox.Show(
-                                                  messageBuilder.ToString(),
+            DialogResult result = MessageBox.Show(messageBuilder.ToString(),
                                                   Resources.MainWindow_ErrorHandler_Error,
                                                   MessageBoxButtons.AbortRetryIgnore,
-                                                  MessageBoxIcon.Exclamation
-                    );
+                                                  MessageBoxIcon.Exclamation);
+
+            SetErrorReturnState(e, result);
+        }
+
+        private static void SetErrorReturnState(ActionErrorEventArgs e, DialogResult result)
+        {
+            ActionException exception = ((ActionException)e.Exception);
 
             if (exception.ErrorAction == null)
             {
@@ -178,24 +198,25 @@ namespace Centipede
                 e.Continue = false;
                 return;
             }
+            
             switch (result)
             {
-                case DialogResult.Abort:
-                    e.NextAction = null;
-                    e.Continue = false;
-                    break;
-                case DialogResult.Retry:
-                    e.NextAction = exception.ErrorAction;
-                    e.Continue = true;
-                    break;
-                case DialogResult.Ignore:
-                    e.NextAction = exception.ErrorAction.GetNext();
-                    e.Continue = true;
-                    break;
-                default:
-                    e.NextAction = null;
-                    e.Continue = false;
-                    break;
+            case DialogResult.Abort:
+                e.NextAction = null;
+                e.Continue = false;
+                break;
+            case DialogResult.Retry:
+                e.NextAction = exception.ErrorAction;
+                e.Continue = true;
+                break;
+            case DialogResult.Ignore:
+                e.NextAction = exception.ErrorAction.GetNext();
+                e.Continue = true;
+                break;
+            default:
+                e.NextAction = null;
+                e.Continue = false;
+                break;
             }
         }
 
@@ -251,11 +272,11 @@ namespace Centipede
             }
         }
 
-        private static void CompletedHandler(Boolean success)
+        private static void CompletedHandler(object sender, JobCompletedEventArgs e)
         {
             String message;
             MessageBoxIcon icon;
-            if (success)
+            if (e.Completed)
             {
                 message = Resources.MainWindow_CompletedHandler_Job_finished_successfully_;
                 icon = MessageBoxIcon.Information;
@@ -371,13 +392,6 @@ namespace Centipede
 
             ActionDisplayControl.SetDirty = delegate { Dirty = true; };
 
-            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
-            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
-            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
-            Height = Settings.Default.MainWindowHeight;
-            Width = Settings.Default.MainWindowWidth;
-            Location = Settings.Default.MainWindowLocation;
-            WindowState = Settings.Default.MainWindowState;
         }
 
         private void UpdateFavourites()
@@ -467,6 +481,8 @@ namespace Centipede
             if (!string.IsNullOrEmpty(catAttribute.iconName))
             {
                 Type t = asm.GetType(pluginType.Namespace + @".Properties.Resources");
+                		
+
                 if (t != null)
                 {
                     var icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t, null) as Icon;
@@ -628,7 +644,7 @@ namespace Centipede
             DoDragDrop(e.Item, DragDropEffects.Move);
         }
 
-        private static void ActionContainer_DragEnter(object sender, DragEventArgs e)
+        private void ActionContainer_DragEnter(object sender, DragEventArgs e)
         {
             //Fixme: Should type be checked in here?
             e.Effect = DragDropEffects.Move;
@@ -855,7 +871,7 @@ namespace Centipede
 
         private void SplitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
-            
+
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -870,7 +886,7 @@ namespace Centipede
             Settings.Default.SplitContainer1Point = SplitContainer1.SplitterDistance;
             Settings.Default.SplitContainer2Point = SplitContainer2.SplitterDistance;
             Settings.Default.SplitContainer3Point = SplitContainer3.SplitterDistance;
-            
+
             Settings.Default.Save();
 
             base.Dispose();

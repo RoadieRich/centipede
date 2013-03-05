@@ -283,6 +283,8 @@ namespace Centipede
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ActionContainer.ContextMenuStrip = this.VarsContextMenu;
             this.ActionContainer.Name = "ActionContainer";
+            this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
+            this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
             // 
             // VarsContextMenu
             // 
@@ -969,9 +971,6 @@ namespace Centipede
         private System.Windows.Forms.ToolStrip MessageFilterToolStrip;
         private System.Windows.Forms.SplitContainer SplitContainer3;
         private System.Windows.Forms.TableLayoutPanel ActionContainer;
-        private System.Windows.Forms.TabControl AddActionTabs;
-        private System.Windows.Forms.TabPage UIActTab;
-        private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.ToolStripContainer toolStripContainer4;
         private System.Windows.Forms.WebBrowser WebBrowser;
         private System.Windows.Forms.ToolStrip NavigationToolbar;
@@ -992,6 +991,9 @@ namespace Centipede
         private System.Windows.Forms.DataGridViewTextBoxColumn actionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
+        private System.Windows.Forms.TabControl AddActionTabs;
+        private System.Windows.Forms.TabPage UIActTab;
+        private System.Windows.Forms.ListView UIActListBox;
     }
 }
 

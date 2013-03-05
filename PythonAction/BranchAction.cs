@@ -89,7 +89,7 @@ namespace PyAction
             Comment = element.SelectSingleNode("@Comment").Value;
             ConditionSource = element.Value;
             int index = int.Parse(element.SelectSingleNode("@Target").Value);
-            AfterLoadEventHandler instanceOnAfterLoad = null;
+            AfterLoadEvent instanceOnAfterLoad = null;
             instanceOnAfterLoad = delegate{
                 NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
                 MainWindow.Instance.Core.AfterLoad -= instanceOnAfterLoad;
