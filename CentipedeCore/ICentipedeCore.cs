@@ -33,7 +33,7 @@ namespace CentipedeInterfaces
         /// <summary>
         /// 
         /// </summary>
-        event AfterLoadEventHandler AfterLoad;
+        event AfterLoadEvent AfterLoad;
         
         /// <summary>
         /// 
@@ -43,7 +43,7 @@ namespace CentipedeInterfaces
         /// <summary>
         /// 
         /// </summary>
-        event CompletedHandler JobCompleted;
+        event JobCompletedEvent JobCompleted;
      
         /// <summary>
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
@@ -110,13 +110,20 @@ namespace CentipedeInterfaces
 
     public delegate void AddActionCallback(IAction action, Int32 index);
 
-    public delegate void AfterLoadEventHandler(Object sender, EventArgs e);
+    public delegate void AfterLoadEvent(Object sender, EventArgs e);
 
     /// <summary>
     ///     Handler for job completion
     /// </summary>
     /// <param name="succeeded">True if all actions completed successfully.</param>
     public delegate void CompletedHandler(Boolean succeeded);
+
+    public delegate void JobCompletedEvent(object sender, JobCompletedEventArgs e);
+
+    public class JobCompletedEventArgs : EventArgs
+    {
+        public Boolean Completed { get; set; }
+    }
 
     /// <summary>
     ///     Handler delegate for errors occuring in actions

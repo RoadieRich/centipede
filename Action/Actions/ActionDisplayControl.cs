@@ -11,29 +11,34 @@ using ResharperAnnotations;
 namespace Centipede.Actions
 {
     /// <summary>
-    /// 
+    /// The control used to display an action.  Contains all logic required to determine what arguments to display
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public partial class ActionDisplayControl : UserControl
     {
         /// <summary>
-        /// 
+        /// The status of the action, displayed as a tooltip on the status icon.
         /// </summary>
         public String StatusMessage
         {
             set
             {
-                StatusTooltip.SetToolTip(StatusIconBox, value);
+                this.StatusTooltip.SetToolTip(StatusIconBox, value);
+            }  
+            get
+            {
+                return this.StatusToolTip.GetToolTip(StatusIconBox);
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected ActionDisplayControl()
-        {
-            Selected = false;
-            InitializeComponent();
-        }
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //protected ActionDisplayControl()
+        //{
+        //    Selected = false;
+        //    InitializeComponent();
+        //}
 
         /// <summary>
         /// 
@@ -50,10 +55,13 @@ namespace Centipede.Actions
         }
 
         /// <summary>
-        /// 
+        /// Create a new ActionDisplayControl object
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="generateArgumentFields"></param>
+        /// <param name="action">The <see cref="Centipede.Action"/> this contol is displaying</param>
+        /// <param name="generateArgumentFields">If <c>true</c>, automatically generate argument fields from the members 
+        ///     of <paramref name="action"/> tagged with <see cref="T:CentipedeInterfaces.ActionArgumentAttribute"/>
+        ///     If passed as <c>false</c> from a subclass, the subclass must do this itself.
+        /// </param>
         public ActionDisplayControl(IAction action, bool generateArgumentFields = true)
         {
             Selected = false;
@@ -67,14 +75,11 @@ namespace Centipede.Actions
             StatusToolTip.SetToolTip(StatusIconBox, "");
 
             ActionIcon.Image = GetActionIcon(action);
-
-
+            
             if (generateArgumentFields)
             {
                 GenerateArguments();
             }
-
-
         }
 
         private static Image GetActionIcon(IAction action)
@@ -232,10 +237,7 @@ namespace Centipede.Actions
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(
-                                    String.Format(
-                                                  Resources
-                                                          .ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message,
+                    MessageBox.Show(String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message,
                                                   ThisAction.Name, argInfo.displayName, attrValue.Text));
                 }
             }
@@ -271,7 +273,6 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        [PublicAPI]
         public bool Selected { get; private set; }
 
         private void ExpandButton_Click(object sender, EventArgs e)
@@ -294,7 +295,6 @@ namespace Centipede.Actions
         /// Sets the displayed state of the action.
         /// <seealso cref="T:Centipede.Actions.ActionState"/>
         /// </summary>
-        [UsedImplicitly]
         public ActionState State
         {
             get
@@ -329,7 +329,6 @@ namespace Centipede.Actions
         /// <summary>
         /// The <see cref="T:Centipede.Action"/> this control is displaying.
         /// </summary>
-
         public virtual IAction ThisAction
         {
             get
@@ -348,7 +347,6 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        [UsedImplicitly]
         public static EventHandler SetDirty;
 
         /// <summary>
@@ -424,21 +422,21 @@ namespace Centipede.Actions
         /// <summary>
         /// Action has not been executed yet 
         /// </summary>
-        None = -1,
+        None = 0,
 
         /// <summary>
         /// Action is currently being executed
         /// </summary>
-        Running = 0,
+        Running = 1,
 
         /// <summary>
-        /// Actiion has been completed
+        /// Action has been completed
         /// </summary>
-        Completed = 1,
+        Completed = 2,
 
         /// <summary>
-        /// 
+        /// An error occurred
         /// </summary>
-        Error = 2
+        Error = -1
     }
 }

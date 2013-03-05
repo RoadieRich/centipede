@@ -16,7 +16,15 @@ namespace Centipede
                 return DefaultSize;
             }
 
-            // Declare a variable to store the total available width as  
+            // Retrieve the preferred size from the base class, but change the 
+            // width to the calculated width. 
+            Size size = base.GetPreferredSize(constrainingSize);
+            size.Width = CalculateWidth();
+            return size;
+        }
+
+        private int CalculateWidth()
+        { // Declare a variable to store the total available width as  
             // it is calculated, starting with the display width of the  
             // owning ToolStrip.
             Int32 width = Owner.DisplayRectangle.Width;
@@ -25,7 +33,7 @@ namespace Centipede
             if (Owner.OverflowButton.Visible)
             {
                 width = width - Owner.OverflowButton.Width -
-                    Owner.OverflowButton.Margin.Horizontal;
+                        Owner.OverflowButton.Margin.Horizontal;
             }
 
             // Declare a variable to maintain a count of ToolStripSpringTextBox  
@@ -51,17 +59,18 @@ namespace Centipede
 
             // If there are multiple ToolStripSpringTextBox items in the owning 
             // ToolStrip, divide the total available width between them.  
-            if (springBoxCount > 1) width /= springBoxCount;
+            if (springBoxCount > 1)
+            {
+                width /= springBoxCount;
+            }
 
             // If the available width is less than the default width, use the 
             // default width, forcing one or more items onto the overflow menu. 
-            if (width < DefaultSize.Width) width = DefaultSize.Width;
-
-            // Retrieve the preferred size from the base class, but change the 
-            // width to the calculated width. 
-            Size size = base.GetPreferredSize(constrainingSize);
-            size.Width = width;
-            return size;
+            if (width < DefaultSize.Width)
+            {
+                width = DefaultSize.Width;
+            }
+            return width;
         }
     }
 }

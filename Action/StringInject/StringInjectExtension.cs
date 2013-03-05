@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -37,6 +38,18 @@ namespace Centipede.StringInject
         {
             return formatString.Inject(new Hashtable(dictionary));
         }
+        /// <summary>
+        /// Extension method that replaces keys in a string with the values of matching dictionary entries.
+        /// <remarks>Uses <see cref="string.Format(string, object)"/> internally; custom formats should match those used for that method.</remarks>
+        /// </summary>
+        /// <param name="formatString">The format string, containing keys like {foo} and {foo:SomeFormat}.</param>
+        /// <param name="dictionary">An <see cref="IDictionary"/> with keys and values to inject into the string</param>
+        /// <returns>A version of the formatString string with dictionary keys replaced by (formatted) key values.</returns>
+        public static string Inject<TKey, TValue>(this string formatString, IDictionary<TKey, TValue> dictionary)
+        {
+            return formatString.Inject(new Hashtable((IDictionary)dictionary));
+        }
+
 
         /// <summary>
         /// Extension method that replaces keys in a string with the values of matching hashtable entries.
