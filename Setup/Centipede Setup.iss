@@ -1,6 +1,12 @@
 #define OutputFileBaseName "CentipedeSetup"
 #define OutputDir "Output"
 #define AppName "Centipede"
+#define ProjectDir "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede"
+#define SetupDir ProjectDir + "\Setup"
+#define BinaryDir ProjectDir + "\bin\Debug"
+#define SDKDir "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction"
+#define CygwinSetupDir "/home/RLovely/MyDocuments/Visual\ Studio\ 2010/Projects/Centipede/Setup"
+
 [Setup]
 AppName={#AppName}
 AppVersion=0.1.0
@@ -28,31 +34,31 @@ UninstallDisplayIcon={app}\Centipede.exe
 ShowLanguageDialog=auto
 
 [Files]
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\CentipedeInterfaces.dll"; DestDir: "{app}"
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\ShellActions
+Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
+Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
+Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
+Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
+Source: "{#BinaryDir}\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
+Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
+Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
+Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
+Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
+Source: "{#BinaryDir}\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
+Source: "{#BinaryDir}\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
+Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
+Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"
+Source: "{#BinaryDir}\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\ShellActions
 
 ; sdk items
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 [Run]
 Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
@@ -104,8 +110,14 @@ Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Fla
 Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
 [PostCompile]
-Name: "C:\Python32\python.exe"; Parameters: ""C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Checksum.py" "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe""; Flags: runminimized cmdprompt redirectoutput
-Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "C:/Documents and Settings/RLovely/My Documents/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
+Name: "C:\Python32\python.exe"; Parameters: ""{#SetupDir}\Checksum.py" "{#SetupDir}\{#OutputDir}\{#OutputFileBaseName}.exe""; Flags: runminimized cmdprompt redirectoutput
+
+
+;I'm sure I had this working at one point...
+;Name: "C:\cygwin\bin\bash.exe"; Parameters: "-c /usr/bin/echo lcd {#CygwinSetupDir}/Output > {#CygwinSetupDir}/upload.sftpc"
+;Name: "C:\cygwin\bin\bash.exe"; Parameters: "-c /usr/bin/echo put * >> {#CygwinSetupDir}/upload.sftpc"
+;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "C:/Documents and Settings/RLovely/My Documents/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
+;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "{#CygwinSetupDir}/upload.sftpc" www-data@ps-der-hg1"
 ;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
 
 [Code]
@@ -154,3 +166,5 @@ function IronPythonNotInstalled: Boolean;
 begin
   Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\IronPython\2.7');
 end;
+
+#expr SaveToFile(AddBackslash(SetupDir) + "Preprocessed.iss")
