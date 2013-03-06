@@ -2,14 +2,16 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
+using CentipedeInterfaces;
+
 
 namespace Centipede
 {
     public partial class JobPropertyForm : Form
     {
-        private readonly CentipedeCore _core;
+        private readonly ICentipedeCore _core;
 
-        public JobPropertyForm(CentipedeCore core)
+        public JobPropertyForm(ICentipedeCore core)
         {
             _core = core;
             InitializeComponent();

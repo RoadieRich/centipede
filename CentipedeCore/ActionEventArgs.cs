@@ -31,6 +31,13 @@ namespace CentipedeInterfaces
                 NextAction = value.Next;
             }
         }
-        public Boolean Continue { get; set; }
+        public ContinueState Continue { get; set; }
+    }
+
+    public enum ContinueState
+    {
+        Abort,
+        Retry,
+        Continue
     }
 }

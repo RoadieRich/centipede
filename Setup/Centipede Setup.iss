@@ -20,6 +20,12 @@ OutputBaseFilename={#OutputFileBaseName}
 AllowNoIcons=True
 DefaultGroupName=Centipede
 OutputDir={#OutputDir}
+WizardImageFile=C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\images\big.bmp
+WizardSmallImageFile=C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\images\small.bmp
+AlwaysShowGroupOnReadyPage=True
+AlwaysShowDirOnReadyPage=True
+UninstallDisplayIcon={app}\Centipede.exe
+ShowLanguageDialog=auto
 
 [Files]
 Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
@@ -74,8 +80,8 @@ Name: "Actions\Python\Python_Engine"; Description: "The IronPython 2.7 Interpret
 Name: "Actions\Solidworks"; Description: "Solidworks 2012"; Types: Complete Custom
 Name: "Actions\Xml"; Description: "Xml"; Types: Complete Custom
 Name: "Actions\Office"; Description: "Office"; Types: Complete Custom
-Name: "SDK"; Description: "CentipedeAction SDK"
 Name: "Actions\ShellActions"; Description: "Shell Actions"; Types: Complete Custom
+Name: "SDK"; Description: "CentipedeAction SDK"; Types: Complete
 Name: "UserFiles"; Description: "User Configuration"; Types: UserSetup; Flags: fixed
 
 [InstallDelete]
@@ -98,7 +104,9 @@ Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Fla
 Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
 [PostCompile]
-Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
+Name: "C:\Python32\python.exe"; Parameters: ""C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Checksum.py" "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe""; Flags: runminimized cmdprompt redirectoutput
+Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "C:/Documents and Settings/RLovely/My Documents/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
+;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
 
 [Code]
 var
@@ -113,10 +121,6 @@ begin
     'Please select a location for the {#AppName} sdk. (We recommend the default.)',
     False, '');
   SdkDirPage.Add('');
-  #ifdef DEBUG
-  MsgBox('configured datadirpage', mbError, MB_OK);
-  #endif
-
   SdkDirPage.Values[0] := GetPreviousData('DataDir', ExpandConstant('{userdocs}\{#appname}SDK'));
   
 end;
@@ -138,13 +142,7 @@ end;
 function GetSdkDir(param: String): String;
 begin
   { Return the selected DataDir }
-  #ifdef DEBUG
-  MsgBox('GetDataDir.' + param, mbError, MB_OK);
-  #endif
   Result := SdkDirPage.Values[0];
-  #ifdef DEBUG
-  MsgBox(DataDirPage.Values[0], mbError, MB_OK);
-  #endif
 end;
 
 function FrameworkIsNotInstalled: Boolean;

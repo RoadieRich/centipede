@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using System.Xml.XPath;
 using Centipede.Properties;
@@ -16,7 +17,7 @@ using ResharperAnnotations;
 
 namespace Centipede
 {
-    public class CentipedeCore : ICentipedeCore
+    public sealed class CentipedeCore : ICentipedeCore
     {
         #region Constructors
 
@@ -44,7 +45,7 @@ namespace Centipede
 
         #region Fields
 
-        internal IAction CurrentAction;
+        public IAction CurrentAction { get; set; }
 
         [UsedImplicitly]
         private Dictionary<string, string> _arguments;
@@ -77,73 +78,120 @@ namespace Centipede
         ///     Run the job, starting with the first action added.
         /// </summary>
         [STAThread]
-        public void RunJob()
+        public void RunJob(bool stepping = false)
         {
+            Mutex steppingPauseMutex = new Mutex();
+            if (stepping)
+            {
+                OnStartStepping(new StartSteppingEventArgs(steppingPauseMutex));
+            }
+
             if (!Job.Actions.Any())
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                Action = this.CurrentAction,
-                                                Exception =
-                                                        new ActionException(
-                                                        Resources.Program_RunJob_No_Actions_Added)
+                                                    Action = this.CurrentAction,
+                                                    Exception =
+                                                            new ActionException(
+                                                            Resources.Program_RunJob_No_Actions_Added)
                                             };
                 OnActionError(args);
 
             }
-
-            Boolean completed = true;
-
+            
             this.CurrentAction = Job.Actions.First();
 
-            while (this.CurrentAction != null)
+            Boolean jobFailed = false;
+
+            try
             {
-                try
+                while (this.CurrentAction != null)
                 {
-                    ActionEventArgs args = new ActionEventArgs
+
+                    ContinueState = ContinueState.Continue;
+
+                    RunStep(this.CurrentAction);
+
+                    if (stepping)
                     {
-                        Action = this.CurrentAction
-                    };
-                 
-                    OnBeforeAction(args);
-                    this.CurrentAction.Run();
-                    OnAfterAction(args);
-
-                    this.CurrentAction = this.CurrentAction.GetNext();
-                }
-                catch (FatalActionException e)
-                {
-                    completed = false;
-
-                    ActionErrorEventArgs args = new ActionErrorEventArgs
-                                                {
-                                                    Action = this.CurrentAction,
-                                                    Exception = new FatalActionException(string.Format(Resources.CentipedeCore_RunJob_FatalError,
-                                                                                                e.Message, e))
-                                                };
-                    OnActionError(args);
-                    break;
-
-                }
-                catch (Exception e)
-                {
-                    ActionErrorEventArgs args = new ActionErrorEventArgs()
-                                                    {
-                                                        Action = this.CurrentAction,
-                                                        Exception = (e as ActionException) ?? new ActionException(e, this.CurrentAction)
-                                                    };
-                    OnActionError(args);
-                    if (!args.Continue)
-                    {
-                        completed = false;
-                        break;
+                        //something
                     }
-                    CurrentAction = args.NextAction;
+
+                    switch (ContinueState)
+                    {
+                    case ContinueState.Abort:
+                        throw new AbortOperationException();
+                    case ContinueState.Retry:
+                        continue;
+                    case ContinueState.Continue:
+                        this.CurrentAction = this.CurrentAction.GetNext();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
 
-            OnCompleted(completed);
+            catch (AbortOperationException)
+            {
+                jobFailed = true;
+            }
+            OnCompleted(!jobFailed);
         }
+
+        public event StartSteppingEvent StartStepping;
+
+        private void OnStartStepping(StartSteppingEventArgs e)
+        {
+            StartSteppingEvent handler = this.StartStepping;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void RunStep(IAction currentAction)
+        {
+            try
+            {
+                ActionEventArgs args = new ActionEventArgs
+                                       {
+                                            Action = currentAction
+                                       };
+
+                OnBeforeAction(args);
+                currentAction.Run();
+                OnAfterAction(args);
+
+            }
+            catch (FatalActionException e)
+            {
+                ActionErrorEventArgs args = new ActionErrorEventArgs
+                                            {
+                                                    Action = currentAction,
+                                                    Exception =
+                                                            new FatalActionException(
+                                                            string.Format(Resources.CentipedeCore_RunJob_FatalError,
+                                                                          e.Message, e))
+                                            };
+                OnActionError(args);
+                throw new AbortOperationException();
+            }
+            catch (Exception e)
+            {
+                ActionErrorEventArgs args = new ActionErrorEventArgs()
+                                            {
+                                                    Action = currentAction,
+                                                    Exception =
+                                                            (e as ActionException) ?? new ActionException(e, this.CurrentAction)
+                                            };
+                OnActionError(args);
+                
+                this.ContinueState = args.Continue;
+            }
+        }
+
+        private ContinueState ContinueState = ContinueState.Continue;
 
         private void OnAfterAction(ActionEventArgs args)
         {
@@ -394,4 +442,5 @@ namespace Centipede
 
         
     }
+
 }
