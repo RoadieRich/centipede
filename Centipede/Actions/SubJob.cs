@@ -39,7 +39,7 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            CentipedeCore core = new CentipedeCore(null);
+            ICentipedeCore core = new CentipedeCore(null);
 
             foreach (String inputVarName in InputVars.Split(',').Select(s => s.Trim()))
             {
@@ -59,8 +59,12 @@ namespace Centipede.Actions
                                   };
             
             newMain.ShowDialog();
-            Thread runjobThread = new Thread(core.RunJob);
-            runjobThread.Start();
+            Thread runjobThread = new Thread(delegate(object arg)
+                                             {
+                                                 ICentipedeCore subjobCore = (ICentipedeCore)arg;
+                                                 subjobCore.RunJob();
+                                             });
+            runjobThread.Start(core);
             runjobThread.Join();
             
         }

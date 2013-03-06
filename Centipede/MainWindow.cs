@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace Centipede
         private ToolStripSpringTextBox _urlTextbox;
         private MessageLevel _displayedLevels;
 
-        public MainWindow(CentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
+        public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
             //Visible = false;
 
@@ -144,7 +145,7 @@ namespace Centipede
             }
         }
 
-        public CentipedeCore Core { get; private set; }
+        public ICentipedeCore Core { get; private set; }
 
         private void ErrorHandler(object sender, ActionErrorEventArgs e)
         {
@@ -195,7 +196,7 @@ namespace Centipede
             if (exception.ErrorAction == null)
             {
                 e.NextAction = null;
-                e.Continue = false;
+                e.Continue = ContinueState.Abort;
                 return;
             }
             
@@ -203,19 +204,19 @@ namespace Centipede
             {
             case DialogResult.Abort:
                 e.NextAction = null;
-                e.Continue = false;
+                e.Continue = ContinueState.Abort;
                 break;
             case DialogResult.Retry:
                 e.NextAction = exception.ErrorAction;
-                e.Continue = true;
+                e.Continue = ContinueState.Retry;
                 break;
             case DialogResult.Ignore:
                 e.NextAction = exception.ErrorAction.GetNext();
-                e.Continue = true;
+                e.Continue = ContinueState.Continue;
                 break;
             default:
                 e.NextAction = null;
-                e.Continue = false;
+                e.Continue = ContinueState.Abort;
                 break;
             }
         }
@@ -933,6 +934,16 @@ namespace Centipede
             {
                 e.Cancel = true;
             }
+        }
+
+        private void visitGetSatisfactionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://getsatisfaction.com/centipede");
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new AboutForm()).Show(this);
         }
     }
 

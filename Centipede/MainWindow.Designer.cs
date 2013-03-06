@@ -119,6 +119,8 @@ namespace Centipede
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
+            this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -688,25 +690,27 @@ namespace Centipede
             this.contentsToolStripMenuItem,
             this.indexToolStripMenuItem,
             this.searchToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.visitGetSatisfactionToolStripMenuItem,
             this.toolStripSeparator10,
             this.aboutToolStripMenuItem});
-            resources.ApplyResources(this.helpToolStripMenuItem1, "helpToolStripMenuItem1");
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            resources.ApplyResources(this.helpToolStripMenuItem1, "helpToolStripMenuItem1");
             // 
             // contentsToolStripMenuItem
             // 
-            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             resources.ApplyResources(this.contentsToolStripMenuItem, "contentsToolStripMenuItem");
+            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             // 
             // indexToolStripMenuItem
             // 
-            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
             resources.ApplyResources(this.indexToolStripMenuItem, "indexToolStripMenuItem");
+            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
             // 
             // searchToolStripMenuItem
             // 
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
             resources.ApplyResources(this.searchToolStripMenuItem, "searchToolStripMenuItem");
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
             // 
             // toolStripSeparator10
             // 
@@ -717,6 +721,7 @@ namespace Centipede
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // FavouritesMenu
             // 
@@ -844,6 +849,17 @@ namespace Centipede
             // 
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // visitGetSatisfactionToolStripMenuItem
+            // 
+            this.visitGetSatisfactionToolStripMenuItem.Name = "visitGetSatisfactionToolStripMenuItem";
+            resources.ApplyResources(this.visitGetSatisfactionToolStripMenuItem, "visitGetSatisfactionToolStripMenuItem");
+            this.visitGetSatisfactionToolStripMenuItem.Click += new System.EventHandler(this.visitGetSatisfactionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // MainWindow
             // 
@@ -994,6 +1010,8 @@ namespace Centipede
         private System.Windows.Forms.TabControl AddActionTabs;
         private System.Windows.Forms.TabPage UIActTab;
         private System.Windows.Forms.ListView UIActListBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem visitGetSatisfactionToolStripMenuItem;
     }
 }
 

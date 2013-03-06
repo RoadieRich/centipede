@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Threading;
 using ResharperAnnotations;
 
 namespace CentipedeInterfaces
@@ -57,7 +58,7 @@ namespace CentipedeInterfaces
         ///     Run the job, starting with the first action added.
         /// </summary>
         [STAThread]
-        void RunJob();
+        void RunJob(bool stepping = false);
 
         /// <summary>
         ///     Add action to the job queue.  By default, it is added as the last action in the job.
@@ -96,6 +97,9 @@ namespace CentipedeInterfaces
         CentipedeJob LoadJob(string jobFileName);
 
         CentipedeJob Job { get; set; }
+        event StartSteppingEvent StartStepping;
+
+        IAction CurrentAction { get; set; }
     }
 
     public delegate void ActionRemovedHandler(IAction action);
@@ -130,4 +134,15 @@ namespace CentipedeInterfaces
     /// </summary>
     public delegate void ActionErrorEvent(object sender, ActionErrorEventArgs e);
 
+    public delegate void StartSteppingEvent(object sender, StartSteppingEventArgs e);
+
+    public class StartSteppingEventArgs : EventArgs
+    {
+        public Mutex SteppingPauseMutex { get; set; }
+
+        public StartSteppingEventArgs(Mutex steppingPauseMutex)
+        {
+            SteppingPauseMutex = steppingPauseMutex;
+        }
+    }
 }
