@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Xml;
@@ -7,6 +8,7 @@ using System.Xml.XPath;
 using Centipede;
 using CentipedeInterfaces;
 using PythonEngine;
+using System.Linq;
 using Action = Centipede.Action;
 
 
@@ -25,7 +27,14 @@ namespace PyAction
 
         public PythonAction(IDictionary<string, object> v, ICentipedeCore c)
                 : base("Python Action", v, c)
-        { }
+        {
+            _source = String.Join("\n", new[]
+                                        {
+                                                "# use the variables dict to access the Job Variables:",
+                                                "#",
+                                                "# variables['result'] = float(variables['a']) * int(variables['b'])"
+                                        });
+        }
 
         [ActionArgument(usage = "Source code to be executed")]
         public String Source
@@ -38,7 +47,12 @@ namespace PyAction
             set
             {
                 _source = value;
-                _complexity = value.Split(Environment.NewLine.ToCharArray()).Length;
+                //Complexity is the count of non-black, non-comment lines
+                _complexity =
+                        value.Split(Environment.NewLine.ToCharArray())
+                             .Count(s => !String.IsNullOrWhiteSpace(s)
+                                         || !s.TrimStart().StartsWith(@"#"));
+
             }
         }
 
@@ -79,6 +93,7 @@ namespace PyAction
             }
         }
 
+        [Localizable(false)]
         public override void AddToXmlElement(XmlElement rootElement)
         {
             XmlDocument ownerDocument = rootElement.OwnerDocument;
@@ -97,6 +112,7 @@ namespace PyAction
             rootElement.AppendChild(element);
         }
 
+        [Localizable(false)]
         protected override void PopulateMembersFromXml(XPathNavigator element)
         {
             Source = element.Value;
