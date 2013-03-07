@@ -110,61 +110,58 @@ Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Fla
 Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
 [PostCompile]
-Name: "C:\Python32\python.exe"; Parameters: ""{#SetupDir}\Checksum.py" "{#SetupDir}\{#OutputDir}\{#OutputFileBaseName}.exe""; Flags: runminimized cmdprompt redirectoutput
+Name: "C:\Python32\python.exe"; Parameters: " "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Checksum.py" "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe" "; Flags: runminimized cmdprompt redirectoutput
 
 
 ;I'm sure I had this working at one point...
-;Name: "C:\cygwin\bin\bash.exe"; Parameters: "-c /usr/bin/echo lcd {#CygwinSetupDir}/Output > {#CygwinSetupDir}/upload.sftpc"
+;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\upload.sh"; Flags: cmdprompt redirectoutput
 ;Name: "C:\cygwin\bin\bash.exe"; Parameters: "-c /usr/bin/echo put * >> {#CygwinSetupDir}/upload.sftpc"
 ;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "C:/Documents and Settings/RLovely/My Documents/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
-;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "{#CygwinSetupDir}/upload.sftpc" www-data@ps-der-hg1"
+;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "/home/RLovely/MyDocuments/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
 ;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
 
 [Code]
 var
-  SdkDirPage: TInputDirWizardPage;
+    SdkDirPage: TInputDirWizardPage;
 
 procedure InitializeWizard;
 begin
-  { Taken from CodeDlg.iss example script }
-  { Create custom pages to show during install }
-  SdkDirPage := CreateInputDirPage(wpSelectComponents,
-    '{#AppName} SDK Directory', '',
-    'Please select a location for the {#AppName} sdk. (We recommend the default.)',
-    False, '');
-  SdkDirPage.Add('');
-  SdkDirPage.Values[0] := GetPreviousData('DataDir', ExpandConstant('{userdocs}\{#appname}SDK'));
-  
+    { Taken from CodeDlg.iss example script }
+    { Create custom pages to show during install }
+    SdkDirPage := CreateInputDirPage(wpSelectComponents,
+        '{#AppName} SDK Directory', '',
+        'Please select a location for the {#AppName} sdk. (We recommend the default.)', False, '');
+    SdkDirPage.Add('');
+    SdkDirPage.Values[0] := GetPreviousData('DataDir', ExpandConstant('{userdocs}\{#appname}SDK'));
+    
 end;
 
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
-  Result := False;
-  // skip sdk path request if sdk isn't installed }
-  if PageID = SdkDirPage.ID then
-    Result := not IsComponentSelected('SDK');
+    Result := False;
+    // skip sdk path request if sdk isn't installed
+    if PageID = SdkDirPage.ID then
+        Result := not IsComponentSelected('SDK');
 end;
 
 // This is needed only if you use GetPreviousData above.
 procedure RegisterPreviousData(PreviousDataKey: Integer);
 begin
-  SetPreviousData(PreviousDataKey, 'DataDir', SdkDirPage.Values[0]);
+    SetPreviousData(PreviousDataKey, 'DataDir', SdkDirPage.Values[0]);
 end;
 
 function GetSdkDir(param: String): String;
 begin
-  { Return the selected DataDir }
-  Result := SdkDirPage.Values[0];
+    { Return the selected DataDir }
+    Result := SdkDirPage.Values[0];
 end;
 
 function FrameworkIsNotInstalled: Boolean;
 begin
-  Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\.NETFramework\policy\v4.0');
+    Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\.NETFramework\policy\v4.0');
 end;
 
 function IronPythonNotInstalled: Boolean;
 begin
-  Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\IronPython\2.7');
+    Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\IronPython\2.7');
 end;
-
-#expr SaveToFile(AddBackslash(SetupDir) + "Preprocessed.iss")
