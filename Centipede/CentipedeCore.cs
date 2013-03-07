@@ -80,17 +80,23 @@ namespace Centipede
         [STAThread]
         public void RunJob(bool stepping = false)
         {
-            Mutex steppingPauseMutex = new Mutex();
+            ManualResetEvent pause = new ManualResetEvent(true);
+
+            lock (_abortRequested)
+            {
+                _abortRequested = false;
+            }
+            
             if (stepping)
             {
-                OnStartStepping(new StartSteppingEventArgs(steppingPauseMutex));
+                OnStartStepping(new StartSteppingEventArgs(pause));
             }
 
             if (!Job.Actions.Any())
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action = this.CurrentAction,
+                                                    Action = CurrentAction,
                                                     Exception =
                                                             new ActionException(
                                                             Resources.Program_RunJob_No_Actions_Added)
@@ -99,35 +105,47 @@ namespace Centipede
 
             }
             
-            this.CurrentAction = Job.Actions.First();
+            CurrentAction = Job.Actions.First();
 
             Boolean jobFailed = false;
 
             try
             {
-                while (this.CurrentAction != null)
+                while (CurrentAction != null)
                 {
-
-                    ContinueState = ContinueState.Continue;
-
-                    RunStep(this.CurrentAction);
-
                     if (stepping)
                     {
-                        //something
+                        pause.WaitOne();
                     }
 
-                    switch (ContinueState)
+                    this._continueState = ContinueState.Continue;
+                    
+                    RunStep(CurrentAction);
+                    
+                    switch (this._continueState)
                     {
                     case ContinueState.Abort:
                         throw new AbortOperationException();
                     case ContinueState.Retry:
                         continue;
                     case ContinueState.Continue:
-                        this.CurrentAction = this.CurrentAction.GetNext();
+                        CurrentAction = CurrentAction.GetNext();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
+                    }
+
+                    if (stepping)
+                    {
+                        pause.Reset();
+                    }
+
+                    lock (this._abortRequested)
+                    {
+                        if ((bool)this._abortRequested)
+                        {
+                            throw new AbortOperationException();
+                        }
                     }
                 }
             }
@@ -143,7 +161,7 @@ namespace Centipede
 
         private void OnStartStepping(StartSteppingEventArgs e)
         {
-            StartSteppingEvent handler = this.StartStepping;
+            StartSteppingEvent handler = StartStepping;
             if (handler != null)
             {
                 handler(this, e);
@@ -179,23 +197,32 @@ namespace Centipede
             }
             catch (Exception e)
             {
-                ActionErrorEventArgs args = new ActionErrorEventArgs()
+                ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
                                                     Action = currentAction,
                                                     Exception =
-                                                            (e as ActionException) ?? new ActionException(e, this.CurrentAction)
+                                                            (e as ActionException) ?? new ActionException(e, CurrentAction)
                                             };
                 OnActionError(args);
                 
-                this.ContinueState = args.Continue;
+                this._continueState = args.Continue;
             }
         }
 
-        private ContinueState ContinueState = ContinueState.Continue;
+        private ContinueState _continueState = ContinueState.Continue;
+        private Object _abortRequested = false;
+
+        public void AbortRun()
+        {
+            lock (_abortRequested)
+            {
+                _abortRequested = true;
+            }
+        }
 
         private void OnAfterAction(ActionEventArgs args)
         {
-            ActionEvent handler = this.ActionCompleted;
+            ActionEvent handler = ActionCompleted;
             if (handler != null)
             {
                 handler(this, args);
@@ -204,7 +231,7 @@ namespace Centipede
 
         private void OnBeforeAction(ActionEventArgs e)
         {
-            ActionEvent handler = this.BeforeAction;
+            ActionEvent handler = BeforeAction;
             if (handler != null)
             {
                 handler(this, e);
@@ -213,7 +240,7 @@ namespace Centipede
 
         private void OnCompleted(bool completed)
         {
-            JobCompletedEvent handler = this.JobCompleted;
+            JobCompletedEvent handler = JobCompleted;
             if (handler != null)
             {
                 handler(this, new JobCompletedEventArgs { Completed = completed });
@@ -284,7 +311,7 @@ namespace Centipede
 
         public void AddAction(IAction action, Int32 index = -1)
         {
-            AddAction(this.Job, action, index);
+            AddAction(Job, action, index);
         }
 
         /// <summary>
@@ -306,7 +333,7 @@ namespace Centipede
                 ActionEvent handler = ActionRemoved;
                 if (handler != null)
                 {
-                    ActionEventArgs args = new ActionEventArgs()
+                    ActionEventArgs args = new ActionEventArgs
                                            {
                                                    Action = action
                                            };
@@ -438,9 +465,5 @@ namespace Centipede
         #endregion
 
         #endregion
-
-
-        
     }
-
 }

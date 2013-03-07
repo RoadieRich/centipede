@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Actions\AskValues.cs" />
+    <Compile Include="Actions\MultipleChoice.cs" />
     <Compile Include="Actions\DemoAction.cs" />
     <Compile Include="Actions\ExitAction.cs" />
     <Compile Include="Actions\GetFileNameAction.cs" />
