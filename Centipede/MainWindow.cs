@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Centipede.Actions;
@@ -18,6 +19,17 @@ using Centipede.Properties;
 using CentipedeInterfaces;
 using ResharperAnnotations;
 
+//
+// ,  , ,  , ,  , ,  , 
+// | /  | /  | /  | /  
+// /-\==/-\==/-\==/-\==
+// \-/==\-/==\-/==\-/==
+// | \  | \  | \  | \  
+// `  ` `  ` `  ` `  ` 
+//
+//
+//
+//
 
 //      \,,/
 //      (..)
@@ -53,6 +65,9 @@ namespace Centipede
         private bool _dirty;
         private ToolStripSpringTextBox _urlTextbox;
         private MessageLevel _displayedLevels;
+        private ManualResetEvent _steppingMutex;
+        private bool _stepping;
+        private Keys _modifierState;
 
         public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
@@ -113,6 +128,8 @@ namespace Centipede
         {
             this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
                                                   DisplayedLevels.HasFlag(e.Level));
+
+           
         }
 
         public override String Text
@@ -273,7 +290,7 @@ namespace Centipede
             }
         }
 
-        private static void CompletedHandler(object sender, JobCompletedEventArgs e)
+        private void CompletedHandler(object sender, JobCompletedEventArgs e)
         {
             String message;
             MessageBoxIcon icon;
@@ -288,6 +305,8 @@ namespace Centipede
                 icon = MessageBoxIcon.Error;
             }
             MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
+            this._stepping = false;
+            this._steppingMutex = null;
         }
 
         private void ItemActivate(object sender, EventArgs e)
@@ -343,6 +362,8 @@ namespace Centipede
             AddToActionTab(typeof(AskValues));
             AddToActionTab(typeof(ExitAction));
             AddToActionTab(typeof(SubJob));
+            AddToActionTab(typeof(MultipleChoice));
+            AddToActionTab(typeof(AskBooleans));
 
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += UrlTextbox_KeyUp;
@@ -374,6 +395,7 @@ namespace Centipede
             Core.ActionAdded += Program_ActionAdded;
             Core.ActionRemoved += Program_ActionRemoved;
             Core.AfterLoad += Program_AfterLoad;
+            Core.StartStepping += CoreOnStartStepping;
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
 
@@ -393,6 +415,12 @@ namespace Centipede
 
             ActionDisplayControl.SetDirty = delegate { Dirty = true; };
 
+        }
+
+        private void CoreOnStartStepping(object sender, StartSteppingEventArgs startSteppingEventArgs)
+        {
+            this._steppingMutex = startSteppingEventArgs.ResetEvent;
+            this._stepping = true;
         }
 
         private void UpdateFavourites()
@@ -612,21 +640,27 @@ namespace Centipede
             }
             this.progressBar1.Value = 0;
             this.progressBar1.Maximum = Core.Job.Complexity;
-            this.backgroundWorker1.RunWorkerAsync();
+            Boolean step = _modifierState.HasFlag(Keys.Control);
+            this.backgroundWorker1.RunWorkerAsync(step);
         }
 
         [STAThread]
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            Core.RunJob();
+            Core.RunJob((bool)e.Argument);
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
+            
+
+            this._modifierState = e.Modifiers;
+
             if (e.KeyData == Keys.F5)
             {
                 this.RunButton.PerformClick();
             }
+            e.IsInputKey = true;
         }
 
         private void ActionContainer_DragDrop(object sender, DragEventArgs e)
@@ -945,6 +979,23 @@ namespace Centipede
         {
             (new AboutForm()).Show(this);
         }
+
+        private void stepThroughToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this._stepping)
+            {
+                this._steppingMutex.Set();
+            }
+            else
+            {
+                backgroundWorker1.RunWorkerAsync(true);
+            }
+        }
+
+        private void abortToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.AbortRun();
+        }
     }
 
     [Serializable]
@@ -973,7 +1024,8 @@ namespace Centipede
         protected AbortOperationException(
                 SerializationInfo info,
                 StreamingContext context)
-            : base(info, context)
+                : base(info, context)
         { }
     }
 }
+

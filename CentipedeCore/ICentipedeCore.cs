@@ -100,6 +100,7 @@ namespace CentipedeInterfaces
         event StartSteppingEvent StartStepping;
 
         IAction CurrentAction { get; set; }
+        void AbortRun();
     }
 
     public delegate void ActionRemovedHandler(IAction action);
@@ -138,11 +139,11 @@ namespace CentipedeInterfaces
 
     public class StartSteppingEventArgs : EventArgs
     {
-        public Mutex SteppingPauseMutex { get; set; }
+        public ManualResetEvent ResetEvent { get; set; }
 
-        public StartSteppingEventArgs(Mutex steppingPauseMutex)
+        public StartSteppingEventArgs(ManualResetEvent resetEvent)
         {
-            SteppingPauseMutex = steppingPauseMutex;
+            ResetEvent = resetEvent;
         }
     }
 }

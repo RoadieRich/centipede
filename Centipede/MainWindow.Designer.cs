@@ -92,17 +92,21 @@ namespace Centipede
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.stepThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FavouritesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FavouritesToolStripMenuPlaceholder = new System.Windows.Forms.ToolStripMenuItem();
             this.FaveMenuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.addCurrentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditFavouritesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.OtherActIcons = new System.Windows.Forms.ImageList(this.components);
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
@@ -119,8 +123,6 @@ namespace Centipede
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
-            this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -521,8 +523,8 @@ namespace Centipede
             this.fileToolStripMenuItem1,
             this.editToolStripMenuItem,
             this.runToolStripMenuItem,
-            this.helpToolStripMenuItem1,
-            this.FavouritesMenu});
+            this.FavouritesMenu,
+            this.helpToolStripMenuItem1});
             this.menuStrip1.Name = "menuStrip1";
             // 
             // fileToolStripMenuItem1
@@ -667,7 +669,9 @@ namespace Centipede
             // 
             this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runToolStripMenuItem1,
-            this.abortToolStripMenuItem});
+            this.abortToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.stepThroughToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             resources.ApplyResources(this.runToolStripMenuItem, "runToolStripMenuItem");
             // 
@@ -682,46 +686,18 @@ namespace Centipede
             // 
             this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
             resources.ApplyResources(this.abortToolStripMenuItem, "abortToolStripMenuItem");
+            this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortToolStripMenuItem_Click);
             // 
-            // helpToolStripMenuItem1
+            // toolStripSeparator3
             // 
-            this.helpToolStripMenuItem1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.helpToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentsToolStripMenuItem,
-            this.indexToolStripMenuItem,
-            this.searchToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.visitGetSatisfactionToolStripMenuItem,
-            this.toolStripSeparator10,
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            resources.ApplyResources(this.helpToolStripMenuItem1, "helpToolStripMenuItem1");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
-            // contentsToolStripMenuItem
+            // stepThroughToolStripMenuItem
             // 
-            resources.ApplyResources(this.contentsToolStripMenuItem, "contentsToolStripMenuItem");
-            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            // 
-            // indexToolStripMenuItem
-            // 
-            resources.ApplyResources(this.indexToolStripMenuItem, "indexToolStripMenuItem");
-            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            // 
-            // searchToolStripMenuItem
-            // 
-            resources.ApplyResources(this.searchToolStripMenuItem, "searchToolStripMenuItem");
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            // 
-            // toolStripSeparator10
-            // 
-            this.toolStripSeparator10.Name = "toolStripSeparator10";
-            resources.ApplyResources(this.toolStripSeparator10, "toolStripSeparator10");
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.stepThroughToolStripMenuItem.Name = "stepThroughToolStripMenuItem";
+            resources.ApplyResources(this.stepThroughToolStripMenuItem, "stepThroughToolStripMenuItem");
+            this.stepThroughToolStripMenuItem.Click += new System.EventHandler(this.stepThroughToolStripMenuItem_Click);
             // 
             // FavouritesMenu
             // 
@@ -754,6 +730,56 @@ namespace Centipede
             this.EditFavouritesMenuItem.Name = "EditFavouritesMenuItem";
             resources.ApplyResources(this.EditFavouritesMenuItem, "EditFavouritesMenuItem");
             this.EditFavouritesMenuItem.Click += new System.EventHandler(this.EditFavouritesMenuItem_Click);
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contentsToolStripMenuItem,
+            this.indexToolStripMenuItem,
+            this.searchToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.visitGetSatisfactionToolStripMenuItem,
+            this.toolStripSeparator10,
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            resources.ApplyResources(this.helpToolStripMenuItem1, "helpToolStripMenuItem1");
+            // 
+            // contentsToolStripMenuItem
+            // 
+            resources.ApplyResources(this.contentsToolStripMenuItem, "contentsToolStripMenuItem");
+            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
+            // 
+            // indexToolStripMenuItem
+            // 
+            resources.ApplyResources(this.indexToolStripMenuItem, "indexToolStripMenuItem");
+            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
+            // 
+            // searchToolStripMenuItem
+            // 
+            resources.ApplyResources(this.searchToolStripMenuItem, "searchToolStripMenuItem");
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
+            // visitGetSatisfactionToolStripMenuItem
+            // 
+            this.visitGetSatisfactionToolStripMenuItem.Name = "visitGetSatisfactionToolStripMenuItem";
+            resources.ApplyResources(this.visitGetSatisfactionToolStripMenuItem, "visitGetSatisfactionToolStripMenuItem");
+            this.visitGetSatisfactionToolStripMenuItem.Click += new System.EventHandler(this.visitGetSatisfactionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            resources.ApplyResources(this.toolStripSeparator10, "toolStripSeparator10");
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStripContainer2
             // 
@@ -849,17 +875,6 @@ namespace Centipede
             // 
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // visitGetSatisfactionToolStripMenuItem
-            // 
-            this.visitGetSatisfactionToolStripMenuItem.Name = "visitGetSatisfactionToolStripMenuItem";
-            resources.ApplyResources(this.visitGetSatisfactionToolStripMenuItem, "visitGetSatisfactionToolStripMenuItem");
-            this.visitGetSatisfactionToolStripMenuItem.Click += new System.EventHandler(this.visitGetSatisfactionToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // MainWindow
             // 
@@ -1012,6 +1027,8 @@ namespace Centipede
         private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem visitGetSatisfactionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem stepThroughToolStripMenuItem;
     }
 }
 
