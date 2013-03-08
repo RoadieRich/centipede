@@ -75,14 +75,15 @@ namespace Centipede
 
             InitializeComponent();
 
-            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
-            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
-            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
             Height = Settings.Default.MainWindowHeight;
             Width = Settings.Default.MainWindowWidth;
             Location = Settings.Default.MainWindowLocation;
             WindowState = Settings.Default.MainWindowState;
 
+            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
+            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
+            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
+            
             WebBrowser.DocumentText = Resources.WelcomeScreen;
 
             //Visible = true;
@@ -913,16 +914,7 @@ namespace Centipede
         {
             Core.Dispose();
 
-            Settings.Default.MainWindowState = WindowState;
-            Settings.Default.MessageFilterSetting = DisplayedLevels;
-            Settings.Default.MainWindowHeight = Height;
-            Settings.Default.MainWindowWidth = Width;
-            Settings.Default.MainWindowLocation = Location;
-            Settings.Default.SplitContainer1Point = SplitContainer1.SplitterDistance;
-            Settings.Default.SplitContainer2Point = SplitContainer2.SplitterDistance;
-            Settings.Default.SplitContainer3Point = SplitContainer3.SplitterDistance;
-
-            Settings.Default.Save();
+            
 
             base.Dispose();
         }
@@ -968,6 +960,16 @@ namespace Centipede
             {
                 e.Cancel = true;
             }
+            Settings.Default.MainWindowState = WindowState;
+            Settings.Default.MessageFilterSetting = DisplayedLevels;
+            Settings.Default.MainWindowHeight = Height;
+            Settings.Default.MainWindowWidth = Width;
+            Settings.Default.MainWindowLocation = Location;
+            Settings.Default.SplitContainer1Point = SplitContainer1.SplitterDistance;
+            Settings.Default.SplitContainer2Point = SplitContainer2.SplitterDistance;
+            Settings.Default.SplitContainer3Point = SplitContainer3.SplitterDistance;
+
+            Settings.Default.Save();
         }
 
         private void visitGetSatisfactionToolStripMenuItem_Click(object sender, EventArgs e)

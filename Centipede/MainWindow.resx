@@ -263,7 +263,7 @@
     <value>23, 22</value>
   </data>
   <data name="toolStripButton1.Text" xml:space="preserve">
-    <value>toolStripButton1</value>
+    <value>Back</value>
   </data>
   <data name="toolStripButton3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -285,7 +285,7 @@
     <value>23, 22</value>
   </data>
   <data name="toolStripButton3.Text" xml:space="preserve">
-    <value>toolStripButton3</value>
+    <value>Next</value>
   </data>
   <data name="toolStripButton2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -325,7 +325,7 @@
     <value>23, 22</value>
   </data>
   <data name="toolStripButton2.Text" xml:space="preserve">
-    <value>toolStripButton2</value>
+    <value>Refresh</value>
   </data>
   <data name="NavigationToolbar.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -508,7 +508,7 @@
     <value>0</value>
   </data>
   <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629,Absolute,629" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631,Absolute,631" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;SplitContainer3.Panel1.Name" xml:space="preserve">
     <value>SplitContainer3.Panel1</value>
@@ -537,19 +537,19 @@
         AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
         Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
         Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN6Af8DegH/A3oB/wN6Af8DegH/A3oB/wwA
-        A3oB/wN6Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN6
-        Af8UAAN6Af8DegH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
-        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN6Af8UAAN6Af8DegH/kAADZAH2
+        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN7Af8DewH/A3sB/wN7Af8DewH/A3sB/wwA
+        A3sB/wN7Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN7
+        Af8UAAN7Af8DewH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
+        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN7Af8UAAN7Af8DewH/kAADZAH2
         AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA3oB/xQAA3oB/wN6Af+QAAT/AaQCgQH/AZkCgQH/
-        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN6
-        Af8UAAN6Af8DegH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
-        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA3oB/wN6Af8DegH/A3oB/wwA
-        A3oB/wN6Af8DegH/A3oB/wN6Af8DegH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
-        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN6Af8DegH/lAADWwG4
-        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA3oB/xQAA3oB/wN6Af+gAAT/AZsCgQH/
-        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADegH/GAADegH/A3oB/wN6Af8DegH/lAADcgH1AaYCgQH/
+        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA3sB/xQAA3sB/wN7Af+QAAT/AaQCgQH/AZkCgQH/
+        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN7
+        Af8UAAN7Af8DewH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
+        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA3sB/wN7Af8DewH/A3sB/wwA
+        A3sB/wN7Af8DewH/A3sB/wN7Af8DewH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
+        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN7Af8DewH/lAADWwG4
+        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA3sB/xQAA3sB/wN7Af+gAAT/AZsCgQH/
+        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADewH/GAADewH/A3sB/wN7Af8DewH/lAADcgH1AaYCgQH/
         AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
         AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
         AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
@@ -1448,22 +1448,22 @@
     <value>False</value>
   </data>
   <data name="runToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="runToolStripMenuItem1.Text" xml:space="preserve">
     <value>Run</value>
   </data>
   <data name="abortToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="abortToolStripMenuItem.Text" xml:space="preserve">
     <value>Abort</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>147, 6</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Text" xml:space="preserve">
     <value>Step Through</value>
