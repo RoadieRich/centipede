@@ -42,6 +42,7 @@ namespace Centipede
 {
     public partial class MainWindow : Form
     {
+        
         public static MainWindow Instance;
         //private readonly JobDataSet _dataSet = new JobDataSet();
 
@@ -56,16 +57,18 @@ namespace Centipede
         private ManualResetEvent _steppingMutex;
         private bool _stepping;
         private Keys _modifierState;
+        private ActionEventArgs _pendingUpdate;
 
         public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
+            this._pendingUpdate = null;
             //Visible = false;
 
             InitializeComponent();
 
-            Height = Settings.Default.MainWindowHeight;
-            Width = Settings.Default.MainWindowWidth;
-            Location = Settings.Default.MainWindowLocation;
+            Height      = Settings.Default.MainWindowHeight;
+            Width       = Settings.Default.MainWindowWidth;
+            Location    = Settings.Default.MainWindowLocation;
             WindowState = Settings.Default.MainWindowState;
 
             SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
@@ -83,9 +86,7 @@ namespace Centipede
             this._arguments = arguments;
 
             Core.Variables.RowChanged += OnVariablesOnRowChanged;
-
-
-
+            
             _dataSet.Messages.RowChanged += delegate
                                             {
                                                 this.MessageDataGridView.Invalidate();
@@ -103,10 +104,10 @@ namespace Centipede
 
         private void OnVariablesOnRowChanged(object sender, DataRowChangeEventArgs args)
         {
-            DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
-            String message = string.Format("{1} variable {{{0}}} : {2}", row.Name, args.Action.ToString(), row.Value);
+DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
+            String message = string.Format(Resources.MainWindow_OnVariablesOnRowChanged_Message_Text, args.Action.ToString(), row.Name, row.Value);
             System.Action action =
-                    () => this._dataSet.Messages.AddMessagesRow(DateTime.Now, message, this.Core.CurrentAction,
+                    () => this._dataSet.Messages.AddMessagesRow(DateTime.Now, message, Core.CurrentAction,
                                                                 MessageLevel.VariableChange,
                                                                 DisplayedLevels.HasFlag(MessageLevel.VariableChange));
 
@@ -229,40 +230,24 @@ namespace Centipede
 
         private void UpdateHandlerDone(object sender, ActionEventArgs actionEventArgs)
         {
-            //foreach (var v in Core.Variables.ToArray())
-            //{
-            //    if (v.Key.StartsWith(@"_"))
-            //    {
-            //        continue;
-            //    }
-            //    KeyValuePair<string, object> v1 = v;
-            //    JobDataSet.VariablesRow row = this._dataSet.Variables.Rows
-            //                                      .OfType<JobDataSet.VariablesRow>()
-            //                                      .First(r => r.Name == v1.Key);
-            //    if (row != null)
-            //    {
-            //        row.Value = v.Value;
-            //    }
-            //    else
-            //    {
-            //        this._dataSet.Variables.AddVariablesRow(v.Key, v.Value);
-            //    }
-            //}
-            var adc = (ActionDisplayControl)Core.CurrentAction.Tag;
+            if (actionEventArgs.Stepping)
+            {
+                this._pendingUpdate = actionEventArgs;
+            }
+
+            DoAfterAction(actionEventArgs);
+
+        }
+
+        private void DoAfterAction(ActionEventArgs actionEventArgs)
+        {
+            IAction action = actionEventArgs.Action;
+
+            var adc = (ActionDisplayControl)action.Tag;
             SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
-            if (this.ActionContainer.InvokeRequired)
-            {
-                this.ActionContainer.Invoke(new Action<Control>(this.ActionContainer.ScrollControlIntoView), adc);
-            }
-            else
-            {
-                this.ActionContainer.ScrollControlIntoView(adc);
-            }
-
             //this is supposed to be a percentage, but this works.
-            this.backgroundWorker1.ReportProgress(Core.CurrentAction.Complexity);
-            //UpdateOutputWindow();
+            this.backgroundWorker1.ReportProgress(action.Complexity);
         }
 
         private static void SetState([NotNull] ActionDisplayControl adc, ActionState state,
@@ -327,8 +312,8 @@ namespace Centipede
                                                select new ToolStripButton(Enum.GetName(typeof(MessageLevel), value))
                                                       {
                                                           CheckOnClick = true,
-                                                          Checked = DisplayedLevels.HasFlag(value),
-                                                          Tag = value
+                                                          Checked      = DisplayedLevels.HasFlag(value),
+                                                          Tag          = value
                                                       })
             {
                 button.Click += delegate(object sender1, EventArgs e1)
@@ -377,14 +362,14 @@ namespace Centipede
 
             MessageDataGridView.DataSource = this.messagesBindingSource; //this._messageFilterBindingSource;
 
-            Core.ActionCompleted += UpdateHandlerDone;
-            Core.BeforeAction += Program_BeforeAction;
-            Core.JobCompleted += CompletedHandler;
-            Core.ActionErrorOccurred += ErrorHandler;
-            Core.ActionAdded += Program_ActionAdded;
-            Core.ActionRemoved += Program_ActionRemoved;
-            Core.AfterLoad += Program_AfterLoad;
-            Core.StartStepping += CoreOnStartStepping;
+            Core.ActionCompleted      += UpdateHandlerDone;
+            Core.BeforeAction         += Program_BeforeAction;
+            Core.JobCompleted         += CompletedHandler;
+            Core.ActionErrorOccurred  += ErrorHandler;
+            Core.ActionAdded          += Program_ActionAdded;
+            Core.ActionRemoved        += Program_ActionRemoved;
+            Core.AfterLoad            += Program_AfterLoad;
+            Core.StartStepping        += CoreOnStartStepping;
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
 
@@ -543,7 +528,7 @@ namespace Centipede
                      {
                              LargeImageList = this.ActionIcons,
                              SmallImageList = this.ActionIcons,
-                             View = View.List
+                             View           = View.List
                      };
 
             var tabPage = new TabPage(category);
@@ -557,11 +542,26 @@ namespace Centipede
             return lv;
         }
 
-        private static void Program_BeforeAction(object sender, ActionEventArgs e)
+        private void Program_BeforeAction(object sender, ActionEventArgs e)
         {
+            if (this._pendingUpdate != null)
+            {
+                DoAfterAction(_pendingUpdate);
+                _pendingUpdate = null;
+            }
+
             IAction action = e.Action;
             var adc = (ActionDisplayControl)action.Tag;
             SetState(adc, ActionState.Running, Resources.MainWindow_Program_ActionStatus_Running);
+
+            if (this.ActionContainer.InvokeRequired)
+            {
+                this.ActionContainer.Invoke(new Action<Control>(this.ActionContainer.ScrollControlIntoView), adc);
+            }
+            else
+            {
+                this.ActionContainer.ScrollControlIntoView(adc);
+            }
         }
 
         private void Program_ActionAdded(object sender, ActionEventArgs e)
@@ -572,9 +572,8 @@ namespace Centipede
             ActionDisplayControl adc;
             if (actionAttribute != null && actionAttribute.displayControl != null)
             {
-                Type customADCType =
-                        actionType.Assembly.GetType(string.Format(@"{0}.{1}", actionType.Namespace,
-                                                                  actionAttribute.displayControl));
+                Type customADCType = actionType.Assembly.GetType(string.Format(@"{0}.{1}", actionType.Namespace,
+                                                                               actionAttribute.displayControl));
                 ConstructorInfo constructor = customADCType.GetConstructor(new[] { actionType });
 
                 if (constructor != null)
@@ -590,9 +589,9 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
-            adc.Deleted += adc_Deleted;
+            adc.Deleted   += adc_Deleted;
             adc.DragEnter += ActionContainer_DragEnter;
-            adc.DragDrop += ActionContainer_DragDrop;
+            adc.DragDrop  += ActionContainer_DragDrop;
             this.ActionContainer.Controls.Add(adc, 0, e.Index);
             this.ActionContainer.SetRow(adc, e.Index);
             Dirty = true;
@@ -847,7 +846,7 @@ namespace Centipede
 
         private void UrlTextbox_KeyUp(object sender, KeyEventArgs e)
         {
-            var textBox = ((ToolStripTextBox)sender);
+            var textBox = ((ToolStripSpringTextBox)sender);
             string url = textBox.Text;
 
             if (e.KeyCode == Keys.Enter)
@@ -906,10 +905,7 @@ namespace Centipede
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             Core.Dispose();
-
-            
-
-            base.Dispose();
+            Dispose();
         }
 
         private void MainWindow_Resize(object sender, EventArgs e)
@@ -967,7 +963,7 @@ namespace Centipede
 
         private void visitGetSatisfactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://getsatisfaction.com/centipede");
+            Process.Start(Resources.MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

@@ -331,6 +331,15 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} variable {{{1}}} : {2}.
+        /// </summary>
+        public static string MainWindow_OnVariablesOnRowChanged_Message_Text {
+            get {
+                return ResourceManager.GetString("MainWindow_OnVariablesOnRowChanged_Message_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Running.
         /// </summary>
         public static string MainWindow_Program_ActionStatus_Running {
@@ -376,6 +385,15 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://getsatisfaction.com/centipede.
+        /// </summary>
+        public static string MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url {
+            get {
+                return ResourceManager.GetString("MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Actions Added.
         /// </summary>
         public static string Program_RunJob_No_Actions_Added {
@@ -408,13 +426,24 @@ namespace Centipede.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html lang=&quot;en-gb&quot;&gt;
-        ///    &lt;head&gt;
-        ///        &lt;title&gt;Welcome To Centipede&lt;/title&gt;
-        ///    &lt;/head&gt;
-        ///    &lt;body&gt;
-        ///        &lt;h1&gt;Welcome to Centipede&lt;/h1&gt;
-        ///    &lt;/body&gt;
-        ///&lt;/html&gt;.
+        ///&lt;head&gt;
+        ///    &lt;title&gt;Welcome To Centipede&lt;/title&gt;
+        ///    &lt;style type=&quot;text/css&quot;&gt;
+        ///        .welcomeBody
+        ///        {
+        ///            font-family: Microsoft Sans Serif, sans-serif;
+        ///        }
+        ///    &lt;/style&gt;
+        ///&lt;/head&gt;
+        ///&lt;body class=&quot;welcomeBody&quot;&gt;
+        ///    &lt;section&gt;
+        ///        &lt;h1&gt;
+        ///            Welcome to Centipede
+        ///        &lt;/h1&gt;
+        ///        &lt;p&gt;
+        ///            Centipede is a tool for automating stuff.
+        ///        &lt;/p&gt;
+        ///        &lt;p&gt;Please submit feedback on the &lt;a href=&quot;https://getsatisfaction.com/cen [rest of string was truncated]&quot;;.
         /// </summary>
         public static string WelcomeScreen {
             get {

@@ -10,6 +10,8 @@ namespace CentipedeInterfaces
             Index = -1;
         }
 
+        public Boolean Stepping { get; set; }
+
         public virtual IAction Action { get; set; }
 
         public Int32 Index { get; set; }
