@@ -247,4 +247,13 @@
   <data name="exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\exit.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="MainWindow_OnVariablesOnRowChanged_Message_Text" xml:space="preserve">
+    <value>{0} variable {{{1}}} : {2}</value>
+    <comment>{0}: Action
+{1}: Variable Name
+{2}: New value</comment>
+  </data>
+  <data name="MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url" xml:space="preserve">
+    <value>https://getsatisfaction.com/centipede</value>
+  </data>
 </root>

@@ -96,9 +96,8 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action = CurrentAction,
-                                                    Exception =
-                                                            new ActionException(
+                                                    Action    = CurrentAction,
+                                                    Exception = new ActionException(
                                                             Resources.Program_RunJob_No_Actions_Added)
                                             };
                 OnActionError(args);
@@ -174,9 +173,10 @@ namespace Centipede
             {
                 ActionEventArgs args = new ActionEventArgs
                                        {
-                                            Action = currentAction
+                                            Action   = currentAction,
+                                            Stepping = this._stepping
                                        };
-
+                
                 OnBeforeAction(args);
                 currentAction.Run();
                 OnAfterAction(args);
@@ -186,9 +186,8 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action = currentAction,
-                                                    Exception =
-                                                            new FatalActionException(
+                                                    Action    = currentAction,
+                                                    Exception = new FatalActionException(
                                                             string.Format(Resources.CentipedeCore_RunJob_FatalError,
                                                                           e.Message, e))
                                             };
@@ -199,9 +198,9 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action = currentAction,
-                                                    Exception =
-                                                            (e as ActionException) ?? new ActionException(e, CurrentAction)
+                                                    Action    = currentAction,
+                                                    Exception = (e as ActionException) ??
+                                                            new ActionException(e, CurrentAction)
                                             };
                 OnActionError(args);
                 
@@ -211,6 +210,7 @@ namespace Centipede
 
         private ContinueState _continueState = ContinueState.Continue;
         private Object _abortRequested = false;
+        private bool _stepping;
 
         public void AbortRun()
         {
@@ -302,7 +302,7 @@ namespace Centipede
                     ActionEventArgs args = new ActionEventArgs
                                            {
                                                    Action = action,
-                                                   Index = index
+                                                   Index  = index
                                            };
                     handler(this, args);
                 }
@@ -349,11 +349,11 @@ namespace Centipede
             {
                 RemoveAction(Job.Actions.First());
             }
-            Job.Author = "";
+            Job.Author        = "";
             Job.AuthorContact = "";
-            Job.FileName = "";
-            Job.InfoUrl = "";
-            Job.Name = "";
+            Job.FileName      = "";
+            Job.InfoUrl       = "";
+            Job.Name          = "";
         }
 
         #endregion
@@ -368,23 +368,23 @@ namespace Centipede
         public void SaveJob(String filename)
         {
             var xmlDoc = new XmlDocument();
-            XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
+            XmlElement xmlRoot      = xmlDoc.CreateElement("CentipedeJob");
             XmlElement metaElement1 = xmlDoc.CreateElement("Metadata");
             XmlElement metaElement2 = xmlDoc.CreateElement("Name");
             
             metaElement2.AppendChild(xmlDoc.CreateTextNode(Job.Name));
             metaElement1.AppendChild(metaElement2);
 
-            metaElement2 = xmlDoc.CreateElement("Author");
+            metaElement2            = xmlDoc.CreateElement("Author");
             XmlElement metaElement3 = xmlDoc.CreateElement("Name");
             metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.Author));
             metaElement2.AppendChild(metaElement3);
-            metaElement3 = xmlDoc.CreateElement("Contact");
+            metaElement3            = xmlDoc.CreateElement("Contact");
             metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.AuthorContact));
             metaElement2.AppendChild(metaElement3);
             metaElement1.AppendChild(metaElement2);
 
-            metaElement2 = xmlDoc.CreateElement("Info");
+            metaElement2            = xmlDoc.CreateElement("Info");
             metaElement2.SetAttribute("Url", Job.InfoUrl);
             metaElement1.AppendChild(metaElement2);
 
@@ -402,9 +402,9 @@ namespace Centipede
             
             var settings = new XmlWriterSettings
                            {
-                                   Indent = true,
-                                   IndentChars = "  ",
-                                   NewLineChars = "\r\n",
+                                   Indent          = true,
+                                   IndentChars     = "  ",
+                                   NewLineChars    = "\r\n",
                                    NewLineHandling = NewLineHandling.Replace
                            };
 
