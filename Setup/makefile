@@ -49,3 +49,9 @@ upload: sftp-upload.sftpc $(installerfilename) $(webpagefilename)
 	echo ''
 	echo 'All done.'
 	
+	
+install: compile
+	$(installerfilename)
+	
+run: compile
+	$(installerfilename)
