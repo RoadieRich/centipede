@@ -5,6 +5,13 @@ using System.Data;
 using System.Threading;
 using ResharperAnnotations;
 
+//    , ,,    ,, ,   , ,,    ,, ,   , ,,    ,, ,   , ,,    ,, ,   ,        ,---,
+//   /  |\    /|  \ /  |\    /|  \ /  |\    /|  \ /  |\    /|  \ /   /===\/
+// /=\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/-\==/   O \^
+// \=/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\-/==\   O /v
+//   \  | /   \|  / \  | /   \|  / \  | /   \|  / \  | /   \|  / \   \===/\
+//    ` ``    `` `   ` ``    `` `   ` ``    `` `   ` ``    `` `   `        `---`
+
 namespace CentipedeInterfaces
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]

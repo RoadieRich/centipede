@@ -370,6 +370,7 @@ namespace Centipede
             this.UIActListBox.Name = "UIActListBox";
             this.UIActListBox.SmallImageList = this.ActionIcons;
             this.UIActListBox.UseCompatibleStateImageBehavior = false;
+            this.UIActListBox.View = System.Windows.Forms.View.List;
             this.UIActListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
             this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
             // 
