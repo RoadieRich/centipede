@@ -39,15 +39,17 @@ Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Components: Action
 Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
 Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
-Source: "{#BinaryDir}\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
 Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
 Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Python
+Source: "{#BinaryDir}\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
 Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
 Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
 Source: "{#BinaryDir}\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
 Source: "{#BinaryDir}\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
 Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
-Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"
+Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Components: Centipede
 Source: "{#BinaryDir}\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\ShellActions
 
 ; sdk items
