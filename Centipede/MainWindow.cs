@@ -19,18 +19,6 @@ using Centipede.Properties;
 using CentipedeInterfaces;
 using ResharperAnnotations;
 
-//
-// ,  , ,  , ,  , ,  , 
-// | /  | /  | /  | /  
-// /-\==/-\==/-\==/-\==
-// \-/==\-/==\-/==\-/==
-// | \  | \  | \  | \  
-// `  ` `  ` `  ` `  ` 
-//
-//
-//
-//
-
 //      \,,/
 //      (..)
 //  ''=={##}==''
@@ -551,7 +539,12 @@ namespace Centipede
 
         private ListView GenerateNewTabPage(String category)
         {
-            var lv = new ListView { LargeImageList = this.ActionIcons, SmallImageList = this.ActionIcons };
+            var lv = new ListView
+                     {
+                             LargeImageList = this.ActionIcons,
+                             SmallImageList = this.ActionIcons,
+                             View = View.List
+                     };
 
             var tabPage = new TabPage(category);
             tabPage.Controls.Add(lv);
