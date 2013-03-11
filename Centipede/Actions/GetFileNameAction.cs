@@ -13,18 +13,28 @@ namespace Centipede.Actions
         public GetFileNameAction(IDictionary<string, object> v, ICentipedeCore c)
             : base("Get Filename", v, c)
         {
-            _handler = GetFileNameDialogue_FileOk;
+            
         }
 
         [ActionArgument]
         public String DestinationVariable = "Filename";
 
         private delegate DialogResult ShowGetFileDialog();
-        private readonly CancelEventHandler _handler;
+        
+        [ActionArgument(displayName = "Caption")]
+        public String Caption = "";
+
+
+
+        [ActionArgument(displayName = "Filter")]
+        public String Filter = "";
+
 
         protected override void InitAction()
         {
-            MainWindow.Instance.GetFileNameDialogue.FileOk += _handler;
+            MainWindow.Instance.GetFileNameDialogue.FileOk += GetFileNameDialogue_FileOk;
+            MainWindow.Instance.GetFileNameDialogue.Title = Caption;
+            MainWindow.Instance.GetFileNameDialogue.Filter = Filter;
         }
 
         protected override void DoAction()
@@ -44,7 +54,7 @@ namespace Centipede.Actions
 
         protected override void CleanupAction()
         {
-            MainWindow.Instance.GetFileNameDialogue.FileOk -= _handler;
+            MainWindow.Instance.GetFileNameDialogue.FileOk -= GetFileNameDialogue_FileOk;
         }
     }
 }

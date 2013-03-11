@@ -1,5 +1,17 @@
-
-
+######################################
+#                                    #
+#   ______________________________   #
+#  /   Yes, I'm not a centipede.  \  #
+#  \ Are you surprised to see me? /  #
+#   ------------------------------   #
+#          \   ^__^                  #
+#           \  (oo)\_______          #
+#              (__)\       )\/\      #
+#                  ||----w |         #
+#                  ||     ||         #
+#                                    #
+#                                    #
+######################################
 
 iscc = /cygdrive/c/Program\ Files/Inno\ Setup\ 5/ISCC
 binfolder = ../bin/Debug
@@ -12,12 +24,10 @@ webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
 binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll $(binfolder)/SciLexer.dll
-pluginfiles1 = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/PythonEngine.dll $(pluginsfolder)/SolidworksActions.dll  
-pluginfiles2 = $(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/SciLexer.dll $(pluginsfolder)/TextFile.dll
-pluginfiles3 = $(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/ScintillaNET.dll $(pluginsfolder)/XMLActions.dll
-pluginfiles4 = $(pluginsfolder)/PythonAction.dll $(pluginsfolder)/ShellActions.dll
-
-pluginfiles = $(pluginfiles1) $(pluginfiles2) $(pluginfiles3) $(pluginfiles4)
+pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/PythonEngine.dll $(pluginsfolder)/SolidworksActions.dll \
+	$(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/SciLexer.dll $(pluginsfolder)/TextFile.dll \
+	$(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/ScintillaNET.dll $(pluginsfolder)/XMLActions.dll \
+	$(pluginsfolder)/PythonAction.dll $(pluginsfolder)/ShellActions.dll
 
 setupfiles = centipede-setup.iss favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
 
@@ -32,10 +42,9 @@ server = ps-der-hg1
 
 
 
-all: compile webpage upload notify
+all: installer webpage upload notify
 
 installer: $(installerfilename)
-compile: installer
 webpage: $(webpagefilename)
 upload: upload.log
 notify: notify.log
@@ -43,7 +52,7 @@ notify: notify.log
 $(installerfilename): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) centipede-setup.iss
 
-$(webpagefilename): $(pagescipt) $(installerfilename) 
+$(webpagefilename): $(pagescript) $(installerfilename) 
 	$(scriptengine) $(pagescript) $(installerfilename) $(webpagefilename)
 
 upload.log: $(uploadscript) $(installerfilename) $(webpagefilename)
@@ -64,7 +73,7 @@ install: $(installerfilename)
 help:
 	@echo Available targets:
 	@echo
-	@echo 'installer / compile'
+	@echo 'installer'
 	@echo '	Compliles the installer executable'
 	@echo 'webpage'
 	@echo '	Generates the download webpage with md5 and sha1 checksums'

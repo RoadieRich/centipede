@@ -8,7 +8,7 @@ using System.Xml.XPath;
 using Centipede.Actions;
 using Centipede.StringInject;
 using CentipedeInterfaces;
-
+using ResharperAnnotations;
 
 [assembly: CLSCompliant(true)]
 
@@ -18,7 +18,7 @@ namespace Centipede
     /// Base Action class: all actions will subclass this
     /// </summary>
     [Serializable]
-    [ResharperAnnotations.UsedImplicitly(ResharperAnnotations.ImplicitUseTargetFlags.WithMembers)]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class Action : IDisposable, IAction
     {
         /// <summary>

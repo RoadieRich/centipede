@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.XPath;
+using CentipedeInterfaces;
 
 
 namespace Centipede
@@ -41,20 +43,11 @@ namespace Centipede
 
         private void AddFavourite(string fileName)
         {
-            this._favouriteJobs.Favourites.AddFavouritesRow(GetJobName(fileName), fileName);
+            CentipedeJob job = new CentipedeJob(fileName);
+
+            this._favouriteJobs.Favourites.AddFavouritesRow(job.Name, fileName);
         }
 
-        private static string GetJobName(string fileName)
-        {
-            XmlDocument xmlDocument = new XmlDocument();
-            using (FileStream file = File.OpenRead(fileName))
-            {
-                xmlDocument.Load(file);
-            }
-            string jobName = xmlDocument.OfType<XmlElement>().First(e => e.HasAttribute(@"Title")).GetAttribute(@"Title");
-            return jobName;
-        }
-        
         private void RemoveButton_Click(object sender, EventArgs e)
         {
             foreach (int index in from DataGridViewRow selectedRow in FavouriteJobsGridView.SelectedRows

@@ -61,6 +61,7 @@
             this.InfoUrlTextbox.Name = "InfoUrlTextbox";
             this.InfoUrlTextbox.Size = new System.Drawing.Size(301, 20);
             this.InfoUrlTextbox.TabIndex = 1;
+            this.InfoUrlTextbox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // label2
             // 
@@ -87,7 +88,8 @@
             this.AuthorTextbox.Location = new System.Drawing.Point(73, 58);
             this.AuthorTextbox.Name = "AuthorTextbox";
             this.AuthorTextbox.Size = new System.Drawing.Size(382, 20);
-            this.AuthorTextbox.TabIndex = 4;
+            this.AuthorTextbox.TabIndex = 2;
+            this.AuthorTextbox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // ContactTextbox
             // 
@@ -96,7 +98,8 @@
             this.ContactTextbox.Location = new System.Drawing.Point(73, 84);
             this.ContactTextbox.Name = "ContactTextbox";
             this.ContactTextbox.Size = new System.Drawing.Size(301, 20);
-            this.ContactTextbox.TabIndex = 5;
+            this.ContactTextbox.TabIndex = 3;
+            this.ContactTextbox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // BrowseButton
             // 
@@ -115,7 +118,7 @@
             this.OKBtn.Location = new System.Drawing.Point(155, 117);
             this.OKBtn.Name = "OKBtn";
             this.OKBtn.Size = new System.Drawing.Size(75, 23);
-            this.OKBtn.TabIndex = 7;
+            this.OKBtn.TabIndex = 4;
             this.OKBtn.Text = "OK";
             this.OKBtn.UseVisualStyleBackColor = true;
             this.OKBtn.Click += new System.EventHandler(this.OKBtn_Click);
@@ -126,9 +129,10 @@
             this.CancelBtn.Location = new System.Drawing.Point(236, 117);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(75, 23);
-            this.CancelBtn.TabIndex = 8;
+            this.CancelBtn.TabIndex = 5;
             this.CancelBtn.Text = "Cancel";
             this.CancelBtn.UseVisualStyleBackColor = true;
+            this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
             // label4
             // 
@@ -146,12 +150,13 @@
             this.JobNameTextbox.Location = new System.Drawing.Point(73, 6);
             this.JobNameTextbox.Name = "JobNameTextbox";
             this.JobNameTextbox.Size = new System.Drawing.Size(382, 20);
-            this.JobNameTextbox.TabIndex = 5;
+            this.JobNameTextbox.TabIndex = 0;
+            this.JobNameTextbox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.DefaultExt = "htm";
-            this.openFileDialog1.Filter = "HTML|*.htm,*.html|All Files|*.*";
+            this.openFileDialog1.Filter = "HTML (*.htm; *.html)|*.htm;*.html|All Files|*.*";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // SetDefaultButton
@@ -159,7 +164,7 @@
             this.SetDefaultButton.Location = new System.Drawing.Point(379, 117);
             this.SetDefaultButton.Name = "SetDefaultButton";
             this.SetDefaultButton.Size = new System.Drawing.Size(75, 23);
-            this.SetDefaultButton.TabIndex = 9;
+            this.SetDefaultButton.TabIndex = 7;
             this.SetDefaultButton.Text = "Set Defaults";
             this.SetDefaultButton.UseVisualStyleBackColor = true;
             this.SetDefaultButton.Click += new System.EventHandler(this.button1_Click);
@@ -198,7 +203,7 @@
             this.Controls.Add(this.label1);
             this.Name = "JobPropertyForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "JobPropertyForm";
+            this.Text = "Properties";
             this.ResumeLayout(false);
             this.PerformLayout();
 

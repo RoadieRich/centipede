@@ -56,7 +56,6 @@ namespace Centipede
         private MessageLevel _displayedLevels;
         private ManualResetEvent _steppingMutex;
         private bool _stepping;
-        private Keys _modifierState;
         private ActionEventArgs _pendingUpdate;
 
         public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
@@ -192,8 +191,12 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                                                   Resources.MainWindow_ErrorHandler_Error,
                                                   MessageBoxButtons.AbortRetryIgnore,
                                                   MessageBoxIcon.Exclamation);
+            
+            _dataSet.Messages.AddMessagesRow(DateTime.Now, messageBuilder.ToString(), e.Action, MessageLevel.Error,
+                                             DisplayedLevels.HasFlag(MessageLevel.Error));
 
             SetErrorReturnState(e, result);
+            
         }
 
         private static void SetErrorReturnState(ActionErrorEventArgs e, DialogResult result)
@@ -281,6 +284,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
             this._stepping = false;
             this._steppingMutex = null;
+            this.RunButton.Text = "Run";
         }
 
         private void ItemActivate(object sender, EventArgs e)
@@ -370,6 +374,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             Core.ActionRemoved        += Program_ActionRemoved;
             Core.AfterLoad            += Program_AfterLoad;
             Core.StartStepping        += CoreOnStartStepping;
+
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
 
@@ -391,10 +396,25 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         }
 
+        private void CentipedeJobOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            CentipedeJob job = (CentipedeJob)sender;
+
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+            case "InfoUrl":
+                WebBrowser.Navigate(job.InfoUrl);
+                break;
+            case "Name":
+                Text = job.Name;
+                break;
+            }
+        }
+
         private void CoreOnStartStepping(object sender, StartSteppingEventArgs startSteppingEventArgs)
         {
             this._steppingMutex = startSteppingEventArgs.ResetEvent;
-            this._stepping = true;
+            //this._stepping = true;
         }
 
         private void UpdateFavourites()
@@ -404,15 +424,16 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             foreach (
                     ToolStripMenuItem item in
                             this._favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
-                                                                                  {
-                                                                                      Tag = job.Filename
-                                                                                  }))
+                                                                         {
+                                                                                 Tag = job.Filename
+                                                                         }))
             {
                 item.Click += ItemOnClick;
                 this.FavouritesMenu.DropDownItems.Add(item);
             }
 
             this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
+            this.FavouritesMenu.DropDownItems.Add(this.addCurrentToolStripMenuItem);
             this.FavouritesMenu.DropDownItems.Add(this.EditFavouritesMenuItem);
         }
 
@@ -425,8 +446,10 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             }
             catch (AbortOperationException)
             { }
-            Core.Job = Core.LoadJob((String)item.Tag);
+            Core.LoadJob((String)item.Tag);
         }
+
+        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>(); 
 
         private void GetActionPlugins()
         {
@@ -448,12 +471,25 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 {
                     continue;
                 }
+                
                 Type[] pluginsInFile = asm.GetExportedTypes();
-                foreach (Type pluginType in from type in pluginsInFile
-                                            where !type.IsAbstract
-                                            where type.GetCustomAttributes(typeof(ActionCategoryAttribute), true).Any()
-                                            select type)
+
+                IEnumerable<Type> actionTypes = from type in pluginsInFile
+                                                  where !type.IsAbstract
+                                                  where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true)
+                                                            .Any()
+                                                  select type;
+
+                if (!actionTypes.Any())
                 {
+                    continue;
+                }
+
+                _pluginFiles.Add(fi, new List<Type>());
+
+                foreach (Type pluginType in actionTypes)
+                {
+                    _pluginFiles[fi].Add(pluginType);
                     AddToActionTab(pluginType);
                 }
             }
@@ -503,7 +539,9 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         private void Program_AfterLoad(object sender, EventArgs e)
         {
             Dirty = false;
+            Core.Job.PropertyChanged += CentipedeJobOnPropertyChanged;
             Text = Core.Job.Name;
+            progressBar1.Value = 0;
 
             this.WebBrowser.Navigate(Core.Job.InfoUrl);
         }
@@ -511,9 +549,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         private void Program_ActionRemoved(object sender, ActionEventArgs e)
         {
             IAction action = e.Action;
-            ActionDisplayControl adc = this.ActionContainer.Controls
-                                           .Cast<ActionDisplayControl>()
-                                           .FirstOrDefault(a => a.ThisAction == action);
+            ActionDisplayControl adc = (ActionDisplayControl)action.Tag;
             if (adc == null)
             {
                 return;
@@ -613,7 +649,9 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 AskSave();
             }
             catch (AbortOperationException)
-            { }
+            {
+                return;
+            }
 
             DialogResult result = this.OpenFileDialog.ShowDialog();
 
@@ -622,33 +660,47 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 return;
             }
 
-            Core.Job = Core.LoadJob(this.OpenFileDialog.FileName);
+            Core.LoadJob(this.OpenFileDialog.FileName);
+            this.Text = Core.Job.Name;
         }
 
         private void RunButton_Click(object sender, EventArgs e)
+        {
+            if(!_stepping)
+            {
+                StartRunning(false);
+            }
+            else
+            {
+                DoStep();
+            }
+        }
+
+        private void StartRunning(bool step)
+        {
+            this._stepping = step;
+            ResetDisplay();
+            this.backgroundWorker1.RunWorkerAsync(step);
+        }
+
+        private void ResetDisplay()
         {
             foreach (ActionDisplayControl adc in this.ActionContainer.Controls)
             {
                 SetState(adc, ActionState.None, String.Empty);
             }
             this.progressBar1.Value = 0;
-            this.progressBar1.Maximum = Core.Job.Complexity;
-            Boolean step = _modifierState.HasFlag(Keys.Control);
-            this.backgroundWorker1.RunWorkerAsync(step);
+            this.progressBar1.Maximum = this.Core.Job.Complexity;
         }
 
         [STAThread]
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            Core.RunJob((bool)e.Argument);
+            Core.RunJob(_stepping);
         }
 
         private void MainWindow_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            
-
-            this._modifierState = e.Modifiers;
-
             if (e.KeyData == Keys.F5)
             {
                 this.RunButton.PerformClick();
@@ -682,14 +734,20 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         {
             if (String.IsNullOrEmpty(Core.Job.Name))
             {
-                var jobPropertyForm = new JobPropertyForm(Core);
+                CentipedeJob job = Core.Job;
+                var jobPropertyForm = new JobPropertyForm(ref job);
                 DialogResult result = jobPropertyForm.ShowDialog(this);
+                Core.Job = job;
                 if (result == DialogResult.Cancel)
                 {
                     throw new AbortOperationException();
                 }
+                
             }
-            this.saveFileDialog1.FileName = Core.Job.FileName;
+            this.saveFileDialog1.FileName = !String.IsNullOrEmpty(this.Core.Job.FileName)
+                                                    ? this.Core.Job.FileName
+                                                    : this.Core.Job.Name;
+
             if (this.saveFileDialog1.ShowDialog(this) == DialogResult.Cancel)
             {
                 throw new AbortOperationException();
@@ -798,6 +856,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         private void EditFavouritesMenuItem_Click(object sender, EventArgs e)
         {
+            //var editFavourites = new EditFavourites(Settings.Default.FavouriteJobs);
             var editFavourites = new EditFavourites(this._favouriteJobsDataStore);
 
             editFavourites.ShowDialog();
@@ -893,13 +952,14 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            var form = new JobPropertyForm(Core);
+            CentipedeJob centipedeJob = Core.Job;
+            var form = new JobPropertyForm(ref centipedeJob);
             form.ShowDialog(this);
-        }
-
-        private void SplitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-
+            if (form.Dirty)
+            {
+                Dirty = true;
+                WebBrowser.Navigate(Core.Job.InfoUrl);
+            }
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -918,20 +978,17 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             if (String.IsNullOrEmpty(Core.Job.Name))
             {
                 try
                 {
                     SaveJob();
+                    _favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
+                    UpdateFavourites();
                 }
                 catch (AbortOperationException)
-                {
-                    return;
-                }
+                { }
             }
-            _favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
-            UpdateFavourites();
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
@@ -968,24 +1025,39 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            (new AboutForm()).Show(this);
+            (new AboutForm(this._pluginFiles)).Show(this);
         }
 
         private void stepThroughToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this._stepping)
+            if (!this._stepping)
             {
-                this._steppingMutex.Set();
+                RunButton.Text = "Step";
+                StartRunning(true);
             }
             else
             {
-                backgroundWorker1.RunWorkerAsync(true);
+                DoStep();
             }
+        }
+
+        private void DoStep()
+        {
+            this._steppingMutex.Set();
         }
 
         private void abortToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Core.AbortRun();
+        }
+
+        private void resetJobToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Core.AbortRun();
+            
+            ResetDisplay();
+            this._dataSet.Messages.Clear();
+            
         }
     }
 

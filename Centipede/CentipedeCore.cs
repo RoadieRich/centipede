@@ -80,27 +80,26 @@ namespace Centipede
         [STAThread]
         public void RunJob(bool stepping = false)
         {
-            ManualResetEvent pause = new ManualResetEvent(true);
+            ManualResetEvent pause = null;
 
             lock (_abortRequested)
             {
                 _abortRequested = false;
             }
-            
             if (stepping)
             {
+                pause = new ManualResetEvent(true);
                 OnStartStepping(new StartSteppingEventArgs(pause));
             }
 
             if (!Job.Actions.Any())
             {
-                ActionErrorEventArgs args = new ActionErrorEventArgs
-                                            {
-                                                    Action    = CurrentAction,
-                                                    Exception = new ActionException(
-                                                            Resources.Program_RunJob_No_Actions_Added)
-                                            };
-                OnActionError(args);
+                OnActionError(new ActionErrorEventArgs
+                {
+                    Action = CurrentAction,
+                    Exception = new ActionException(
+                            Resources.Program_RunJob_No_Actions_Added)
+                });
 
             }
             
@@ -247,6 +246,15 @@ namespace Centipede
             }
         }
 
+        private void OnActionRemoved(ActionEventArgs args)
+        {
+            var handler = ActionRemoved;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
+        }
+
         private void OnActionError(ActionErrorEventArgs args)
         {
             ActionErrorEvent handler = ActionErrorOccurred;
@@ -295,17 +303,20 @@ namespace Centipede
                 }
                 break;
             }
+            OnActionAdded(new ActionEventArgs
+                          {
+                                  Action = action,
+                                  Index = index
+                          });
+
+        }
+
+        private void OnActionAdded(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionAdded;
+            if (handler != null)
             {
-                ActionEvent handler = ActionAdded;
-                if (handler != null)
-                {
-                    ActionEventArgs args = new ActionEventArgs
-                                           {
-                                                   Action = action,
-                                                   Index  = index
-                                           };
-                    handler(this, args);
-                }
+                handler(this, args);
             }
         }
 
@@ -330,15 +341,11 @@ namespace Centipede
             }
             Job.Actions.Remove(action);
             {
-                ActionEvent handler = ActionRemoved;
-                if (handler != null)
-                {
-                    ActionEventArgs args = new ActionEventArgs
-                                           {
-                                                   Action = action
-                                           };
-                    handler(this, args);
-                }
+
+                OnActionRemoved(new ActionEventArgs
+                                {
+                                        Action = action
+                                });
             }
         }
 
@@ -349,11 +356,13 @@ namespace Centipede
             {
                 RemoveAction(Job.Actions.First());
             }
-            Job.Author        = "";
-            Job.AuthorContact = "";
+            Job.Author        = Settings.Default.DefaultAuthor;
+            Job.AuthorContact = Settings.Default.DefaultContact;
             Job.FileName      = "";
             Job.InfoUrl       = "";
             Job.Name          = "";
+            OnAfterLoad(EventArgs.Empty);
+            
         }
 
         #endregion
@@ -420,12 +429,10 @@ namespace Centipede
         /// </summary>
         /// <param name="jobFileName">Name of the job to load</param>
         [Localizable(false)]
-        public CentipedeJob LoadJob(string jobFileName)
+        public void LoadJob(string jobFileName)
         {
 
-            Clear();
-            CentipedeJob job = new CentipedeJob();
-
+            Variables.Clear();
             //var xmlDoc = new XmlDocument();
             if (!File.Exists(jobFileName))
             {
@@ -435,14 +442,7 @@ namespace Centipede
 
             XPathDocument xPathDoc = new XPathDocument(jobFileName);
             XPathNavigator nav = xPathDoc.CreateNavigator();
-
-            job.FileName = jobFileName;
-
-            job.Name = nav.SelectSingleNode("//Metadata/Name").Value;
-            job.Author = nav.SelectSingleNode("//Metadata/Author/Name").Value;
-            job.AuthorContact = nav.SelectSingleNode("//Metadata/Author/Contact").Value;
-            job.InfoUrl = nav.SelectSingleNode("//Metadata/Info/@Url").Value;
-
+            CentipedeJob job = new CentipedeJob(jobFileName, nav) { FileName = jobFileName };
 
             var it = nav.Select("//Actions/*");
 
@@ -451,15 +451,18 @@ namespace Centipede
                 AddAction(job, Action.FromXml(actionElement, Variables, this));
             }
 
-            {
-                AfterLoadEvent handler = AfterLoad;
-                if (handler != null)
-                {
-                    handler(this, EventArgs.Empty);
-                }
-            }
+            Job = job;
+            
+            OnAfterLoad(EventArgs.Empty);
+        }
 
-            return job;
+        private void OnAfterLoad(EventArgs eventArgs)
+        {
+            AfterLoadEvent handler = this.AfterLoad;
+            if (handler != null)
+            {
+                handler(this, eventArgs);
+            }
         }
 
         #endregion

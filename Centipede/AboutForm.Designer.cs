@@ -36,6 +36,7 @@ namespace Centipede
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,7 +45,7 @@ namespace Centipede
             this.pictureBox1.BackColor = System.Drawing.Color.ForestGreen;
             this.pictureBox1.Location = new System.Drawing.Point(13, 13);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(241, 241);
+            this.pictureBox1.Size = new System.Drawing.Size(361, 361);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -53,7 +54,7 @@ namespace Centipede
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(256, 13);
+            this.label1.Location = new System.Drawing.Point(376, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 20);
             this.label1.TabIndex = 1;
@@ -63,7 +64,7 @@ namespace Centipede
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(13, 14);
-            this.linkLabel1.Location = new System.Drawing.Point(260, 33);
+            this.linkLabel1.Location = new System.Drawing.Point(380, 34);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(151, 17);
             this.linkLabel1.TabIndex = 5;
@@ -76,7 +77,7 @@ namespace Centipede
             // 
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(20, 13);
-            this.linkLabel2.Location = new System.Drawing.Point(260, 50);
+            this.linkLabel2.Location = new System.Drawing.Point(380, 51);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(185, 17);
             this.linkLabel2.TabIndex = 6;
@@ -87,18 +88,32 @@ namespace Centipede
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(261, 71);
+            this.textBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(380, 71);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(219, 183);
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox1.Size = new System.Drawing.Size(401, 303);
             this.textBox1.TabIndex = 7;
+            // 
+            // button1
+            // 
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.button1.Location = new System.Drawing.Point(359, 401);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Close";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(492, 266);
+            this.ClientSize = new System.Drawing.Size(793, 436);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.linkLabel1);
@@ -106,7 +121,7 @@ namespace Centipede
             this.Controls.Add(this.pictureBox1);
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(500, 300);
+            this.MaximumSize = new System.Drawing.Size(1000, 600);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "AboutForm";
@@ -210,6 +225,7 @@ namespace Centipede
         private LinkLabel linkLabel1;
         private LinkLabel linkLabel2;
         private TextBox textBox1;
+        private Button button1;
     
     }
 }

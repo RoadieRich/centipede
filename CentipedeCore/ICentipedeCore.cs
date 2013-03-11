@@ -101,7 +101,7 @@ namespace CentipedeInterfaces
         /// </summary>
         /// <param name="jobFileName">Name of the job to load</param>
         [Localizable(false)]
-        CentipedeJob LoadJob(string jobFileName);
+        void LoadJob(string jobFileName);
 
         CentipedeJob Job { get; set; }
         event StartSteppingEvent StartStepping;

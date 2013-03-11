@@ -46,7 +46,7 @@ namespace Centipede.Actions
                 core.Variables.AddVariablesTableRow(inputVarName, Variables[inputVarName]);
             }
 
-            core.Job = core.LoadJob(ParseStringForVariable(JobFileName));
+            core.LoadJob(ParseStringForVariable(JobFileName));
 
             MainWindow newMain = new MainWindow(core);
             newMain.FormClosed += delegate
