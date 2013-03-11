@@ -1,2 +1,2 @@
-lcd /home/rlovely/MyDocuments/Visual\ Studio\ 2010/Projects/Centipede/Setup/Output
-put *
+
+put ./Output/*
