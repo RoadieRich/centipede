@@ -62,7 +62,7 @@ if __name__ == "__main__":
             md5.update(bytes)
             sha1.update(bytes)
     
-    with open(outputFile, 'wb') as outFile:
+    with open(outputFile, 'w') as outFile:
         outFile.write(html % (md5.hexdigest(), sha1.hexdigest()))
         
     print "Page created!"
