@@ -26,6 +26,7 @@ namespace Centipede
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
             this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -123,6 +124,7 @@ namespace Centipede
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
+            this.resetJobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -193,7 +195,6 @@ namespace Centipede
             this.SplitContainer1.Panel2.Controls.Add(this.RunTabs);
             this.SplitContainer1.Panel2.Controls.Add(this.RunButton);
             this.SplitContainer1.Panel2.Controls.Add(this.progressBar1);
-            this.SplitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.SplitContainer1_SplitterMoved);
             // 
             // SplitContainer2
             // 
@@ -418,8 +419,11 @@ namespace Centipede
             this.MessageDataGridView.AllowUserToAddRows = false;
             this.MessageDataGridView.AllowUserToDeleteRows = false;
             this.MessageDataGridView.AllowUserToOrderColumns = true;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.MessageDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.MessageDataGridView.AutoGenerateColumns = false;
             this.MessageDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.MessageDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MessageDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MessageDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.timestampDataGridViewTextBoxColumn,
@@ -672,6 +676,7 @@ namespace Centipede
             this.runToolStripMenuItem1,
             this.abortToolStripMenuItem,
             this.toolStripSeparator3,
+            this.resetJobToolStripMenuItem,
             this.stepThroughToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             resources.ApplyResources(this.runToolStripMenuItem, "runToolStripMenuItem");
@@ -877,6 +882,12 @@ namespace Centipede
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // resetJobToolStripMenuItem
+            // 
+            this.resetJobToolStripMenuItem.Name = "resetJobToolStripMenuItem";
+            resources.ApplyResources(this.resetJobToolStripMenuItem, "resetJobToolStripMenuItem");
+            this.resetJobToolStripMenuItem.Click += new System.EventHandler(this.resetJobToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -1030,6 +1041,7 @@ namespace Centipede
         private System.Windows.Forms.ToolStripMenuItem visitGetSatisfactionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem stepThroughToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetJobToolStripMenuItem;
     }
 }
 

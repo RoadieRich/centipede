@@ -9,28 +9,29 @@ namespace Centipede
 {
     public partial class JobPropertyForm : Form
     {
-        private readonly ICentipedeCore _core;
+        public CentipedeJob Job { get; set; }
 
-        public JobPropertyForm(ICentipedeCore core)
+        public JobPropertyForm(ref CentipedeJob job)
         {
-            _core = core;
+            this.Job = job;
+            
             InitializeComponent();
 
-            if (!String.IsNullOrEmpty(core.Job.Name))
+            if (!String.IsNullOrEmpty(job.Name))
             {
-                JobNameTextbox.Text = core.Job.Name;
+                JobNameTextbox.Text = job.Name;
             }
-            if (!String.IsNullOrEmpty(core.Job.InfoUrl))
+            if (!String.IsNullOrEmpty(job.InfoUrl))
             {
-                InfoUrlTextbox.Text = core.Job.InfoUrl;
+                InfoUrlTextbox.Text = job.InfoUrl;
             }
-            if (!String.IsNullOrEmpty(core.Job.Author))
+            if (!String.IsNullOrEmpty(job.Author))
             {
-                JobNameTextbox.Text = core.Job.Name;
+                AuthorTextbox.Text = job.Author;
             }
-            if (!String.IsNullOrEmpty(core.Job.AuthorContact))
+            if (!String.IsNullOrEmpty(job.AuthorContact))
             {
-                ContactTextbox.Text = core.Job.AuthorContact;
+                ContactTextbox.Text = job.AuthorContact;
             }
         }
 
@@ -55,10 +56,10 @@ namespace Centipede
                 return;
             
             }
-            _core.Job.InfoUrl = InfoUrlTextbox.Text;
-            _core.Job.Author = AuthorTextbox.Text;
-            _core.Job.AuthorContact = ContactTextbox.Text;
-            this._core.Job.Name = JobNameTextbox.Text;
+            Job.InfoUrl = InfoUrlTextbox.Text;
+            Job.Author = AuthorTextbox.Text;
+            Job.AuthorContact = ContactTextbox.Text;
+            Job.Name = JobNameTextbox.Text;
 
             Close();
             
@@ -73,12 +74,23 @@ namespace Centipede
             }
             Properties.Settings.Default.DefaultAuthor = this.AuthorTextbox.Text;
             Properties.Settings.Default.DefaultContact = this.ContactTextbox.Text;
-            Properties.Settings.Default.Save();
         }
 
         private void EmailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(string.Format(@"mailto:{0}", ContactTextbox.Text));
+        }
+
+        private void TextChanged(object sender, EventArgs e)
+        {
+            Dirty = true;
+        }
+
+        public bool Dirty { get; set; }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            Dirty = false;
         }
     }
 }

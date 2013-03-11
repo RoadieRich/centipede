@@ -56,6 +56,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Centipede\Properties\Settings.cs">
+      <Link>Properties\Settings.cs</Link>
+    </Compile>
+    <Compile Include="..\Centipede\Properties\Settings.Designer.cs">
+      <Link>Properties\Settings.Designer.cs</Link>
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Action.cs" />
     <Compile Include="Actions\ActionDisplayControl.cs">
       <SubType>UserControl</SubType>
@@ -70,20 +77,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="ResharperAttributes.cs" />
     <Compile Include="StringInject\StringInjectExtension.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    <None Include="..\Centipede\Properties\Settings.settings">
+      <Link>Properties\Settings.settings</Link>
     </None>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Actions\ActionDisplayControl.resx">

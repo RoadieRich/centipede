@@ -508,7 +508,7 @@
     <value>0</value>
   </data>
   <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633,Absolute,633" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;SplitContainer3.Panel1.Name" xml:space="preserve">
     <value>SplitContainer3.Panel1</value>
@@ -537,19 +537,19 @@
         AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
         Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
         Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN8Af8DfAH/A3wB/wN8Af8DfAH/A3wB/wwA
-        A3wB/wN8Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN8
-        Af8UAAN8Af8DfAH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
-        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN8Af8UAAN8Af8DfAH/kAADZAH2
+        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN9Af8DfQH/A30B/wN9Af8DfQH/A30B/wwA
+        A30B/wN9Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN9
+        Af8UAAN9Af8DfQH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
+        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN9Af8UAAN9Af8DfQH/kAADZAH2
         AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA3wB/xQAA3wB/wN8Af+QAAT/AaQCgQH/AZkCgQH/
-        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN8
-        Af8UAAN8Af8DfAH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
-        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA3wB/wN8Af8DfAH/A3wB/wwA
-        A3wB/wN8Af8DfAH/A3wB/wN8Af8DfAH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
-        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN8Af8DfAH/lAADWwG4
-        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA3wB/xQAA3wB/wN8Af+gAAT/AZsCgQH/
-        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADfAH/GAADfAH/A3wB/wN8Af8DfAH/lAADcgH1AaYCgQH/
+        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA30B/xQAA30B/wN9Af+QAAT/AaQCgQH/AZkCgQH/
+        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN9
+        Af8UAAN9Af8DfQH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
+        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA30B/wN9Af8DfQH/A30B/wwA
+        A30B/wN9Af8DfQH/A30B/wN9Af8DfQH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
+        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN9Af8DfQH/lAADWwG4
+        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA30B/xQAA30B/wN9Af+gAAT/AZsCgQH/
+        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADfQH/GAADfQH/A30B/wN9Af8DfQH/lAADcgH1AaYCgQH/
         AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
         AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
         AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
@@ -1448,22 +1448,28 @@
     <value>False</value>
   </data>
   <data name="runToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="runToolStripMenuItem1.Text" xml:space="preserve">
     <value>Run</value>
   </data>
   <data name="abortToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="abortToolStripMenuItem.Text" xml:space="preserve">
     <value>Abort</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>147, 6</value>
+    <value>149, 6</value>
+  </data>
+  <data name="resetJobToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="resetJobToolStripMenuItem.Text" xml:space="preserve">
+    <value>Reset Job</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Text" xml:space="preserve">
     <value>Step Through</value>
@@ -2307,6 +2313,12 @@
   </data>
   <data name="&gt;&gt;favouriteJobs1.Type" xml:space="preserve">
     <value>Centipede.FavouriteJobs, FavouriteJobs.Designer.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;resetJobToolStripMenuItem.Name" xml:space="preserve">
+    <value>resetJobToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;resetJobToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainWindow</value>
