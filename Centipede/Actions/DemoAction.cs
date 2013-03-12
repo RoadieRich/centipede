@@ -27,18 +27,19 @@ namespace Centipede.Actions
                            ),
                            Resources.DemoAction_DoAction_Demo_Action_executed
             );
-            OnMessage(new MessageEventArgs(MessageText, MessageLevel.Message));
+            Message(MessageText);
         }
 
         [ActionArgument(
             usage = "First Value to display (int)",
             displayName = "Test 1",
-            onChangedHandlerName = "Test1Set"
+            onChangedHandlerName = "Test1Set",
+            Literal = true
         )]
         public Int32 Test1 = 1;
 
         
-        [ActionArgument(displayName = "Message")]
+        [ActionArgument(displayName = "Message", Literal=true)]
         public String MessageText = "This is sent as a message";
 
 
@@ -54,7 +55,7 @@ namespace Centipede.Actions
             textBox.Text = oldVal.ToString(CultureInfo.InvariantCulture);
             Test1 = oldVal;
 
-            OnMessage(new MessageEventArgs(MessageText, MessageLevel.Message));
+            OnMessage(new MessageEventArgs(MessageText, MessageLevel.Action));
         }
 
         [ActionArgument(

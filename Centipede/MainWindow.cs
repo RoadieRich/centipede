@@ -43,7 +43,6 @@ namespace Centipede
     public partial class MainWindow : Form
     {
         
-        public static MainWindow Instance;
         //private readonly JobDataSet _dataSet = new JobDataSet();
 
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
@@ -79,8 +78,8 @@ namespace Centipede
             //Visible = true;
 
             Core = centipedeCore;
-            Instance = this;
-            ActionFactory.MessageHandlerDelegate = OnMessageHandlerDelegate;
+            
+            ActionFactory.MessageEvent = OnMessageHandlerDelegate;
 
             this._arguments = arguments;
 
@@ -189,7 +188,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
             DialogResult result = MessageBox.Show(messageBuilder.ToString(),
                                                   Resources.MainWindow_ErrorHandler_Error,
-                                                  MessageBoxButtons.AbortRetryIgnore,
+                                                  e.Fatal ? MessageBoxButtons.OK : MessageBoxButtons.AbortRetryIgnore,
                                                   MessageBoxIcon.Exclamation);
             
             _dataSet.Messages.AddMessagesRow(DateTime.Now, messageBuilder.ToString(), e.Action, MessageLevel.Error,
@@ -312,8 +311,8 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         private void MainWindow_Load(object sender, EventArgs e)
         {
             foreach (ToolStripButton button in from MessageLevel value in Enum.GetValues(typeof(MessageLevel))
-                                               where value != MessageLevel.All
-                                               select new ToolStripButton(Enum.GetName(typeof(MessageLevel), value))
+                                               where (value != MessageLevel.All) && (value != MessageLevel.Default)
+                                               select new ToolStripButton(value.AsText())
                                                       {
                                                           CheckOnClick = true,
                                                           Checked      = DisplayedLevels.HasFlag(value),
@@ -334,20 +333,23 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
             this.UIActTab.Tag = this.UIActListBox;
 
-            AddToActionTab(typeof(DemoAction));
-            AddToActionTab(typeof(GetFileNameAction));
-            AddToActionTab(typeof(ShowMessageBox));
-            AddToActionTab(typeof(AskValues));
-            AddToActionTab(typeof(ExitAction));
-            AddToActionTab(typeof(SubJob));
-            AddToActionTab(typeof(MultipleChoice));
-            AddToActionTab(typeof(AskBooleans));
+            AddToActionTab( typeof( DemoAction        ));
+            AddToActionTab( typeof( GetFileNameAction ));
+            AddToActionTab( typeof( ShowMessageBox    ));
+            AddToActionTab( typeof( AskValues         ));
+            AddToActionTab( typeof( ExitAction        ));
+            AddToActionTab( typeof( SubJobAction      ));
+            AddToActionTab( typeof( MultipleChoice    ));
+            AddToActionTab( typeof( AskBooleans       ));
 
-            this._urlTextbox = new ToolStripSpringTextBox();
-            this._urlTextbox.KeyUp += UrlTextbox_KeyUp;
-            this.NavigationToolbar.Stretch = true;
+            this._urlTextbox               = new ToolStripSpringTextBox();
+            this._urlTextbox.KeyUp        += UrlTextbox_KeyUp;
+            this._urlTextbox.MergeIndex    = this.NavigationToolbar.Items.Count - 2;
+
             this.NavigationToolbar.Items.Add(this._urlTextbox);
-            this._urlTextbox.MergeIndex = this.NavigationToolbar.Items.Count - 2;
+            
+            this.NavigationToolbar.Stretch = true;
+
             GetActionPlugins();
 
             this.VarDataGridView.DataSource = Core.Variables;
@@ -879,11 +881,14 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
         private void UpdateOutputWindow()
         {
+            MessageDataGridView.Parent.SuspendLayout();
+            MessageDataGridView.Hide();
             foreach (JobDataSet.MessagesRow row in _dataSet.Messages)
             {
                 row.Visible = DisplayedLevels.HasFlag(row.Level);
             }
-
+            MessageDataGridView.Show();
+            MessageDataGridView.Parent.ResumeLayout(true);
             // return;
 
             //MessageDataGridView.CurrentCell = null;

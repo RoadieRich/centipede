@@ -7,7 +7,7 @@ namespace CentipedeInterfaces
     /// <summary>
     /// 
     /// </summary>
-    public class AskActionEventArgs : EventArgs
+    public class AskEventArgs : EventArgs
     {
         /// <summary>
         /// 
@@ -71,6 +71,7 @@ namespace CentipedeInterfaces
             /// </summary>
             YesNoCancel = System.Windows.Forms.MessageBoxButtons.YesNoCancel
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -79,31 +80,38 @@ namespace CentipedeInterfaces
             /// <summary>
             /// 
             /// </summary>
+            None = System.Windows.Forms.DialogResult.None,
+
+            /// <summary>
+            /// 
+            /// </summary>
             Abort = System.Windows.Forms.DialogResult.Abort,
+
             /// <summary>
             /// 
             /// </summary>
             Cancel = System.Windows.Forms.DialogResult.Cancel,
+
             /// <summary>
             /// 
             /// </summary>
             Ignore = System.Windows.Forms.DialogResult.Ignore,
+
             /// <summary>
             /// 
             /// </summary>
             No = System.Windows.Forms.DialogResult.No,
-            /// <summary>
-            /// 
-            /// </summary>
-            None = System.Windows.Forms.DialogResult.None,
+
             /// <summary>
             /// 
             /// </summary>
             OK = System.Windows.Forms.DialogResult.OK,
+
             /// <summary>
             /// 
             /// </summary>
             Retry = System.Windows.Forms.DialogResult.Retry,
+
             /// <summary>
             /// 
             /// </summary>
@@ -119,34 +127,42 @@ namespace CentipedeInterfaces
             /// 
             /// </summary>
             Asterisk = System.Windows.Forms.MessageBoxIcon.Asterisk,
+
             /// <summary>
             /// 
             /// </summary>
             Error = System.Windows.Forms.MessageBoxIcon.Error,
+
             /// <summary>
             /// 
             /// </summary>
             Exclamation = System.Windows.Forms.MessageBoxIcon.Exclamation,
+
             /// <summary>
             /// 
             /// </summary>
             Hand = System.Windows.Forms.MessageBoxIcon.Hand,
+
             /// <summary>
             /// 
             /// </summary>
             Information = System.Windows.Forms.MessageBoxIcon.Information,
+
             /// <summary>
             /// 
             /// </summary>
             None = System.Windows.Forms.MessageBoxIcon.None,
+
             /// <summary>
             /// 
             /// </summary>
             Question = System.Windows.Forms.MessageBoxIcon.Question,
+
             /// <summary>
             /// 
             /// </summary>
             Stop = System.Windows.Forms.MessageBoxIcon.Stop,
+
             /// <summary>
             /// 
             /// </summary>

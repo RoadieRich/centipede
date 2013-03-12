@@ -18,8 +18,8 @@ binfolder = ../bin/Debug
 pluginsfolder = $(binfolder)/Plugins
 setupoutputfolder = ./Output
 
-
-installerfilename = $(setupoutputfolder)/CentipedeSetup.exe
+installerfilename = CentipedeSetup.exe
+installerfilepath = $(setupoutputfolder)/$(installerfilename)
 webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
@@ -37,38 +37,43 @@ scriptengine = python
 uploadscript = sftp-upload.sftpc
 uploadtool = /usr/bin/sftp
 
+#assumes sftp is set up for unattended log in to this account
 webuser = www-data
 server = ps-der-hg1
 
-
-
 all: installer webpage upload notify
 
-installer: $(installerfilename)
+installer: $(installerfilepath)
 webpage: $(webpagefilename)
 upload: upload.log
 notify: notify.log
 
-$(installerfilename): $(binfolderfiles) $(pluginfiles) $(setupfiles)
+$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) centipede-setup.iss
 
-$(webpagefilename): $(pagescript) $(installerfilename) 
-	$(scriptengine) $(pagescript) $(installerfilename) $(webpagefilename)
+$(webpagefilename): $(pagescript) $(installerfilepath) 
+	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename)
 
-upload.log: $(uploadscript) $(installerfilename) $(webpagefilename)
+upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
 	$(uploadtool) -b $(uploadscript) $(webuser)@$(server) > upload.log
 	@echo Upload complete.
 
 notify.log: upload.log
 	@#nothing for now.
-	@touch notify.log
+	touch notify.log
 	
+checksum:
+	@echo 'Local: '
+	@echo 'md5:         ' `md5sum $(installerfilepath) | awk '{print $$1}'`
+	@echo 'sha1:        ' `sha1sum $(installerfilepath) | awk '{print $$1}'`
+	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' `
+		
 clean:
 	@rm -rf $(setupoutputfolder)
 	@rm upload.log notify.log
 	
-install: $(installerfilename)
-	$(installerfilename)
+install: $(installerfilepath)
+	$(installerfilepath)
 	
 help:
 	@echo Available targets:

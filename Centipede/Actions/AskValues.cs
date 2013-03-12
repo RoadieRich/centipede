@@ -20,7 +20,7 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas")]
+        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
 
         /// <summary>
@@ -104,12 +104,12 @@ namespace Centipede.Actions
                                    }
                                };
 
-            form.ShowDialog();
+            form.ShowDialog(Form.ActiveForm);
             
         }
     }
 
-    [ActionCategory("UI", displayName = "Ask for values")]
+    [ActionCategory("UI", displayName = "Checkboxes")]
     class AskBooleans : Action
     {
         /// <summary>
@@ -122,7 +122,7 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas")]
+        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Centipede.Actions
                                    }
                                };
 
-            form.ShowDialog();
+            form.ShowDialog(Form.ActiveForm);
             
         }
     }

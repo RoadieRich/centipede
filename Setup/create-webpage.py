@@ -12,7 +12,7 @@ html = """<!DOCTYPE html>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
 <title>Centipede</title>
 <style type="text/css">
-tt
+code
 { 
 	background: #e9e9e9;
 	font-family: consolas, courier new, monospace;
@@ -42,8 +42,8 @@ if (typeof GSFN !== "undefined") { GSFN.loadWidget(4615,{"containerId":"getsat-w
 
 <table border=1>
 <tr><th>Hash</th><th>Checksum</th></tr>
-<tr><td>MD5</td> <td><tt>%s</tt></td></tr>
-<tr><td>SHA1</td><td><tt>%s</tt></td></tr>
+<tr><td>MD5</td> <td><code>%s</code></td></tr>
+<tr><td>SHA1</td><td><code>%s</code></td></tr>
 </table>
 
 <div class="GetSatisfactionBadge"><a href="https://getsatisfaction.com/centipede">

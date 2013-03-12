@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Xml;
 using ResharperAnnotations;
 
 
 namespace CentipedeInterfaces
 {
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public interface IAction
     {
         /// <summary>
@@ -50,18 +52,11 @@ namespace CentipedeInterfaces
         string ToString();
 
         /// <summary>
-        /// 
-        /// </summary>
-        [UsedImplicitly]
-        event AskEvent OnAsk;
-
-        /// <summary>
         /// Append xml code for the action to the given parent element
         /// </summary>
         /// <param name="rootElement">
         /// The parent element to add the action to
         /// </param>
-        [UsedImplicitly]
         void AddToXmlElement(XmlElement rootElement);
 
         /// <summary>
@@ -72,15 +67,19 @@ namespace CentipedeInterfaces
         /// <summary>
         /// 
         /// </summary>
-        [UsedImplicitly]
-        event MessageHandlerDelegate MessageHandler;
+        event MessageEvent MessageHandler;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        event AskEvent AskHandler;
     }
     /// <summary>
     /// 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    public delegate void AskEvent(object sender, AskActionEventArgs e);
+    public delegate void AskEvent(object sender, AskEventArgs e);
 
 
     /// <summary>
@@ -88,7 +87,7 @@ namespace CentipedeInterfaces
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    public delegate void MessageHandlerDelegate(object sender, MessageEventArgs e);
+    public delegate void MessageEvent(object sender, MessageEventArgs e);
 
     /// <summary>
     /// 
@@ -150,12 +149,12 @@ namespace CentipedeInterfaces
         /// <summary>
         /// Message
         /// </summary>
-        Message = 0x4,
+        Action = 0x4,
 
         /// <summary>
         /// Notice
         /// </summary>
-        Notice = 0x8,
+        Core = 0x8,
 
         /// <summary>
         /// Variable Changed
@@ -165,6 +164,12 @@ namespace CentipedeInterfaces
         /// <summary>
         /// All levels
         /// </summary>
-        All = Error | Warning | Message | Notice | VariableChange
+        All = Error | Warning | Action | Core | VariableChange,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        Default = Error | Warning | Action
+
     }
 }

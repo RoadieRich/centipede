@@ -11,7 +11,7 @@ namespace Centipede
     class ActionFactory : ListViewItem
     {
         [ResharperAnnotations.UsedImplicitly]
-        public static volatile MessageHandlerDelegate MessageHandlerDelegate;
+        public static volatile MessageEvent MessageEvent;
 
         [UsedImplicitly]
         internal ActionFactory(String displayName, Type actionType, ICentipedeCore core) : base(displayName)
@@ -42,9 +42,9 @@ namespace Centipede
             ConstructorInfo constructorInfo = _actionType.GetConstructor(ctorTypes);
             Action instance = (Action)constructorInfo.Invoke(new object[] { _core.Variables, _core });
             
-            if (MessageHandlerDelegate != null)
+            if (MessageEvent != null)
             {
-                instance.MessageHandler += MessageHandlerDelegate;
+                instance.MessageHandler += MessageEvent;
             }
             
             return instance;

@@ -33,6 +33,10 @@ namespace CentipedeInterfaces
             }
         }
 
+        public static String AsText(this MessageLevel e)
+        {
+            return DisplayTextAttribute.ToDisplayString(e);
+        }
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Xml;
 using System.Reflection;
 using System.Linq;
@@ -112,11 +113,11 @@ namespace Centipede
         {
             OnMessage(new MessageEventArgs{
                 Message = string.Format("Processing action {0}", Name), 
-                Level = MessageLevel.Notice});
+                Level = MessageLevel.Core});
             InitAction();
             DoAction();
             CleanupAction();
-            OnMessage(new MessageEventArgs(string.Format("Finished action {0}", Name), MessageLevel.Notice));
+            OnMessage(new MessageEventArgs(string.Format("Finished action {0}", Name), MessageLevel.Core));
         }
 
         /// <summary>
@@ -161,55 +162,68 @@ namespace Centipede
         /// <returns>
         /// String
         /// </returns>
-        protected String ParseStringForVariable(String str)
+        protected String ParseStringForVariable([NotNull] String str)
         {
-            return str.Inject(Variables);
+            string injected = str.Inject(Variables);
+            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", str, injected);
+            return injected;
         }
 
-
         /// <summary>
-        /// <see cref="Action.Ask" /> a question
+        /// Ask the user a question
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="title"></param>
-        /// <param name="options"></param>
-        /// <returns>
-        /// 
-        /// </returns>
+        /// <param name="message" />
+        /// <param name="title" />
+        /// <param name="options" />
+        /// <returns />
         protected AskEventEnums.DialogResult Ask(String message, String title = "Question",
                                                  AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
         {
-            var handler = OnAsk;
-            if (handler != null)
-            {
-                var eventArgs = new AskActionEventArgs
+            var eventArgs = new AskEventArgs
                                 {
                                         Icon = AskEventEnums.MessageIcon.Question,
                                         Message = message,
                                         Title = title,
                                         Type = options
                                 };
-                OnAsk(this, eventArgs);
+                OnAsk(eventArgs);
                 return eventArgs.Result;
 
-            }
-            return AskEventEnums.DialogResult.None;
+            
+            
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public event AskEvent OnAsk;
+        public event AskEvent AskHandler;
 
+        protected void OnAsk(AskEventArgs e)
+        {
+            AskEvent handler = AskHandler;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="message"></param>
         /// <param name="level"></param>
-        protected void Message(String message,
-                               MessageLevel level)
-        { }
+        /// <param name="args"></param>
+        [StringFormatMethod(@"message")]
+        private void OnMessage(MessageLevel level, string message, params object[] args)
+        {
+            OnMessage(new MessageEventArgs(String.Format(message, args), level));
+        }
+
+        [StringFormatMethod(@"message")]
+        protected void Warning(String message, params object[] args)
+        {
+            OnMessage(MessageLevel.Warning, message, args);
+        }
 
 
         /// <summary>
@@ -228,23 +242,36 @@ namespace Centipede
             }
             XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
 
-            foreach (FieldAndPropertyWrapper wrappedMember in from member in thisType.GetMembers()
-                                                              where member is FieldInfo || member is PropertyInfo
-                                                              select (FieldAndPropertyWrapper)member
-                                                              into wrapped
-                                                              where wrapped.GetArguementAttribute() != null
-                                                              select wrapped
-                    )
-            {
-                element.SetAttribute(wrappedMember.Name, wrappedMember.Get<dynamic>(this).ToString());
-            }
+            element.SetAttribute(@"Comment", this.Comment);
+            
+            PopulateXmlTag(element);
 
             String pluginFilePath = Path.GetFileName(thisType.Assembly.CodeBase);
-
-            element.SetAttribute(@"Comment", Comment);
             element.SetAttribute(@"Assembly", pluginFilePath);
 
             rootElement.AppendChild(element);
+        }
+
+        /// <summary>
+        /// Populate the Xml Tag passed in through <paramref name="element"/> with the argument values
+        /// </summary>
+        /// <remarks>Comment is set by the superclass, but can be overridden, should you really need to.</remarks>
+        /// <param name="element"></param>
+        [Localizable(false)]
+        protected virtual void PopulateXmlTag(XmlElement element)
+        {
+            Type thisType = GetType();
+            var wrappers = from member in thisType.GetMembers()
+                           where member is FieldInfo || member is PropertyInfo
+                           select (FieldAndPropertyWrapper)member
+                           into wrapped
+                           where wrapped.GetArguementAttribute() != null
+                           select wrapped;
+
+            foreach (FieldAndPropertyWrapper wrappedMember in wrappers)
+            {
+                element.SetAttribute(wrappedMember.Name, wrappedMember.Get<dynamic>(this).ToString());
+            }
         }
 
         /// <summary>
@@ -394,15 +421,15 @@ namespace Centipede
         /// <summary>
         /// 
         /// </summary>
-        public event MessageHandlerDelegate MessageHandler;
+        public event MessageEvent MessageHandler;
 
         [ResharperAnnotations.PublicAPI]
         protected void OnMessage(MessageEventArgs e)
         {
-            MessageHandlerDelegate handlerDelegate = MessageHandler;
-            if (handlerDelegate != null)
+            MessageEvent @event = MessageHandler;
+            if (@event != null)
             {
-                handlerDelegate(this, e);
+                @event(this, e);
             }
         }
 
@@ -421,7 +448,25 @@ namespace Centipede
         /// <returns></returns>
         public override String ToString()
         {
-            return String.IsNullOrWhiteSpace(Comment) ? Name : String.Format("{0} ({1})", Name, Comment);
+            if (String.IsNullOrWhiteSpace(this.Comment))
+            {
+                return this.Name;
+            }
+            else
+            {
+                return String.Format("{0} ({1})", this.Name, this.Comment);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        [StringFormatMethod(@"message")]
+        protected void Message([NotNull] string message, params object[] args)
+        {
+            OnMessage(MessageLevel.Action, message, args);
         }
     }
 

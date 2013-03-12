@@ -61,7 +61,7 @@
             this.InfoUrlTextbox.Name = "InfoUrlTextbox";
             this.InfoUrlTextbox.Size = new System.Drawing.Size(301, 20);
             this.InfoUrlTextbox.TabIndex = 1;
-            this.InfoUrlTextbox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.InfoUrlTextbox.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
             // 
             // label2
             // 
@@ -89,7 +89,7 @@
             this.AuthorTextbox.Name = "AuthorTextbox";
             this.AuthorTextbox.Size = new System.Drawing.Size(382, 20);
             this.AuthorTextbox.TabIndex = 2;
-            this.AuthorTextbox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.AuthorTextbox.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
             // 
             // ContactTextbox
             // 
@@ -99,7 +99,7 @@
             this.ContactTextbox.Name = "ContactTextbox";
             this.ContactTextbox.Size = new System.Drawing.Size(301, 20);
             this.ContactTextbox.TabIndex = 3;
-            this.ContactTextbox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.ContactTextbox.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
             // 
             // BrowseButton
             // 
@@ -151,7 +151,7 @@
             this.JobNameTextbox.Name = "JobNameTextbox";
             this.JobNameTextbox.Size = new System.Drawing.Size(382, 20);
             this.JobNameTextbox.TabIndex = 0;
-            this.JobNameTextbox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.JobNameTextbox.TextChanged += new System.EventHandler(this.TextBoxTextChanged);
             // 
             // openFileDialog1
             // 
