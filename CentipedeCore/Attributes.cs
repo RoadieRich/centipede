@@ -9,49 +9,52 @@ namespace CentipedeInterfaces
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     [MeansImplicitUse]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class ActionArgumentAttribute : Attribute
     {
 
-        // ReSharper disable InconsistentNaming
         /// <summary>
+        /// 
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
-        [PublicAPI]
         public string displayControl;
 
         /// <summary>
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
         public String displayName;
 
         /// <summary>
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
         public string onChangedHandlerName;
 
         /// <summary>
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
         public String onLeaveHandlerName;
 
         /// <summary>
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
         public string setterMethodName;
 
         /// <summary>
         /// </summary>
         [CanBeNull]
-        [UsedImplicitly]
         public String usage;
 
-        // ReSharper restore InconsistentNaming
+        /// <summary>
+        ///     Anchor value for location of the argument's help.
+        /// </summary>
+        /// <remarks>
+        ///     If <see cref="ActionCategoryAttribute.HelpText"/> or <see cref="ActionCategoryAttribute.HelpUri"/> are
+        ///     set on the containing anchor, this can be set to an anchor within that page: <c>#ArgumentName</c>.
+        /// </remarks>
+        [CanBeNull]
+        public String HelpUri;
 
+        public Boolean Literal;
     }
 
     /// <summary>
@@ -59,6 +62,7 @@ namespace CentipedeInterfaces
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class ActionCategoryAttribute : Attribute
     {
         // ReSharper disable InconsistentNaming
@@ -90,14 +94,66 @@ namespace CentipedeInterfaces
         public String iconName;
 
         /// <summary>
+        ///     Uri of a help file related to the action
+        /// </summary>
+        /// <remarks>
+        ///     If both this and <see cref="HelpText"/> are defined, <see cref="HelpText"/> value has priority.
+        /// </remarks>
+        public String HelpUri;
+
+        /// <summary>
+        ///     Html text for help related to the action
+        /// </summary>
+        /// <remarks>
+        ///     If both this and <see cref="HelpUri"/> are defined, <see cref="HelpText"/> value has priority.
+        /// </remarks>
+        public String HelpText;
+
+        /// <summary>
         ///     Marks a class as an Action, to be displayed in the GUI listbox
         /// </summary>
         /// <param name="category">
         ///     <see cref="ActionCategoryAttribute.category" />
         /// </param>
-        public ActionCategoryAttribute(String category)
+        public ActionCategoryAttribute([NotNull] String category)
         {
             this.category = category;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Field)]
+    internal sealed class DisplayTextAttribute : Attribute
+    {
+        public string DisplayString { get; set; }
+        // See the attribute guidelines at 
+        //  http://go.microsoft.com/fwlink/?LinkId=85236
+        private readonly string positionalString;
+
+        // This is a positional argument
+        public DisplayTextAttribute(string displayString)
+        {
+            DisplayString = displayString;
+        }
+
+        public static string ToDisplayString(Enum value)
+        {
+            // Get the type
+            Type type = value.GetType();
+
+            // Get fieldinfo for this type
+            System.Reflection.FieldInfo fieldInfo = type.GetField(value.ToString());
+
+            // Get the attributes
+            DisplayTextAttribute[] attribs = fieldInfo.GetCustomAttributes(typeof(DisplayTextAttribute), false) as DisplayTextAttribute[];
+
+            string strValue = value.ToString();
+
+            // Return the first if there was a match.
+            if (attribs != null && attribs.Length > 0)
+            {
+                strValue = attribs[0].DisplayString;
+            }
+            return strValue;
         }
     }
 }

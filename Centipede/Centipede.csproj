@@ -105,7 +105,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Actions\ShowMessageBox.cs" />
-    <Compile Include="Actions\SubJob.cs" />
+    <Compile Include="Actions\SubJobAction.cs" />
     <Compile Include="Actions\TextFileActions.cs" />
     <Compile Include="CentipedeCore.cs" />
     <Compile Include="Extensions.cs" />
@@ -223,7 +223,7 @@
     <None Include="Properties\DataSources\MainWindow.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\Settings.settings">
-      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">

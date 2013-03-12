@@ -41,8 +41,9 @@ Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Co
 Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
 Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
 Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Python
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python; Check: not IsWin64
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Python; Check: not IsWin64
+Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer64.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python; Check: IsWin64
 Source: "{#BinaryDir}\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
 Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
 Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
@@ -112,15 +113,6 @@ Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Fla
 Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
 [PostCompile]
-Name: "C:\Python32\python.exe"; Parameters: " "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Checksum.py" "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe" "; Flags: runminimized cmdprompt redirectoutput
-
-
-;I'm sure I had this working at one point...
-;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\upload.sh"; Flags: cmdprompt redirectoutput
-;Name: "C:\cygwin\bin\bash.exe"; Parameters: "-c /usr/bin/echo put * >> {#CygwinSetupDir}/upload.sftpc"
-;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "C:/Documents and Settings/RLovely/My Documents/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
-;Name: "C:\cygwin\bin\sftp.exe"; Parameters: "-b "/home/RLovely/MyDocuments/Visual Studio 2010/Projects/Centipede/Setup/upload.sftpc" www-data@ps-der-hg1"
-;Name: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\ChecksumGen.exe"; Parameters: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\Setup\Output\CentipedeSetup.exe"
 
 [Code]
 var

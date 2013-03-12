@@ -107,6 +107,7 @@ namespace CentipedeInterfaces
         event StartSteppingEvent StartStepping;
 
         IAction CurrentAction { get; set; }
+        Boolean IsStepping{ get; }
         void AbortRun();
     }
 

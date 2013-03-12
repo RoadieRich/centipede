@@ -16,30 +16,50 @@ namespace Centipede.Actions
             
         }
 
-        [ActionArgument]
+        [ActionArgument(Literal = true)]
         public String DestinationVariable = "Filename";
 
-        private delegate DialogResult ShowGetFileDialog();
+        [ActionArgument(Literal = true)]
+        public String Caption = "Choose File";
         
-        [ActionArgument(displayName = "Caption")]
-        public String Caption = "";
-
-
-
         [ActionArgument(displayName = "Filter")]
-        public String Filter = "";
+        public String Filter = "All Files (*.*)|*.*";
 
+
+        [ActionArgument(displayName = "Default filename")]
+        public String DefaultFilename = "";
+
+        private OpenFileDialog _dialog;
 
         protected override void InitAction()
         {
-            MainWindow.Instance.GetFileNameDialogue.FileOk += GetFileNameDialogue_FileOk;
-            MainWindow.Instance.GetFileNameDialogue.Title = Caption;
-            MainWindow.Instance.GetFileNameDialogue.Filter = Filter;
+            this._dialog = ((MainWindow)Form.ActiveForm).GetFileNameDialogue;
+            object oldFilename;
+            bool hasOldFilename = Variables.TryGetValue(DestinationVariable, out oldFilename);
+
+            
+            
+            this._dialog.FileOk  += GetFileNameDialogue_FileOk;
+            this._dialog.Title    = Caption;
+            this._dialog.Filter   = Filter;
+            this._dialog.FileName = ParseStringForVariable(this.DefaultFilename);
+            
+            if (String.IsNullOrEmpty(this.DefaultFilename) && hasOldFilename)
+            {
+                this._dialog.FileName = oldFilename as String;
+            }
         }
 
         protected override void DoAction()
         {
-            MainWindow.Instance.Invoke(new ShowGetFileDialog(MainWindow.Instance.GetFileNameDialogue.ShowDialog));
+            DialogResult result =
+                    (DialogResult)
+                    Form.ActiveForm.Invoke(new Func<DialogResult>(
+                                                   () => (this._dialog.ShowDialog())));
+            if (result == DialogResult.Cancel)
+            {
+                throw new FatalActionException(string.Format("Cancel clicked on {0} dialog.", Caption), this);
+            }
         }
 
         private void GetFileNameDialogue_FileOk(object sender, CancelEventArgs e)
@@ -54,7 +74,7 @@ namespace Centipede.Actions
 
         protected override void CleanupAction()
         {
-            MainWindow.Instance.GetFileNameDialogue.FileOk -= GetFileNameDialogue_FileOk;
+            this._dialog.FileOk -= GetFileNameDialogue_FileOk;
         }
     }
 }

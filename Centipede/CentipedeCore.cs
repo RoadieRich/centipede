@@ -88,6 +88,7 @@ namespace Centipede
             }
             if (stepping)
             {
+                _stepping = true;
                 pause = new ManualResetEvent(true);
                 OnStartStepping(new StartSteppingEventArgs(pause));
             }
@@ -153,6 +154,7 @@ namespace Centipede
                 jobFailed = true;
             }
             OnCompleted(!jobFailed);
+            _stepping = false;
         }
 
         public event StartSteppingEvent StartStepping;
@@ -185,10 +187,11 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action    = currentAction,
+                                                    Action = currentAction,
                                                     Exception = new FatalActionException(
                                                             string.Format(Resources.CentipedeCore_RunJob_FatalError,
-                                                                          e.Message, e))
+                                                                          e.Message, e)),
+                                                    Fatal = true
                                             };
                 OnActionError(args);
                 throw new AbortOperationException();
@@ -210,6 +213,14 @@ namespace Centipede
         private ContinueState _continueState = ContinueState.Continue;
         private Object _abortRequested = false;
         private bool _stepping;
+
+        bool ICentipedeCore.IsStepping
+        {
+            get
+            {
+                return _stepping;
+            }
+        }
 
         public void AbortRun()
         {
@@ -432,7 +443,8 @@ namespace Centipede
         public void LoadJob(string jobFileName)
         {
 
-            Variables.Clear();
+            Clear();
+            
             //var xmlDoc = new XmlDocument();
             if (!File.Exists(jobFileName))
             {

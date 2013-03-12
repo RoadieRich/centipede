@@ -54,5 +54,7 @@ namespace Centipede.Actions
                 return _actions;
             }
         }
+
+        public new static CentipedeEventArgs Empty = new CentipedeEventArgs(null, null);
     }
 }

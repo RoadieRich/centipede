@@ -81,7 +81,7 @@ namespace Centipede
             Process.Start(string.Format(@"mailto:{0}", ContactTextbox.Text));
         }
 
-        private void TextChanged(object sender, EventArgs e)
+        private void TextBoxTextChanged(object sender, EventArgs e)
         {
             Dirty = true;
         }

@@ -33,14 +33,13 @@ namespace Centipede.Actions
         /// </summary>
         protected void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionDisplayControl));
             this.NameLabel = new System.Windows.Forms.Label();
             this.ExpandButton = new System.Windows.Forms.Button();
             this.AttributeTable = new System.Windows.Forms.TableLayoutPanel();
-            this.StatusIcons = new System.Windows.Forms.ImageList(this.components);
+            this.StatusIcons = new System.Windows.Forms.ImageList();
             this.StatusIconBox = new System.Windows.Forms.PictureBox();
-            this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,8 +52,8 @@ namespace Centipede.Actions
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
-            this.StatusTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.ArgumentTooltips = new System.Windows.Forms.ToolTip(this.components);
+            this.StatusTooltip = new System.Windows.Forms.ToolTip();
+            this.ArgumentTooltips = new System.Windows.Forms.ToolTip();
             this.ActionIcon = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.ActionContextMenu.SuspendLayout();

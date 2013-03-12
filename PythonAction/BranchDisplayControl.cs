@@ -30,9 +30,14 @@ namespace PyAction
             StatusToolTip = new ToolTip();
             StatusToolTip.SetToolTip(StatusIconBox, "");
 
-            
-            
-            _actionCombo = new ComboBox { DisplayMember = @"Text", ValueMember = @"Action" };
+
+
+            _actionCombo = new ComboBox
+                           {
+                                   DisplayMember = @"Text",
+                                   ValueMember = @"Action",
+                                   Dock = DockStyle.Fill
+                           };
 
             _actionCombo.DropDown += actionCombo_DropDown;
             _actionCombo.SelectionChangeCommitted +=
@@ -83,22 +88,25 @@ namespace PyAction
 
         private void PopulateComboBox()
         {
-            var actionIter = from Action a in MainWindow.Instance.Core.Job.Actions
-                             where a != ThisAction
-                             select new
-                                    {
-                                            Text = String.Format("{0}: {1}",
-                                                                 a.Name, a.Comment),
-                                            Action = a
-                                    };
-            _actionCombo.DataSource = actionIter.ToList();
+            ICentipedeCore core = ThisAction.GetCurrentCore();
+            lock (core.Job)
+            {
+                var actionIter = from Action a in core.Job.Actions
+                                 where a != ThisAction
+                                 select new
+                                        {
+                                                Text = String.Format("{0}: {1}",
+                                                                     a.Name, a.Comment),
+                                                Action = a
+                                        };
+                _actionCombo.DataSource = actionIter.ToList();
+            }
         }
 
         public override void UpdateControls()
         {
-            Action a = ThisAction.NextIfTrue;
             PopulateComboBox();
-            _actionCombo.SelectedIndex = MainWindow.Instance.Core.Job.Actions.IndexOf(ThisAction.NextIfTrue);
+            _actionCombo.SelectedIndex = ((MainWindow)ParentForm).Core.Job.Actions.Where(a => a != ThisAction).ToList().IndexOf(ThisAction.NextIfTrue);
             _conditionControl.Text = ThisAction.ConditionSource;
         }
 

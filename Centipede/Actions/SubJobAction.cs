@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using CentipedeInterfaces;
 
@@ -9,26 +10,30 @@ using CentipedeInterfaces;
 namespace Centipede.Actions
 {
     [ActionCategory("Flow Control", displayName = "Run Centipede Job")]
-    class SubJob : Action
+    class SubJobAction : Action
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="v"></param>
         /// <param name="c"></param>
-        public SubJob(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Subjob", v,c)
+        public SubJobAction(IDictionary<string, object> v, ICentipedeCore c)
+                : base("Run Sub-job", v,c)
         { }
 
         
         [ActionArgument(displayName="Job Filename")]
         public String JobFileName = "";
 
-        
-        [ActionArgument(displayName = "Input Variables", usage="Comma-separated list of variables to set within the subjob")]
+
+        [ActionArgument(displayName = "Input Variables",
+                usage = "Comma-separated list of variables to set within the subjob", 
+                Literal = true)]
         public String InputVars = "";
 
-        [ActionArgument(displayName = "Output Variables", usage = "Comma-separated list of variables to retrieve from the subjob")]
+        [ActionArgument(displayName = "Output Variables",
+                usage = "Comma-separated list of variables to retrieve from the subjob", 
+                Literal = true)]
         public String OutputVars = "";
 
         /// <summary>
@@ -58,13 +63,14 @@ namespace Centipede.Actions
                                       }
                                   };
             
-            newMain.ShowDialog();
-            Thread runjobThread = new Thread(delegate(object arg)
+            newMain.ShowDialog(Form.ActiveForm);
+            Thread runjobThread = new Thread(delegate(object o)
                                              {
-                                                 ICentipedeCore subjobCore = (ICentipedeCore)arg;
-                                                 subjobCore.RunJob();
+                                                 SubJobAction @this = this;
+                                                 core.RunJob((Boolean)o);
                                              });
-            runjobThread.Start(core);
+                                             
+            runjobThread.Start(GetCurrentCore().IsStepping);
             runjobThread.Join();
             
         }

@@ -34,6 +34,7 @@ namespace CentipedeInterfaces
             }
         }
         public ContinueState Continue { get; set; }
+        public Boolean Fatal { get; set; }
     }
 
     public enum ContinueState

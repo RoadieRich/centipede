@@ -25,7 +25,7 @@ namespace Centipede.Actions
         {
             String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);
-            MainWindow.Instance.Invoke(new ShowMessageBoxDelegate(() => MessageBox.Show(MainWindow.Instance, parsedMessage, parsedTitle)));
+            Form.ActiveForm.Invoke(new Func<DialogResult>(() => MessageBox.Show(Form.ActiveForm, parsedMessage, parsedTitle)));
         }
     }
 }

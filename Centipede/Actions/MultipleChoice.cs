@@ -8,7 +8,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI")]
+    [ActionCategory("UI", displayName = "Multiple Choice")]
     public class MultipleChoice : Action
     {
         /// <summary>
@@ -17,8 +17,8 @@ namespace Centipede.Actions
         /// <param name="name"></param>
         /// <param name="v"></param>
         /// <param name="core"></param>
-        public MultipleChoice(string name, IDictionary<string, object> v, ICentipedeCore core)
-                : base(name, v, core)
+        public MultipleChoice(IDictionary<string, object> v, ICentipedeCore core)
+                : base("Multiple Choice", v, core)
         { }
 
         [ActionArgument]
@@ -60,12 +60,11 @@ namespace Centipede.Actions
             if (RadioButtons)
             {
                 int i = 0;
-                form.Controls.AddRange(this.Choices.Split(',')
-                                           .Select(choice => new RadioButton
-                                                             {
-                                                                     Text = choice.Trim(),
-                                                                     Tag = i++
-                                                             }));
+                form.Controls.AddRange(this.Choices.Split(',').Select(s=>s.Trim()).Select(choice => new RadioButton
+                                                                                {
+                                                                                        Text = choice,
+                                                                                        Tag = i++
+                                                                                }));
                 form.FormClosing += delegate
                                     {
                                         switch (form.DialogResult)

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using Centipede;
@@ -73,14 +76,10 @@ namespace PyAction
         }
 
         [Localizable(false)]
-        public override void AddToXmlElement(XmlElement rootElement)
+        protected override void PopulateXmlTag(XmlElement element)
         {
-            Type thisType = GetType();
-            XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
-            element.SetAttribute("Comment", Comment);
             element.SetAttribute("Target", GetCurrentCore().Job.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
             element.InnerText = ConditionSource;
-            rootElement.AppendChild(element);
         }
 
         [Localizable(false)]
@@ -92,10 +91,10 @@ namespace PyAction
             AfterLoadEvent instanceOnAfterLoad = null;
             instanceOnAfterLoad = delegate{
                 NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
-                MainWindow.Instance.Core.AfterLoad -= instanceOnAfterLoad;
+                GetCurrentCore().AfterLoad -= instanceOnAfterLoad;
                 ((ActionDisplayControl)Tag).UpdateControls();
             };
-            MainWindow.Instance.Core.AfterLoad += instanceOnAfterLoad;
+            GetCurrentCore().AfterLoad += instanceOnAfterLoad;
         }
     }
 

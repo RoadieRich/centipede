@@ -128,11 +128,11 @@ namespace Centipede.Actions
         {
             ActionArgumentAttribute attrData = arg.GetArguementAttribute();
             var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
+
             if (!string.IsNullOrEmpty(attrData.usage))
             {
                 ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
             }
-
             Control attrValue;
             {
                 switch (arg.GetFieldTypeCategory())
@@ -155,7 +155,10 @@ namespace Centipede.Actions
                 default:
                     attrValue = new TextBox
                                 {
-                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
+                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                                        BackColor = attrData.Literal
+                                                            ? SystemColors.Info
+                                                            : SystemColors.Window
                                 };
                     object obj = arg.Get<Object>(ThisAction); //.ToString();
                     attrValue.Text = (obj ?? "").ToString();
@@ -168,6 +171,14 @@ namespace Centipede.Actions
                 attrValue.Leave += GetLeaveHandler(arg);
             }
 
+            attrLabel.Margin = new Padding
+                               {
+                                       Top = (attrValue.Height - attrLabel.Height) / 2,
+                                       Bottom = attrLabel.Margin.Bottom,
+                                       Left = attrLabel.Margin.Left,
+                                       Right = attrLabel.Margin.Right
+                               };
+            
             return new[] { attrLabel, attrValue };
         }
 
@@ -360,7 +371,9 @@ namespace Centipede.Actions
             if (textBox != null)
             {
                 ThisAction.Comment = textBox.Text;
+                
             }
+            SetDirty(sender, e);
         }
 
         //private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
@@ -380,7 +393,7 @@ namespace Centipede.Actions
             var handler = Deleted;
             if (handler != null)
             {
-                handler(this, null);
+                handler(this, CentipedeEventArgs.Empty);
             }
 
         }

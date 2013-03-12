@@ -26,15 +26,10 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-
-
             if (Form.ActiveForm.InvokeRequired)
             {
-                Form.ActiveForm.Invoke(new D(DoClose));
+                Form.ActiveForm.Invoke(new System.Action(Form.ActiveForm.Close));
             }
-
-            
-
         }
 
         public override int Complexity
@@ -43,12 +38,6 @@ namespace Centipede.Actions
             {
                 return 0;
             }
-        }
-
-        private delegate void D();
-        private void DoClose()
-        {
-            Form.ActiveForm.Close();
         }
     }
 }
