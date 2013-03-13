@@ -94,6 +94,7 @@ namespace Centipede
             this.runToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.resetJobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FavouritesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.FavouritesToolStripMenuPlaceholder = new System.Windows.Forms.ToolStripMenuItem();
@@ -124,7 +125,7 @@ namespace Centipede
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
-            this.resetJobToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pythonReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -699,6 +700,12 @@ namespace Centipede
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
+            // resetJobToolStripMenuItem
+            // 
+            this.resetJobToolStripMenuItem.Name = "resetJobToolStripMenuItem";
+            resources.ApplyResources(this.resetJobToolStripMenuItem, "resetJobToolStripMenuItem");
+            this.resetJobToolStripMenuItem.Click += new System.EventHandler(this.resetJobToolStripMenuItem_Click);
+            // 
             // stepThroughToolStripMenuItem
             // 
             this.stepThroughToolStripMenuItem.Name = "stepThroughToolStripMenuItem";
@@ -744,6 +751,7 @@ namespace Centipede
             this.indexToolStripMenuItem,
             this.searchToolStripMenuItem,
             this.toolStripSeparator2,
+            this.pythonReferenceToolStripMenuItem,
             this.visitGetSatisfactionToolStripMenuItem,
             this.toolStripSeparator10,
             this.aboutToolStripMenuItem});
@@ -882,11 +890,11 @@ namespace Centipede
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // resetJobToolStripMenuItem
+            // pythonReferenceToolStripMenuItem
             // 
-            this.resetJobToolStripMenuItem.Name = "resetJobToolStripMenuItem";
-            resources.ApplyResources(this.resetJobToolStripMenuItem, "resetJobToolStripMenuItem");
-            this.resetJobToolStripMenuItem.Click += new System.EventHandler(this.resetJobToolStripMenuItem_Click);
+            this.pythonReferenceToolStripMenuItem.Name = "pythonReferenceToolStripMenuItem";
+            resources.ApplyResources(this.pythonReferenceToolStripMenuItem, "pythonReferenceToolStripMenuItem");
+            this.pythonReferenceToolStripMenuItem.Click += new System.EventHandler(this.pythonReferenceToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -1042,6 +1050,7 @@ namespace Centipede
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem stepThroughToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetJobToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pythonReferenceToolStripMenuItem;
     }
 }
 

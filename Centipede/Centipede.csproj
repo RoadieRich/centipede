@@ -106,7 +106,6 @@
     </Compile>
     <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\SubJobAction.cs" />
-    <Compile Include="Actions\TextFileActions.cs" />
     <Compile Include="CentipedeCore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FilterDataBindingSource.cs" />
