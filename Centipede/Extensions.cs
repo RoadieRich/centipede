@@ -38,7 +38,7 @@ namespace Centipede
         {
             foreach (var item in items)
             {
-                list.Remove(item);
+                list.Add(item);
             }
         }
 

@@ -20,6 +20,7 @@ setupoutputfolder = ./Output
 
 installerfilename = CentipedeSetup.exe
 installerfilepath = $(setupoutputfolder)/$(installerfilename)
+
 webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
@@ -29,7 +30,9 @@ pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/PythonEngine
 	$(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/ScintillaNET.dll $(pluginsfolder)/XMLActions.dll \
 	$(pluginsfolder)/PythonAction.dll $(pluginsfolder)/ShellActions.dll
 
-setupfiles = centipede-setup.iss favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
+installersource = centipede-setup.iss
+	
+setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
 
 pagescript = create-webpage.py
 scriptengine = python
@@ -41,36 +44,52 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = ps-der-hg1
 
-all: installer webpage upload notify
+all: installer webpage upload notify checksum.log
 
 installer: $(installerfilepath)
+
 webpage: $(webpagefilename)
+
 upload: upload.log
+
 notify: notify.log
 
 $(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
-	$(iscc) centipede-setup.iss
+	$(iscc) $(installersource)
 
 $(webpagefilename): $(pagescript) $(installerfilepath) 
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename)
 
 upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
-	$(uploadtool) -b $(uploadscript) $(webuser)@$(server) > upload.log
+	@date >> upload.log
+	$(uploadtool) -b $(uploadscript) $(webuser)@$(server) >> upload.log
 	@echo Upload complete.
 
 notify.log: upload.log
-	@#nothing for now.
-	touch notify.log
+	@date >> notify.log
 	
-checksum:
-	@echo 'Local: '
-	@echo 'md5:         ' `md5sum $(installerfilepath) | awk '{print $$1}'`
-	@echo 'sha1:        ' `sha1sum $(installerfilepath) | awk '{print $$1}'`
-	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' `
+checksum: 
+	@tail -3 checksum.log
+	
+checksum.log: upload.log $(installerfilepath)
+	@date >> checksum.log
+	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
+	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
+		
+		
+view logs:
+	@echo Upload:
+	@tail -4 upload.log
+	@echo
+	@echo Notify:
+	@tail -1 notify.log
+	@echo
+	@echo Checksum:
+	@tail -3 checksum.log
 		
 clean:
 	@rm -rf $(setupoutputfolder)
-	@rm upload.log notify.log
+	@#rm upload.log notify.log
 	
 install: $(installerfilepath)
 	$(installerfilepath)
