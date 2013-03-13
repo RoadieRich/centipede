@@ -508,7 +508,7 @@
     <value>0</value>
   </data>
   <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635,Absolute,635" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637,Absolute,637" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;SplitContainer3.Panel1.Name" xml:space="preserve">
     <value>SplitContainer3.Panel1</value>
@@ -537,19 +537,19 @@
         AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
         Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
         Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN9Af8DfQH/A30B/wN9Af8DfQH/A30B/wwA
-        A30B/wN9Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN9
-        Af8UAAN9Af8DfQH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
-        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN9Af8UAAN9Af8DfQH/kAADZAH2
+        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAN+Af8DfgH/A34B/wN+Af8DfgH/A34B/wwA
+        A34B/wN+Af+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAN+
+        Af8UAAN+Af8DfgH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
+        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAN+Af8UAAN+Af8DfgH/kAADZAH2
         AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA30B/xQAA30B/wN9Af+QAAT/AaQCgQH/AZkCgQH/
-        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN9
-        Af8UAAN9Af8DfQH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
-        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA30B/wN9Af8DfQH/A30B/wwA
-        A30B/wN9Af8DfQH/A30B/wN9Af8DfQH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
-        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN9Af8DfQH/lAADWwG4
-        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA30B/xQAA30B/wN9Af+gAAT/AZsCgQH/
-        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADfQH/GAADfQH/A30B/wN9Af8DfQH/lAADcgH1AaYCgQH/
+        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA34B/xQAA34B/wN+Af+QAAT/AaQCgQH/AZkCgQH/
+        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAN+
+        Af8UAAN+Af8DfgH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
+        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA34B/wN+Af8DfgH/A34B/wwA
+        A34B/wN+Af8DfgH/A34B/wN+Af8DfgH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
+        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAN+Af8DfgH/lAADWwG4
+        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA34B/xQAA34B/wN+Af+gAAT/AZsCgQH/
+        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADfgH/GAADfgH/A34B/wN+Af8DfgH/lAADcgH1AaYCgQH/
         AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
         AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
         AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
@@ -1448,28 +1448,28 @@
     <value>False</value>
   </data>
   <data name="runToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="runToolStripMenuItem1.Text" xml:space="preserve">
     <value>Run</value>
   </data>
   <data name="abortToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="abortToolStripMenuItem.Text" xml:space="preserve">
     <value>Abort</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>147, 6</value>
   </data>
   <data name="resetJobToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="resetJobToolStripMenuItem.Text" xml:space="preserve">
     <value>Reset Job</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Text" xml:space="preserve">
     <value>Step Through</value>
@@ -1514,7 +1514,7 @@
     <value>False</value>
   </data>
   <data name="contentsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 22</value>
+    <value>197, 22</value>
   </data>
   <data name="contentsToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Contents</value>
@@ -1523,7 +1523,7 @@
     <value>False</value>
   </data>
   <data name="indexToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 22</value>
+    <value>197, 22</value>
   </data>
   <data name="indexToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Index</value>
@@ -1532,25 +1532,31 @@
     <value>False</value>
   </data>
   <data name="searchToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 22</value>
+    <value>197, 22</value>
   </data>
   <data name="searchToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Search</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 6</value>
+    <value>194, 6</value>
+  </data>
+  <data name="pythonReferenceToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 22</value>
+  </data>
+  <data name="pythonReferenceToolStripMenuItem.Text" xml:space="preserve">
+    <value>View Python Reference</value>
   </data>
   <data name="visitGetSatisfactionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 22</value>
+    <value>197, 22</value>
   </data>
   <data name="visitGetSatisfactionToolStripMenuItem.Text" xml:space="preserve">
     <value>Visit Get Satisfaction</value>
   </data>
   <data name="toolStripSeparator10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 6</value>
+    <value>194, 6</value>
   </data>
   <data name="aboutToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 22</value>
+    <value>197, 22</value>
   </data>
   <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;About...</value>
@@ -2176,6 +2182,12 @@
   <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;resetJobToolStripMenuItem.Name" xml:space="preserve">
+    <value>resetJobToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;resetJobToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;stepThroughToolStripMenuItem.Name" xml:space="preserve">
     <value>stepThroughToolStripMenuItem</value>
   </data>
@@ -2314,10 +2326,10 @@
   <data name="&gt;&gt;favouriteJobs1.Type" xml:space="preserve">
     <value>Centipede.FavouriteJobs, FavouriteJobs.Designer.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
-  <data name="&gt;&gt;resetJobToolStripMenuItem.Name" xml:space="preserve">
-    <value>resetJobToolStripMenuItem</value>
+  <data name="&gt;&gt;pythonReferenceToolStripMenuItem.Name" xml:space="preserve">
+    <value>pythonReferenceToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;resetJobToolStripMenuItem.Type" xml:space="preserve">
+  <data name="&gt;&gt;pythonReferenceToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

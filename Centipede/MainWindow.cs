@@ -746,9 +746,9 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 }
                 
             }
-            this.saveFileDialog1.FileName = !String.IsNullOrEmpty(this.Core.Job.FileName)
-                                                    ? this.Core.Job.FileName
-                                                    : this.Core.Job.Name;
+            this.saveFileDialog1.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
+                                                    ? Core.Job.FileName
+                                                    : Core.Job.Name;
 
             if (this.saveFileDialog1.ShowDialog(this) == DialogResult.Cancel)
             {
@@ -846,9 +846,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 SaveJob();
             }
             catch (AbortOperationException)
-            {
-
-            }
+            { }
         }
 
         private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -889,16 +887,6 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             }
             MessageDataGridView.Show();
             MessageDataGridView.Parent.ResumeLayout(true);
-            // return;
-
-            //MessageDataGridView.CurrentCell = null;
-            //foreach (DataGridViewRow row in MessageDataGridView.Rows)
-            //{
-            //    row.Visible = DisplayedLevels.HasFlag((MessageLevel)row.Cells[3].Value);
-            //}
-            ////MessageDataGridView.Show();
-            ////MessageDataGridView.PerformLayout();
-            //MessageDataGridView.Focus();
         }
 
         private void MessageDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -1063,6 +1051,11 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             ResetDisplay();
             this._dataSet.Messages.Clear();
             
+        }
+
+        private void pythonReferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"http://docs.python.org/2.7/");
         }
     }
 

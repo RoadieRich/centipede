@@ -159,6 +159,7 @@ namespace CentipedeInterfaces
         /// <summary>
         /// Variable Changed
         /// </summary>
+        [DisplayText("Variable Changes")]
         VariableChange = 0x10,
 
         /// <summary>
