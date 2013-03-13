@@ -30,32 +30,32 @@ namespace Centipede.Actions
         public String DefaultFilename = "";
 
         private OpenFileDialog _dialog;
+        private MainWindow _mainWindow;
 
         protected override void InitAction()
         {
-            this._dialog = ((MainWindow)Form.ActiveForm).GetFileNameDialogue;
+            this._mainWindow = ((MainWindow)Form.ActiveForm);
+            this._dialog = this._mainWindow.GetFileNameDialogue;
             object oldFilename;
             bool hasOldFilename = Variables.TryGetValue(DestinationVariable, out oldFilename);
 
-            
-            
-            this._dialog.FileOk  += GetFileNameDialogue_FileOk;
-            this._dialog.Title    = Caption;
-            this._dialog.Filter   = Filter;
-            this._dialog.FileName = ParseStringForVariable(this.DefaultFilename);
+
+
+            this._mainWindow.GetFileNameDialogue.FileOk += GetFileNameDialogue_FileOk;
+            this._mainWindow.GetFileNameDialogue.Title = Caption;
+            this._mainWindow.GetFileNameDialogue.Filter = Filter;
+            this._mainWindow.GetFileNameDialogue.FileName = ParseStringForVariable(this.DefaultFilename);
             
             if (String.IsNullOrEmpty(this.DefaultFilename) && hasOldFilename)
             {
-                this._dialog.FileName = oldFilename as String;
+                this._mainWindow.GetFileNameDialogue.FileName = oldFilename as String;
             }
         }
 
         protected override void DoAction()
         {
             DialogResult result =
-                    (DialogResult)
-                    Form.ActiveForm.Invoke(new Func<DialogResult>(
-                                                   () => (this._dialog.ShowDialog())));
+                    (DialogResult)_mainWindow.Invoke(new Func<DialogResult>(_mainWindow.GetFileNameDialogue.ShowDialog));
             if (result == DialogResult.Cancel)
             {
                 throw new FatalActionException(string.Format("Cancel clicked on {0} dialog.", Caption), this);
@@ -74,7 +74,7 @@ namespace Centipede.Actions
 
         protected override void CleanupAction()
         {
-            this._dialog.FileOk -= GetFileNameDialogue_FileOk;
+            this._mainWindow.GetFileNameDialogue.FileOk -= GetFileNameDialogue_FileOk;
         }
     }
 }

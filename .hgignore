@@ -21,5 +21,5 @@ TestProject1/*.xml
 TestProject1/*.exe
 TestProject1/*.XML
 *.resources.dll
-Setup/upload.log
-Setup/notify.log
+Setup/*.log
+Setup/Output/*

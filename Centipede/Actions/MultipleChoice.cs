@@ -56,27 +56,44 @@ namespace Centipede.Actions
             {
                 throw new ActionException("No choices listed", this);
             }
-
+            var choices = ParseStringForVariable(this.Choices).Split(',');
+            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
+                                                {
+                                                        Dock = DockStyle.Fill,
+                                                        AutoSize = true,
+                                                        AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                                                        ColumnCount = 2,
+                                                        RowCount = choices.Length + 1
+                                                        
+                                                };
             if (RadioButtons)
             {
                 int i = 0;
-                form.Controls.AddRange(this.Choices.Split(',').Select(s=>s.Trim()).Select(choice => new RadioButton
-                                                                                {
-                                                                                        Text = choice,
-                                                                                        Tag = i++
-                                                                                }));
+
+                for (int index = 0; index < choices.Length; index++)
+                {
+                    RadioButton radioButton = new RadioButton
+                                              {
+                                                      Text = choices[index].Trim(),
+                                                      Tag = i++
+                                              };
+                    
+                    tableLayoutPanel.Controls.Add(radioButton, 0, index);
+                    tableLayoutPanel.SetColumnSpan(radioButton, 2);
+                }
+
                 form.FormClosing += delegate
                                     {
                                         switch (form.DialogResult)
                                         {
                                         case DialogResult.OK:
-                                            RadioButton radioButton = form.Controls.OfType<RadioButton>()
+                                            RadioButton radioButton = tableLayoutPanel.Controls.OfType<RadioButton>()
                                                                           .First(button => button.Checked);
-                                            if (String.IsNullOrEmpty(ChoiceNameVar))
+                                            if (!String.IsNullOrEmpty(ChoiceNameVar))
                                             {
                                                 Variables[ChoiceNameVar] = radioButton.Text;
                                             }
-                                            if (String.IsNullOrEmpty(ChoiceIndexVar))
+                                            if (!String.IsNullOrEmpty(ChoiceIndexVar))
                                             {
                                                 Variables[ChoiceIndexVar] = (int)radioButton.Tag;
                                             }
@@ -84,7 +101,6 @@ namespace Centipede.Actions
                                         case DialogResult.Cancel:
                                             throw new FatalActionException("Cancel Clicked", this);
                                         }
-
                                     };
             }
             else
@@ -94,8 +110,10 @@ namespace Centipede.Actions
                                             DropDownStyle = ComboBoxStyle.DropDown
                                     };
 
-                comboBox.Items.AddRange(Choices.Split(',').Select(s => s.Trim()));
-                form.Controls.Add(comboBox);
+                comboBox.Items.AddRange(choices.Select(s => s.Trim()));
+
+                tableLayoutPanel.Controls.Add(comboBox);
+                tableLayoutPanel.SetColumnSpan(comboBox, 2);
 
                 form.FormClosing += delegate
                                     {
@@ -119,30 +137,23 @@ namespace Centipede.Actions
                                     };
             }
 
-            form.Controls.Add(new TableLayoutPanel
-            {
-                ColumnCount = 2,
-                GrowStyle = TableLayoutPanelGrowStyle.AddRows,
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Controls = {
-                                            new Button
-                                            {
-                                                    Text = "Cancel",
-                                                    DialogResult = DialogResult.Cancel,
-                                                    Dock = DockStyle.Fill
-                                            },
-                                            new Button
-                                            {
-                                                    Text = "OK",
-                                                    DialogResult = DialogResult.OK,
-                                                    Dock = DockStyle.Fill
-                                            }
-                }
-            });
-            
-            form.ShowDialog();
+            tableLayoutPanel.ColumnCount = 2;
+            int rows = tableLayoutPanel.RowCount;
+            tableLayoutPanel.Controls.Add(new Button
+                                          {
+                                                  Text = "Cancel",
+                                                  DialogResult = DialogResult.Cancel,
+                                                  Dock = DockStyle.Fill
+                                          }, 0, rows);
+            tableLayoutPanel.Controls.Add(new Button
+                                          {
+                                                  Text = "OK",
+                                                  DialogResult = DialogResult.OK,
+                                                  Dock = DockStyle.Fill
+                                          }, 1, rows);
+            form.Controls.Add(tableLayoutPanel);
+
+            Form.ActiveForm.Invoke(new Func<DialogResult>(form.ShowDialog));
         }
     }
 }
