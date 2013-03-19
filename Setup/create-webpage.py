@@ -1,7 +1,6 @@
 import hashlib
 import sys
 import os
-#import ftp
 
 html = """<!DOCTYPE html>
 <!-- PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -45,7 +44,7 @@ if (typeof GSFN !== "undefined") { GSFN.loadWidget(4615,{"containerId":"getsat-w
 <tr><td>MD5</td> <td><code>%s</code></td></tr>
 <tr><td>SHA1</td><td><code>%s</code></td></tr>
 </table>
-
+%s
 <div class="GetSatisfactionBadge"><a href="https://getsatisfaction.com/centipede">
 <img alt="Badge_logo_small" width=184 height=43 src="https://getsatisfaction.com/images/badges/badge_logo_small.png" /></a></div>
 </body>
@@ -62,7 +61,12 @@ if __name__ == "__main__":
             md5.update(bytes)
             sha1.update(bytes)
     
+    
+    comment = ""
+    if len(sys.argv) > 2:
+        comment = "\n<p>%s</p>\n" % " ".join(sys.argv[3:])
+    
     with open(outputFile, 'w') as outFile:
-        outFile.write(html % (md5.hexdigest(), sha1.hexdigest()))
+        outFile.write(html % (md5.hexdigest(), sha1.hexdigest(), comment))
         
     print "Page created!"
