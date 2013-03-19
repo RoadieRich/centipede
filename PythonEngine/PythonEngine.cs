@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using IronPython.Hosting;
+using IronPython.Runtime;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
-using ResharperAnnotations;
 
-
+[assembly: CLSCompliant(true)]
 namespace PythonEngine
 {
     /// <summary>
@@ -15,15 +15,15 @@ namespace PythonEngine
     public class PythonEngine
     {
         private readonly ScriptEngine _pyEngine;
-        private readonly ScriptScope _pyScope;
+        private readonly PythonScope _pyScope;
 
         private PythonEngine()
         {
             //if (_pyEngine == null)
             {
                 _pyEngine = Python.CreateEngine();
-                _pyScope = _pyEngine.CreateScope();
-                _pyScope.ImportModule(@"sys");
+                _pyScope = new PythonScope(this._pyEngine.CreateScope());
+                _pyScope.Scope.ImportModule(@"sys");
             }
         }
 
@@ -89,7 +89,7 @@ namespace PythonEngine
         /// <param name="name">Variable name to get</param>
         /// <returns>The variable's value.  Will need casting to the correct type.</returns>
         /// <remarks>Avoids extra boxing/unboxing if the value is to be stored as an object reference.</remarks>
-        public Object GetVariable(String name)
+        public dynamic GetVariable(String name)
         {
             return _pyScope.GetVariable(name);
         }
@@ -151,6 +151,20 @@ namespace PythonEngine
                            : new PythonScope(this._pyEngine.CreateScope(variables));
         }
 
+        public PythonScope GetNewTypedScope(IDictionary<String, Object> variables = null)
+        {
+            if (variables == null)
+            {
+                return new PythonScope(this._pyScope);
+            }
+            ScriptScope scope = this._pyEngine.CreateScope();
+            foreach (KeyValuePair<string, object> variable in variables)
+            {
+                scope.SetVariable(variable.Key, Convert.ChangeType(variable.Value, variable.Value.GetType()));
+            }
+            return new PythonScope(scope);
+        }
+
         #region Singleton handling code
 
         private static volatile PythonEngine _instance;
@@ -178,6 +192,11 @@ namespace PythonEngine
         }
 
         #endregion
+
+        public PythonScope GetScope()
+        {
+            return this._pyScope;
+        }
     }
 
     /// <summary>
@@ -192,88 +211,5 @@ namespace PythonEngine
         public PythonException(Exception e)
                 : base(String.Format(@"{0}: {1}", e.GetType().Name, e.Message), e)
         { }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class PythonScope
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="scope"></param>
-        public PythonScope(ScriptScope scope)
-        {
-            Scope = scope;
-        }
-        internal readonly ScriptScope Scope;
-        
-        // 
-        /// <summary>
-        /// Determines if this context or any outer scope contains the defined name.
-        /// </summary>
-        /// <exception cref="T:System.ArgumentNullException">name is a null reference. </exception>
-        /// <param name="name">The variable name to look for</param>
-        /// <returns><see cref="bool"/> indicating whether the variable exists</returns>
-        public bool ContainsVariable(string name)
-        {
-            return Scope.ContainsVariable(name);
-        }
-
-        /// <summary>
-        /// Gets an array of variable names and their values stored in the scope.
-        /// </summary>
-        /// <returns><see cref="KeyValuePair{TKey,TValue}">KeyValuePairs</see> of variable names and values. 
-        /// </returns>
-        public IEnumerable<KeyValuePair<string, dynamic>> GetItems()
-        {
-            return Scope.GetItems();
-        }
-        /// <summary>
-        /// Gets a value stored in the scope under the given name.
-        /// </summary>
-        /// <typeparam name="T">blah blah blah</typeparam>
-        /// <exception cref="System.MissingMemberException">The specified name is not defined in the scope.</exception>
-        /// <exception cref="System.ArgumentNullException">name is a null reference</exception>   
-        public T GetVariable<T>(string name)
-        {
-            return Scope.GetVariable(name);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public bool RemoveVariable(string name)
-        {
-            return Scope.RemoveVariable(name);
-        }
-
-        /// <summary>
-        /// Sets the name to the specified value.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">name is a null reference.</exception>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetVariable(string name, object value)
-        {
-            Scope.SetVariable(name, value);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool TryGetVariable<T>(string name, out T value)
-        {
-            return Scope.TryGetVariable(name, out value);
-        }
-
     }
 }

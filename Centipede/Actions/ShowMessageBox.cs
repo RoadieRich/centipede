@@ -23,9 +23,11 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
+            Form form = Form.ActiveForm;
+
             String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);
-            Form.ActiveForm.Invoke(new Func<DialogResult>(() => MessageBox.Show(Form.ActiveForm, parsedMessage, parsedTitle)));
+            form.Invoke(new Func<DialogResult>(() => MessageBox.Show(form, parsedMessage, parsedTitle)));
         }
     }
 }

@@ -271,6 +271,9 @@ namespace Centipede.Actions
 
         private System.Windows.Forms.Button ExpandButton;
         private System.Windows.Forms.ImageList StatusIcons;
+        /// <summary>
+        /// 
+        /// </summary>
         protected System.Windows.Forms.PictureBox StatusIconBox;
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;

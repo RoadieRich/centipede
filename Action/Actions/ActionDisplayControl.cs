@@ -352,6 +352,9 @@ namespace Centipede.Actions
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected ToolTip StatusToolTip;
         private IAction _thisAction;
 

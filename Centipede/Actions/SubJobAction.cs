@@ -48,7 +48,7 @@ namespace Centipede.Actions
 
             foreach (String inputVarName in InputVars.Split(',').Select(s => s.Trim()))
             {
-                core.Variables.AddVariablesTableRow(inputVarName, Variables[inputVarName]);
+                core.Variables.SetVariable(inputVarName, Variables[inputVarName]);
             }
 
             core.LoadJob(ParseStringForVariable(JobFileName));

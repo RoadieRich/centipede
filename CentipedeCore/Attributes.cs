@@ -86,7 +86,7 @@ namespace CentipedeInterfaces
         /// <summary>
         ///     helptext for the action, displayed as a tooltip
         /// </summary>
-        public String helpText;
+        public String Usage;
 
         /// <summary>
         ///     name of the icon in the resource file
@@ -127,7 +127,6 @@ namespace CentipedeInterfaces
         public string DisplayString { get; set; }
         // See the attribute guidelines at 
         //  http://go.microsoft.com/fwlink/?LinkId=85236
-        private readonly string positionalString;
 
         // This is a positional argument
         public DisplayTextAttribute(string displayString)

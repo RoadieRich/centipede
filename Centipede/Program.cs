@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
-using CentipedeInterfaces;
 
 
 //  LINQ
-    //   \o/
-    // All the
-    // things
+//   \o/
+// All the
+// things
 
 
 namespace Centipede
@@ -33,7 +31,7 @@ namespace Centipede
                 {
                     string flag = enumerator.Current.Substring(0, 1);
                     lastKey = trimmed;
-                    result.Add(trimmed, flag == "/" ? null : flag);
+                    result.Add(trimmed, flag == @"/" ? null : flag);
                 }
                 else
                 {

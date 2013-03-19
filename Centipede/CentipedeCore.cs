@@ -8,8 +8,9 @@ using System.Xml;
 using System.Xml.XPath;
 using Centipede.Properties;
 using CentipedeInterfaces;
+using PythonEngine;
 using ResharperAnnotations;
-
+using PyEngine = PythonEngine.PythonEngine;
 //  LINQ
 //   \o/
 // All the
@@ -23,7 +24,7 @@ namespace Centipede
 
         public CentipedeCore(Dictionary<string, string> arguments)
         {
-            Variables = new VariablesTable();
+            Variables = PythonEngine.GetScope();
             
             Job = new CentipedeJob();
             this._arguments = arguments;
@@ -60,7 +61,7 @@ namespace Centipede
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
         ///     I can't figure a way of doing it easily.
         /// </summary>
-        public VariablesTable Variables { get; private set; }
+        public PythonScope Variables { get; private set; }
 
         #endregion
 
@@ -213,6 +214,7 @@ namespace Centipede
         private ContinueState _continueState = ContinueState.Continue;
         private Object _abortRequested = false;
         private bool _stepping;
+        private PyEngine _pythonEngine = PyEngine.Instance;
 
         bool ICentipedeCore.IsStepping
         {
@@ -227,6 +229,18 @@ namespace Centipede
             lock (_abortRequested)
             {
                 _abortRequested = true;
+            }
+        }
+
+        public PyEngine PythonEngine
+        {
+            get
+            {
+                return this._pythonEngine;
+            }
+            private set
+            {
+                this._pythonEngine = value;
             }
         }
 

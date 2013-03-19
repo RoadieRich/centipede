@@ -24,10 +24,11 @@ installerfilepath = $(setupoutputfolder)/$(installerfilename)
 webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
-binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll $(binfolder)/SciLexer.dll
-pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/PythonEngine.dll $(pluginsfolder)/SolidworksActions.dll \
-	$(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/SciLexer.dll $(pluginsfolder)/TextFile.dll \
-	$(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/ScintillaNET.dll $(pluginsfolder)/XMLActions.dll \
+binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll \
+	$(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll
+pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/PythonEngine.dll \
+	$(pluginsfolder)/SolidworksActions.dll $(pluginsfolder)/Microsoft.Scripting.Core.dll \
+	$(pluginsfolder)/TextFile.dll $(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/XMLActions.dll \
 	$(pluginsfolder)/PythonAction.dll $(pluginsfolder)/ShellActions.dll
 
 installersource = centipede-setup.iss

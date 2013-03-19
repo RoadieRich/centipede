@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using CentipedeInterfaces;
+using Action = Centipede.Action;
 
 
-namespace Centipede.Actions
+namespace TextFile
 {
     public abstract class BaseTextFileAction : Action
     {
@@ -21,15 +22,15 @@ namespace Centipede.Actions
         protected override void InitAction()
         {
             Object obj;
-            Variables.TryGetValue(FileVar, out obj);
-            FileStream = (FileStream)(obj is DBNull ? null : obj);
+            Variables.TryGetValue(this.FileVar, out obj);
+            this.FileStream = (FileStream)(obj is DBNull ? null : obj);
         }
 
         protected FileStream FileStream;
 
         protected override void CleanupAction()
         {
-            Variables[FileVar] = FileStream;
+            Variables[this.FileVar] = this.FileStream;
         }
 
         public override void Dispose()
@@ -47,7 +48,7 @@ namespace Centipede.Actions
         { }
 
         [ActionArgument(usage="Filename to open")]
-        public String Filename = "";
+        public String Filename = "{Filename}";
 
         [ActionArgument(usage="Allow read access")]
         public Boolean Read = true;
@@ -57,10 +58,10 @@ namespace Centipede.Actions
         
         protected override void DoAction()
         {
-            FileAccess access = Read ? FileAccess.Read : 0;
-            access |= Write ? FileAccess.Write : 0;
+            FileAccess access = this.Read ? FileAccess.Read : 0;
+            access |= this.Write ? FileAccess.Write : 0;
 
-            FileStream = File.Open(ParseStringForVariable(Filename), FileMode.OpenOrCreate, access);
+            FileStream = File.Open(ParseStringForVariable(this.Filename), FileMode.OpenOrCreate, access);
             GetCurrentCore().JobCompleted += delegate
             {
                 if (Variables[FileVar] != null)
@@ -81,18 +82,23 @@ namespace Centipede.Actions
     }
     
     [ActionCategory("Text File Actions", displayName = "Find and Replace")]
-    public class RegexAction : BaseTextFileAction
+    public class RegexAction : Action //BaseTextFileAction
     {
         public RegexAction(IDictionary<string, object> v, ICentipedeCore c)
                 : base("Find and Replace", v, c)
         { }
 
+        [ActionArgument(Literal=true)]
+        public String FromFileVar = "Filename";
 
+        [ActionArgument(Literal = true)]
+        public String ToFileVar = "";
+        
         [ActionArgument]
         public String Regex = "";
 
         [ActionArgument]
-        public string Replacement;
+        public string Replacement = "";
 
         /// <summary>
         /// Perform the action
@@ -103,28 +109,26 @@ namespace Centipede.Actions
         /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected override void DoAction()
         {
-            Regex re = new Regex(ParseStringForVariable(Regex));
 
+            FileStream fromFile = (FileStream)Variables[this.FromFileVar];
+            FileStream toFile = (FileStream)Variables[this.ToFileVar];
 
-            var temp = new MemoryStream();
-            FileStream.CopyTo(temp);
-            temp.Seek(0, SeekOrigin.Begin);
-            var reader = new StreamReader(temp);
-            FileStream.Seek(0, SeekOrigin.Begin);
-            FileStream.SetLength(0);
-            var writer = new StreamWriter(FileStream);
+            Regex re = new Regex(ParseStringForVariable(this.Regex));
 
-            while (!reader.EndOfStream)
+            string replace = ParseStringForVariable(this.Replacement);
+
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                var line = reader.ReadLine();
-                //FileStream.Seek(-line.Length, SeekOrigin.Current);
-                var pos1 = FileStream.Position;
-                while (re.Match(line).Success)
+                using (StreamWriter writer = new StreamWriter(memoryStream))
+                using (StreamReader reader = new StreamReader(fromFile))
                 {
-                    line = re.Replace(line, Replacement);   
+                    while (!reader.EndOfStream)
+                    {
+                        writer.WriteLine(re.Replace(reader.ReadLine(), replace));
+                    }
                 }
-                writer.WriteLine(line);
-                var pos2 = FileStream.Position;
+                toFile.SetLength(0);
+                memoryStream.CopyTo(toFile);
             }
         }
     }

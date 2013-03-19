@@ -17,6 +17,7 @@ using Centipede.Actions;
 using Centipede.Properties;
 
 using CentipedeInterfaces;
+using PythonEngine;
 using ResharperAnnotations;
 
 //      \,,/
@@ -83,7 +84,7 @@ namespace Centipede
 
             this._arguments = arguments;
 
-            Core.Variables.RowChanged += OnVariablesOnRowChanged;
+            Core.Variables.PropertyChanged += OnVariablesOnRowChanged;
             
             _dataSet.Messages.RowChanged += delegate
                                             {
@@ -100,14 +101,18 @@ namespace Centipede
             DisplayedLevels = Settings.Default.MessageFilterSetting;
         }
 
-        private void OnVariablesOnRowChanged(object sender, DataRowChangeEventArgs args)
+        private void OnVariablesOnRowChanged(object sender, PythonVariableChangedEventArgs args)
         {
-DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
-            String message = string.Format(Resources.MainWindow_OnVariablesOnRowChanged_Message_Text, args.Action.ToString(), row.Name, row.Value);
-            System.Action action =
-                    () => this._dataSet.Messages.AddMessagesRow(DateTime.Now, message, Core.CurrentAction,
-                                                                MessageLevel.VariableChange,
-                                                                DisplayedLevels.HasFlag(MessageLevel.VariableChange));
+            var scope = (PythonScope)sender;
+            var name = args.PropertyName;
+            var value = scope.GetVariable(name);
+
+            //DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
+            String message = string.Format(Resources.MainWindow_OnVariablesOnRowChanged_Message_Text, args.Action.ToString(), name, value);
+            System.Action action = () => this._dataSet.Messages
+                                             .AddMessagesRow(DateTime.Now, message, Core.CurrentAction,
+                                                             MessageLevel.VariableChange,
+                                                             DisplayedLevels.HasFlag(MessageLevel.VariableChange));
 
             Invoke(action);
         }
@@ -116,8 +121,6 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         {
             this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
                                                   DisplayedLevels.HasFlag(e.Level));
-
-           
         }
 
         public override String Text
@@ -283,7 +286,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
             this._stepping = false;
             this._steppingMutex = null;
-            this.RunButton.Text = "Run";
+            this.RunButton.Text = Resources.MainWindow_CompletedHandler_Run;
         }
 
         private void ItemActivate(object sender, EventArgs e)
@@ -476,23 +479,21 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 
                 Type[] pluginsInFile = asm.GetExportedTypes();
 
-                IEnumerable<Type> actionTypes = from type in pluginsInFile
-                                                  where !type.IsAbstract
-                                                  where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true)
-                                                            .Any()
-                                                  select type;
+                var actionTypes = (from type in pluginsInFile
+                                   where !type.IsAbstract
+                                   where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Any()
+                                   select type).ToArray();
 
-                if (!actionTypes.Any())
+
+                if (actionTypes.Any())
                 {
-                    continue;
-                }
+                    this._pluginFiles.Add(fi, new List<Type>());
 
-                _pluginFiles.Add(fi, new List<Type>());
-
-                foreach (Type pluginType in actionTypes)
-                {
-                    _pluginFiles[fi].Add(pluginType);
-                    AddToActionTab(pluginType);
+                    foreach (Type pluginType in actionTypes)
+                    {
+                        this._pluginFiles[fi].Add(pluginType);
+                        AddToActionTab(pluginType);
+                    }
                 }
             }
         }
@@ -502,10 +503,10 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             Assembly asm = pluginType.Assembly;
             Object[] customAttributes = pluginType.GetCustomAttributes(typeof(ActionCategoryAttribute), true);
 
-            ActionCategoryAttribute catAttribute = customAttributes.Cast<ActionCategoryAttribute>().First();
+            ActionCategoryAttribute catAttribute = customAttributes.OfType<ActionCategoryAttribute>().First();
 
-            TabPage tabPage =
-                    this.AddActionTabs.TabPages.Cast<TabPage>().SingleOrDefault(tp => tp.Text == catAttribute.category);
+            TabPage tabPage = this.AddActionTabs.TabPages
+                                  .Cast<TabPage>().SingleOrDefault(tp => tp.Text == catAttribute.category);
 
             ListView catListView;
             if (tabPage != null)
@@ -521,9 +522,8 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
 
             if (!string.IsNullOrEmpty(catAttribute.iconName))
             {
-                Type t = asm.GetType(pluginType.Namespace + @".Properties.Resources");
-                		
-
+                Type t = asm.GetType(string.Format(@"{0}.Properties.Resources", pluginType.Namespace));
+                
                 if (t != null)
                 {
                     var icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t, null) as Icon;
@@ -546,6 +546,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             progressBar1.Value = 0;
 
             this.WebBrowser.Navigate(Core.Job.InfoUrl);
+            this.ActionContainer.VerticalScroll.Maximum = 0;
         }
 
         private void Program_ActionRemoved(object sender, ActionEventArgs e)
@@ -631,6 +632,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             adc.DragEnter += ActionContainer_DragEnter;
             adc.DragDrop  += ActionContainer_DragDrop;
             this.ActionContainer.Controls.Add(adc, 0, e.Index);
+            this.ActionContainer.ScrollControlIntoView(adc);
             this.ActionContainer.SetRow(adc, e.Index);
             Dirty = true;
         }
@@ -663,7 +665,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
             }
 
             Core.LoadJob(this.OpenFileDialog.FileName);
-            this.Text = Core.Job.Name;
+            Text = Core.Job.Name;
         }
 
         private void RunButton_Click(object sender, EventArgs e)
@@ -692,7 +694,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
                 SetState(adc, ActionState.None, String.Empty);
             }
             this.progressBar1.Value = 0;
-            this.progressBar1.Maximum = this.Core.Job.Complexity;
+            this.progressBar1.Maximum = Core.Job.Complexity;
         }
 
         [STAThread]
@@ -1025,7 +1027,7 @@ DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
         {
             if (!this._stepping)
             {
-                RunButton.Text = "Step";
+                RunButton.Text = Resources.MainWindow_stepThroughToolStripMenuItem_Click_Step;
                 StartRunning(true);
             }
             else

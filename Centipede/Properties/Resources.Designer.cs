@@ -241,6 +241,15 @@ namespace Centipede.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Run.
+        /// </summary>
+        public static string MainWindow_CompletedHandler_Run {
+            get {
+                return ResourceManager.GetString("MainWindow_CompletedHandler_Run", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string MainWindow_ErrorHandler_Error {
@@ -345,6 +354,15 @@ namespace Centipede.Properties {
         public static string MainWindow_Program_ActionStatus_Running {
             get {
                 return ResourceManager.GetString("MainWindow_Program_ActionStatus_Running", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step.
+        /// </summary>
+        public static string MainWindow_stepThroughToolStripMenuItem_Click_Step {
+            get {
+                return ResourceManager.GetString("MainWindow_stepThroughToolStripMenuItem_Click_Step", resourceCulture);
             }
         }
         

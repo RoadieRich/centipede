@@ -25,7 +25,7 @@ namespace Centipede
         {
             string displayName = !String.IsNullOrEmpty(catAttribute.displayName) ? catAttribute.displayName : pluginType.Name;
             Text = displayName;
-            ToolTipText = catAttribute.helpText;
+            ToolTipText = catAttribute.Usage;
             _actionType = pluginType;
             _core = core;
             ImageKey = @"Generic";
@@ -34,17 +34,23 @@ namespace Centipede
         private readonly Type _actionType;
         private readonly ICentipedeCore _core;
 
-        public Action Generate()
+        public IAction Generate()
         {
 
-            var ctorTypes = new[] { typeof (IDictionary<String, Object>), typeof (ICentipedeCore) };
-
-            ConstructorInfo constructorInfo = _actionType.GetConstructor(ctorTypes);
-            Action instance = (Action)constructorInfo.Invoke(new object[] { _core.Variables, _core });
+            var ctorTypes1 = new[] { typeof (IDictionary<String, Object>), typeof (ICentipedeCore) };
+            var ctorTypes2 = new[] { typeof(Dictionary<String, Object>), typeof(ICentipedeCore) };
+            IAction instance = null;
             
-            if (MessageEvent != null)
+            ConstructorInfo constructorInfo = this._actionType.GetConstructor(ctorTypes1) ??
+                                              this._actionType.GetConstructor(ctorTypes2);
+            if (constructorInfo != null)
             {
-                instance.MessageHandler += MessageEvent;
+                instance = (IAction)constructorInfo.Invoke(new object[] { this._core.Variables, this._core });
+
+                if (MessageEvent != null)
+                {
+                    instance.MessageHandler += MessageEvent;
+                }
             }
             
             return instance;

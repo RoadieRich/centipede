@@ -13,13 +13,10 @@ namespace CentipedeInterfaces
     [Serializable]
     public class CentipedeJob : INotifyPropertyChanged
     {
-        private System.Xml.XPath.XPathNavigator nav;
         private string _infoUrl;
         private string _author;
         private string _authorContact;
         private string _fileName;
-        private string _authorContact1;
-        private string _infoUrl1;
         private string _name;
 
         public CentipedeJob ()
@@ -60,15 +57,15 @@ namespace CentipedeInterfaces
         {
             get
             {
-                return this._infoUrl1;
+                return this._infoUrl;
             }
             set
             {
-                if (value == this._infoUrl1)
+                if (value == this._infoUrl)
                 {
                     return;
                 }
-                this._infoUrl1 = value;
+                this._infoUrl = value;
                 OnPropertyChanged("InfoUrl");
             }
         }

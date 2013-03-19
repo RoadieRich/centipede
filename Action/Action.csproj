@@ -102,6 +102,10 @@
       <Name>CentipedeInterfaces</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\PythonEngine\PythonEngine.csproj">
+      <Project>{A67D27AC-3393-42F7-9FE8-179751FCE732}</Project>
+      <Name>PythonEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

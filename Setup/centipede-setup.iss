@@ -33,52 +33,12 @@ AlwaysShowDirOnReadyPage=True
 UninstallDisplayIcon={app}\Centipede.exe
 ShowLanguageDialog=auto
 
-[Files]
-Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
-Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
-Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
-Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
-Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
-Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python\Python_Engine
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python; Check: not IsWin64
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Python; Check: not IsWin64
-Source: "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede\bin\Debug\Plugins\SciLexer64.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python; Check: IsWin64
-Source: "{#BinaryDir}\Plugins\ScintillaNET.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python
-Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
-Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
-Source: "{#BinaryDir}\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
-Source: "{#BinaryDir}\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
-Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
-Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-Source: "{#BinaryDir}\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\ShellActions
-
-; sdk items
-Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-
-[Run]
-Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
-Filename: "msiexec"; Parameters: "/i {tmp}\IronPython-2.7.3.msi"; Flags: shellexec; StatusMsg: "Installing IronPython 2.7"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
-Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede UserFiles
-
-[Dirs]
-Name: "{userappdata}\Centipede"; Components: UserFiles
-Name: "{app}\Resources"
-Name: "{app}\Plugins"
-Name: "{app}\Plugins\Resources"
-
-; SDK items
-Name: "{code:GetSdkDir}\sdk"; Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Components: SDK
-Name: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Components: SDK
+[Types]
+Name: "Complete"; Description: "Install all components"
+Name: "Minimal"; Description: "Install only required items"
+Name: "Custom"; Description: "Customise the installation"; Flags: iscustom
+Name: "UserSetup"; Description: "Setup pre-installed Centipede for local user"
+Name: "CompleteSDK"; Description: "Install all components and SDK"
 
 [Components]
 Name: "Centipede"; Description: "The Centipede application"; Types: Complete Custom Minimal CompleteSDK; Flags: fixed
@@ -93,26 +53,55 @@ Name: "Actions\ShellActions"; Description: "Shell Actions"; Types: Complete Cust
 Name: "SDK"; Description: "CentipedeAction SDK"; Types: CompleteSDK
 Name: "UserFiles"; Description: "User Configuration"; Types: UserSetup; Flags: fixed
 
-[InstallDelete]
+[Dirs]
+Name: "{userappdata}\Centipede"; Components: UserFiles
+Name: "{app}\Resources"
+Name: "{app}\Plugins"
+Name: "{app}\Plugins\Resources"
 
-[Types]
-Name: "Complete"; Description: "Install all components"
-Name: "Minimal"; Description: "Install only required items"
-Name: "Custom"; Description: "Customise the installation"; Flags: iscustom
-Name: "UserSetup"; Description: "Setup pre-installed Centipede for local user"
-Name: "CompleteSDK"; Description: "Install all components and SDK"
+; SDK items
+Name: "{code:GetSdkDir}\sdk"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Components: SDK
+Name: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Components: SDK
 
-[UninstallRun]
+[Files]
+Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Centipede; Check: FrameworkIsNotInstalled
+Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
+Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite; Components: Centipede UserFiles
+Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions Actions\Python Actions\Python\Python_Engine Actions\Text_File
+Source: "{#BinaryDir}\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Python
+Source: "{#BinaryDir}\SciLexer64.dll"; DestDir: "{app}"; Components: Actions\Python; Check: IsWin64
+Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+Source: "{#BinaryDir}\ScintillaNET.dll"; DestDir: "{app}"; Components: Actions\Python
+Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
+Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
+Source: "{#BinaryDir}\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
+Source: "{#BinaryDir}\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
+Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
+Source: "{#BinaryDir}\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\ShellActions
+Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
+Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python\Python_Engine
 
-[Registry]
-
-[Tasks]
+; sdk items
+Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 [Icons]
 Name: "{userprograms}\Centipede\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"; Components: Centipede UserFiles
 Name: "{userprograms}\Centipede\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
 
-[PostCompile]
+[Run]
+Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
+Filename: "msiexec"; Parameters: "/i {tmp}\IronPython-2.7.3.msi"; Flags: shellexec; StatusMsg: "Installing IronPython 2.7"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
+Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede UserFiles
 
 [Code]
 var
