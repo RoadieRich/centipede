@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Reflection;
 using System.Linq;
@@ -164,7 +165,18 @@ namespace Centipede
         /// </returns>
         protected String ParseStringForVariable([NotNull] String str)
         {
-            string injected = str.Inject(Variables);
+
+            PythonEngine.PythonEngine pythonEngine = GetCurrentCore().PythonEngine;
+            
+            Regex expressionRegex = new Regex(@"(?<template>{(?<expression>.*?)})", RegexOptions.ExplicitCapture);
+            MatchCollection matches = expressionRegex.Matches(str);
+            
+            string injected = str;
+            foreach (Match match in matches)
+            {
+                string result = pythonEngine.Evaluate<String>(match.Groups[@"expression"].Value);
+                injected = expressionRegex.Replace(injected, result);
+            }
             OnMessage(MessageLevel.Core, "String {0} parsed to {1}", str, injected);
             return injected;
         }
@@ -198,6 +210,10 @@ namespace Centipede
         /// </summary>
         public event AskEvent AskHandler;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected void OnAsk(AskEventArgs e)
         {
             AskEvent handler = AskHandler;
@@ -219,6 +235,11 @@ namespace Centipede
             OnMessage(new MessageEventArgs(String.Format(message, args), level));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
         [StringFormatMethod(@"message")]
         protected void Warning(String message, params object[] args)
         {
@@ -291,6 +312,13 @@ namespace Centipede
             return FromXml(element.CreateNavigator(), variables, core);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="variables"></param>
+        /// <param name="core"></param>
+        /// <returns></returns>
         public static Action FromXml(XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
         {
 
@@ -423,6 +451,10 @@ namespace Centipede
         /// </summary>
         public event MessageEvent MessageHandler;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         [ResharperAnnotations.PublicAPI]
         protected void OnMessage(MessageEventArgs e)
         {

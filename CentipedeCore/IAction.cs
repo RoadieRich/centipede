@@ -147,17 +147,17 @@ namespace CentipedeInterfaces
         Warning = 0x2,
 
         /// <summary>
-        /// Message
+        /// Message originating from action
         /// </summary>
         Action = 0x4,
 
         /// <summary>
-        /// Notice
+        /// Message from Core - action started, finished, string parsed
         /// </summary>
         Core = 0x8,
 
         /// <summary>
-        /// Variable Changed
+        /// Variable Changed, created, etc
         /// </summary>
         [DisplayText("Variable Changes")]
         VariableChange = 0x10,

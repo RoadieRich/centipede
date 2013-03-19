@@ -256,4 +256,10 @@
   <data name="MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url" xml:space="preserve">
     <value>https://getsatisfaction.com/centipede</value>
   </data>
+  <data name="MainWindow_stepThroughToolStripMenuItem_Click_Step" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="MainWindow_CompletedHandler_Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
 </root>

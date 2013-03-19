@@ -32,6 +32,11 @@ namespace Centipede.Actions
 
         [ActionArgument]
         public String ChoiceIndexVar = "";
+        [ActionArgument(Literal = true)]
+        public string Title = "Choice";
+
+        [ActionArgument]
+        public String Prompt = "";
 
         /// <summary>
         /// Perform the action
@@ -49,7 +54,9 @@ namespace Centipede.Actions
                 StartPosition = FormStartPosition.CenterParent,
                 MinimizeBox = false,
                 MaximizeBox = false,
-                SizeGripStyle = SizeGripStyle.Hide
+                SizeGripStyle = SizeGripStyle.Hide,
+                ShowIcon=false, ShowInTaskbar=false,
+                Text=this.Title
             };
             
             if (String.IsNullOrEmpty(Choices))
@@ -59,13 +66,18 @@ namespace Centipede.Actions
             var choices = ParseStringForVariable(this.Choices).Split(',');
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
                                                 {
-                                                        Dock = DockStyle.Fill,
-                                                        AutoSize = true,
+                                                        Dock         = DockStyle.Fill,
+                                                        AutoSize     = true,
                                                         AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                                        ColumnCount = 2,
-                                                        RowCount = choices.Length + 1
-                                                        
+                                                        ColumnCount  = 2,
+                                                        RowCount     = choices.Length 
+                                                                 + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
                                                 };
+            if (!String.IsNullOrEmpty(Prompt))
+            {
+                tableLayoutPanel.Controls.Add(new Label { Text = this.Prompt });
+            }
+
             if (RadioButtons)
             {
                 int i = 0;
@@ -87,15 +99,16 @@ namespace Centipede.Actions
                                         switch (form.DialogResult)
                                         {
                                         case DialogResult.OK:
-                                            RadioButton radioButton = tableLayoutPanel.Controls.OfType<RadioButton>()
-                                                                          .First(button => button.Checked);
-                                            if (!String.IsNullOrEmpty(ChoiceNameVar))
+                                            using (RadioButton checkedButton = tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked))
                                             {
-                                                Variables[ChoiceNameVar] = radioButton.Text;
-                                            }
-                                            if (!String.IsNullOrEmpty(ChoiceIndexVar))
-                                            {
-                                                Variables[ChoiceIndexVar] = (int)radioButton.Tag;
+                                                if (!String.IsNullOrEmpty(this.ChoiceNameVar))
+                                                {
+                                                    Variables[this.ChoiceNameVar] = checkedButton.Text;
+                                                }
+                                                if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
+                                                {
+                                                    Variables[this.ChoiceIndexVar] = (int)checkedButton.Tag;
+                                                }
                                             }
                                             break;
                                         case DialogResult.Cancel:
@@ -107,7 +120,9 @@ namespace Centipede.Actions
             {
                 ComboBox comboBox = new ComboBox
                                     {
-                                            DropDownStyle = ComboBoxStyle.DropDown
+                                            DropDownStyle = ComboBoxStyle.DropDown,
+                                            AutoSize = true,
+                                            AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
@@ -117,23 +132,24 @@ namespace Centipede.Actions
 
                 form.FormClosing += delegate
                                     {
-                                        switch (form.DialogResult)
+                                        using (TableLayoutPanel tlp = tableLayoutPanel)
                                         {
-                                        case DialogResult.OK:
-                                            if (String.IsNullOrEmpty(ChoiceNameVar))
+                                            switch (form.DialogResult)
                                             {
-                                                Variables[ChoiceNameVar] = comboBox.SelectedItem;
+                                            case DialogResult.OK:
+                                                if (!String.IsNullOrEmpty(ChoiceNameVar))
+                                                {
+                                                    Variables[ChoiceNameVar] = comboBox.SelectedItem;
+                                                }
+                                                if (!String.IsNullOrEmpty(ChoiceIndexVar))
+                                                {
+                                                    Variables[ChoiceIndexVar] = comboBox.SelectedIndex;
+                                                }
+                                                break;
+                                            case DialogResult.Cancel:
+                                                throw new FatalActionException("Cancel Clicked", this);
                                             }
-                                            if (String.IsNullOrEmpty(ChoiceIndexVar))
-                                            {
-                                                Variables[ChoiceIndexVar] = comboBox.SelectedIndex;
-                                            }
-                                            break;
-                                        case DialogResult.Cancel:
-                                            throw new FatalActionException("Cancel Clicked", this);
                                         }
-
-
                                     };
             }
 
@@ -153,7 +169,7 @@ namespace Centipede.Actions
                                           }, 1, rows);
             form.Controls.Add(tableLayoutPanel);
 
-            Form.ActiveForm.Invoke(new Func<DialogResult>(form.ShowDialog));
+            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PyAction
         /// </summary>
         protected override void DoAction()
         {
-            var scope = PythonEngine.PythonEngine.Instance.GetNewScope(Variables);
+            var scope = PythonEngine.PythonEngine.Instance.GetNewTypedScope(Variables);
             Variables[DestinationVarName] = PythonEngine.PythonEngine.Instance.Evaluate<object>(Expresson, scope);
         }
     }

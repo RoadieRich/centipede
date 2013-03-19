@@ -104,7 +104,7 @@ namespace Centipede.Actions
                                    }
                                };
 
-            form.ShowDialog(Form.ActiveForm);
+            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
             
         }
     }
@@ -188,7 +188,7 @@ namespace Centipede.Actions
                                    }
                                };
 
-            form.ShowDialog(Form.ActiveForm);
+            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
             
         }
     }

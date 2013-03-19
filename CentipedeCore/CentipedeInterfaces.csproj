@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -45,9 +46,7 @@
     <Compile Include="AskEvent.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="CentipedeJob.cs" />
-    <Compile Include="Extensions.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="FieldAndPropertyWrapper.cs" />
     <Compile Include="Variables.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -72,6 +71,12 @@
     <None Include="Variables.xss">
       <DependentUpon>Variables.xsd</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PythonEngine\PythonEngine.csproj">
+      <Project>{A67D27AC-3393-42F7-9FE8-179751FCE732}</Project>
+      <Name>PythonEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
