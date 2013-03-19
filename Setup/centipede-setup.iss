@@ -75,8 +75,8 @@ Source: "{#BinaryDir}\SciLexer.dll"; DestDir: "{app}"; Components: Actions\Pytho
 Source: "{#BinaryDir}\SciLexer64.dll"; DestDir: "{app}"; Components: Actions\Python; Check: IsWin64
 Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\ScintillaNET.dll"; DestDir: "{app}"; Components: Actions\Python
+Source: "{#BinaryDir}\PythonEngine.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
 Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
-Source: "{#BinaryDir}\Plugins\PythonEngine.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python\Python_Engine
 Source: "{#BinaryDir}\Plugins\SolidworksActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Solidworks
 Source: "{#BinaryDir}\Plugins\XMLActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Xml
 Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Office
