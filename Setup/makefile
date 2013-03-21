@@ -38,6 +38,8 @@ setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronP
 pagescript = create-webpage.py
 scriptengine = python
 
+comments = < comments.txt
+
 uploadscript = sftp-upload.sftpc
 uploadtool = /usr/bin/sftp
 
@@ -58,8 +60,8 @@ notify: notify.log
 $(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) $(installersource)
 
-$(webpagefilename): $(pagescript) $(installerfilepath) 
-	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(comments)
+$(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
+	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(comments) 
 
 upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
 	@date >> upload.log

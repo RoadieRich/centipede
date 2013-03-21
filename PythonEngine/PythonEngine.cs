@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IronPython.Hosting;
-using IronPython.Runtime;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
@@ -24,6 +23,7 @@ namespace PythonEngine
                 _pyEngine = Python.CreateEngine();
                 _pyScope = new PythonScope(this._pyEngine.CreateScope());
                 _pyScope.Scope.ImportModule(@"sys");
+                _pyScope.Scope.ImportModule(@"math");
             }
         }
 
@@ -57,7 +57,6 @@ namespace PythonEngine
         /// <param name="scope">(Optional) the scope to evaluate the action in</param>
         /// <exception cref="PythonException"></exception>
         /// <returns>The result of the expression, coerced to type T</returns>
-        
         public T Evaluate<T>(String expression, PythonScope scope = null)
         {
             ScriptScope myscope = scope == null ? _pyScope : scope.Scope;
@@ -73,6 +72,27 @@ namespace PythonEngine
             }
         }
 
+        /// <summary>
+        ///     Evaluate an expression, and return the result
+        /// </summary>
+        /// <param name="expression">Expression to evaluate</param>
+        /// <param name="scope">(Optional) the scope to evaluate the action in</param>
+        /// <exception cref="PythonException"></exception>
+        /// <returns>The result of the expression</returns>
+        public dynamic Evaluate(String expression, PythonScope scope = null)
+        {
+            ScriptScope myscope = scope == null ? _pyScope : scope.Scope;
+            try
+            {
+                ScriptSource source = _pyEngine.CreateScriptSourceFromString(expression, SourceCodeKind.Expression);
+                CompiledCode compiled = source.Compile();
+                return compiled.Execute(myscope);
+            }
+            catch (Exception e)
+            {
+                throw new PythonException(e);
+            }
+        }
         /// <summary>
         ///     Set a python variable, inside the Engine.
         /// </summary>
@@ -111,6 +131,7 @@ namespace PythonEngine
         /// <param name="code"></param>
         /// <param name="kind"></param>
         /// <returns></returns>
+        [Obsolete]
         public CompiledCode Compile(String code, SourceCodeKind kind)
         {
             return _pyEngine.CreateScriptSourceFromString(code, kind).Compile();
@@ -160,7 +181,7 @@ namespace PythonEngine
             ScriptScope scope = this._pyEngine.CreateScope();
             foreach (KeyValuePair<string, object> variable in variables)
             {
-                scope.SetVariable(variable.Key, Convert.ChangeType(variable.Value, variable.Value.GetType()));
+                scope.SetVariable(variable.Key, variable.Value);
             }
             return new PythonScope(scope);
         }

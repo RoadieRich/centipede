@@ -99,16 +99,23 @@ namespace Centipede.Actions
                                         switch (form.DialogResult)
                                         {
                                         case DialogResult.OK:
-                                            using (RadioButton checkedButton = tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked))
+                                            try
                                             {
-                                                if (!String.IsNullOrEmpty(this.ChoiceNameVar))
+                                                using (RadioButton checkedButton = tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked))
                                                 {
-                                                    Variables[this.ChoiceNameVar] = checkedButton.Text;
+                                                    if (!String.IsNullOrEmpty(this.ChoiceNameVar))
+                                                    {
+                                                        Variables[this.ChoiceNameVar] = checkedButton.Text;
+                                                    }
+                                                    if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
+                                                    {
+                                                        Variables[this.ChoiceIndexVar] = (int)checkedButton.Tag;
+                                                    }
                                                 }
-                                                if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
-                                                {
-                                                    Variables[this.ChoiceIndexVar] = (int)checkedButton.Tag;
-                                                }
+                                            }
+                                            catch (InvalidOperationException e)
+                                            {
+                                                throw new ActionException("No choice selected.", e, this);
                                             }
                                             break;
                                         case DialogResult.Cancel:
