@@ -79,7 +79,7 @@ upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
 notify.log: upload.log
 	@date >> notify.log
 	
-checksum: 
+checksum: checksum.log
 	@tail -3 checksum.log
 	
 checksum.log: upload.log $(installerfilepath)
