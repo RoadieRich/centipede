@@ -1,14 +1,25 @@
 from hashlib import md5, sha1
+from optparse import OptionParser
+
 import sys
 
 htmlFile = "index.htm"
+
+
 
 def formatLine(line):
     return "<p>%s</p>" % (line.strip() or "&nbsp;")
 
 if __name__ == "__main__":
-    inputFile = sys.argv[1]
-    outputFile = sys.argv[2]
+    parser = OptionParser()
+    parser.add_option("-f", "--comment-file", dest="commentFile")
+    parser.add_option("-c", "--comment", dest="commentText")
+    
+    (options, args) = parser.parse_args()
+
+    
+    inputFile = args[0]
+    outputFile = args[1]
     md5 = md5()
     sha1 = sha1()
     with open(inputFile, "rb") as inFile:
@@ -16,12 +27,15 @@ if __name__ == "__main__":
             md5.update(bytes)
             sha1.update(bytes)
     
-    if len(sys.argv) > 3:
-        commentText = "<p>%s</p>" % " ".join(sys.argv[3:])
-    else:
-        commentLines = (line for line in sys.stdin.readlines() if not line.lstrip().startswith("#"))
+    commentText = ""
+    
+    if options.commentText:
+        commentText = "<p>%s</p>" % options.commentText
+    elif options.commentFile:
+        with open(options.commentFile, "r") as commentFile:
+            commentLines = (line for line in commentFile if not line.lstrip().startswith("#"))
         
-        commentText = "\n".join(formatLine(line) for line in commentLines if line.strip("\r\n"))
+            commentText = "\n".join(formatLine(line) for line in commentLines if line.strip("\r\n"))
     
     comment = (commentText + "\n") if commentText else ""
     

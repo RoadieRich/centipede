@@ -38,7 +38,11 @@ setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronP
 pagescript = create-webpage.py
 scriptengine = python
 
-comments = < comments.txt
+ifeq ($(origin comment), "command line")
+	comments = -c $(comment)
+else
+	comments = -f comments.txt
+endif
 
 uploadscript = sftp-upload.sftpc
 uploadtool = /usr/bin/sftp
