@@ -51,8 +51,12 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = ps-der-hg1
 
-all: installer webpage upload notify checksum.log
+all: repo installer webpage upload notify checksum.log
 
+repo:
+	hg pull default
+	hg update
+	
 installer: $(installerfilepath)
 
 webpage: $(webpagefilename)
@@ -82,8 +86,7 @@ checksum.log: upload.log $(installerfilepath)
 	@date >> checksum.log
 	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
 	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
-		
-		
+
 view logs:
 	@echo Upload:
 	@tail -4 upload.log
