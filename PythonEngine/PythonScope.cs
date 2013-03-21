@@ -211,7 +211,7 @@ namespace PythonEngine
             this.Scope.GetItems().ToList().ForEach(kvp =>
                                                    {
                                                        this.Scope.RemoveVariable(kvp.Key);
-                                                       OnVariableChanged(kvp.Key, PythonVariableChangedAction.Delete);
+                                                       //OnVariableChanged(kvp.Key, PythonVariableChangedAction.Delete);
                                                    });
         }
 
