@@ -62,8 +62,10 @@ namespace Centipede.Actions
                             {
                                     Text = varName
                             };
-                Object value = Variables[varName];
+                dynamic value;
 
+				Variables.TryGetValue(varName, out value);
+				
                 TextBox tb = new TextBox
                              {
                                      Text = (value ?? "").ToString(),
@@ -96,7 +98,7 @@ namespace Centipede.Actions
                                    case DialogResult.OK:
                                        foreach (TextBox tb in table.Controls.OfType<TextBox>())
                                        {
-                                           Variables[(string)tb.Tag] = tb.Text;
+                                           Variables[(string)tb.Tag] = PythonEngine.PythonEngine.Instance.Evaluate(tb.Text);
                                        }
                                        break;
                                    case DialogResult.Cancel:
