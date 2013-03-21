@@ -584,7 +584,7 @@ namespace PythonEngine
                 if(Scope.ContainsVariable(key))
                 {
                     dynamic val = Scope.GetVariable(key);
-                    if (Convert.ChangeType(value, val.GetType()) != val)
+                    if (!value.Equals(val))
                     {
                         Scope.SetVariable(key, value);
                         OnVariableChanged(key);
@@ -772,8 +772,8 @@ namespace PythonEngine
                     changedType = ListChangedType.ItemChanged;
                     break;
                 }
-
-                ListChangedEventArgs args = new ListChangedEventArgs(changedType, -1);
+                int index = Scope.GetVariableNames().ToList().IndexOf(propertyName);
+                ListChangedEventArgs args = new ListChangedEventArgs(changedType, index);
                 
                 OnListChanged(args);
             }

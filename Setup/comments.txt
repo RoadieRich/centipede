@@ -1,0 +1,5 @@
+# Comments to be shown on the webpage.
+# lines starting with a # are ignored, as are empty lines are ignored.
+# To force a blank line, use one or more spaces.
+# 
+# Lines are wrapped with <p></p> tags, but otherwise any html is fine.

@@ -28,12 +28,7 @@ namespace PyAction
         public PythonAction(IDictionary<string, object> v, ICentipedeCore c)
                 : base("Python Action", v, c)
         {
-            _source = String.Join("\n", new[]
-                                        {
-                                                "# use the variables dict to access the Job Variables:",
-                                                "#",
-                                                "# variables['result'] = float(variables['a']) * int(variables['b'])"
-                                        });
+            _source = "";
         }
 
         [ActionArgument(usage = "Source code to be executed")]

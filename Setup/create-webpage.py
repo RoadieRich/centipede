@@ -1,72 +1,31 @@
-import hashlib
+from hashlib import md5, sha1
 import sys
-import os
 
-html = """<!DOCTYPE html>
-<!-- PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta charset="UTF-8" />
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-<title>Centipede</title>
-<style type="text/css">
-code
-{ 
-	background: #e9e9e9;
-	font-family: consolas, courier new, monospace;
-	font-size: 90%%;
-}
-div.GetSatisfactionBadge
-{
-	position: absolute; 
-	bottom: 30px; 
-	right: 30px;
-}
-</style>
-<script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>
-</head>
-<body>
-<div id="getsat-widget-4615"></div>
-<script type="text/javascript">
-//<![CDATA[ 
-if (typeof GSFN !== "undefined") { GSFN.loadWidget(4615,{"containerId":"getsat-widget-4615"}); } 
-//]]>
-</script>
-<h1>Centipede Installer</h1>
+htmlFile = "index.htm"
 
-<p style="font-weight:bold"><a href="CentipedeSetup.exe">Click here to download.</a></p>
-
-<p>Please report bugs, ideas, feature requests etc on the <a href="https://getsatisfaction.com/centipede">Centipede Get Satisfaction page</a>, or using the Feedback button below.</p>
-
-<table border=1>
-<tr><th>Hash</th><th>Checksum</th></tr>
-<tr><td>MD5</td> <td><code>%s</code></td></tr>
-<tr><td>SHA1</td><td><code>%s</code></td></tr>
-</table>
-%s
-<div class="GetSatisfactionBadge"><a href="https://getsatisfaction.com/centipede">
-<img alt="Badge_logo_small" width=184 height=43 src="https://getsatisfaction.com/images/badges/badge_logo_small.png" /></a></div>
-</body>
-</html>
-"""
+def formatLine(line):
+    return "<p>%s</p>" % (line.strip() or "&nbsp;")
 
 if __name__ == "__main__":
     inputFile = sys.argv[1]
     outputFile = sys.argv[2]
-    md5 = hashlib.md5()
-    sha1 = hashlib.sha1()
+    md5 = md5()
+    sha1 = sha1()
     with open(inputFile, "rb") as inFile:
         for bytes in inFile:
             md5.update(bytes)
             sha1.update(bytes)
     
+    if len(sys.argv) > 3:
+        commentText = "<p>%s</p>" % " ".join(sys.argv[3:])
+    else:
+        commentLines = (line for line in sys.stdin.readlines() if not line.lstrip().startswith("#"))
+        
+        commentText = "\n".join(formatLine(line) for line in commentLines if line.strip("\r\n"))
     
-    comment = ""
-    if len(sys.argv) > 2:
-        comment = "\n<p>%s</p>\n" % " ".join(sys.argv[3:])
+    comment = (commentText + "\n") if commentText else ""
     
-    with open(outputFile, 'w') as outFile:
-        outFile.write(html % (md5.hexdigest(), sha1.hexdigest(), comment))
+    with open(outputFile, "w") as outFile:
+        outFile.write(open(htmlFile).read() % (md5.hexdigest(), sha1.hexdigest(), comment))
         
     print "Page created!"

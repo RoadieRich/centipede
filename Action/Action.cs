@@ -8,7 +8,6 @@ using System.Linq;
 using System.IO;
 using System.Xml.XPath;
 using Centipede.Actions;
-using Centipede.StringInject;
 using CentipedeInterfaces;
 using ResharperAnnotations;
 
@@ -174,7 +173,7 @@ namespace Centipede
             string injected = str;
             foreach (Match match in matches)
             {
-                string result = pythonEngine.Evaluate<String>(match.Groups[@"expression"].Value);
+                String result = pythonEngine.Evaluate(match.Groups[@"expression"].Value).ToString();
                 injected = expressionRegex.Replace(injected, result);
             }
             OnMessage(MessageLevel.Core, "String {0} parsed to {1}", str, injected);

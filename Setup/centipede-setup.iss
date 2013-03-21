@@ -103,6 +103,9 @@ Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET f
 Filename: "msiexec"; Parameters: "/i {tmp}\IronPython-2.7.3.msi"; Flags: shellexec; StatusMsg: "Installing IronPython 2.7"; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
 Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede UserFiles
 
+[Registry]
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "centipede.exe"; ValueData: "{code:GetIEEmulationValue}"; Flags: createvalueifdoesntexist
+
 [Code]
 var
     SdkDirPage: TInputDirWizardPage;
@@ -147,4 +150,43 @@ end;
 function IronPythonNotInstalled: Boolean;
 begin
     Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\IronPython\2.7');
+end;
+
+procedure Explode(var Dest: TArrayOfString; Text: String; Separator: String);
+var
+	i: Integer;
+begin
+	i := 0;
+	repeat
+		SetArrayLength(Dest, i+1);
+		if Pos(Separator,Text) > 0 then	begin
+			Dest[i] := Copy(Text, 1, Pos(Separator, Text)-1);
+			Text := Copy(Text, Pos(Separator,Text) + Length(Separator), Length(Text));
+			i := i + 1;
+		end else begin
+			 Dest[i] := Text;
+			 Text := '';
+		end;
+	until Length(Text)=0;
+end;
+
+function GetIEVersion: Longint;
+var
+    versionString : String;
+    versionParts : TArrayOfString;
+begin
+    if not RegQueryStringValue(HKEY_LOCAL_MACHINE,
+                               'Software\Microsoft\Internet Explorer', 
+                               'version', 
+                               versionString) then
+        Result := 3
+    else begin
+        Explode(versionParts, versionString, '.');
+        Result := StrToInt(versionParts[0]);
+    end;
+end;
+
+function GetIEEmulationValue(Param: String): String;
+begin
+    Result := inttostr(GetIEVersion * 1000)
 end;

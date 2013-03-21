@@ -355,7 +355,7 @@ namespace Centipede
 
             GetActionPlugins();
 
-            this.VarDataGridView.DataSource = Core.Variables;
+            this.VarDataGridView.DataSource = (Core.Variables);
 
             //this.VarDataGridView.Columns.Add
 
