@@ -38,10 +38,11 @@ setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronP
 pagescript = create-webpage.py
 scriptengine = python
 
-ifeq ($(origin comment), "command line")
-	comments = -c $(comment)
+ifndef comment
+	commentsarg = -f comments.txt
 else
-	comments = -f comments.txt
+	commentsarg = -c "$(comment)"
+	updateCommand = @touch comments.txt
 endif
 
 uploadscript = sftp-upload.sftpc
@@ -51,16 +52,23 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = ps-der-hg1
 
-all: repo installer webpage upload notify checksum.log
+all: repo installer webpage upload notify checksum.log 
+
+updatecomments:
+ifdef updateCommand
+	$(updateCommand)
+endif
 
 repo:
 	hg pull default
 	hg update
 	
+	
+
 installer: $(installerfilepath)
 
-webpage: $(webpagefilename)
-
+webpage: updatecomments $(webpagefilename)
+	
 upload: upload.log
 
 notify: notify.log
@@ -69,7 +77,7 @@ $(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) $(installersource)
 
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
-	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(comments) 
+	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
 
 upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
 	@date >> upload.log
