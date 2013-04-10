@@ -27,10 +27,6 @@ namespace PyAction
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
             SetProperties();
 
-            StatusToolTip = new ToolTip();
-            StatusToolTip.SetToolTip(StatusIconBox, "");
-
-
 
             _actionCombo = new ComboBox
                            {
@@ -106,7 +102,7 @@ namespace PyAction
         public override void UpdateControls()
         {
             PopulateComboBox();
-            _actionCombo.SelectedIndex = ((MainWindow)ParentForm).Core.Job.Actions.Where(a => a != ThisAction).ToList().IndexOf(ThisAction.NextIfTrue);
+            _actionCombo.SelectedIndex = ((MainWindow)ParentForm).Core.Job.Actions.WhereNot(ThisAction.Equals).ToList().IndexOf(ThisAction.NextIfTrue);
             _conditionControl.Text = ThisAction.ConditionSource;
         }
 

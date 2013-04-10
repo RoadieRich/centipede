@@ -10,7 +10,7 @@ namespace Centipede
 {
     class ActionFactory : ListViewItem
     {
-        [ResharperAnnotations.UsedImplicitly]
+        [UsedImplicitly]
         public static volatile MessageEvent MessageEvent;
 
         [UsedImplicitly]
@@ -23,7 +23,7 @@ namespace Centipede
 
         public ActionFactory(ActionCategoryAttribute catAttribute, Type pluginType, ICentipedeCore core)
         {
-            string displayName = !String.IsNullOrEmpty(catAttribute.displayName) ? catAttribute.displayName : pluginType.Name;
+            string displayName = !String.IsNullOrEmpty(catAttribute.DisplayName) ? catAttribute.DisplayName : pluginType.Name;
             Text = displayName;
             ToolTipText = catAttribute.Usage;
             _actionType = pluginType;

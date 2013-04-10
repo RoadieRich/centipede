@@ -14,8 +14,8 @@ namespace TextFile
             : base(name, v, c)
         { }
         [ActionArgument(
-            usage = "Variable to store the opened file in",
-            displayName = "File Variable"
+            Usage = "Variable to store the opened file in",
+            DisplayName = "File Variable"
         )]
         public String FileVar = "TextFile";
 
@@ -47,13 +47,13 @@ namespace TextFile
             : base("Open Text File", v, c)
         { }
 
-        [ActionArgument(usage="Filename to open")]
+        [ActionArgument(Usage="Filename to open")]
         public String Filename = "{Filename}";
 
-        [ActionArgument(usage="Allow read access")]
+        [ActionArgument(Usage="Allow read access")]
         public Boolean Read = true;
 
-        [ActionArgument(usage="Allow write access to file")]
+        [ActionArgument(Usage="Allow write access to file")]
         public Boolean Write = true;
         
         protected override void DoAction()
@@ -81,7 +81,7 @@ namespace TextFile
 
     }
     
-    [ActionCategory("Text File Actions", displayName = "Find and Replace")]
+    [ActionCategory("Text File Actions", DisplayName = "Find and Replace")]
     public class RegexAction : Action //BaseTextFileAction
     {
         public RegexAction(IDictionary<string, object> v, ICentipedeCore c)

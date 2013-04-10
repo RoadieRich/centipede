@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
-using Centipede;
 using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
@@ -20,7 +16,7 @@ namespace PyAction
     /// 
     /// </summary>
 
-    [ActionCategory(@"Flow Control", displayName = "Branch", displayControl = @"BranchDisplayControl", iconName = @"branch")]
+    [ActionCategory(@"Flow Control", DisplayName = "Branch", DisplayControl = @"BranchDisplayControl", iconName = @"branch")]
     public class BranchAction : Action
     {
         /// <summary>
@@ -41,15 +37,15 @@ namespace PyAction
         /// <summary>
         /// 
         /// </summary>
-        [ActionArgument(displayName = @"Condition")]
+        [ActionArgument(DisplayName = @"Condition")]
         public String ConditionSource = @"False";
 
         /// <summary>
         /// 
         /// </summary>
         [ActionArgument(
-            usage = @"Next action if condition returns true (otherwise, proceed normally)",
-            displayName = @"Next Action if True"
+            Usage = @"Next action if condition returns true (otherwise, proceed normally)",
+            DisplayName = @"Next Action if True"
         )]
         public Action NextIfTrue;
 

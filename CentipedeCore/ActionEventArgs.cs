@@ -19,6 +19,7 @@ namespace CentipedeInterfaces
 
     public class ActionErrorEventArgs : ActionEventArgs
     {
+        [ResharperAnnotations.UsedImplicitly]
         public IAction NextAction { get; set; }
         public Exception Exception { get; set; }
         public override IAction Action

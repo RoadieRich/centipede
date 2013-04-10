@@ -9,11 +9,11 @@ namespace Centipede
 {
     public partial class JobPropertyForm : Form
     {
-        public CentipedeJob Job { get; set; }
+        private CentipedeJob Job { get; set; }
 
         public JobPropertyForm(ref CentipedeJob job)
         {
-            this.Job = job;
+            Job = job;
             
             InitializeComponent();
 
@@ -50,7 +50,7 @@ namespace Centipede
         {
             if (String.IsNullOrWhiteSpace(JobNameTextbox.Text))
             {
-                MessageBox.Show("Jobname Cannot be empty", null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Jobname Cannot be empty", null, MessageBoxButtons.OK, MessageBoxIcon.Error);
             
                 DialogResult = DialogResult.None;
                 return;
@@ -67,7 +67,7 @@ namespace Centipede
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Set default author and contact details to current values?", "Set Defaults", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(this, "Set default author and contact details to current values?", "Set Defaults", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes)
             {
                 return;
@@ -86,7 +86,7 @@ namespace Centipede
             Dirty = true;
         }
 
-        public bool Dirty { get; set; }
+        public bool Dirty { get; private set; }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {

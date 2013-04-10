@@ -9,7 +9,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", displayName="Demo Action")]
+    [ActionCategory("UI", DisplayName="Demo Action")]
     public class DemoAction : Action
     {
         [Localizable(false)]
@@ -21,7 +21,7 @@ namespace Centipede.Actions
         
         protected override void DoAction()
         {
-            MessageBox.Show(String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
+            MessageBox.Show(GetCurrentCore().Window, String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
                                           Test1, 
                                           ParseStringForVariable(Test2)
                            ),
@@ -31,15 +31,15 @@ namespace Centipede.Actions
         }
 
         [ActionArgument(
-            usage = "First Value to display (int)",
-            displayName = "Test 1",
-            onChangedHandlerName = "Test1Set",
+            Usage = "First Value to display (int)",
+            DisplayName = "Test 1",
+            OnChangedHandlerName = "Test1Set",
             Literal = true
         )]
         public Int32 Test1 = 1;
 
         
-        [ActionArgument(displayName = "Message", Literal=true)]
+        [ActionArgument(DisplayName = "Message", Literal=true)]
         public String MessageText = "This is sent as a message";
 
 
@@ -59,8 +59,8 @@ namespace Centipede.Actions
         }
 
         [ActionArgument(
-            usage = "Second Value to display (string)",
-            displayName = "Test 2")]
+            Usage = "Second Value to display (string)",
+            DisplayName = "Test 2")]
         public String Test2 { get; set; }
     }
 

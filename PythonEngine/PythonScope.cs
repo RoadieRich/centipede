@@ -19,7 +19,7 @@ namespace PythonEngine
         /// 
         /// </summary>
         /// <param name="scope"></param>
-        public PythonScope(ScriptScope scope)
+        internal PythonScope(ScriptScope scope)
         {
             this.Scope = scope;
         }
@@ -131,7 +131,7 @@ namespace PythonEngine
         /// </summary>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public static implicit operator ScriptScope(PythonScope scope)
+        public static explicit operator ScriptScope(PythonScope scope)
         {
             return scope.Scope;
         }
@@ -208,11 +208,7 @@ namespace PythonEngine
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary"/> object is read-only. </exception>
         public void Clear()
         {
-            this.Scope.GetItems().ToList().ForEach(kvp =>
-                                                   {
-                                                       this.Scope.RemoveVariable(kvp.Key);
-                                                       //OnVariableChanged(kvp.Key, PythonVariableChangedAction.Delete);
-                                                   });
+            this.Scope.GetItems().ToList().ForEach(kvp => this.Scope.RemoveVariable(kvp.Key));
         }
 
         /// <summary>
@@ -755,28 +751,29 @@ namespace PythonEngine
         private void OnVariableChanged(string propertyName, PythonVariableChangedAction action = PythonVariableChangedAction.Change)
         {
             PythonVariableChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            if (handler == null)
             {
-                handler(this, new PythonVariableChangedEventArgs(propertyName, action));
-                ListChangedType changedType;
-
-                switch (action)
-                {
-                case PythonVariableChangedAction.Add:
-                    changedType = ListChangedType.ItemAdded;
-                    break;
-                case PythonVariableChangedAction.Delete:
-                    changedType = ListChangedType.ItemDeleted;
-                    break;
-                default:
-                    changedType = ListChangedType.ItemChanged;
-                    break;
-                }
-                int index = Scope.GetVariableNames().ToList().IndexOf(propertyName);
-                ListChangedEventArgs args = new ListChangedEventArgs(changedType, index);
-                
-                OnListChanged(args);
+                return;
             }
+            handler(this, new PythonVariableChangedEventArgs(propertyName, action));
+            ListChangedType changedType;
+
+            switch (action)
+            {
+            case PythonVariableChangedAction.Add:
+                changedType = ListChangedType.ItemAdded;
+                break;
+            case PythonVariableChangedAction.Delete:
+                changedType = ListChangedType.ItemDeleted;
+                break;
+            default:
+                changedType = ListChangedType.ItemChanged;
+                break;
+            }
+            int index = this.Scope.GetVariableNames().ToList().IndexOf(propertyName);
+            ListChangedEventArgs args = new ListChangedEventArgs(changedType, index);
+                
+            OnListChanged(args);
         }
 
         /// <summary>

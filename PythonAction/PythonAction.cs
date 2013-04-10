@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
-using Centipede;
 using CentipedeInterfaces;
 using PythonEngine;
 using System.Linq;
@@ -17,8 +16,8 @@ namespace PyAction
 
     [ActionCategory("Other Actions",
             iconName = @"pycon",
-            displayName = "Python Action",
-            displayControl = @"PythonDisplayControl"
+            DisplayName = "Python Action",
+            DisplayControl = @"PythonDisplayControl"
             )]
     // ReSharper disable ClassNeverInstantiated.Global
     public class PythonAction : Action
@@ -31,7 +30,7 @@ namespace PyAction
             _source = "";
         }
 
-        [ActionArgument(usage = "Source code to be executed")]
+        [ActionArgument(Usage = "Source code to be executed")]
         public String Source
         {
             // ReSharper disable MemberCanBePrivate.Global
@@ -114,4 +113,6 @@ namespace PyAction
             Comment = element.SelectSingleNode("@Comment").Value;
         }
     }
+
+    
 }

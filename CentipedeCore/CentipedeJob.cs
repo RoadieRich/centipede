@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.XPath;
 using ResharperAnnotations;
 
@@ -11,7 +9,7 @@ using ResharperAnnotations;
 namespace CentipedeInterfaces
 {
     [Serializable]
-    public class CentipedeJob : INotifyPropertyChanged
+    public sealed class CentipedeJob : INotifyPropertyChanged
     {
         private string _infoUrl;
         private string _author;
@@ -49,7 +47,7 @@ namespace CentipedeInterfaces
         {
             get
             {
-                return this.Actions.Sum(action => action.Complexity);
+                return Actions.Sum(action => action.Complexity);
             }
         }
 
@@ -134,11 +132,14 @@ namespace CentipedeInterfaces
             }
         }
 
-        public IList<IAction> Actions { get; set; }
+        public IList<IAction> Actions { get; private set; }
+
+        public event ActionEvent ActionAdded;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged(string propertyName)
+        private void OnPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
@@ -146,6 +147,8 @@ namespace CentipedeInterfaces
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+
     }
 
     [Serializable]

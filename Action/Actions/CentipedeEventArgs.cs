@@ -47,6 +47,7 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
+        [UsedImplicitly]
         public List<Action> Actions
         {
             get
@@ -58,6 +59,6 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        public new static CentipedeEventArgs Empty = new CentipedeEventArgs(null, null);
+        public new static readonly CentipedeEventArgs Empty = new CentipedeEventArgs(null, null);
     }
 }

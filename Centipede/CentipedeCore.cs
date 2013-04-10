@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using Centipede.Properties;
@@ -11,6 +12,7 @@ using CentipedeInterfaces;
 using PythonEngine;
 using ResharperAnnotations;
 using PyEngine = PythonEngine.PythonEngine;
+
 //  LINQ
 //   \o/
 // All the
@@ -63,6 +65,8 @@ namespace Centipede
         /// </summary>
         public PythonScope Variables { get; private set; }
 
+        public Form Window { get; set; }
+
         #endregion
 
         #region Methods
@@ -81,61 +85,43 @@ namespace Centipede
         [STAThread]
         public void RunJob(bool stepping = false)
         {
-            ManualResetEvent pause = null;
-
-            lock (_abortRequested)
+            IsStepping = stepping;
+            ManualResetEvent pause = IsStepping?new ManualResetEvent(true) : null;
+            
+            _abortRequested = false;
+            IsStepping = stepping;
+            
+            OnStartRun(new StartRunEventArgs(pause));
+            
+            try
             {
-                _abortRequested = false;
+                CurrentAction = Job.Actions.First();
             }
-            if (stepping)
-            {
-                _stepping = true;
-                pause = new ManualResetEvent(true);
-                OnStartStepping(new StartSteppingEventArgs(pause));
-            }
-
-            if (!Job.Actions.Any())
+            catch (InvalidOperationException)
             {
                 OnActionError(new ActionErrorEventArgs
                 {
                     Action = CurrentAction,
-                    Exception = new ActionException(
-                            Resources.Program_RunJob_No_Actions_Added)
+                    Exception = new FatalActionException(Resources.Program_RunJob_No_Actions_Added)
                 });
-
             }
-            
-            CurrentAction = Job.Actions.First();
 
             Boolean jobFailed = false;
-
             try
             {
                 while (CurrentAction != null)
                 {
-                    if (stepping)
+                    if (pause != null)
                     {
                         pause.WaitOne();
                     }
 
-                    this._continueState = ContinueState.Continue;
+                    ContinueState continueState = RunStep(CurrentAction);
                     
-                    RunStep(CurrentAction);
-                    
-                    switch (this._continueState)
-                    {
-                    case ContinueState.Abort:
-                        throw new AbortOperationException();
-                    case ContinueState.Retry:
+                    if (NeedsRetry(continueState))
                         continue;
-                    case ContinueState.Continue:
-                        CurrentAction = CurrentAction.GetNext();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                    }
 
-                    if (stepping)
+                    if (pause != null)
                     {
                         pause.Reset();
                     }
@@ -155,33 +141,51 @@ namespace Centipede
                 jobFailed = true;
             }
             OnCompleted(!jobFailed);
-            _stepping = false;
+            IsStepping = false;
         }
 
-        public event StartSteppingEvent StartStepping;
-
-        private void OnStartStepping(StartSteppingEventArgs e)
+        private bool NeedsRetry(ContinueState continueState)
         {
-            StartSteppingEvent handler = StartStepping;
+            switch (continueState)
+            {
+            case ContinueState.Abort:
+                throw new AbortOperationException();
+            case ContinueState.Retry:
+                return true;
+            default:
+                CurrentAction = CurrentAction.GetNext();
+                return false;
+            }
+        }
+
+        public event StartSteppingEvent StartRun;
+
+        private void OnStartRun(StartRunEventArgs e)
+        {
+            if(e.ResetEvent == null)
+                return;
+            StartSteppingEvent handler = StartRun;
             if (handler != null)
             {
                 handler(this, e);
             }
         }
 
-        private void RunStep(IAction currentAction)
+        private ContinueState RunStep(IAction currentAction)
         {
             try
             {
                 ActionEventArgs args = new ActionEventArgs
                                        {
                                             Action   = currentAction,
-                                            Stepping = this._stepping
+                                            Stepping = IsStepping
                                        };
                 
                 OnBeforeAction(args);
                 currentAction.Run();
                 OnAfterAction(args);
+
+                return ContinueState.Continue;
 
             }
             catch (FatalActionException e)
@@ -207,22 +211,14 @@ namespace Centipede
                                             };
                 OnActionError(args);
                 
-                this._continueState = args.Continue;
+                return args.Continue;
             }
         }
 
-        private ContinueState _continueState = ContinueState.Continue;
         private Object _abortRequested = false;
-        private bool _stepping;
         private PyEngine _pythonEngine = PyEngine.Instance;
 
-        bool ICentipedeCore.IsStepping
-        {
-            get
-            {
-                return _stepping;
-            }
-        }
+        public bool IsStepping { get; private set; }
 
         public void AbortRun()
         {
@@ -338,7 +334,7 @@ namespace Centipede
 
         private void OnActionAdded(ActionEventArgs args)
         {
-            ActionEvent handler = this.ActionAdded;
+            ActionEvent handler = ActionAdded;
             if (handler != null)
             {
                 handler(this, args);
@@ -484,7 +480,7 @@ namespace Centipede
 
         private void OnAfterLoad(EventArgs eventArgs)
         {
-            AfterLoadEvent handler = this.AfterLoad;
+            AfterLoadEvent handler = AfterLoad;
             if (handler != null)
             {
                 handler(this, eventArgs);

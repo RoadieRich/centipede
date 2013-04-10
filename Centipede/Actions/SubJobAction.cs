@@ -9,7 +9,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("Flow Control", displayName = "Run Centipede Job")]
+    [ActionCategory("Flow Control", DisplayName = "Run Centipede Job")]
     class SubJobAction : Action
     {
         /// <summary>
@@ -22,17 +22,17 @@ namespace Centipede.Actions
         { }
 
         
-        [ActionArgument(displayName="Job Filename")]
+        [ActionArgument(DisplayName="Job Filename")]
         public String JobFileName = "";
 
 
-        [ActionArgument(displayName = "Input Variables",
-                usage = "Comma-separated list of variables to set within the subjob", 
+        [ActionArgument(DisplayName = "Input Variables",
+                Usage = "Comma-separated list of variables to set within the subjob", 
                 Literal = true)]
         public String InputVars = "";
 
-        [ActionArgument(displayName = "Output Variables",
-                usage = "Comma-separated list of variables to retrieve from the subjob", 
+        [ActionArgument(DisplayName = "Output Variables",
+                Usage = "Comma-separated list of variables to retrieve from the subjob", 
                 Literal = true)]
         public String OutputVars = "";
 
@@ -63,11 +63,13 @@ namespace Centipede.Actions
                                       }
                                   };
             
-            newMain.ShowDialog(Form.ActiveForm);
+            newMain.ShowDialog(GetCurrentCore().Window);
             Thread runjobThread = new Thread(delegate(object o)
                                              {
-                                                 SubJobAction @this = this;
-                                                 core.RunJob((Boolean)o);
+                                                 using (this)
+                                                 {
+                                                     core.RunJob((Boolean)o);
+                                                 }
                                              });
                                              
             runjobThread.Start(GetCurrentCore().IsStepping);

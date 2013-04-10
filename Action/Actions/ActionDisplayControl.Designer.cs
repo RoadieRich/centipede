@@ -33,13 +33,14 @@ namespace Centipede.Actions
         /// </summary>
         protected void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionDisplayControl));
             this.NameLabel = new System.Windows.Forms.Label();
             this.ExpandButton = new System.Windows.Forms.Button();
             this.AttributeTable = new System.Windows.Forms.TableLayoutPanel();
-            this.StatusIcons = new System.Windows.Forms.ImageList();
+            this.StatusIcons = new System.Windows.Forms.ImageList(this.components);
             this.StatusIconBox = new System.Windows.Forms.PictureBox();
-            this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip();
+            this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,8 +53,8 @@ namespace Centipede.Actions
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
-            this.StatusTooltip = new System.Windows.Forms.ToolTip();
-            this.ArgumentTooltips = new System.Windows.Forms.ToolTip();
+            this.StatusTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.ArgumentTooltips = new System.Windows.Forms.ToolTip(this.components);
             this.ActionIcon = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.ActionContextMenu.SuspendLayout();
@@ -270,11 +271,6 @@ namespace Centipede.Actions
         #endregion
 
         private System.Windows.Forms.Button ExpandButton;
-        private System.Windows.Forms.ImageList StatusIcons;
-        /// <summary>
-        /// 
-        /// </summary>
-        protected System.Windows.Forms.PictureBox StatusIconBox;
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
@@ -300,5 +296,7 @@ namespace Centipede.Actions
         protected Label NameLabel;
         private ToolStripSeparator toolStripSeparator1;
         private PictureBox ActionIcon;
+        private PictureBox StatusIconBox;
+        public ImageList StatusIcons;
     }
 }
