@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Centipede;
 using CentipedeInterfaces;
 using Action = Centipede.Action;
 
@@ -10,7 +9,7 @@ using Action = Centipede.Action;
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 namespace PyAction
 {
-    [ActionCategory("Flow Control", displayName="Variable", iconName=@"variable")]
+    [ActionCategory("Flow Control", DisplayName="Variable", iconName=@"variable")]
     public class VariableAction : Action
     {
         /// <summary>
@@ -25,7 +24,7 @@ namespace PyAction
         [ActionArgument]
         public String Expresson = "";
 
-        [ActionArgument(displayName = "Destination Variable Name")]
+        [ActionArgument(DisplayName = "Destination Variable Name")]
         public string DestinationVarName = "";
 
         /// <summary>

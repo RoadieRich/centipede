@@ -9,7 +9,9 @@ using System.IO;
 using System.Xml.XPath;
 using Centipede.Actions;
 using CentipedeInterfaces;
+using PythonEngine;
 using ResharperAnnotations;
+
 
 [assembly: CLSCompliant(true)]
 
@@ -48,7 +50,7 @@ namespace Centipede
         public String Comment { get; set; }
 
         /// <summary>
-        /// Gets or sets the object that contains data associated with tje action.
+        /// Gets or sets the object that contains data associated with the action.
         /// </summary>
         /// <example>
         /// In the GUI version of Centipede, <c>Tag</c> is used for a reference
@@ -147,14 +149,33 @@ namespace Centipede
             return Next;
         }
 
+        
+        protected String OldParseStringForVariable([NotNull] String str)
+        {
+
+            PythonEngine.PythonEngine pythonEngine = GetCurrentCore().PythonEngine;
+            
+            Regex expressionRegex = new Regex(@"(?<template>{(?<expression>.*?)})", RegexOptions.ExplicitCapture);
+            MatchCollection matches = expressionRegex.Matches(str);
+
+            var enumerable = from Match match in matches
+                             select (string)pythonEngine.Evaluate(match.Groups[@"expression"].Value).ToString();
+            string injected = enumerable.Aggregate(str, expressionRegex.Replace);
+
+
+            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", str, injected);
+            return injected;
+        }
+
         /// <summary>
-        /// Parse a string, injecting values from
-        /// <see cref="Centipede.Action.Variables" /> as required
+        /// Parse a string, injecting values from the job's variables as required
         /// </summary>
         /// <example>
         /// <code>
-        /// Variables["variable_a"] = "foo";
-        /// Variables["variable_b"] = "bar"
+        /// (in python)
+        /// variable_a = "foo";
+        /// variable_b = "bar"
+        /// (in c#)
         /// ParseStringForVariable("{variable_a}{variable_b}") //returns "foobar"
         /// </code>
         /// </example>
@@ -164,24 +185,45 @@ namespace Centipede
         /// </returns>
         protected String ParseStringForVariable([NotNull] String str)
         {
-
             PythonEngine.PythonEngine pythonEngine = GetCurrentCore().PythonEngine;
             
-            Regex expressionRegex = new Regex(@"(?<template>{(?<expression>.*?)})", RegexOptions.ExplicitCapture);
-            MatchCollection matches = expressionRegex.Matches(str);
-            
-            string injected = str;
-            foreach (Match match in matches)
+            for (int i = 0; i < str.Length; i++)
             {
-                String result = pythonEngine.Evaluate(match.Groups[@"expression"].Value).ToString();
-                injected = expressionRegex.Replace(injected, result);
+                if (str[i] != '{')
+                {
+                    continue;
+                }
+
+                int opening = i;
+                foreach (var expression in from closing in str.IndexesWhere('}'.Equals)
+                                           where closing > opening
+                                           select new
+                                                  {
+                                                      Template = str.Substring(opening, closing - opening + 1),
+                                                      Code = str.Substring(opening + 1, closing - opening - 1)
+                                                  })
+                {
+                    PythonByteCode compiled;
+                    try
+                    {
+                        compiled = pythonEngine.Compile(expression.Code, PythonByteCode.SourceCodeType.Expression);
+                    }
+                    catch (PythonParseException)
+                    {
+                        // not valid python, try next expression
+                        continue;
+                    }
+                    String result = pythonEngine.Evaluate(compiled).ToString();
+                    str = str.Replace(expression.Template, result);
+                    break;
+                }
             }
-            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", str, injected);
-            return injected;
+
+            return str;
         }
 
         /// <summary>
-        /// Ask the user a question
+        ///  Ask the user a question
         /// </summary>
         /// <param name="message" />
         /// <param name="title" />
@@ -262,7 +304,7 @@ namespace Centipede
             }
             XmlElement element = rootElement.OwnerDocument.CreateElement(thisType.FullName);
 
-            element.SetAttribute(@"Comment", this.Comment);
+            element.SetAttribute(@"Comment", Comment);
             
             PopulateXmlTag(element);
 
@@ -403,48 +445,7 @@ namespace Centipede
             }
         }
 
-        /// <summary>
-        /// Allows programmers to specify jobs using arrow notaton
-        /// </summary>
-        /// <example>
-        /// <code> action1 &gt; action2 &gt; action2 </code>
-        /// </example>
-        /// <param name="prev"></param>
-        /// <param name="next"></param>
-        public static Action operator >(Action prev, Action next)
-        {
-            prev.Next = next;
-            return next;
-        }
-
-        /// <summary>
-        /// Allows programmers to specify jobs using arrow notaton
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// action3 &lt; action2 &lt; action1
-        /// </code>
-        /// </example>
-        /// <param name="prev"></param>
-        /// <param name="next"></param>
-        public static Action operator <(Action next, Action prev)
-        {
-            prev.Next = next;
-            return prev;
-        }
-
-        /// <summary>
-        /// Get the next <paramref name="action" />
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns>
-        /// 
-        /// </returns>
-        public static Action operator ++(Action action)
-        {
-            return action.GetNext() as Action;
-        }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -454,7 +455,7 @@ namespace Centipede
         /// 
         /// </summary>
         /// <param name="e"></param>
-        [ResharperAnnotations.PublicAPI]
+        [PublicAPI]
         protected void OnMessage(MessageEventArgs e)
         {
             MessageEvent @event = MessageHandler;
@@ -479,14 +480,9 @@ namespace Centipede
         /// <returns></returns>
         public override String ToString()
         {
-            if (String.IsNullOrWhiteSpace(this.Comment))
-            {
-                return this.Name;
-            }
-            else
-            {
-                return String.Format("{0} ({1})", this.Name, this.Comment);
-            }
+            return String.IsNullOrWhiteSpace(Comment)
+                           ? Name
+                           : String.Format("{0} ({1})", Name, Comment);
         }
 
         /// <summary>
@@ -500,15 +496,4 @@ namespace Centipede
             OnMessage(MessageLevel.Action, message, args);
         }
     }
-
-
-    
-    /// <summary>
-    /// <see cref="I18N" /> resources for a class
-    /// </summary>
-    public abstract class I18N
-    {
-
-    }
-
 }

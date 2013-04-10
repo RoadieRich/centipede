@@ -6,7 +6,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("Flow Control", displayName = "Exit Centipede", iconName="exit")]
+    [ActionCategory("Flow Control", DisplayName = "Exit Centipede", iconName = "exit")]
     class ExitAction:Action
     {
         /// <summary>
@@ -26,9 +26,9 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            if (Form.ActiveForm.InvokeRequired)
+            if (GetCurrentCore().Window.InvokeRequired)
             {
-                Form.ActiveForm.Invoke(new System.Action(Form.ActiveForm.Close));
+                GetCurrentCore().Window.Invoke(new System.Action(GetCurrentCore().Window.Close));
             }
         }
 

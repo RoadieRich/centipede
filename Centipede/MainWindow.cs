@@ -99,6 +99,8 @@ namespace Centipede
                                                   };
 
             DisplayedLevels = Settings.Default.MessageFilterSetting;
+
+            Core.Window = this;
         }
 
         private void OnVariablesOnRowChanged(object sender, PythonVariableChangedEventArgs args)
@@ -378,11 +380,9 @@ namespace Centipede
             Core.ActionAdded          += Program_ActionAdded;
             Core.ActionRemoved        += Program_ActionRemoved;
             Core.AfterLoad            += Program_AfterLoad;
-            Core.StartStepping        += CoreOnStartStepping;
+            Core.StartRun        += CoreOnStartRun;
 
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
-
-
 
             using (FileStream file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
             {
@@ -416,9 +416,9 @@ namespace Centipede
             }
         }
 
-        private void CoreOnStartStepping(object sender, StartSteppingEventArgs startSteppingEventArgs)
+        private void CoreOnStartRun(object sender, StartRunEventArgs startRunEventArgs)
         {
-            this._steppingMutex = startSteppingEventArgs.ResetEvent;
+            this._steppingMutex = startRunEventArgs.ResetEvent;
             //this._stepping = true;
         }
 
@@ -454,7 +454,7 @@ namespace Centipede
             Core.LoadJob((String)item.Tag);
         }
 
-        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>(); 
+        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
 
         private void GetActionPlugins()
         {
@@ -484,16 +484,16 @@ namespace Centipede
                                    where type.GetCustomAttributes(typeof (ActionCategoryAttribute), true).Any()
                                    select type).ToArray();
 
-
-                if (actionTypes.Any())
+                if (!actionTypes.Any())
                 {
-                    this._pluginFiles.Add(fi, new List<Type>());
+                    continue;
+                }
+                this._pluginFiles.Add(fi, new List<Type>());
 
-                    foreach (Type pluginType in actionTypes)
-                    {
-                        this._pluginFiles[fi].Add(pluginType);
-                        AddToActionTab(pluginType);
-                    }
+                foreach (Type pluginType in actionTypes)
+                {
+                    this._pluginFiles[fi].Add(pluginType);
+                    AddToActionTab(pluginType);
                 }
             }
         }
@@ -609,10 +609,10 @@ namespace Centipede
             Type actionType = action.GetType();
             var actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
             ActionDisplayControl adc;
-            if (actionAttribute != null && actionAttribute.displayControl != null)
+            if (actionAttribute != null && actionAttribute.DisplayControl != null)
             {
                 Type customADCType = actionType.Assembly.GetType(string.Format(@"{0}.{1}", actionType.Namespace,
-                                                                               actionAttribute.displayControl));
+                                                                               actionAttribute.DisplayControl));
                 ConstructorInfo constructor = customADCType.GetConstructor(new[] { actionType });
 
                 if (constructor != null)
@@ -628,13 +628,14 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
-            adc.Deleted   += adc_Deleted;
+            adc.Deleted += adc_Deleted;
             adc.DragEnter += ActionContainer_DragEnter;
-            adc.DragDrop  += ActionContainer_DragDrop;
+            adc.DragDrop += ActionContainer_DragDrop;
             this.ActionContainer.Controls.Add(adc, 0, e.Index);
             this.ActionContainer.ScrollControlIntoView(adc);
             this.ActionContainer.SetRow(adc, e.Index);
             Dirty = true;
+
         }
 
         private void adc_Deleted(object sender, CentipedeEventArgs e)
@@ -657,7 +658,7 @@ namespace Centipede
                 return;
             }
 
-            DialogResult result = this.OpenFileDialog.ShowDialog();
+            DialogResult result = this.OpenFileDialog.ShowDialog(this);
 
             if (result != DialogResult.OK)
             {
@@ -861,7 +862,7 @@ namespace Centipede
             //var editFavourites = new EditFavourites(Settings.Default.FavouriteJobs);
             var editFavourites = new EditFavourites(this._favouriteJobsDataStore);
 
-            editFavourites.ShowDialog();
+            editFavourites.ShowDialog(this);
 
             UpdateFavourites();
         }
@@ -950,11 +951,12 @@ namespace Centipede
             CentipedeJob centipedeJob = Core.Job;
             var form = new JobPropertyForm(ref centipedeJob);
             form.ShowDialog(this);
-            if (form.Dirty)
+            if (!form.Dirty)
             {
-                Dirty = true;
-                WebBrowser.Navigate(Core.Job.InfoUrl);
+                return;
             }
+            Dirty = true;
+            this.WebBrowser.Navigate(Core.Job.InfoUrl);
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -973,17 +975,18 @@ namespace Centipede
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(Core.Job.Name))
+            if (!String.IsNullOrEmpty(Core.Job.Name))
             {
-                try
-                {
-                    SaveJob();
-                    _favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
-                    UpdateFavourites();
-                }
-                catch (AbortOperationException)
-                { }
+                return;
             }
+            try
+            {
+                SaveJob();
+                this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
+                UpdateFavourites();
+            }
+            catch (AbortOperationException)
+            { }
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)

@@ -45,13 +45,7 @@ namespace Centipede.Actions
         /// </summary>
         protected void SetProperties()
         {
-            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            BackColor = SystemColors.Control;
-            NameLabel.Text = ThisAction.Name;
-
-            CommentTextBox.Text = ThisAction.Comment;
-
-            ThisAction.Tag = this;
+            
         }
 
         /// <summary>
@@ -68,7 +62,13 @@ namespace Centipede.Actions
             InitializeComponent();
 
             _thisAction = action;
+            Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            BackColor = SystemColors.Control;
+            NameLabel.Text = ThisAction.Name;
 
+            CommentTextBox.Text = ThisAction.Comment;
+
+            ThisAction.Tag = this;
             SetProperties();
 
             StatusToolTip = new ToolTip();
@@ -129,9 +129,9 @@ namespace Centipede.Actions
             ActionArgumentAttribute attrData = arg.GetArguementAttribute();
             var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
 
-            if (!string.IsNullOrEmpty(attrData.usage))
+            if (!string.IsNullOrEmpty(attrData.Usage))
             {
-                ArgumentTooltips.SetToolTip(attrLabel, attrData.usage);
+                ArgumentTooltips.SetToolTip(attrLabel, attrData.Usage);
             }
             Control attrValue;
             {
@@ -192,11 +192,11 @@ namespace Centipede.Actions
         private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
-            if (argAttr.onChangedHandlerName == null)
+            if (argAttr.OnChangedHandlerName == null)
             {
                 return null;
             }
-            MethodInfo method = arg.DeclaringType.GetMethod(argAttr.onChangedHandlerName);
+            MethodInfo method = arg.DeclaringType.GetMethod(argAttr.OnChangedHandlerName);
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
@@ -204,23 +204,23 @@ namespace Centipede.Actions
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
 
-            if (argAttr.onLeaveHandlerName == null)
+            if (argAttr.OnLeaveHandlerName == null)
             {
-                if (argAttr.onChangedHandlerName == null)
+                if (argAttr.OnChangedHandlerName == null)
                 {
                     return attrValue_TextChanged;
                 }
                 return null;
             }
             Type actionType = ThisAction.GetType();
-            MethodInfo method = actionType.GetMethod(argAttr.onLeaveHandlerName);
+            MethodInfo method = actionType.GetMethod(argAttr.OnLeaveHandlerName);
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
         }
 
         private static String GetArgumentName(FieldAndPropertyWrapper argument)
         {
             ActionArgumentAttribute argAttr = argument.GetArguementAttribute();
-            return argAttr.displayName ?? argument.Name;
+            return argAttr.DisplayName ?? argument.Name;
         }
 
         private void attrValue_TextChanged(object sender, EventArgs e)
@@ -248,8 +248,8 @@ namespace Centipede.Actions
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message,
-                                                  ThisAction.Name, argInfo.displayName, attrValue.Text));
+                    MessageBox.Show(this, String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message,
+                                                  ThisAction.Name, argInfo.DisplayName, attrValue.Text));
                 }
             }
             else

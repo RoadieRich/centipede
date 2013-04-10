@@ -7,7 +7,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", displayName = "Ask for values")]
+    [ActionCategory("UI", DisplayName = "Ask for values")]
     class AskValues : Action
     {
         /// <summary>
@@ -20,7 +20,7 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas", Literal=true)]
+        [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Centipede.Actions
                                             }
                                     });
 
-            form.FormClosed += delegate(object sender, FormClosedEventArgs e)
+            form.FormClosed += delegate
                                {
                                    switch (form.DialogResult)
                                    {
@@ -106,12 +106,12 @@ namespace Centipede.Actions
                                    }
                                };
 
-            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
+            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
             
         }
     }
 
-    [ActionCategory("UI", displayName = "Checkboxes")]
+    [ActionCategory("UI", DisplayName = "Checkboxes")]
     class AskBooleans : Action
     {
         /// <summary>
@@ -124,7 +124,7 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variables", usage="Variable names, separated by commas", Literal=true)]
+        [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace Centipede.Actions
                                             }
                                     });
 
-            form.FormClosed += delegate(object sender, FormClosedEventArgs e)
+            form.FormClosed += delegate
                                {
                                    switch (form.DialogResult)
                                    {
@@ -190,7 +190,7 @@ namespace Centipede.Actions
                                    }
                                };
 
-            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
+            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
             
         }
     }

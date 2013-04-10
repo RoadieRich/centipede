@@ -7,7 +7,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", displayName="Get Filename")]
+    [ActionCategory("UI", DisplayName="Get Filename")]
     class GetFileNameAction : Action
     {
         public GetFileNameAction(IDictionary<string, object> v, ICentipedeCore c)
@@ -22,11 +22,11 @@ namespace Centipede.Actions
         [ActionArgument(Literal = true)]
         public String Caption = "Choose File";
         
-        [ActionArgument(displayName = "Filter")]
+        [ActionArgument(DisplayName = "Filter")]
         public String Filter = "All Files (*.*)|*.*";
 
 
-        [ActionArgument(displayName = "Default filename")]
+        [ActionArgument(DisplayName = "Default filename")]
         public String DefaultFilename = "";
 
         private OpenFileDialog _dialog;
@@ -34,7 +34,7 @@ namespace Centipede.Actions
 
         protected override void InitAction()
         {
-            this._mainWindow = ((MainWindow)Form.ActiveForm);
+            this._mainWindow = ((MainWindow)GetCurrentCore().Window);
             this._dialog = this._mainWindow.GetFileNameDialogue;
             object oldFilename;
             bool hasOldFilename = Variables.TryGetValue(DestinationVariable, out oldFilename);
@@ -55,7 +55,9 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
             DialogResult result =
-                    (DialogResult)_mainWindow.Invoke(new Func<DialogResult>(_mainWindow.GetFileNameDialogue.ShowDialog));
+                    (DialogResult)
+                    _mainWindow.Invoke(new Func<Form, DialogResult>(_mainWindow.GetFileNameDialogue.ShowDialog),
+                                       GetCurrentCore().Window);
             if (result == DialogResult.Cancel)
             {
                 throw new FatalActionException(string.Format("Cancel clicked on {0} dialog.", Caption), this);

@@ -173,7 +173,7 @@ namespace CentipedeInterfaces
         public FieldType GetFieldTypeCategory()
         {
 
-            Type baseType = this.MemberType;
+            Type baseType = MemberType;
 
             while (!TypeMapping.ContainsKey(baseType) && baseType != typeof (object))
             {
@@ -222,17 +222,7 @@ namespace CentipedeInterfaces
         /// <returns><see cref="FieldAndPropertyWrapper"/> wrapping <paramref name="p"/>.</returns>
         public static implicit operator FieldAndPropertyWrapper(PropertyInfo p)
         {
-            if (Cache.ContainsKey(p))
-            {
-                Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache hit {0}", p));
-                return Cache[p];
-            }
-            else
-            {
-                
-                Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache miss {0}", p));
-                return new FieldAndPropertyWrapper(p);
-            }
+            return Cache.ContainsKey(p) ? Cache[p] : new FieldAndPropertyWrapper(p);
         }
 
         /// <summary>
@@ -313,8 +303,8 @@ namespace CentipedeInterfaces
         {
             // This won't work if you want to compare methods or constructors (due to the possiblity of 
             // different signatures, but then this class isn't intended to wrap those.
-            return this.DeclaringType == other.DeclaringType
-                   && this.Name == other.Name;
+            return DeclaringType == other.DeclaringType
+                   && Name == other.Name;
         }
     }
 }

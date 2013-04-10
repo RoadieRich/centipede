@@ -6,7 +6,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", displayName="Show Messagebox")]
+    [ActionCategory("UI", DisplayName="Show Messagebox")]
     class ShowMessageBox : Action
     {
         public ShowMessageBox(IDictionary<string, object> v, ICentipedeCore c)
@@ -16,14 +16,14 @@ namespace Centipede.Actions
         [ActionArgument]
         public String Title = "Message";
 
-        [ActionArgument(displayName="Message")]
+        [ActionArgument(DisplayName="Message")]
         public String MessageText = "";
 
         private delegate void ShowMessageBoxDelegate();
 
         protected override void DoAction()
         {
-            Form form = Form.ActiveForm;
+            Form form = GetCurrentCore().Window;
 
             String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);

@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using CentipedeInterfaces;
 
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", displayName = "Multiple Choice")]
+    [ActionCategory("UI", DisplayName = "Multiple Choice")]
     public class MultipleChoice : Action
     {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="v"></param>
         /// <param name="core"></param>
         public MultipleChoice(IDictionary<string, object> v, ICentipedeCore core)
@@ -38,6 +36,9 @@ namespace Centipede.Actions
         [ActionArgument]
         public String Prompt = "";
 
+        private TableLayoutPanel _tableLayoutPanel;
+        private Form _form;
+
         /// <summary>
         /// Perform the action
         /// </summary>
@@ -47,17 +48,17 @@ namespace Centipede.Actions
         /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected override void DoAction()
         {
-            Form form = new Form
-            {
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false,
-                MaximizeBox = false,
-                SizeGripStyle = SizeGripStyle.Hide,
-                ShowIcon=false, ShowInTaskbar=false,
-                Text=this.Title
-            };
+            this._form = new Form
+                    {
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                            StartPosition = FormStartPosition.CenterParent,
+                            MinimizeBox = false,
+                            MaximizeBox = false,
+                            SizeGripStyle = SizeGripStyle.Hide,
+                            ShowIcon=false, ShowInTaskbar=false,
+                            Text=this.Title
+                    };
             
             if (String.IsNullOrEmpty(Choices))
             {
@@ -73,9 +74,10 @@ namespace Centipede.Actions
                                                         RowCount     = choices.Length 
                                                                  + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
                                                 };
+            this._tableLayoutPanel = tableLayoutPanel;
             if (!String.IsNullOrEmpty(Prompt))
             {
-                tableLayoutPanel.Controls.Add(new Label { Text = this.Prompt });
+                this._tableLayoutPanel.Controls.Add(new Label { Text = this.Prompt });
             }
 
             if (RadioButtons)
@@ -90,38 +92,11 @@ namespace Centipede.Actions
                                                       Tag = i++
                                               };
                     
-                    tableLayoutPanel.Controls.Add(radioButton, 0, index);
-                    tableLayoutPanel.SetColumnSpan(radioButton, 2);
+                    this._tableLayoutPanel.Controls.Add(radioButton, 0, index);
+                    this._tableLayoutPanel.SetColumnSpan(radioButton, 2);
                 }
 
-                form.FormClosing += delegate
-                                    {
-                                        switch (form.DialogResult)
-                                        {
-                                        case DialogResult.OK:
-                                            try
-                                            {
-                                                using (RadioButton checkedButton = tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked))
-                                                {
-                                                    if (!String.IsNullOrEmpty(this.ChoiceNameVar))
-                                                    {
-                                                        Variables[this.ChoiceNameVar] = checkedButton.Text;
-                                                    }
-                                                    if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
-                                                    {
-                                                        Variables[this.ChoiceIndexVar] = (int)checkedButton.Tag;
-                                                    }
-                                                }
-                                            }
-                                            catch (InvalidOperationException e)
-                                            {
-                                                throw new ActionException("No choice selected.", e, this);
-                                            }
-                                            break;
-                                        case DialogResult.Cancel:
-                                            throw new FatalActionException("Cancel Clicked", this);
-                                        }
-                                    };
+                this._form.FormClosing += RadioButtonFormOnFormClosing;
             }
             else
             {
@@ -134,49 +109,84 @@ namespace Centipede.Actions
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
 
-                tableLayoutPanel.Controls.Add(comboBox);
-                tableLayoutPanel.SetColumnSpan(comboBox, 2);
+                this._tableLayoutPanel.Controls.Add(comboBox);
+                this._tableLayoutPanel.SetColumnSpan(comboBox, 2);
 
-                form.FormClosing += delegate
+                this._form.FormClosing += CheckBoxFormOnFormClosing; //+= (sender, e) =>
                                     {
-                                        using (TableLayoutPanel tlp = tableLayoutPanel)
-                                        {
-                                            switch (form.DialogResult)
-                                            {
-                                            case DialogResult.OK:
-                                                if (!String.IsNullOrEmpty(ChoiceNameVar))
-                                                {
-                                                    Variables[ChoiceNameVar] = comboBox.SelectedItem;
-                                                }
-                                                if (!String.IsNullOrEmpty(ChoiceIndexVar))
-                                                {
-                                                    Variables[ChoiceIndexVar] = comboBox.SelectedIndex;
-                                                }
-                                                break;
-                                            case DialogResult.Cancel:
-                                                throw new FatalActionException("Cancel Clicked", this);
-                                            }
-                                        }
+                                        
                                     };
             }
 
-            tableLayoutPanel.ColumnCount = 2;
-            int rows = tableLayoutPanel.RowCount;
-            tableLayoutPanel.Controls.Add(new Button
+            this._tableLayoutPanel.ColumnCount = 2;
+            int rows = this._tableLayoutPanel.RowCount;
+            this._tableLayoutPanel.Controls.Add(new Button
                                           {
                                                   Text = "Cancel",
                                                   DialogResult = DialogResult.Cancel,
                                                   Dock = DockStyle.Fill
                                           }, 0, rows);
-            tableLayoutPanel.Controls.Add(new Button
+            this._tableLayoutPanel.Controls.Add(new Button
                                           {
                                                   Text = "OK",
                                                   DialogResult = DialogResult.OK,
                                                   Dock = DockStyle.Fill
                                           }, 1, rows);
-            form.Controls.Add(tableLayoutPanel);
+            this._form.Controls.Add(this._tableLayoutPanel);
 
-            Form.ActiveForm.Invoke(new Func<Form, DialogResult>(form.ShowDialog), Form.ActiveForm);
+            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog), GetCurrentCore().Window);
+        }
+
+        private void CheckBoxFormOnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
+        {
+            Form form = (Form)sender;
+            TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
+            switch (form.DialogResult)
+            {
+            case DialogResult.OK:
+                ComboBox comboBox = tableLayoutPanel.Controls.OfType<ComboBox>().First();
+                SetVars((string)comboBox.SelectedItem, comboBox.SelectedIndex);
+                break;
+            case DialogResult.Cancel:
+                throw new FatalActionException("Cancel Clicked", this);
+            }
+        }
+
+        private void SetVars(string item, int index)
+        {
+            if (!String.IsNullOrEmpty(this.ChoiceNameVar))
+            {
+                Variables[this.ChoiceNameVar] = item;
+            }
+            if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
+            {
+                Variables[this.ChoiceIndexVar] = index;
+            }
+        }
+
+        private void RadioButtonFormOnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
+        {
+            Form form = (Form)sender;
+            TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
+            switch (form.DialogResult)
+            {
+            case DialogResult.OK:
+                try
+                {
+                    RadioButton checkedButton =
+                            tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked);
+
+                    SetVars(checkedButton.Text, (int)checkedButton.Tag);
+                }
+
+                catch (InvalidOperationException e)
+                {
+                    throw new ActionException("No choice selected.", e, this);
+                }
+                break;
+            case DialogResult.Cancel:
+                throw new FatalActionException("Cancel Clicked", this);
+            }
         }
     }
 }

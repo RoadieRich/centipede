@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Threading;
+using System.Windows.Forms;
 using PythonEngine;
 using ResharperAnnotations;
 
@@ -80,6 +79,7 @@ namespace CentipedeInterfaces
         /// 
         /// </summary>
         /// <param name="action"></param>
+        /// <param name="index"></param>
         void AddAction(IAction action, Int32 index = -1);
 
         /// <summary>
@@ -105,13 +105,14 @@ namespace CentipedeInterfaces
         void LoadJob(string jobFileName);
 
         CentipedeJob Job { get; set; }
-        event StartSteppingEvent StartStepping;
+        event StartSteppingEvent StartRun;
 
         IAction CurrentAction { get; set; }
         Boolean IsStepping{ get; }
         void AbortRun();
 
         PythonEngine.PythonEngine PythonEngine { get; }
+        Form Window { get; set; }
     }
 
     public delegate void ActionRemovedHandler(IAction action);
@@ -146,15 +147,19 @@ namespace CentipedeInterfaces
     /// </summary>
     public delegate void ActionErrorEvent(object sender, ActionErrorEventArgs e);
 
-    public delegate void StartSteppingEvent(object sender, StartSteppingEventArgs e);
+    public delegate void StartSteppingEvent(object sender, StartRunEventArgs e);
 
-    public class StartSteppingEventArgs : EventArgs
+    public class StartRunEventArgs : EventArgs
     {
-        public ManualResetEvent ResetEvent { get; set; }
+        public ManualResetEvent ResetEvent { get; private set; }
 
-        public StartSteppingEventArgs(ManualResetEvent resetEvent)
+        public StartRunEventArgs(ManualResetEvent resetEvent)
         {
             ResetEvent = resetEvent;
+        }
+        public StartRunEventArgs()
+        {
+            ResetEvent = null;
         }
     }
 }
