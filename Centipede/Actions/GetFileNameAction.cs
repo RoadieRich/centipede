@@ -10,8 +10,8 @@ namespace Centipede.Actions
     [ActionCategory("UI", DisplayName="Get Filename")]
     class GetFileNameAction : Action
     {
-        public GetFileNameAction(IDictionary<string, object> v, ICentipedeCore c)
-            : base("Get Filename", v, c)
+        public GetFileNameAction(IDictionary<string, object> variables, ICentipedeCore c)
+            : base("Get Filename", variables, c)
         {
             
         }

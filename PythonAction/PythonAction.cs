@@ -24,8 +24,8 @@ namespace PyAction
             // ReSharper restore ClassNeverInstantiated.Global
     {
 
-        public PythonAction(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Python Action", v, c)
+        public PythonAction(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Python Action", variables, c)
         {
             _source = "";
         }
@@ -64,7 +64,7 @@ namespace PyAction
 
         protected override void DoAction()
         {
-            PythonEngine.PythonEngine engine = PythonEngine.PythonEngine.Instance;
+            IPythonEngine engine = PythonEngine.PythonEngine.Instance;
             if (!engine.VariableExists(@"variables"))
             {
                 engine.SetVariable(@"variables", Variables);

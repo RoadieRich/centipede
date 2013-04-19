@@ -9,8 +9,8 @@ namespace Centipede.Actions
     [ActionCategory("UI", DisplayName="Show Messagebox")]
     class ShowMessageBox : Action
     {
-        public ShowMessageBox(IDictionary<string, object> v, ICentipedeCore c)
-            : base("Show message box", v,c)
+        public ShowMessageBox(IDictionary<string, object> variables, ICentipedeCore c)
+            : base("Show message box", variables,c)
         { }
 
         [ActionArgument]

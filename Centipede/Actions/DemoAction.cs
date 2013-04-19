@@ -13,8 +13,8 @@ namespace Centipede.Actions
     public class DemoAction : Action
     {
         [Localizable(false)]
-        public DemoAction(IDictionary<string, object> v, ICentipedeCore c)
-            : base("Demo Action", v, c)
+        public DemoAction(IDictionary<string, object> variables, ICentipedeCore c)
+            : base("Demo Action", variables, c)
         {
             Test2 = "Text";
         }

@@ -13,10 +13,10 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="core"></param>
-        public MultipleChoice(IDictionary<string, object> v, ICentipedeCore core)
-                : base("Multiple Choice", v, core)
+        public MultipleChoice(IDictionary<string, object> variables, ICentipedeCore core)
+                : base("Multiple Choice", variables, core)
         { }
 
         [ActionArgument]

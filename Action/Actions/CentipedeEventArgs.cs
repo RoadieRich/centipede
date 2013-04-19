@@ -6,37 +6,30 @@ using ResharperAnnotations;
 namespace Centipede.Actions
 {
     /// <summary>
-    /// 
+    /// The base Event arguments, containing a list of actions and variables
     /// </summary>
     public class CentipedeEventArgs : EventArgs
     {
         /// <summary>
-        /// 
+        /// crteate a bnerw <see cref="CentipedeEventArgs"/>
         /// </summary>
-        /// <param name="actions"></param>
-        /// <param name="variables"></param>
-        public CentipedeEventArgs(List<Action> actions, Dictionary<String, Object> variables)
+        /// <param name="actions">Actions from the job</param>
+        /// <param name="variables">variables from the job</param>
+        public CentipedeEventArgs(List<Action> actions, IDictionary<String, Object> variables)
         {
             _actions = actions;
             _variables = variables;
         }
 
-        
-        /// <summary>
-        /// 
-        /// </summary>
         private readonly List<Action> _actions;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly Dictionary<string, object> _variables;
+        private readonly IDictionary<string, object> _variables;
 
         /// <summary>
-        /// 
+        /// get the variables from the jiob
         /// </summary>
         [PublicAPI]
-        public Dictionary<string, object> Variables
+        public IDictionary<string, object> Variables
         {
             get
             {
@@ -45,7 +38,7 @@ namespace Centipede.Actions
         }
 
         /// <summary>
-        /// 
+        /// get the actions from the job
         /// </summary>
         [UsedImplicitly]
         public List<Action> Actions
@@ -57,7 +50,7 @@ namespace Centipede.Actions
         }
 
         /// <summary>
-        /// 
+        /// em[ty event args
         /// </summary>
         public new static readonly CentipedeEventArgs Empty = new CentipedeEventArgs(null, null);
     }

@@ -60,8 +60,7 @@ namespace Centipede
         public CentipedeJob Job { get; set; }
         
         /// <summary>
-        ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
-        ///     I can't figure a way of doing it easily.
+        ///     Dictionary of Variables for use by actions
         /// </summary>
         public PythonScope Variables { get; private set; }
 
@@ -216,7 +215,7 @@ namespace Centipede
         }
 
         private Object _abortRequested = false;
-        private PyEngine _pythonEngine = PyEngine.Instance;
+        private IPythonEngine _pythonEngine = PyEngine.Instance;
 
         public bool IsStepping { get; private set; }
 
@@ -228,7 +227,7 @@ namespace Centipede
             }
         }
 
-        public PyEngine PythonEngine
+        public IPythonEngine PythonEngine
         {
             get
             {
@@ -347,9 +346,9 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        ///     Remove action from the current job
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action"><see cref="Action"/> to remove</param>
         public void RemoveAction(IAction action)
         {
             IAction prevAction = Job.Actions.SingleOrDefault(a => a.Next == action);
@@ -391,9 +390,9 @@ namespace Centipede
         #region Save and Load methods
 
         /// <summary>
-        /// 
+        ///     Save job
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="filename">filename to save to</param>
         [Localizable(false)]
         public void SaveJob(String filename)
         {

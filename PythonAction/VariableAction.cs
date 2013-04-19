@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using CentipedeInterfaces;
 using Action = Centipede.Action;
 
-// ReSharper disable UnusedMember.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable ConvertToConstant.Global
-// ReSharper disable FieldCanBeMadeReadOnly.Global
 namespace PyAction
 {
     [ActionCategory("Flow Control", DisplayName="Variable", iconName=@"variable")]
@@ -15,10 +11,10 @@ namespace PyAction
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="c"></param>
-        public VariableAction(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Variable", v, c)
+        public VariableAction(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Variable", variables, c)
         { }
 
         [ActionArgument]

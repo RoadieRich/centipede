@@ -13,10 +13,10 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="c"></param>
-        public AskValues(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Ask For Values", v, c)
+        public AskValues(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Ask For Values", variables, c)
         { }
 
 
@@ -117,10 +117,10 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="c"></param>
-        public AskBooleans(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Ask For Values", v, c)
+        public AskBooleans(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Ask For Values", variables, c)
         { }
 
 
