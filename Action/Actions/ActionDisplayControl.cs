@@ -30,16 +30,7 @@ namespace Centipede.Actions
                 return this.StatusToolTip.GetToolTip(StatusIconBox);
             }
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //protected ActionDisplayControl()
-        //{
-        //    Selected = false;
-        //    InitializeComponent();
-        //}
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -58,7 +49,7 @@ namespace Centipede.Actions
         /// </param>
         public ActionDisplayControl(IAction action, bool generateArgumentFields = true)
         {
-            Selected = false;
+            //Selected = false;
             InitializeComponent();
 
             _thisAction = action;
@@ -181,14 +172,7 @@ namespace Centipede.Actions
             
             return new[] { attrLabel, attrValue };
         }
-
-        /*
-        private Control GetDisplayControl(FieldAndPropertyWrapper fieldAndPropertyWrapper)
-        {
-            return null;
-        }
-*/
-
+        
         private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
@@ -274,18 +258,11 @@ namespace Centipede.Actions
         {
             set
             {
-                if (!Selected)
-                {
-                    base.BackColor = value;
-                }
+                base.BackColor = value;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Selected { get; private set; }
-
+        
         private void ExpandButton_Click(object sender, EventArgs e)
         {
             if (!AttributeTable.Visible)
@@ -353,18 +330,18 @@ namespace Centipede.Actions
         }
 
         /// <summary>
-        /// 
+        /// The tooltip shoiwubng the staus of the <see cref="Action"/> over the status icon
         /// </summary>
         protected ToolTip StatusToolTip;
         private IAction _thisAction;
 
         /// <summary>
-        /// 
+        /// Raise to set the job dirty status to true
         /// </summary>
         public static EventHandler SetDirty;
 
         /// <summary>
-        /// 
+        /// raised when the actiuon is deleted
         /// </summary>
         public event DeletedEventHandler Deleted;
 
@@ -378,18 +355,6 @@ namespace Centipede.Actions
             }
             SetDirty(sender, e);
         }
-
-        //private void ActionDisplayControl_DragEnter(object sender, DragEventArgs e)
-        //{
-        //    e.Effect = DragDropEffects.Move;
-        //}
-
-        //private void ActionDisplayControl_DragDrop(object sender, DragEventArgs e)
-        //{
-        //    var data = e.Data.GetData("WindowsForms10PersistentObject");
-        //    int index = Program.GetIndexOf(ThisAction);
-        //    Program.AddAction((data as ActionFactory).Generate(), index);
-        //}
 
         private void ActMenuDelete_Click(object sender, EventArgs e)
         {
@@ -423,7 +388,7 @@ namespace Centipede.Actions
         { }
 
         /// <summary>
-        /// 
+        /// raise the <see cref="ActionDisplayControl.Deleted"/> event
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

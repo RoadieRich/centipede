@@ -10,8 +10,8 @@ namespace TextFile
 {
     public abstract class BaseTextFileAction : Action
     {
-        protected BaseTextFileAction(String name, IDictionary<string, object> v, ICentipedeCore c)
-            : base(name, v, c)
+        protected BaseTextFileAction(String name, IDictionary<string, object> variables, ICentipedeCore c)
+            : base(name, variables, c)
         { }
         [ActionArgument(
             Usage = "Variable to store the opened file in",
@@ -43,8 +43,8 @@ namespace TextFile
     [ActionCategory("Text File Actions")]
     public class OpenTextFileAction : BaseTextFileAction
     {
-        public OpenTextFileAction(IDictionary<string, object> v, ICentipedeCore c)
-            : base("Open Text File", v, c)
+        public OpenTextFileAction(IDictionary<string, object> variables, ICentipedeCore c)
+            : base("Open Text File", variables, c)
         { }
 
         [ActionArgument(Usage="Filename to open")]
@@ -84,8 +84,8 @@ namespace TextFile
     [ActionCategory("Text File Actions", DisplayName = "Find and Replace")]
     public class RegexAction : Action //BaseTextFileAction
     {
-        public RegexAction(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Find and Replace", v, c)
+        public RegexAction(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Find and Replace", variables, c)
         { }
 
         [ActionArgument(Literal=true)]

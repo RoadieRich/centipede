@@ -26,7 +26,7 @@ namespace Centipede
                 Array.ConstrainedCopy(list, 0, arr, 0, pivot);
                 return BinaryFind(arr, comparer);
             case Centipede.Sign.Positive:
-                Array.ConstrainedCopy(list, pivot, arr, 0, list.Length-pivot);
+                Array.ConstrainedCopy(list, pivot, arr, 0, list.Length - pivot);
                 return BinaryFind(arr, comparer);
             default:
                 return pivotVal;
@@ -219,52 +219,4 @@ namespace Centipede
         Positive = 1
     }
 
-    /// <summary>
-    /// Double Ended Queue
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Deque<T> : List<T>
-    {
-        public void PushFront(T item)
-        {
-            Insert(0, item);
-        }
-
-        public void PushBack(T item)
-        {
-            Add(item);
-        }
-
-        public T PeekFront()
-        {
-            return this.First();
-        }
-
-        public T PeekBack()
-        {
-            return this.Last();
-        }
-
-        public T PopFront()
-        {
-            T value = this.First();
-            RemoveAt(0);
-            return value;
-        }
-
-        public T PopBack()
-        {
-            T value = this.Last();
-            RemoveAt(Count - 1);
-            return value;
-        }
-        
-        public void SwapFront()
-        {
-            T a = PopFront();
-            T b = PopFront();
-            PushFront(a);
-            PushFront(b);
-        }
-    }
 }

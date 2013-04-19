@@ -111,7 +111,7 @@ namespace CentipedeInterfaces
         Boolean IsStepping{ get; }
         void AbortRun();
 
-        PythonEngine.PythonEngine PythonEngine { get; }
+        IPythonEngine PythonEngine { get; }
         Form Window { get; set; }
     }
 

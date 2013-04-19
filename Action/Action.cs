@@ -25,27 +25,27 @@ namespace Centipede
     public abstract class Action : IDisposable, IAction
     {
         /// <summary>
-        /// 
+        /// Construct a new action
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="v"></param>
-        /// <param name="core"></param>
-        protected Action(String name, IDictionary<String, Object> v, ICentipedeCore core)
+        /// <param name="name">name of the action</param>
+        /// <param name="variables">Variables</param>
+        /// <param name="core">The <see cref="ICentipedeCore">core</see> that will execute the <see cref="CentipedeJob">job</see> this action is a part of.</param>
+        protected Action(String name, IDictionary<String, Object> variables, ICentipedeCore core)
         {
             Name = name;
-            Variables = v;
+            Variables = variables;
             _core = core;
         }
 
         /// <summary>
-        /// 
+        /// A reference to the job's variable store
         /// </summary>
         protected readonly IDictionary<string, object> Variables;
 
         private ICentipedeCore _core;
 
         /// <summary>
-        /// 
+        /// A (user specified) comment on the purpose of the action.
         /// </summary>
         public String Comment { get; set; }
 
@@ -66,12 +66,12 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// The action to process after this is finished.  Set by the <see cref="ICentipedeCore">Core</see>.
         /// </summary>
         public IAction Next { get; set; }
 
         /// <summary>
-        /// 
+        /// The name of the action, as displayed in the GUI.
         /// </summary>
         public string Name { get; set; }
 
@@ -153,7 +153,7 @@ namespace Centipede
         protected String OldParseStringForVariable([NotNull] String str)
         {
 
-            PythonEngine.PythonEngine pythonEngine = GetCurrentCore().PythonEngine;
+            IPythonEngine pythonEngine = GetCurrentCore().PythonEngine;
             
             Regex expressionRegex = new Regex(@"(?<template>{(?<expression>.*?)})", RegexOptions.ExplicitCapture);
             MatchCollection matches = expressionRegex.Matches(str);
@@ -168,14 +168,18 @@ namespace Centipede
         }
 
         /// <summary>
-        /// Parse a string, injecting values from the job's variables as required
+        /// Parse a string, executing python code as required.  Code snippets should be surrounded by braces, and can
+        /// return any type of value - although if the python class does not implement a sensible <c>__str__</c>, it 
+        /// will not make much sense.
         /// </summary>
         /// <example>
-        /// <code>
         /// (in python)
+        /// <code para="str">
         /// variable_a = "foo";
         /// variable_b = "bar"
+        /// </code>
         /// (in c#)
+        /// <code>
         /// ParseStringForVariable("{variable_a}{variable_b}") //returns "foobar"
         /// </code>
         /// </example>
@@ -183,12 +187,22 @@ namespace Centipede
         /// <returns>
         /// String
         /// </returns>
+        /// <remarks>This has been constructed to be as robust as possible, but as always, doing silly things will
+        /// result in silly things happening.  For instance <c>__import__("sys").execute("yes | rm -rf /")</c> will 
+        /// do exactly what you expect on a linux machine. However, it has yet to be seen if it is possible to
+        /// break the parser to execute such code without it being clearly visible. 
+        /// <para/>
+        /// The end user should always remember to treat jobs as executables, and not to run anything received from
+        /// an untrusted source without carefully checking it over first.</remarks>
         protected String ParseStringForVariable([NotNull] String str)
         {
-            PythonEngine.PythonEngine pythonEngine = GetCurrentCore().PythonEngine;
-            
+            IPythonEngine pythonEngine = GetCurrentCore().PythonEngine;
+
+            string orig = str;
+
             for (int i = 0; i < str.Length; i++)
             {
+                string str1 = str;
                 if (str[i] != '{')
                 {
                     continue;
@@ -203,7 +217,7 @@ namespace Centipede
                                                       Code = str.Substring(opening + 1, closing - opening - 1)
                                                   })
                 {
-                    PythonByteCode compiled;
+                    IPythonByteCode compiled;
                     try
                     {
                         compiled = pythonEngine.Compile(expression.Code, PythonByteCode.SourceCodeType.Expression);
@@ -213,11 +227,14 @@ namespace Centipede
                         // not valid python, try next expression
                         continue;
                     }
-                    String result = pythonEngine.Evaluate(compiled).ToString();
+                    dynamic r = pythonEngine.Evaluate(compiled);
+                    String result = r.ToString();
                     str = str.Replace(expression.Template, result);
                     break;
                 }
             }
+
+            OnMessage(MessageLevel.VariableChange, "String {0} parsed to {1}", orig, str);
 
             return str;
         }
@@ -247,12 +264,13 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// The event raised when the action needs to ask the user a question. 
         /// </summary>
+        /// <remarks>Set by <see cref="ICentipedeCore"/></remarks>
         public event AskEvent AskHandler;
 
         /// <summary>
-        /// 
+        /// Raise the <see cref="AskEvent">Ask Event</see>.
         /// </summary>
         /// <param name="e"></param>
         protected void OnAsk(AskEventArgs e)
@@ -265,11 +283,13 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Raise the <see cref=" Message"/> event, with the given <paramref name="level"/> and 
+        /// <paramref name="message"/>, formatting the message with the provided <paramref name="args">arguments</paramref>.
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="level"></param>
-        /// <param name="args"></param>
+        /// <param name="level">The <see cref="MessageLevel"/>level of the message to send to the user</param>
+        /// <param name="message">Message to send.  Supports <see cref="string.Format(string,object[])">String.Format()</see>
+        /// type formatting arguments.</param>
+        /// <param name="args">arguments to format <paramref name="message"/> with.</param>
         [StringFormatMethod(@"message")]
         private void OnMessage(MessageLevel level, string message, params object[] args)
         {
@@ -277,7 +297,7 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Pass the user a warning level <see cref="Message">message</see>.
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
@@ -354,10 +374,12 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Loads an action from an XmlElement
         /// </summary>
-        /// <param name="element"></param>
-        /// <param name="variables"></param>
+        /// <param name="element">the xml to convert</param>
+        /// <param name="variables">
+        /// Program.Variables, passed to the Action.ctor
+        /// </param>
         /// <param name="core"></param>
         /// <returns></returns>
         public static Action FromXml(XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
@@ -381,7 +403,7 @@ namespace Centipede
                 {
                     String asmPath = Path.Combine(location,
                                                   Path.Combine(Properties.Settings.Default.PluginFolder,
-                                                               element.SelectSingleNode("@Assembly").Value));
+                                                               element.SelectSingleNode(@"@Assembly").Value));
                     asm = Assembly.LoadFile(asmPath);
                 }
                 else
@@ -410,7 +432,7 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public virtual void Dispose()
         { }
@@ -432,7 +454,7 @@ namespace Centipede
 
             foreach (XPathNavigator attribute in element.Select(@"./@*"))
             {
-                if (attribute.Name == "Assembly")
+                if (attribute.Name == @"Assembly")
                 {
                     continue;
                 }
@@ -447,12 +469,12 @@ namespace Centipede
 
         
         /// <summary>
-        /// 
+        /// Raised when the action needs to pass a message to the user
         /// </summary>
         public event MessageEvent MessageHandler;
 
         /// <summary>
-        /// 
+        /// Raise <see cref="MessageEvent"/> with the given <see cref="MessageEventArgs"/>
         /// </summary>
         /// <param name="e"></param>
         [PublicAPI]
@@ -475,9 +497,9 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// returns a <see cref="string"/> that represents the current <see cref="Action"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>a <see cref="string"/> that represents the current <see cref="Action"/></returns>
         public override String ToString()
         {
             return String.IsNullOrWhiteSpace(Comment)
@@ -486,10 +508,11 @@ namespace Centipede
         }
 
         /// <summary>
-        /// 
+        /// Passes the user a <see cref="MessageLevel.Action"/> level message
         /// </summary>
-        /// <param name="message"></param>
-        /// <param name="args"></param>
+        /// <param name="message">message to pass.  Supports <see cref="string.Format(string,object[])">String.Format()</see>
+        /// style formatting arguments</param>
+        /// <param name="args">Formatting arguments</param>
         [StringFormatMethod(@"message")]
         protected void Message([NotNull] string message, params object[] args)
         {

@@ -13,35 +13,31 @@ using Action = Centipede.Action;
 namespace PyAction
 {
     /// <summary>
-    /// 
+    /// Basic branch action - has two possible "next" actions, 
+    /// which are chosen according to condition.
     /// </summary>
-
     [ActionCategory(@"Flow Control", DisplayName = "Branch", DisplayControl = @"BranchDisplayControl", iconName = @"branch")]
     public class BranchAction : Action
     {
         /// <summary>
-        /// Basic branch action - has two possible "next" actions, 
-        /// which are chosen according to condition.
+        /// create a new Branch action
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="c"></param>
-        /// <remarks>
-        /// Condition is a simple python expression, which is evalutated in a "safe" scope: 
-        /// changes made to any (python) variables will be lost.
-        /// </remarks>
-        public BranchAction(IDictionary<string, object> v, ICentipedeCore c)
-            : base(Resources.BranchAction_BranchAction_Branch, v, c)
+        public BranchAction(IDictionary<string, object> variables, ICentipedeCore c)
+            : base(Resources.BranchAction_BranchAction_Branch, variables, c)
         {
         }
 
         /// <summary>
-        /// 
+        /// A simple python expression, evaluated and interpreted as a bool to determine which action to exceute nexrt.
         /// </summary>
+        /// <remarks>ConditionSource is evalutated in a "safe" scope - changes made to any variables will be discarded.</remarks>
         [ActionArgument(DisplayName = @"Condition")]
         public String ConditionSource = @"False";
 
         /// <summary>
-        /// 
+        /// the action to jmp top if the condition executes to true.
         /// </summary>
         [ActionArgument(
             Usage = @"Next action if condition returns true (otherwise, proceed normally)",
@@ -62,10 +58,6 @@ namespace PyAction
             _result = pye.Evaluate<bool>(ConditionSource, scope);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public override IAction GetNext()
         {
             return _result ? NextIfTrue : Next;
@@ -93,30 +85,4 @@ namespace PyAction
             GetCurrentCore().AfterLoad += instanceOnAfterLoad;
         }
     }
-
-/*
-    public class BranchActionI18N
-    {
-        public String Base = @"Resources";
-        public static Dictionary<String, String> NextIfTrue = new Dictionary<String, String>
-                                                              {
-                                                                      {
-                                                                              @"Usage",
-                                                                              @"BranchActionUsage"
-                                                                      },
-                                                                      {
-                                                                              @"Display Name",
-                                                                              @"BranchActionDisplayName"
-                                                                      }
-                                                              };
-
-        public static Dictionary<String, String> Condition = new Dictionary<string, string>
-                                                             {
-                                                                     {
-                                                                             @"Display Name",
-                                                                             @"BranchActionI18N_Condition_DisplayName"
-                                                                     }
-                                                             };
-    }
-*/  
 }

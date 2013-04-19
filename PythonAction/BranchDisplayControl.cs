@@ -24,7 +24,6 @@ namespace PyAction
 
             base.ThisAction = action;
 
-            // ReSharper restore DoNotCallOverridableMethodsInConstructor
             SetProperties();
 
 
@@ -46,7 +45,7 @@ namespace PyAction
                             }
                             ThisAction.NextIfTrue = (combo.SelectedValue) as Action;
                         };
-            var actionComboLabel = new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Action_if_false };
+            var actionComboLabel = new Label { Text = "Action if True" };
             AttributeTable.Controls.Add(actionComboLabel);
             AttributeTable.Controls.Add(_actionCombo);
 

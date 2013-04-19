@@ -11,31 +11,144 @@ using ResharperAnnotations;
 namespace PythonEngine
 {
     /// <summary>
-    ///     The Iron Python Engine.  Use the <code>variables</code> dictionary to access Job variables.
+    ///  The Iron Python Engine.
     /// </summary>
-    //[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public class PythonEngine
+    public interface IPythonEngine
+    {
+        /// <summary>
+        ///     Execute python code
+        /// </summary>
+        /// <param name="code">The code to execute</param>
+        /// <param name="scope">(optional)</param>
+        /// <exception cref="PythonException"></exception>
+        void Execute(String code, PythonScope scope = null);
+
+        /// <summary>
+        ///     Evaluate an expression, and return the result
+        /// </summary>
+        /// <typeparam name="T">The (C#) Type to interpret the value of the expression as</typeparam>
+        /// <param name="expression"> Expression to evaluate </param>
+        /// <param name="scope">(Optional) the scope to evaluate the action in</param>
+        /// <exception cref="PythonException"></exception>
+        /// <returns>The result of the expression, coerced to type T</returns>
+        /// <seealso cref="Evaluate(string,PythonScope)"/>
+        T Evaluate<T>(String expression, PythonScope scope = null);
+
+        /// <summary>
+        /// Evaluate a compiled expression, and return the result, cast to type <typeparamref name="T"/>
+        /// </summary>
+        /// <param name="expression">The <see cref="IPythonByteCode">compiled expression</see> to execute</param>
+        /// <param name="scope">The <see cref="PythonScope"/> to execute the value in</param>
+        /// <typeparam name="T">The C# type to interpret the result as</typeparam>
+        /// <returns></returns>
+        /// <seealso cref="Evaluate(IPythonByteCode,PythonScope)"/>
+        [UsedImplicitly]
+        T Evaluate<T>(IPythonByteCode expression, PythonScope scope = null);
+
+        /// <summary>
+        ///     Evaluate an expression, and return the result
+        /// </summary>
+        /// <param name="expression">Expression to evaluate</param>
+        /// <param name="scope">(Optional) the scope to evaluate the action in</param>
+        /// <exception cref="PythonException"></exception>
+        /// <returns>The result of the expression</returns>
+        /// <seealso cref="Evaluate{T}(string,PythonScope)"/>
+        dynamic Evaluate(String expression, PythonScope scope = null);
+
+        /// <summary>
+        /// Compile the <paramref name="expression"/> as the given <paramref name="type"/> of code.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        IPythonByteCode Compile(string expression, PythonByteCode.SourceCodeType type);
+
+        /// <summary>
+        /// Evaluate the compiled expression
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        /// <seealso cref="Evaluate{T}(IPythonByteCode,PythonScope)"/>
+        dynamic Evaluate(IPythonByteCode expression, PythonScope scope=null);
+
+        /// <summary>
+        ///     Set a python variable, inside the Engine.
+        /// </summary>
+        /// <param name="name">Name of the variable to set</param>
+        /// <param name="value">Value to set it to</param>
+        void SetVariable(String name, Object value);
+
+        /// <summary>
+        ///     Get the value of a variable inside the python engine.
+        /// </summary>
+        /// <param name="name">Variable name to get</param>
+        /// <returns>The variable's value.  Will need casting to the correct type.</returns>
+        /// <remarks>Avoids extra boxing/unboxing if the value is to be stored as an object reference.</remarks>
+        /// <seealso cref="GetVariable{T}"/>
+        [UsedImplicitly]
+        dynamic GetVariable(String name);
+
+        /// <summary>
+        ///     Get a python variable, with a known type
+        /// </summary>
+        /// <typeparam name="T">The (c#) type to get the variable as</typeparam>
+        /// <param name="name">Name of the variable to fetch</param>
+        /// <returns>The value of the variable, cast to the appropriate C# type</returns>
+        /// <seealso cref="GetVariable"/>
+        [UsedImplicitly]
+        T GetVariable<T>(String name);
+
+        /// <summary>
+        /// determines whether a variable with the given <paramref name="name"/> exists wuithin the <see cref="DefaultScope"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Boolean VariableExists(String name);
+
+        /// <summary>
+        /// Create a new scope, either a clone of <see cref="DefaultScope"/>, or an unrelated scope from values in <paramref name="variables"/>.
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns>The new scope</returns>
+        PythonScope GetNewScope(IDictionary<String, Object> variables = null);
+
+        /// <summary>
+        /// Create a new scope from values in <paramref name="variables"/>.
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        PythonScope GetNewTypedScope(IEnumerable<KeyValuePair<string, object>> variables);
+
+        /// <summary>
+        /// returns the <see cref="DefaultScope"/>
+        /// </summary>
+        /// <returns></returns>
+        PythonScope GetScope();
+
+        /// <summary>
+        /// The default scope
+        /// </summary>
+        ScriptScope DefaultScope { get; }
+    }
+
+    /// <summary>
+    /// The IronPython engine
+    /// </summary>
+    public class PythonEngine : IPythonEngine
     {
         private readonly ScriptEngine _pyEngine;
         private readonly ScriptScope _pyScope;
-
-        internal ScriptScope Scope
-        {
-            get
-            {
-                return _pyScope;
-            }
-        }
 
         private PythonEngine()
         {
             //if (_pyEngine == null)
             {
                 _pyEngine = Python.CreateEngine();
-                _pyScope = this._pyEngine.CreateScope();
-                _pyScope.ImportModule(@"sys");
-                _pyScope.ImportModule(@"math");
-                Execute(@"from math import *", _pyScope);
+                this._pyScope = this._pyEngine.CreateScope();
+                this._pyScope.ImportModule(@"sys");
+                this._pyScope.ImportModule(@"math");
+                Execute(@"from math import *", this._pyScope);
             }
         }
 
@@ -43,7 +156,7 @@ namespace PythonEngine
         {
             try
             {
-                PythonByteCode compiled = Compile(code, PythonByteCode.SourceCodeType.Statements);
+                PythonByteCode compiled = (PythonByteCode)Compile(code, PythonByteCode.SourceCodeType.Statements);
                 //CompiledCode compiled = source.Compile();
                 compiled.Execute(scope);
             }
@@ -82,14 +195,15 @@ namespace PythonEngine
         }
 
         /// <summary>
-        /// 
+        /// Evaluate a compiled expression, and return the result, cast to type <typeparamref name="T"/>
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="scope"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">The <see cref="IPythonByteCode">compiled expression</see> to execute</param>
+        /// <param name="scope">The <see cref="PythonScope"/> to execute the value in</param>
+        /// <typeparam name="T">The C# type to interpret the result as</typeparam>
         /// <returns></returns>
+        /// <seealso cref="Evaluate(IPythonByteCode,PythonScope)"/>
         [UsedImplicitly]
-        public T Evaluate<T>(PythonByteCode expression, PythonScope scope = null)
+        public T Evaluate<T>(IPythonByteCode expression, PythonScope scope = null)
         {
             return (T)Evaluate(expression, scope);
         }
@@ -101,11 +215,12 @@ namespace PythonEngine
         /// <param name="scope">(Optional) the scope to evaluate the action in</param>
         /// <exception cref="PythonException"></exception>
         /// <returns>The result of the expression</returns>
+        /// <seealso cref="Evaluate{T}(string,PythonScope)"/>
         public dynamic Evaluate(String expression, PythonScope scope = null)
         {
             try
             {
-                PythonByteCode compiled = Compile(expression, SourceCodeKind.Expression);
+                IPythonByteCode compiled = Compile(expression, SourceCodeKind.Expression);
                 return Evaluate(compiled, scope);
             }
             catch (PythonException)
@@ -117,30 +232,30 @@ namespace PythonEngine
                 throw new PythonException(e);
             }
         }
-
         /// <summary>
-        /// 
+        /// Compile the <paramref name="expression"/> as the given <paramref name="type"/> of code.
         /// </summary>
         /// <param name="expression"></param>
-        /// <param name="kind"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        public PythonByteCode Compile(string expression, PythonByteCode.SourceCodeType kind)
+        public IPythonByteCode Compile(string expression, PythonByteCode.SourceCodeType type)
         {
-            return Compile(expression, (SourceCodeKind)kind);
+            return Compile(expression, (SourceCodeKind)type);
         }
 
         /// <summary>
-        /// 
+        /// Evaluate the compiled expression
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="scope"></param>
         /// <returns></returns>
-        public dynamic Evaluate(PythonByteCode expression, PythonScope scope=null)
+        /// <seealso cref="Evaluate{T}(IPythonByteCode,PythonScope)"/>
+        public dynamic Evaluate(IPythonByteCode expression, PythonScope scope=null)
         {
             ScriptScope myscope = scope != null ? scope.Scope : this._pyScope;
             try
             {
-                return expression.Execute(myscope);
+                return ((PythonByteCode)expression).Execute(myscope);
             }
             catch (PythonException)
             {
@@ -159,7 +274,7 @@ namespace PythonEngine
         /// <param name="value">Value to set it to</param>
         public void SetVariable(String name, Object value)
         {
-            _pyScope.SetVariable(name, value);
+            this._pyScope.SetVariable(name, value);
         }
 
         /// <summary>
@@ -171,7 +286,7 @@ namespace PythonEngine
         [UsedImplicitly]
         public dynamic GetVariable(String name)
         {
-            return _pyScope.GetVariable(name);
+            return this._pyScope.GetVariable(name);
         }
 
         /// <summary>
@@ -183,17 +298,10 @@ namespace PythonEngine
         [UsedImplicitly]
         public T GetVariable<T>(String name)
         {
-            return _pyScope.GetVariable<T>(name);
+            return this._pyScope.GetVariable<T>(name);
         }
 
-        /// <summary>
-        /// Currently unsupported
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="kind"></param>
-        /// <returns></returns>
-        [UsedImplicitly]
-        internal PythonByteCode Compile(String code, SourceCodeKind kind)
+        IPythonByteCode Compile(String code, SourceCodeKind kind)
         {
             CompiledCode compiledCode;
             try
@@ -209,13 +317,13 @@ namespace PythonEngine
         }
 
         /// <summary>
-        /// 
+        /// determines whether a variable with the given <paramref name="name"/> exists wuithin the <see cref="DefaultScope"/>.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public Boolean VariableExists(String name)
         {
-            return _pyScope.ContainsVariable(name);
+            return this._pyScope.ContainsVariable(name);
         }
 
         /// <summary>
@@ -230,10 +338,10 @@ namespace PythonEngine
         }
 
         /// <summary>
-        /// 
+        /// Create a new scope, either a clone of <see cref="DefaultScope"/>, or an unrelated scope from values in <paramref name="variables"/>.
         /// </summary>
         /// <param name="variables"></param>
-        /// <returns></returns>
+        /// <returns>The new scope</returns>
         public PythonScope GetNewScope(IDictionary<String, Object> variables = null)
         {
             return variables != null && variables.Count < 1
@@ -241,17 +349,11 @@ namespace PythonEngine
                            : new PythonScope(this._pyEngine.CreateScope(variables));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <summary>Create a new scope from values in <paramref name="variables"/>.</summary>
         /// <param name="variables"></param>
-        /// <returns></returns>
-        public PythonScope GetNewTypedScope(IEnumerable<KeyValuePair<string, object>> variables = null)
+        /// <returns></returns>        
+        public PythonScope GetNewTypedScope([NotNull] IEnumerable<KeyValuePair<string, object>> variables)
         {
-            if (variables == null)
-            {
-                return new PythonScope(this._pyScope);
-            }
             ScriptScope scope = this._pyEngine.CreateScope();
             foreach (KeyValuePair<string, object> variable in variables)
             {
@@ -262,47 +364,65 @@ namespace PythonEngine
 
         #region Singleton handling code
 
-        private static volatile PythonEngine _instance;
-
-        private static readonly Object SyncRoot = new Object();
+        private static readonly Lazy<PythonEngine> InstanceLazy = new Lazy<PythonEngine>(() => new PythonEngine());
 
         /// <summary>
-        ///     The PyEngine Singleton.  <seealso href="http://msdn.microsoft.com/en-us/library/ff650316.aspx" />
+        ///     The PyEngine Singleton
         /// </summary>
-        public static PythonEngine Instance
+        public static IPythonEngine Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    lock (SyncRoot)
-                    {
-                        if (_instance == null)
-                        {
-                            _instance = new PythonEngine();
-                        }
-                    }
-                }
-                return _instance;
+                return InstanceLazy.Value;
             }
         }
 
         #endregion
 
         /// <summary>
-        /// 
+        /// returns the <see cref="DefaultScope"/>
         /// </summary>
         /// <returns></returns>
         public PythonScope GetScope()
         {
             return (PythonScope)this._pyScope;
         }
+
+        /// <summary>
+        /// The default scope
+        /// </summary>
+        public ScriptScope DefaultScope { get
+        {
+            return this._pyScope;
+        }}
+    }
+
+    /// <summary>
+    /// Compiled python bytecode
+    /// </summary>
+    /// <remarks>Ok, so this isn't nessecarily python byte code, but the precise implementation is unspecified</remarks>
+    public interface IPythonByteCode
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pythonScope"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T Execute<T>(PythonScope pythonScope);
+
+        /// <summary>
+        /// Same as <see cref="PythonByteCode.Execute{T}"/>, but uses RTTI
+        /// </summary>
+        /// <param name="pythonScope"></param>
+        /// <returns></returns>
+        dynamic Execute(PythonScope pythonScope);
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public sealed class PythonByteCode
+    public class PythonByteCode : IPythonByteCode
     {
         private readonly CompiledCode _code;
 
@@ -319,7 +439,7 @@ namespace PythonEngine
         /// <returns></returns>
         public T Execute<T>(PythonScope pythonScope)
         {
-            ScriptScope scope = pythonScope != null ? pythonScope.Scope : PythonEngine.Instance.Scope;
+            ScriptScope scope = pythonScope != null ? pythonScope.Scope : PythonEngine.Instance.DefaultScope;
             return _code.Execute<T>(scope);
         }
 
@@ -335,18 +455,19 @@ namespace PythonEngine
         /// <returns></returns>
         public dynamic Execute(PythonScope pythonScope)
         {
-            ScriptScope scope = pythonScope != null ? pythonScope.Scope : PythonEngine.Instance.Scope;
+            ScriptScope scope = pythonScope != null ? pythonScope.Scope : PythonEngine.Instance.DefaultScope;
             return _code.Execute(scope);
         }
 
         internal dynamic Execute(ScriptScope scope)
         {
-            return _code.Execute(scope ?? PythonEngine.Instance.Scope);
+            return _code.Execute(scope ?? PythonEngine.Instance.DefaultScope);
         }
 
         /// <summary>
-        /// 
+        /// Defines a kind of the source code. The parser sets its initial state accordingly. 
         /// </summary>
+        /// <seealso cref="SourceCodeKind"/>
         [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
         public enum SourceCodeType
         {
@@ -396,6 +517,7 @@ namespace PythonEngine
         }
     }
 
+/*
     internal static class PythonExtentions
     {
         public static SourceCodeKind ToSourceCodeKind(this PythonByteCode.SourceCodeType @this)
@@ -421,6 +543,7 @@ namespace PythonEngine
             }
         }
     }
+*/
 
     /// <summary>
     /// 

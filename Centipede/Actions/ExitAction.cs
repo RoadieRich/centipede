@@ -12,10 +12,10 @@ namespace Centipede.Actions
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="variables"></param>
         /// <param name="c"></param>
-        public ExitAction(IDictionary<string, object> v, ICentipedeCore c)
-                : base("Exit Centipede", v, c)
+        public ExitAction(IDictionary<string, object> variables, ICentipedeCore c)
+                : base("Exit Centipede", variables, c)
         { }
 
         /// <summary>

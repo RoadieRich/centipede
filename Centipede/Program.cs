@@ -51,7 +51,7 @@ namespace Centipede
         /// <summary>
         ///     The main entry point for the application.
         /// </summary>
-        /// <param name="argv"></param>
+        /// <param name="argv">the command line arguments.  Currently unused.</param>
         [STAThread]
         private static void Main(String[] argv)
         {
