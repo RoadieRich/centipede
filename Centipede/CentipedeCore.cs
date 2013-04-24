@@ -176,8 +176,8 @@ namespace Centipede
             {
                 ActionEventArgs args = new ActionEventArgs
                                        {
-                                            Action   = currentAction,
-                                            Stepping = IsStepping
+                                           Action = currentAction,
+                                           Stepping = IsStepping
                                        };
                 
                 OnBeforeAction(args);
@@ -191,11 +191,11 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action = currentAction,
-                                                    Exception = new FatalActionException(
-                                                            string.Format(Resources.CentipedeCore_RunJob_FatalError,
-                                                                          e.Message, e)),
-                                                    Fatal = true
+                                                Action = currentAction,
+                                                Exception = new FatalActionException(
+                                                    string.Format(Resources.CentipedeCore_RunJob_FatalError,
+                                                                  e.Message, e)),
+                                                Fatal = true
                                             };
                 OnActionError(args);
                 throw new AbortOperationException();
@@ -204,8 +204,8 @@ namespace Centipede
             {
                 ActionErrorEventArgs args = new ActionErrorEventArgs
                                             {
-                                                    Action    = currentAction,
-                                                    Exception = (e as ActionException) ??
+                                                Action = currentAction,
+                                                Exception = (e as ActionException) ??
                                                             new ActionException(e, CurrentAction)
                                             };
                 OnActionError(args);
@@ -325,8 +325,8 @@ namespace Centipede
             }
             OnActionAdded(new ActionEventArgs
                           {
-                                  Action = action,
-                                  Index = index
+                              Action = action,
+                              Index = index
                           });
 
         }
@@ -364,7 +364,7 @@ namespace Centipede
 
                 OnActionRemoved(new ActionEventArgs
                                 {
-                                        Action = action
+                                    Action = action
                                 });
             }
         }
@@ -428,13 +428,13 @@ namespace Centipede
             {
                 action.AddToXmlElement(actionsElement);
             }
-            
+
             var settings = new XmlWriterSettings
                            {
-                                   Indent          = true,
-                                   IndentChars     = "  ",
-                                   NewLineChars    = "\r\n",
-                                   NewLineHandling = NewLineHandling.Replace
+                               Indent = true,
+                               IndentChars = "  ",
+                               NewLineChars = "\r\n",
+                               NewLineHandling = NewLineHandling.Replace
                            };
 
             using (XmlWriter w = XmlWriter.Create(filename, settings))

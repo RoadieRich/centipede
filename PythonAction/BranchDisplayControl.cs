@@ -23,10 +23,6 @@ namespace PyAction
             InitializeComponent();
 
             base.ThisAction = action;
-
-            SetProperties();
-
-
             _actionCombo = new ComboBox
                            {
                                    DisplayMember = @"Text",
@@ -51,21 +47,21 @@ namespace PyAction
 
             _conditionControl = new Scintilla
                                 {
-                                        ConfigurationManager = { Language = @"python" },
-                                        Height = 20,
-                                        AcceptsReturn = false,
-                                        Text = ThisAction.ConditionSource,
-                                        Dock = DockStyle.Fill
+                                    ConfigurationManager = { Language = @"python" },
+                                    Height = 20,
+                                    AcceptsReturn = false,
+                                    Text = ThisAction.ConditionSource,
+                                    Dock = DockStyle.Fill
                                 };
             _conditionControl.TextChanged += (sender, e) =>
-                                                {
-                                                    Scintilla scintilla = sender as Scintilla;
-                                                    if (scintilla == null)
-                                                    {
-                                                        throw new ArgumentException();
-                                                    }
-                                                    ThisAction.ConditionSource = (scintilla).Text;
-                                                };
+                                             {
+                                                 Scintilla scintilla = sender as Scintilla;
+                                                 if (scintilla == null)
+                                                 {
+                                                     throw new ArgumentException();
+                                                 }
+                                                 ThisAction.ConditionSource = (scintilla).Text;
+                                             };
 
             AttributeTable.Controls.Add(new Label { Text = Resources.BranchDisplayControl_BranchDisplayControl_Condition });
             AttributeTable.Controls.Add(_conditionControl);
@@ -90,9 +86,9 @@ namespace PyAction
                                  where a != ThisAction
                                  select new
                                         {
-                                                Text = String.Format("{0}: {1}",
-                                                                     a.Name, a.Comment),
-                                                Action = a
+                                            Text = String.Format("{0}: {1}",
+                                                                 a.Name, a.Comment),
+                                            Action = a
                                         };
                 _actionCombo.DataSource = actionIter.ToList();
             }

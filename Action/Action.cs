@@ -234,7 +234,7 @@ namespace Centipede
                 }
             }
 
-            OnMessage(MessageLevel.VariableChange, "String {0} parsed to {1}", orig, str);
+            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", orig, str);
 
             return str;
         }
@@ -250,12 +250,12 @@ namespace Centipede
                                                  AskEventEnums.AskType options = AskEventEnums.AskType.YesNoCancel)
         {
             var eventArgs = new AskEventArgs
-                                {
-                                        Icon = AskEventEnums.MessageIcon.Question,
-                                        Message = message,
-                                        Title = title,
-                                        Type = options
-                                };
+                            {
+                                Icon = AskEventEnums.MessageIcon.Question,
+                                Message = message,
+                                Title = title,
+                                Type = options
+                            };
                 OnAsk(eventArgs);
                 return eventArgs.Result;
 
@@ -462,8 +462,8 @@ namespace Centipede
                 MethodInfo parseMethod = field.MemberType.GetMethod(@"Parse", new[] { typeof (String) });
                 field.Set(this,
                           parseMethod != null
-                                  ? parseMethod.Invoke(field, new object[] { attribute.Value })
-                                  : attribute.Value);
+                              ? parseMethod.Invoke(field, new object[] { attribute.Value })
+                              : attribute.Value);
             }
         }
 
@@ -503,8 +503,8 @@ namespace Centipede
         public override String ToString()
         {
             return String.IsNullOrWhiteSpace(Comment)
-                           ? Name
-                           : String.Format("{0} ({1})", Name, Comment);
+                       ? Name
+                       : String.Format("{0} ({1})", Name, Comment);
         }
 
         /// <summary>
