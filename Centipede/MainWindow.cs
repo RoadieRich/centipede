@@ -373,14 +373,14 @@ namespace Centipede
 
             MessageDataGridView.DataSource = this.messagesBindingSource; //this._messageFilterBindingSource;
 
-            Core.ActionCompleted      += UpdateHandlerDone;
-            Core.BeforeAction         += Program_BeforeAction;
-            Core.JobCompleted         += CompletedHandler;
-            Core.ActionErrorOccurred  += ErrorHandler;
-            Core.ActionAdded          += Program_ActionAdded;
-            Core.ActionRemoved        += Program_ActionRemoved;
-            Core.AfterLoad            += Program_AfterLoad;
-            Core.StartRun        += CoreOnStartRun;
+            Core.ActionCompleted     += UpdateHandlerDone;
+            Core.BeforeAction        += Program_BeforeAction;
+            Core.JobCompleted        += CompletedHandler;
+            Core.ActionErrorOccurred += ErrorHandler;
+            Core.ActionAdded         += Program_ActionAdded;
+            Core.ActionRemoved       += Program_ActionRemoved;
+            Core.AfterLoad           += Program_AfterLoad;
+            Core.StartRun            += CoreOnStartRun;
 
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
