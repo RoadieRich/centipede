@@ -33,22 +33,21 @@ namespace Centipede.Actions
         {
             Form form = new Form
                         {
-                                AutoSize = true,
-                                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                StartPosition = FormStartPosition.CenterParent,
-                                MinimizeBox = false,
-                                MaximizeBox = false,
-                                SizeGripStyle = SizeGripStyle.Hide
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                            StartPosition = FormStartPosition.CenterParent,
+                            MinimizeBox = false,
+                            MaximizeBox = false,
+                            SizeGripStyle = SizeGripStyle.Hide
                         };
             TableLayoutPanel table = new TableLayoutPanel
                                      {
 
-                                             ColumnCount = 2,
-                                             GrowStyle = TableLayoutPanelGrowStyle.AddRows,
-                                             Dock = DockStyle.Fill,
-                                             AutoSize = true,
-                                             AutoSizeMode = AutoSizeMode.GrowAndShrink
-
+                                         ColumnCount = 2,
+                                         GrowStyle = TableLayoutPanelGrowStyle.AddRows,
+                                         Dock = DockStyle.Fill,
+                                         AutoSize = true,
+                                         AutoSizeMode = AutoSizeMode.GrowAndShrink
                                      };
 
             form.Controls.Add(table);
@@ -60,16 +59,16 @@ namespace Centipede.Actions
             {
                 Label lbl = new Label
                             {
-                                    Text = varName
+                                Text = varName
                             };
                 dynamic value;
 
-				Variables.TryGetValue(varName, out value);
-				
+                Variables.TryGetValue(varName, out value);
+
                 TextBox tb = new TextBox
                              {
-                                     Text = (value ?? "").ToString(),
-                                     Tag = varName
+                                 Text = (value ?? "").ToString(),
+                                 Tag = varName
                              };
                 table.Controls.Add(lbl);
                 table.Controls.Add(tb);
@@ -77,18 +76,18 @@ namespace Centipede.Actions
 
             table.Controls.AddRange(new Control[]
                                     {
-                                            new Button
-                                            {
-                                                    Text = "Cancel",
-                                                    DialogResult = DialogResult.Cancel,
-                                                    Dock = DockStyle.Fill
-                                            },
-                                            new Button
-                                            {
-                                                    Text = "OK",
-                                                    DialogResult = DialogResult.OK,
-                                                    Dock = DockStyle.Fill
-                                            }
+                                        new Button
+                                        {
+                                            Text = "Cancel",
+                                            DialogResult = DialogResult.Cancel,
+                                            Dock = DockStyle.Fill
+                                        },
+                                        new Button
+                                        {
+                                            Text = "OK",
+                                            DialogResult = DialogResult.OK,
+                                            Dock = DockStyle.Fill
+                                        }
                                     });
 
             form.FormClosed += delegate
@@ -137,12 +136,12 @@ namespace Centipede.Actions
         {
             Form form = new Form
                         {
-                                AutoSize = true,
-                                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                StartPosition = FormStartPosition.CenterParent,
-                                MinimizeBox = false,
-                                MaximizeBox = false,
-                                SizeGripStyle = SizeGripStyle.Hide
+                            AutoSize = true,
+                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                            StartPosition = FormStartPosition.CenterParent,
+                            MinimizeBox = false,
+                            MaximizeBox = false,
+                            SizeGripStyle = SizeGripStyle.Hide
                         };
             
             if (String.IsNullOrEmpty(VariablesToSet))
@@ -154,26 +153,26 @@ namespace Centipede.Actions
                                        .Select(var => var.Trim())
                                        .Select(varName => new CheckBox
                                                           {
-                                                                  Text = varName
+                                                              Text = varName
                                                           }));
-                
-            
+
+
 
             form.Controls.AddRange(new Control[]
-                                    {
-                                            new Button
-                                            {
-                                                    Text = "Cancel",
-                                                    DialogResult = DialogResult.Cancel,
-                                                    Dock = DockStyle.Fill
-                                            },
-                                            new Button
-                                            {
-                                                    Text = "OK",
-                                                    DialogResult = DialogResult.OK,
-                                                    Dock = DockStyle.Fill
-                                            }
-                                    });
+                                   {
+                                       new Button
+                                       {
+                                           Text = "Cancel",
+                                           DialogResult = DialogResult.Cancel,
+                                           Dock = DockStyle.Fill
+                                       },
+                                       new Button
+                                       {
+                                           Text = "OK",
+                                           DialogResult = DialogResult.OK,
+                                           Dock = DockStyle.Fill
+                                       }
+                                   });
 
             form.FormClosed += delegate
                                {

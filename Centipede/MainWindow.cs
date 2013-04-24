@@ -427,11 +427,11 @@ namespace Centipede
             this.FavouritesMenu.DropDownItems.Clear();
 
             foreach (
-                    ToolStripMenuItem item in
-                            this._favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
-                                                                         {
-                                                                                 Tag = job.Filename
-                                                                         }))
+                ToolStripMenuItem item in
+                    this._favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
+                                                                          {
+                                                                              Tag = job.Filename
+                                                                          }))
             {
                 item.Click += ItemOnClick;
                 this.FavouritesMenu.DropDownItems.Add(item);
@@ -565,9 +565,9 @@ namespace Centipede
         {
             var lv = new ListView
                      {
-                             LargeImageList = this.ActionIcons,
-                             SmallImageList = this.ActionIcons,
-                             View           = View.List
+                         LargeImageList = this.ActionIcons,
+                         SmallImageList = this.ActionIcons,
+                         View = View.List
                      };
 
             var tabPage = new TabPage(category);

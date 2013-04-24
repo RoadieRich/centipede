@@ -49,16 +49,17 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
             this._form = new Form
-                    {
-                            AutoSize = true,
-                            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                            StartPosition = FormStartPosition.CenterParent,
-                            MinimizeBox = false,
-                            MaximizeBox = false,
-                            SizeGripStyle = SizeGripStyle.Hide,
-                            ShowIcon=false, ShowInTaskbar=false,
-                            Text=this.Title
-                    };
+                         {
+                             AutoSize = true,
+                             AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                             StartPosition = FormStartPosition.CenterParent,
+                             MinimizeBox = false,
+                             MaximizeBox = false,
+                             SizeGripStyle = SizeGripStyle.Hide,
+                             ShowIcon = false,
+                             ShowInTaskbar = false,
+                             Text = this.Title
+                         };
             
             if (String.IsNullOrEmpty(Choices))
             {
@@ -67,12 +68,12 @@ namespace Centipede.Actions
             var choices = ParseStringForVariable(this.Choices).Split(',');
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
                                                 {
-                                                        Dock         = DockStyle.Fill,
-                                                        AutoSize     = true,
-                                                        AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                                        ColumnCount  = 2,
-                                                        RowCount     = choices.Length 
-                                                                 + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
+                                                    Dock = DockStyle.Fill,
+                                                    AutoSize = true,
+                                                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                                                    ColumnCount = 2,
+                                                    RowCount = choices.Length
+                                                               + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
                                                 };
             this._tableLayoutPanel = tableLayoutPanel;
             if (!String.IsNullOrEmpty(Prompt))
@@ -88,8 +89,8 @@ namespace Centipede.Actions
                 {
                     RadioButton radioButton = new RadioButton
                                               {
-                                                      Text = choices[index].Trim(),
-                                                      Tag = i++
+                                                  Text = choices[index].Trim(),
+                                                  Tag = i++
                                               };
                     
                     this._tableLayoutPanel.Controls.Add(radioButton, 0, index);
@@ -102,9 +103,9 @@ namespace Centipede.Actions
             {
                 ComboBox comboBox = new ComboBox
                                     {
-                                            DropDownStyle = ComboBoxStyle.DropDown,
-                                            AutoSize = true,
-                                            AutoCompleteMode = AutoCompleteMode.SuggestAppend
+                                        DropDownStyle = ComboBoxStyle.DropDown,
+                                        AutoSize = true,
+                                        AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
@@ -112,26 +113,23 @@ namespace Centipede.Actions
                 this._tableLayoutPanel.Controls.Add(comboBox);
                 this._tableLayoutPanel.SetColumnSpan(comboBox, 2);
 
-                this._form.FormClosing += CheckBoxFormOnFormClosing; //+= (sender, e) =>
-                                    {
-                                        
-                                    };
+                this._form.FormClosing += CheckBoxFormOnFormClosing; //+= (sender, e) => { }
             }
 
             this._tableLayoutPanel.ColumnCount = 2;
             int rows = this._tableLayoutPanel.RowCount;
             this._tableLayoutPanel.Controls.Add(new Button
-                                          {
-                                                  Text = "Cancel",
-                                                  DialogResult = DialogResult.Cancel,
-                                                  Dock = DockStyle.Fill
-                                          }, 0, rows);
+                                                {
+                                                    Text = "Cancel",
+                                                    DialogResult = DialogResult.Cancel,
+                                                    Dock = DockStyle.Fill
+                                                }, 0, rows);
             this._tableLayoutPanel.Controls.Add(new Button
-                                          {
-                                                  Text = "OK",
-                                                  DialogResult = DialogResult.OK,
-                                                  Dock = DockStyle.Fill
-                                          }, 1, rows);
+                                                {
+                                                    Text = "OK",
+                                                    DialogResult = DialogResult.OK,
+                                                    Dock = DockStyle.Fill
+                                                }, 1, rows);
             this._form.Controls.Add(this._tableLayoutPanel);
 
             GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog), GetCurrentCore().Window);

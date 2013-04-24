@@ -30,7 +30,7 @@ namespace PyAction
             _source = "";
         }
 
-        [ActionArgument(Usage = "Source code to be executed")]
+        [ActionArgument(Usage = "Source code to be executed", Literal = true)]
         public String Source
         {
             // ReSharper disable MemberCanBePrivate.Global
@@ -42,10 +42,9 @@ namespace PyAction
             {
                 _source = value;
                 //Complexity is the count of non-black, non-comment lines
-                _complexity =
-                        value.Split(Environment.NewLine.ToCharArray())
-                             .Count(s => !String.IsNullOrWhiteSpace(s)
-                                         || !s.TrimStart().StartsWith(@"#"));
+                _complexity = value.Split(Environment.NewLine.ToCharArray())
+                                   .Count(s => !String.IsNullOrWhiteSpace(s)
+                                               || !s.TrimStart().StartsWith(@"#"));
 
             }
         }
@@ -65,13 +64,13 @@ namespace PyAction
         protected override void DoAction()
         {
             IPythonEngine engine = PythonEngine.PythonEngine.Instance;
-            if (!engine.VariableExists(@"variables"))
-            {
-                engine.SetVariable(@"variables", Variables);
-            }
+            //if (!engine.VariableExists(@"variables"))
+            //{
+            //    engine.SetVariable(@"variables", Variables);
+            //}
             try
             {
-                engine.Execute(ParseStringForVariable(Source));
+                engine.Execute(Source);
             }
             catch (PythonException e)
             {
