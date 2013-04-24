@@ -22,7 +22,25 @@ namespace CentipedeInterfaces
 
         public static IEnumerable<KeyValuePair<int, T>> Enumerate<T>(this IEnumerable<T> @this)
         {
-            return @this.Select((o, i) => new KeyValuePair<int, T>(i, o));
+            return @this.Decorate((_, i) => i);
+        }
+
+        public static IEnumerable<KeyValuePair<TDecorator, TItem>> Decorate<TItem, TDecorator>(
+            this IEnumerable<TItem> @this, Func<TItem, TDecorator> decorator)
+        {
+            return @this.Select(item => new KeyValuePair<TDecorator, TItem>(decorator(item), item));
+        }
+
+        public static IEnumerable<KeyValuePair<TDecorator, TItem>> Decorate<TItem, TDecorator>(
+            this IEnumerable<TItem> @this, 
+            Func<TItem, int, TDecorator> decorator)
+        {
+            return @this.Select((item, index) => new KeyValuePair<TDecorator, TItem>(decorator(item, index), item));
+        }
+
+        public static IEnumerable<TItem> Undecorate<TItem, TDecorated>(this IEnumerable<KeyValuePair<TDecorated, TItem>> @this)
+        {
+            return @this.Select(pair => pair.Value);
         }
 
         public static Boolean MoveNext(this IEnumerator @this, int count)
@@ -37,8 +55,13 @@ namespace CentipedeInterfaces
 
         public static IEnumerable<T> Slice<T>(this IEnumerable<T> @this, int start = 0, int stop = -1, int step = 1)
         {
-            stop = stop != -1 ? stop : @this.Count();
-            var it = @this.Take(stop).Skip(start).GetEnumerator();
+            IEnumerable<T> enumerable = @this;
+            if (stop != -1)
+            {
+                enumerable = enumerable.Take(stop);
+            }
+            
+            IEnumerator<T> it = enumerable.Skip(start).GetEnumerator();
 
             it.MoveNext(start);
             while (it.MoveNext(step))
@@ -49,7 +72,7 @@ namespace CentipedeInterfaces
 
         public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> @this, Func<T, bool> predicate)
         {
-            return @this.Where(i => !predicate(i));
+            return @this.Where(predicate.Not());
         }
 
         public static Func<bool> Not(this Func<bool> function)
