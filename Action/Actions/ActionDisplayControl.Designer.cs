@@ -100,7 +100,7 @@ namespace Centipede.Actions
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(493, 41);
+            this.AttributeTable.Size = new System.Drawing.Size(493, 29);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -258,7 +258,7 @@ namespace Centipede.Actions
             this.Controls.Add(this.ExpandButton);
             this.Controls.Add(this.StatusIconBox);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(500, 100);
+            this.Size = new System.Drawing.Size(500, 85);
             this.Load += new System.EventHandler(this.ActionDisplayControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
@@ -270,7 +270,6 @@ namespace Centipede.Actions
 
         #endregion
 
-        private System.Windows.Forms.Button ExpandButton;
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;
         private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
@@ -298,5 +297,6 @@ namespace Centipede.Actions
         private PictureBox ActionIcon;
         private PictureBox StatusIconBox;
         public ImageList StatusIcons;
+        protected Button ExpandButton;
     }
 }

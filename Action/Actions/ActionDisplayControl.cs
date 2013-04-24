@@ -31,12 +31,9 @@ namespace Centipede.Actions
             }
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        protected void SetProperties()
+        protected ActionDisplayControl()
         {
-            
+            InitializeComponent();
         }
 
         /// <summary>
@@ -60,8 +57,7 @@ namespace Centipede.Actions
             CommentTextBox.Text = ThisAction.Comment;
 
             ThisAction.Tag = this;
-            SetProperties();
-
+            
             StatusToolTip = new ToolTip();
             StatusToolTip.SetToolTip(StatusIconBox, "");
 
@@ -245,7 +241,6 @@ namespace Centipede.Actions
             f.Set(ThisAction, value);
         }
 
-        ///
         /// <summary>
         /// Gets or sets the background color for the control.
         /// </summary>
@@ -263,7 +258,7 @@ namespace Centipede.Actions
         }
 
         
-        private void ExpandButton_Click(object sender, EventArgs e)
+        protected void ExpandButton_Click(object sender, EventArgs e)
         {
             if (!AttributeTable.Visible)
             {
@@ -275,6 +270,8 @@ namespace Centipede.Actions
                 AttributeTable.Visible = false;
                 ExpandButton.Text = @"+";
             }
+            ExpandButton.Invalidate(ExpandButton.Region, true);
+            ExpandButton.Refresh();
         }
 
         private ActionState _state = ActionState.None;
