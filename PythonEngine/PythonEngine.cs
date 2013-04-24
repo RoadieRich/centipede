@@ -400,11 +400,10 @@ namespace PythonEngine
     /// <summary>
     /// Compiled python bytecode
     /// </summary>
-    /// <remarks>Ok, so this isn't nessecarily python byte code, but the precise implementation is unspecified</remarks>
     public interface IPythonByteCode
     {
         /// <summary>
-        /// 
+        /// Execute the bytecode in the given scope, interpretting the result as type <typeparamref name="T"/>
         /// </summary>
         /// <param name="pythonScope"></param>
         /// <typeparam name="T"></typeparam>
@@ -422,6 +421,9 @@ namespace PythonEngine
     /// <summary>
     /// 
     /// </summary>
+    /// <remarks>
+    /// Ok, so this isn't nessecarily python byte code - the precise implementation is unspecified.
+    /// </remarks>
     public class PythonByteCode : IPythonByteCode
     {
         private readonly CompiledCode _code;
@@ -432,7 +434,7 @@ namespace PythonEngine
         }
 
         /// <summary>
-        /// 
+        /// Execute the bytecode in the given scope, interpretting the result as type <typeparamref name="T"/>
         /// </summary>
         /// <param name="pythonScope"></param>
         /// <typeparam name="T"></typeparam>
