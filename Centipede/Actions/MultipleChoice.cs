@@ -75,25 +75,31 @@ namespace Centipede.Actions
                                                     RowCount = choices.Length
                                                                + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
                                                 };
+            tableLayoutPanel.ColumnStyles[1].SizeType = SizeType.AutoSize;
             this._tableLayoutPanel = tableLayoutPanel;
             if (!String.IsNullOrEmpty(Prompt))
             {
-                this._tableLayoutPanel.Controls.Add(new Label { Text = this.Prompt });
+                Label label = new Label
+                              {
+                                  Text = this.Prompt
+                              };
+                this._tableLayoutPanel.Controls.Add(label);
+                this._tableLayoutPanel.SetColumnSpan(label, 2);
             }
 
             if (RadioButtons)
             {
                 int i = 0;
 
-                for (int index = 0; index < choices.Length; index++)
+                foreach (var choice in choices.Enumerate())
                 {
                     RadioButton radioButton = new RadioButton
                                               {
-                                                  Text = choices[index].Trim(),
+                                                  Text = choice.Value.Trim(),
                                                   Tag = i++
                                               };
                     
-                    this._tableLayoutPanel.Controls.Add(radioButton, 0, index);
+                    this._tableLayoutPanel.Controls.Add(radioButton, 0, choice.Key);
                     this._tableLayoutPanel.SetColumnSpan(radioButton, 2);
                 }
 

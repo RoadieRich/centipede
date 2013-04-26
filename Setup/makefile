@@ -25,24 +25,24 @@ webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
 binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll \
-	$(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll
+    $(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll
 pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksActions.dll \
-	$(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/TextFile.dll \
-	$(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/XMLActions.dll $(pluginsfolder)/PythonAction.dll \
-	$(pluginsfolder)/ShellActions.dll
+    $(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/TextFile.dll \
+    $(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/XMLActions.dll $(pluginsfolder)/PythonAction.dll \
+    $(pluginsfolder)/ShellActions.dll
 
 installersource = centipede-setup.iss
-	
+    
 setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
 
 pagescript = create-webpage.py
 scriptengine = python
 
 ifndef comment
-	commentsarg = -f comments.txt
+    commentsarg = -f comments.txt
 else
-	commentsarg = -c "$(comment)"
-	updateCommand = @touch comments.txt
+    commentsarg = -c "$(comment)"
+    updateCommand = @touch comments.txt
 endif
 
 uploadscript = sftp-upload.sftpc
@@ -52,27 +52,27 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = ps-der-hg1
 
-all: repo installer webpage upload notify checksum.log 
+all: installer webpage upload notify checksum.log 
 
 updatecomments:
 ifdef updateCommand
 	$(updateCommand)
 endif
 
-repo:
-	hg pull default
-	hg update
-	
-	
+#repo:
+#    @hg pull default
+#    @hg update
+    
+    
 
 installer: $(installerfilepath)
 
 webpage: updatecomments $(webpagefilename)
 	
 upload: upload.log
-
+	
 notify: notify.log
-
+	
 $(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) $(installersource)
 
@@ -81,15 +81,16 @@ $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 
 upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
 	@date >> upload.log
+	@date > $(setupoutputfolder)/date.txt
 	$(uploadtool) -b $(uploadscript) $(webuser)@$(server) >> upload.log
 	@echo Upload complete.
 
 notify.log: upload.log
 	@date >> notify.log
-	
+    
 checksum: checksum.log
 	@tail -3 checksum.log
-	
+    
 checksum.log: upload.log $(installerfilepath)
 	@date >> checksum.log
 	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
@@ -104,27 +105,27 @@ view logs:
 	@echo
 	@echo Checksum:
 	@tail -3 checksum.log
-		
+        
 clean:
-	@rm -rf $(setupoutputfolder)
+	@rm -rf $(setupoutputfolder) 
 	@#rm upload.log notify.log
-	
+    
 install: $(installerfilepath)
 	$(installerfilepath)
-	
+    
 help:
 	@echo Available targets:
 	@echo
 	@echo 'installer'
-	@echo '	Compliles the installer executable'
+	@echo ' Compliles the installer executable'
 	@echo 'webpage'
-	@echo '	Generates the download webpage with md5 and sha1 checksums'
+	@echo ' Generates the download webpage with md5 and sha1 checksums'
 	@echo 'upload'
-	@echo '	Uploads the installer and executable to the webserver'
+	@echo ' Uploads the installer and executable to the webserver'
 	@echo 'all (default)'
-	@echo '	Compiles, generates the webpage, and uploads.'
+	@echo ' Compiles, generates the webpage, and uploads.'
 	@echo 'install'
-	@echo '	Runs the installer'
+	@echo ' Runs the installer'
 	@echo 'clean'
-	@echo '	Deletes all files from the output folder'
+	@echo ' Deletes all files from the output folder'
 	

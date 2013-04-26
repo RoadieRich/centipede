@@ -1,6 +1,7 @@
 from hashlib import md5, sha1
 from optparse import OptionParser
 
+from datetime import datetime
 import sys
 
 htmlFile = "index.htm"
@@ -39,7 +40,13 @@ if __name__ == "__main__":
     
     comment = (commentText + "\n") if commentText else ""
     
+    updateTime = datetime.now().strftime("%Y-%m-%d %H:%M")
+    
     with open(outputFile, "w") as outFile:
-        outFile.write(open(htmlFile).read() % (md5.hexdigest(), sha1.hexdigest(), comment))
+        outFile.write(open(htmlFile).read() % (md5.hexdigest(), 
+                                               sha1.hexdigest(), 
+                                               comment,
+                                               updateTime
+))
         
     print "Page created!"

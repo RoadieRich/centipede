@@ -84,13 +84,11 @@ namespace Centipede
         [STAThread]
         public void RunJob(bool stepping = false)
         {
-            IsStepping = stepping;
-            ManualResetEvent pause = IsStepping?new ManualResetEvent(true) : null;
-            
+            PrepareStepping(stepping);
+
             _abortRequested = false;
-            IsStepping = stepping;
             
-            OnStartRun(new StartRunEventArgs(pause));
+            OnStartRun(new StartRunEventArgs(this._resetEvent));
             
             try
             {
@@ -110,20 +108,14 @@ namespace Centipede
             {
                 while (CurrentAction != null)
                 {
-                    if (pause != null)
-                    {
-                        pause.WaitOne();
-                    }
+                    ShouldPauseStepping();
 
                     ContinueState continueState = RunStep(CurrentAction);
                     
                     if (NeedsRetry(continueState))
                         continue;
 
-                    if (pause != null)
-                    {
-                        pause.Reset();
-                    }
+                    ResetSteppingPause();
 
                     lock (this._abortRequested)
                     {
@@ -140,7 +132,38 @@ namespace Centipede
                 jobFailed = true;
             }
             OnCompleted(!jobFailed);
+            FinishedStepping();
+        }
+
+        private void FinishedStepping()
+        {
             IsStepping = false;
+            this._resetEvent = null;
+        }
+
+        private void PrepareStepping(bool stepping)
+        {
+            IsStepping = stepping;
+            if (stepping)
+            {
+                this._resetEvent = new ManualResetEvent(true);
+            }
+        }
+
+        private void ResetSteppingPause()
+        {
+            if (IsStepping)
+            {
+                this._resetEvent.Reset();
+            }
+        }
+
+        private void ShouldPauseStepping()
+        {
+            if (IsStepping)
+            {
+                this._resetEvent.WaitOne();
+            }
         }
 
         private bool NeedsRetry(ContinueState continueState)
@@ -214,8 +237,9 @@ namespace Centipede
             }
         }
 
-        private Object _abortRequested = false;
+        private volatile Object _abortRequested = false;
         private IPythonEngine _pythonEngine = PyEngine.Instance;
+        private ManualResetEvent _resetEvent;
 
         public bool IsStepping { get; private set; }
 

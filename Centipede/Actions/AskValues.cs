@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using CentipedeInterfaces;
+using PythonEngine;
 
 
 namespace Centipede.Actions
@@ -31,6 +32,11 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
+            if (String.IsNullOrEmpty(this.VariablesToSet))
+            {
+                throw new ActionException("No variables listed", this);
+            }
+
             Form form = new Form
                         {
                             AutoSize = true,
@@ -51,10 +57,6 @@ namespace Centipede.Actions
                                      };
 
             form.Controls.Add(table);
-            if (String.IsNullOrEmpty(VariablesToSet))
-            {
-                throw new ActionException("No variables listed", this);
-            }
             foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
             {
                 Label lbl = new Label
@@ -97,7 +99,7 @@ namespace Centipede.Actions
                                    case DialogResult.OK:
                                        foreach (TextBox tb in table.Controls.OfType<TextBox>())
                                        {
-                                           Variables[(string)tb.Tag] = PythonEngine.PythonEngine.Instance.Evaluate(tb.Text);
+                                           Variables[(string)tb.Tag] = TryEvaluate(tb.Text);
                                        }
                                        break;
                                    case DialogResult.Cancel:
@@ -107,6 +109,20 @@ namespace Centipede.Actions
 
             GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
             
+        }
+
+        private static dynamic TryEvaluate(String str)
+        {
+            try
+            {
+                var compiled = PythonEngine.PythonEngine.Instance.Compile(str, PythonByteCode.SourceCodeType.Expression);
+                var evaluated = PythonEngine.PythonEngine.Instance.Evaluate(compiled);
+                return evaluated;
+            }
+            catch (PythonEngine.PythonParseException)
+            {
+                return str;
+            }
         }
     }
 

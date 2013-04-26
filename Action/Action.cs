@@ -196,6 +196,8 @@ namespace Centipede
         /// an untrusted source without carefully checking it over first.</remarks>
         protected String ParseStringForVariable([NotNull] String str)
         {
+
+            OnMessage(MessageLevel.Debug, "Attempting to parse string {0}", str);
             IPythonEngine pythonEngine = GetCurrentCore().PythonEngine;
 
             string orig = str;
@@ -209,13 +211,13 @@ namespace Centipede
                 }
 
                 int opening = i;
-                foreach (var expression in from closing in str.IndexesWhere('}'.Equals)
-                                           where closing > opening
-                                           select new
-                                                  {
-                                                      Template = str.Substring(opening, closing - opening + 1),
-                                                      Code = str.Substring(opening + 1, closing - opening - 1)
-                                                  })
+                foreach (var expression in str1.IndexesWhere('}'.Equals)
+                                               .Where(Predicate(opening))
+                                               .Select(closing => new
+                                                                  {
+                                                                      Template = str1.Substring(opening, closing - opening + 1),
+                                                                      Code = str1.Substring(opening + 1, closing - opening - 1)
+                                                                  }))
                 {
                     IPythonByteCode compiled;
                     try
@@ -227,8 +229,20 @@ namespace Centipede
                         // not valid python, try next expression
                         continue;
                     }
-                    dynamic r = pythonEngine.Evaluate(compiled);
-                    String result = r.ToString();
+                    String result = expression.Template;
+                    try
+                    {
+                        this.OnMessage(MessageLevel.Debug, "Python expression found: {0}", expression.Code);
+                        dynamic r = pythonEngine.Evaluate(compiled);
+                        result = r.ToString();
+                        this.OnMessage(MessageLevel.Debug, "Expression evaluated to {0}", result);
+                    }
+                    catch (PythonException e)
+                    {
+                        this.OnMessage(MessageLevel.Debug,
+                                       "Expression could not be evaluated: Python raised exception {0}",
+                                       e.Message);
+                    }
                     str = str.Replace(expression.Template, result);
                     break;
                 }
@@ -237,6 +251,11 @@ namespace Centipede
             OnMessage(MessageLevel.Core, "String {0} parsed to {1}", orig, str);
 
             return str;
+        }
+
+        private static Func<int, bool> Predicate(int opening)
+        {
+            return closing => closing > opening;
         }
 
         /// <summary>

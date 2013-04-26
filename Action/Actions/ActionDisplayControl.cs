@@ -257,21 +257,24 @@ namespace Centipede.Actions
             }
         }
 
-        
-        protected void ExpandButton_Click(object sender, EventArgs e)
+
+        private void ExpandButton_Click(object sender, EventArgs e)
         {
+
+            Button button = (Button)sender;
+
             if (!AttributeTable.Visible)
             {
                 AttributeTable.Visible = true;
-                ExpandButton.Text = @"-";
+                button.Text = @"-";
             }
             else
             {
                 AttributeTable.Visible = false;
-                ExpandButton.Text = @"+";
+                button.Text = @"+";
             }
-            ExpandButton.Invalidate(ExpandButton.Region, true);
-            ExpandButton.Refresh();
+            //ExpandButton.Invalidate(ExpandButton.Region, true);
+            //ExpandButton.Refresh();
         }
 
         private ActionState _state = ActionState.None;
