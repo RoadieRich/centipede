@@ -29,6 +29,7 @@ namespace PyAction
                             };
             
             scintilla.TextChanged += sourceControl_TextChanged;
+            scintilla.TextChanged += SetDirty;
             
             AttributeTable.Controls.Add(scintilla);
             AttributeTable.SetColumnSpan(scintilla, 2);

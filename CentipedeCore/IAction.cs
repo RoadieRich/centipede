@@ -160,11 +160,16 @@ namespace CentipedeInterfaces
         /// </summary>
         [DisplayText("Variable Changes")]
         VariableChange = 0x10,
+        
+        /// <summary>
+        /// Debugging information - can be extemely verbose
+        /// </summary>
+        Debug = 0x20,
 
         /// <summary>
         /// All levels
         /// </summary>
-        All = Error | Warning | Action | Core | VariableChange,
+        All = Error | Warning | Action | Core | VariableChange | Debug,
 
         /// <summary>
         /// 

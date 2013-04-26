@@ -20,6 +20,7 @@ using CentipedeInterfaces;
 using PythonEngine;
 using ResharperAnnotations;
 
+
 //      \,,/
 //      (..)
 //  ''=={##}==''
@@ -43,20 +44,7 @@ namespace Centipede
 {
     public partial class MainWindow : Form
     {
-        
-        //private readonly JobDataSet _dataSet = new JobDataSet();
-
-        private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-
-        [UsedImplicitly]
-        private Dictionary<string, string> _arguments;
-
-        private bool _dirty;
-        private ToolStripSpringTextBox _urlTextbox;
-        private MessageLevel _displayedLevels;
-        private ManualResetEvent _steppingMutex;
-        private bool _stepping;
-        private ActionEventArgs _pendingUpdate;
+        #region Constructors
 
         public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
         {
@@ -70,11 +58,11 @@ namespace Centipede
             Location    = Settings.Default.MainWindowLocation;
             WindowState = Settings.Default.MainWindowState;
 
-            SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
-            SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
-            SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
+            this.SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
+            this.SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
+            this.SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
             
-            WebBrowser.DocumentText = Resources.WelcomeScreen;
+            this.WebBrowser.DocumentText = Resources.WelcomeScreen;
 
             //Visible = true;
 
@@ -86,44 +74,50 @@ namespace Centipede
 
             Core.Variables.PropertyChanged += OnVariablesOnRowChanged;
             
-            _dataSet.Messages.RowChanged += delegate
-                                            {
-                                                this.MessageDataGridView.Invalidate();
-                                                this.MessageDataGridView.Update();
-                                            };
+            this._dataSet.Messages.RowChanged += delegate
+                                                 {
+                                                     this.MessageDataGridView.Invalidate();
+                                                     this.MessageDataGridView.Update();
+                                                 };
 
-            MessageDataGridView.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs args)
-                                                  {
-                                                      if (args.Value is IAction)
-                                                          args.Value = args.Value.ToString();
-                                                  };
+            this.MessageDataGridView.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs args)
+                                                       {
+                                                           if (args.Value is IAction)
+                                                               args.Value = args.Value.ToString();
+                                                       };
 
-            DisplayedLevels = Settings.Default.MessageFilterSetting;
+            this.DisplayedLevels = Settings.Default.MessageFilterSetting;
 
-            Core.Window = this;
+            this.Core.Window = this;
         }
 
-        private void OnVariablesOnRowChanged(object sender, PythonVariableChangedEventArgs args)
-        {
-            var scope = (PythonScope)sender;
-            var name = args.PropertyName;
-            var value = scope.GetVariable(name);
+        #endregion
 
-            //DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
-            String message = string.Format(Resources.MainWindow_OnVariablesOnRowChanged_Message_Text, args.Action.ToString(), name, value);
-            System.Action action = () => this._dataSet.Messages
-                                             .AddMessagesRow(DateTime.Now, message, Core.CurrentAction,
-                                                             MessageLevel.VariableChange,
-                                                             DisplayedLevels.HasFlag(MessageLevel.VariableChange));
+        #region Fields
 
-            Invoke(action);
-        }
+        //private readonly JobDataSet _dataSet = new JobDataSet();
 
-        private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
-        {
-            this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
-                                                  DisplayedLevels.HasFlag(e.Level));
-        }
+        private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
+
+        [UsedImplicitly]
+        private Dictionary<string, string> _arguments;
+
+        private bool _dirty;
+
+        private ToolStripSpringTextBox _urlTextbox;
+
+        private MessageLevel _displayedLevels;
+
+        private ManualResetEvent _steppingMutex;
+
+        private bool _stepping;
+        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
+
+        private ActionEventArgs _pendingUpdate;
+
+        #endregion
+
+        #region Properties
 
         public override String Text
         {
@@ -155,7 +149,58 @@ namespace Centipede
             }
         }
 
+        private MessageLevel DisplayedLevels
+        {
+            get
+            {
+                return this._displayedLevels;
+            }
+            set
+            {
+                this._displayedLevels = value;
+                UpdateOutputWindow();
+            }
+        }
+
         public ICentipedeCore Core { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        private void OnVariablesOnRowChanged(object sender, PythonVariableChangedEventArgs args)
+        {
+            var scope = (PythonScope)sender;
+            var name = args.PropertyName;
+            var value = scope.GetVariable(name);
+
+            //DataSet1.VariablesTableRow row = (DataSet1.VariablesTableRow)args.Row;
+            String message = string.Format(Resources.MainWindow_OnVariablesOnRowChanged_Message_Text, args.Action.ToString(), name, value);
+            System.Action action = () => this._dataSet.Messages
+                                             .AddMessagesRow(DateTime.Now, message, Core.CurrentAction,
+                                                             MessageLevel.VariableChange,
+                                                             DisplayedLevels.HasFlag(MessageLevel.VariableChange));
+
+            Invoke(action);
+        }
+
+        private void ItemOnClick(object sender, EventArgs eventArgs)
+        {
+            var item = (ToolStripDropDownItem)sender;
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            { }
+            Core.LoadJob((String)item.Tag);
+        }
+
+        private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
+        {
+            this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
+                                                  DisplayedLevels.HasFlag(e.Level));
+        }
 
         private void ErrorHandler(object sender, ActionErrorEventArgs e)
         {
@@ -441,20 +486,6 @@ namespace Centipede
             this.FavouritesMenu.DropDownItems.Add(this.addCurrentToolStripMenuItem);
             this.FavouritesMenu.DropDownItems.Add(this.EditFavouritesMenuItem);
         }
-
-        private void ItemOnClick(object sender, EventArgs eventArgs)
-        {
-            var item = (ToolStripDropDownItem)sender;
-            try
-            {
-                AskSave();
-            }
-            catch (AbortOperationException)
-            { }
-            Core.LoadJob((String)item.Tag);
-        }
-
-        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
 
         private void GetActionPlugins()
         {
@@ -867,19 +898,6 @@ namespace Centipede
             UpdateFavourites();
         }
 
-        private MessageLevel DisplayedLevels
-        {
-            get
-            {
-                return this._displayedLevels;
-            }
-            set
-            {
-                this._displayedLevels = value;
-                UpdateOutputWindow();
-            }
-        }
-
         private void UpdateOutputWindow()
         {
             MessageDataGridView.Parent.SuspendLayout();
@@ -1062,6 +1080,8 @@ namespace Centipede
         {
             Process.Start(@"http://docs.python.org/2.7/");
         }
+
+        #endregion
     }
 
     [Serializable]

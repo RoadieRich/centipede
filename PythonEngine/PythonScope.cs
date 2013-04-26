@@ -112,7 +112,14 @@ namespace PythonEngine
         /// <returns></returns>
         public bool TryGetVariable<T>(string name, out T value)
         {
-            return this.Scope.TryGetVariable(name, out value);
+            bool exists = Scope.ContainsVariable(name);
+            if (exists)
+            {
+                value = Scope.GetVariable<T>(name);
+            }
+            else
+                value = default(T);
+            return exists;
         }
 
         /// <summary>
@@ -123,7 +130,16 @@ namespace PythonEngine
         /// <returns></returns>
         public bool TryGetVariable(string name, out dynamic value)
         {
-            return this.Scope.TryGetVariable(name, out value);
+            bool exists = Scope.ContainsVariable(name);
+            if (exists)
+            {
+                value = Scope.GetVariable(name);
+            }
+            else
+            {
+                value = null;
+            }
+            return exists;
         }
 
         /// <summary>
@@ -276,7 +292,7 @@ namespace PythonEngine
         /// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
         /// </returns>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
-        public bool Contains(KeyValuePair<string, object> item)
+        bool ICollection<KeyValuePair<string, object>>.Contains(KeyValuePair<string, object> item)
         {
             return Scope.ContainsVariable(item.Key);
         }
@@ -288,7 +304,7 @@ namespace PythonEngine
         /// <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
         /// <exception cref="T:System.ArgumentException"><paramref name="array"/> is multidimensional.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"/> is greater than the available space from <paramref name="arrayIndex"/> to the end of the destination <paramref name="array"/>.-or-Type <see cref="KeyValuePair{String,Object}"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.</exception>
-        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
+        void ICollection<KeyValuePair<string, object>>.CopyTo(KeyValuePair<string, object>[] array, int arrayIndex)
         {
             Scope.GetItems().ToArray().CopyTo(array,arrayIndex);
         }
@@ -557,9 +573,9 @@ namespace PythonEngine
         /// true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, false.
         /// </returns>
         /// <param name="key">The key whose value to get.</param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.</param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
-        public bool TryGetValue(string key, out dynamic value)
+        bool IDictionary<string,object>.TryGetValue(string key, out object value)
         {
-            return Scope.TryGetVariable(key, out value);
+            return TryGetVariable(key, out value);
         }
 
         /// <summary>
@@ -605,7 +621,7 @@ namespace PythonEngine
         {
             get
             {
-                return (ICollection)this.Scope.GetVariableNames();
+                return (ICollection)Scope.GetVariableNames();
             }
         }
 
