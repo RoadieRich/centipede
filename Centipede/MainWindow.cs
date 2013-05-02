@@ -198,6 +198,8 @@ namespace Centipede
 
         private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
         {
+            MessageBox.Show(String.Format("{0}\n\nLevel: {1}", e.Message, e.Level.AsText()), "Message");
+
             this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
                                                   DisplayedLevels.HasFlag(e.Level));
         }
@@ -443,7 +445,6 @@ namespace Centipede
             Dirty = false;
 
             ActionDisplayControl.SetDirty = delegate { Dirty = true; };
-
         }
 
         private void CentipedeJobOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
