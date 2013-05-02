@@ -193,6 +193,7 @@ namespace Centipede
             }
         }
 
+        [STAThread]
         private ContinueState RunStep(IAction currentAction)
         {
             try
@@ -420,6 +421,8 @@ namespace Centipede
         [Localizable(false)]
         public void SaveJob(String filename)
         {
+
+            TakeBackup(filename);
             var xmlDoc = new XmlDocument();
             XmlElement xmlRoot      = xmlDoc.CreateElement("CentipedeJob");
             XmlElement metaElement1 = xmlDoc.CreateElement("Metadata");
@@ -466,6 +469,34 @@ namespace Centipede
                 xmlDoc.WriteTo(w);
             }
             Job.FileName = filename;
+        }
+
+        private void TakeBackup(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            string directory = Path.GetDirectoryName(filePath);
+            string filename = Path.GetFileName(filePath);
+            string backupDir = Path.Combine(directory, @"backups");
+
+            DirectoryInfo dir;
+            if (!Directory.Exists(backupDir))
+            {
+                Directory.CreateDirectory(backupDir);
+            }
+            
+            dir = new DirectoryInfo(backupDir);
+            int numberOfBackups = dir.GetFiles().Length;
+
+
+
+            string backupFilename = string.Format(@"{0}.{1}", filename, numberOfBackups);
+
+            File.Copy(filePath, Path.Combine(backupDir, backupFilename));
+
         }
 
         /// <summary>
