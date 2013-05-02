@@ -24,6 +24,11 @@ namespace Centipede.Actions
         [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
 
+
+        [ActionArgument(DisplayName = "Evaluate")]
+        public Boolean Evaluate = true;
+
+
         /// <summary>
         /// Perform the action
         /// </summary>
@@ -99,9 +104,10 @@ namespace Centipede.Actions
                                    case DialogResult.OK:
                                        foreach (TextBox tb in table.Controls.OfType<TextBox>())
                                        {
-                                           Variables[(string)tb.Tag] = TryEvaluate(tb.Text);
+                                           dynamic tryEvaluate = Evaluate ? TryEvaluate(tb.Text) : tb.Text;
+                                           Variables[(string)tb.Tag] = tryEvaluate;
                                        }
-                                       break;
+                                           break;
                                    case DialogResult.Cancel:
                                        throw new FatalActionException("Cancel Clicked", this);
                                    }
@@ -113,6 +119,7 @@ namespace Centipede.Actions
 
         private static dynamic TryEvaluate(String str)
         {
+
             try
             {
                 var compiled = PythonEngine.PythonEngine.Instance.Compile(str, PythonByteCode.SourceCodeType.Expression);
