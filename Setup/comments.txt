@@ -3,3 +3,9 @@
 # To force a blank line, use one or more spaces.
 # 
 # Lines are wrapped with <p></p> tags, but otherwise any html is fine.
+
+Backup code added.
+Alpha version of MathCad Actions added.
+Added Run Excel Macro for testing.
+This version contains extra debug message boxes that will not be in the final version.
+

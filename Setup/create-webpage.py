@@ -6,11 +6,6 @@ import sys
 
 htmlFile = "index.htm"
 
-
-
-def formatLine(line):
-    return "<p>%s</p>" % (line.strip() or "&nbsp;")
-
 if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-f", "--comment-file", dest="commentFile")
@@ -28,17 +23,15 @@ if __name__ == "__main__":
             md5.update(bytes)
             sha1.update(bytes)
     
-    commentText = ""
+    comment = ""
     
     if options.commentText:
-        commentText = "<p>%s</p>" % options.commentText
+        comment = "<p>%s</p>" % options.commentText
     elif options.commentFile:
         with open(options.commentFile, "r") as commentFile:
             commentLines = (line for line in commentFile if not line.lstrip().startswith("#"))
-        
-            commentText = "\n".join(formatLine(line) for line in commentLines if line.strip("\r\n"))
-    
-    comment = (commentText + "\n") if commentText else ""
+            commentLines = ("<li>%s</li>" % line.strip() for line in commentLines if line.strip())
+            comment = "<ul>\n%s\n</ul>\n" % "\n".join(commentLines)
     
     updateTime = datetime.now().strftime("%Y-%m-%d %H:%M")
     
