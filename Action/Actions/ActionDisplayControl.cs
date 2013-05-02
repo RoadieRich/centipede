@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -124,30 +125,41 @@ namespace Centipede.Actions
             {
                 switch (arg.GetFieldTypeCategory())
                 {
-                case FieldAndPropertyWrapper.FieldType.Boolean:
-                    CheckBox cb = new CheckBox
-                                  {
+                    case FieldAndPropertyWrapper.FieldType.Boolean:
+                        CheckBox cb = new CheckBox
+                                      {
                                           Anchor = AnchorStyles.Top | AnchorStyles.Left,
                                           Checked = arg.Get<Boolean>(ThisAction)
-                                  };
-                    cb.CheckedChanged += GetChangedHandler(arg) ??
-                                         ((sender, e) => arg.Set(ThisAction, ((CheckBox)sender).Checked));
-                    cb.CheckedChanged += SetDirty;
-                    attrValue = cb;
+                                      };
+                        cb.CheckedChanged += GetChangedHandler(arg) ??
+                                             ((sender, e) => arg.Set(ThisAction, ((CheckBox)sender).Checked));
+                        cb.CheckedChanged += SetDirty;
+                        attrValue = cb;
 
-                    break;
-                    //case FieldAndPropertyWrapper.FieldType.Other:
-                    //case FieldAndPropertyWrapper.FieldType.String:
-                    //case FieldAndPropertyWrapper.FieldType.Numeric:
-                default:
-                    attrValue = new TextBox
-                                {
-                                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                                        BackColor = attrData.Literal
-                                                            ? SystemColors.Info
-                                                            : SystemColors.Window
-                                };
-                    object obj = arg.Get<Object>(ThisAction); //.ToString();
+                        break;
+                        //case FieldAndPropertyWrapper.FieldType.Other:
+                        //case FieldAndPropertyWrapper.FieldType.String:
+                        //case FieldAndPropertyWrapper.FieldType.Numeric:
+                    default:
+                        if (attrData.Literal)
+                        {
+                            attrValue = new TextBox
+                                        {
+                                            BackColor = SystemColors.Info
+                                        };
+                        }
+                        else
+                        {
+                            attrValue = new RichTextBox
+                                        {
+                                            Multiline=false,
+                                            Height = 20
+                                        };
+                            ((RichTextBox)attrValue).TextChanged += NonLiteralOnTextChanged;
+                        }
+                        attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                
+                object obj = arg.Get<Object>(ThisAction); //.ToString();
                     attrValue.Text = (obj ?? "").ToString();
                     attrValue.TextChanged += GetChangedHandler(arg);
                     attrValue.TextChanged += SetDirty;
@@ -168,13 +180,42 @@ namespace Centipede.Actions
             
             return new[] { attrLabel, attrValue };
         }
-        
+
+        private void NonLiteralOnTextChanged(object sender, EventArgs eventArgs)
+        {
+            RichTextBox rtb = (RichTextBox)sender;
+            string text = rtb.Text;
+            int oldPos = rtb.SelectionStart;
+            var expressions = ThisAction.FindPythonExpressions(text);
+
+            foreach (Expression expression in expressions)
+            {
+                int find = rtb.Find(expression.Template);
+                rtb.Select(find, expression.Template.Length);
+                rtb.SelectionColor = Color.Blue;
+            }
+            rtb.Select(oldPos,0);
+            rtb.SelectionColor = Color.Black;
+        }
+
+        private string FormatArgumentString(string text)
+        {
+            return text;
+        }
+
         private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
             if (argAttr.OnChangedHandlerName == null)
             {
-                return null;
+                if (argAttr.OnLeaveHandlerName == null)
+                {
+                    return this.attrValue_TextChanged;
+                }
+                else
+                {
+                    return delegate { };
+                }
             }
             MethodInfo method = arg.DeclaringType.GetMethod(argAttr.OnChangedHandlerName);
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });
@@ -186,10 +227,6 @@ namespace Centipede.Actions
 
             if (argAttr.OnLeaveHandlerName == null)
             {
-                if (argAttr.OnChangedHandlerName == null)
-                {
-                    return attrValue_TextChanged;
-                }
                 return null;
             }
             Type actionType = ThisAction.GetType();
@@ -205,7 +242,7 @@ namespace Centipede.Actions
 
         private void attrValue_TextChanged(object sender, EventArgs e)
         {
-            TextBox attrValue = sender as TextBox;
+            TextBoxBase attrValue = sender as TextBoxBase;
 
             if (attrValue == null)
             {
