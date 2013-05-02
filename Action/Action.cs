@@ -196,12 +196,48 @@ namespace Centipede
         /// an untrusted source without carefully checking it over first.</remarks>
         protected String ParseStringForVariable([NotNull] String str)
         {
-
             OnMessage(MessageLevel.Debug, "Attempting to parse string {0}", str);
+            
             IPythonEngine pythonEngine = GetCurrentCore().PythonEngine;
 
             string orig = str;
+            var expressions = FindPythonExpressions(str);
+            foreach (Expression expression in expressions)
+            {
+                String result = expression.Template;
+                try
+                {
+                    this.OnMessage(MessageLevel.Debug, "Python expression found: {0}", expression.Code);
+                    dynamic r = pythonEngine.Evaluate(expression.Compiled);
+                    result = r.ToString();
+                    this.OnMessage(MessageLevel.Debug, "Expression evaluated to {0}", result);
+                }
+                catch (PythonException e)
+                {
+                    this.OnMessage(MessageLevel.Debug,
+                                   "Expression could not be evaluated: Python raised exception {0}",
+                                   e.Message);
+                }
+                str = str.Replace(expression.Template, result);
+                break;
+            }
 
+
+            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", orig, str);
+
+            return str;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public List<Expression> FindPythonExpressions(string str)
+        {
+
+            IPythonEngine pythonEngine = PythonEngine.PythonEngine.Instance;
+            List<Expression> pythonExpressions = new List<Expression>();
             for (int i = 0; i < str.Length; i++)
             {
                 string str1 = str;
@@ -211,47 +247,41 @@ namespace Centipede
                 }
 
                 int opening = i;
+
                 foreach (var expression in str1.IndexesWhere('}'.Equals)
                                                .Where(Predicate(opening))
-                                               .Select(closing => new
+                                               .Select(closing => new Expression
                                                                   {
-                                                                      Template = str1.Substring(opening, closing - opening + 1),
-                                                                      Code = str1.Substring(opening + 1, closing - opening - 1)
+                                                                      Template =
+                                                                          str1.Substring(opening, closing - opening + 1),
+                                                                      Code =
+                                                                          str1.Substring(opening + 1,
+                                                                                         closing - opening - 1),
+                                                                      Start = opening,
+                                                                      End = closing
                                                                   }))
                 {
+                    Expression current = expression;
                     IPythonByteCode compiled;
                     try
                     {
-                        compiled = pythonEngine.Compile(expression.Code, PythonByteCode.SourceCodeType.Expression);
+                        current.Compiled = pythonEngine.Compile(expression.Code,
+                                                                PythonByteCode.SourceCodeType.Expression);
+                        pythonExpressions.Add(current);
                     }
                     catch (PythonParseException)
                     {
                         // not valid python, try next expression
                         continue;
                     }
-                    String result = expression.Template;
-                    try
-                    {
-                        this.OnMessage(MessageLevel.Debug, "Python expression found: {0}", expression.Code);
-                        dynamic r = pythonEngine.Evaluate(compiled);
-                        result = r.ToString();
-                        this.OnMessage(MessageLevel.Debug, "Expression evaluated to {0}", result);
-                    }
-                    catch (PythonException e)
-                    {
-                        this.OnMessage(MessageLevel.Debug,
-                                       "Expression could not be evaluated: Python raised exception {0}",
-                                       e.Message);
-                    }
-                    str = str.Replace(expression.Template, result);
-                    break;
+
                 }
             }
-
-            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", orig, str);
-
-            return str;
+            return pythonExpressions;
         }
+
+
+        
 
         private static Func<int, bool> Predicate(int opening)
         {
