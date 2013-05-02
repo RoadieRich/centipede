@@ -73,9 +73,10 @@ namespace Centipede.Actions
                                                     AutoSizeMode = AutoSizeMode.GrowAndShrink,
                                                     ColumnCount = 2,
                                                     RowCount = choices.Length
-                                                               + (String.IsNullOrEmpty(Prompt) ? 1 : 2)
+                                                               + (String.IsNullOrEmpty(Prompt) ? 1 : 2),
+                                                    ColumnStyles = { new ColumnStyle(), new ColumnStyle(SizeType.AutoSize) }
                                                 };
-            tableLayoutPanel.ColumnStyles[1].SizeType = SizeType.AutoSize;
+            //tableLayoutPanel.ColumnStyles[1].SizeType = SizeType.AutoSize;
             this._tableLayoutPanel = tableLayoutPanel;
             if (!String.IsNullOrEmpty(Prompt))
             {
@@ -111,7 +112,7 @@ namespace Centipede.Actions
                                     {
                                         DropDownStyle = ComboBoxStyle.DropDown,
                                         AutoSize = true,
-                                        AutoCompleteMode = AutoCompleteMode.SuggestAppend
+                                        //AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
