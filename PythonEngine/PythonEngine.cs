@@ -148,7 +148,6 @@ namespace PythonEngine
                 this._pyScope = this._pyEngine.CreateScope();
                 this._pyScope.ImportModule(@"sys");
                 this._pyScope.ImportModule(@"math");
-                Execute(@"from math import *", this._pyScope);
             }
         }
 

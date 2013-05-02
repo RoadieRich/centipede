@@ -113,12 +113,7 @@ namespace PythonEngine
         public bool TryGetVariable<T>(string name, out T value)
         {
             bool exists = Scope.ContainsVariable(name);
-            if (exists)
-            {
-                value = Scope.GetVariable<T>(name);
-            }
-            else
-                value = default(T);
+            value = exists ? this.Scope.GetVariable<T>(name) : default(T);
             return exists;
         }
 
@@ -130,16 +125,7 @@ namespace PythonEngine
         /// <returns></returns>
         public bool TryGetVariable(string name, out dynamic value)
         {
-            bool exists = Scope.ContainsVariable(name);
-            if (exists)
-            {
-                value = Scope.GetVariable(name);
-            }
-            else
-            {
-                value = null;
-            }
-            return exists;
+            return TryGetVariable<dynamic>(name, out value);
         }
 
         /// <summary>
