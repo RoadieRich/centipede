@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
+using PythonEngine;
 using ResharperAnnotations;
 
 
@@ -72,6 +74,8 @@ namespace CentipedeInterfaces
         /// 
         /// </summary>
         event AskEvent AskHandler;
+
+        List<Expression> FindPythonExpressions(string text);
     }
     /// <summary>
     /// 
@@ -128,7 +132,14 @@ namespace CentipedeInterfaces
             Level = level;
         }
     }
-
+    public struct Expression
+    {
+        public int Start;
+        public int End;
+        public string Template;
+        public string Code;
+        public IPythonByteCode Compiled;
+    }
     /// <summary>
     /// 
     /// </summary>
