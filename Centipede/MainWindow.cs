@@ -198,7 +198,7 @@ namespace Centipede
 
         private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
         {
-            MessageBox.Show(String.Format("{0}\n\nLevel: {1}", e.Message, e.Level.AsText()), "Message");
+            //MessageBox.Show(String.Format("{0}\n\nLevel: {1}", e.Message, e.Level.AsText()), "Message");
 
             this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
                                                   DisplayedLevels.HasFlag(e.Level));
@@ -660,6 +660,7 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
+            action.MessageHandler += this.OnMessageHandlerDelegate;
             adc.Deleted += adc_Deleted;
             adc.DragEnter += ActionContainer_DragEnter;
             adc.DragDrop += ActionContainer_DragDrop;
@@ -811,6 +812,11 @@ namespace Centipede
             Core.Dispose();
         }
 
+        /// <summary>
+        /// Check if save needed, ask to save, and save
+        /// </summary>
+        /// <exception cref="AbortOperationException">Throws abort operation exception if cancel is clicked at any 
+        /// point</exception>
         private void AskSave()
         {
             if (!Dirty)

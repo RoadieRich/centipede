@@ -21,12 +21,15 @@ namespace Centipede.Actions
         
         protected override void DoAction()
         {
-            MessageBox.Show(GetCurrentCore().Window, String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
-                                          Test1, 
-                                          ParseStringForVariable(Test2)
-                           ),
-                           Resources.DemoAction_DoAction_Demo_Action_executed
-            );
+            Form window = GetCurrentCore().Window;
+            
+            window.Invoke(new Func<DialogResult>(() => MessageBox.Show(window,
+                              String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",
+                                            Test1,
+                                            ParseStringForVariable(Test2)
+                                  ),
+                              Resources.DemoAction_DoAction_Demo_Action_executed
+                          )));
             Message(MessageText);
         }
 
