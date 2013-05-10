@@ -8,7 +8,7 @@ Backup code added.
 Alpha version of MathCad Actions added.
 Added Run Excel Macro for testing.
 Fixed message handling in loaded jobs.
-
+Fixed Start menu folder, added start menu shortcut to GetSatisfaction
 #<strong style="font-weight: 900; font-size: 1.2em">This version 
 #contains extra debug message boxes that will not be in the final 
 #version.</strong>

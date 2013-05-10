@@ -87,7 +87,7 @@ Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ig
 Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Actions\Python\Python_Engine
 Source: "{#BinaryDir}\Plugins\MathCADActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\MathCad
 
-;	sdk items
+; sdk items
 Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
 Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
 Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
@@ -98,8 +98,9 @@ Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:
 Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 [Icons]
-Name: "{userprograms}\Centipede\Centipede";	Filename: "{app}\Centipede.exe";	Flags: useapppaths;	IconFilename: "{app}\Centipede.exe";	Components: Centipede UserFiles
-Name: "{userprograms}\Centipede\Uninstall Centipede";	Filename: "{uninstallexe}";	IconFilename: "{uninstallexe}";	Components: Centipede UserFiles
+Name: "{group}\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"; Components: Centipede UserFiles
+Name: "{group}\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: Centipede UserFiles
+Name: "{group}\Centipede Help Community"; Filename: "http://getsatisfaction.com/centipede"
 
 [Run]
 Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe";	StatusMsg: "Installing the .NET framework";	Components: Centipede;	Check: FrameworkIsNotInstalled
@@ -127,8 +128,9 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
-mRes : integer;
+  mRes : integer;
 begin
+  { Ask to remove favourites file }
   case CurUninstallStep of
     usUninstall:
       begin
