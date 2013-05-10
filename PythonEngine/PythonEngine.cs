@@ -363,7 +363,7 @@ namespace PythonEngine
 
         #region Singleton handling code
 
-        private static readonly Lazy<PythonEngine> InstanceLazy = new Lazy<PythonEngine>(() => new PythonEngine());
+        private static readonly Lazy<PythonEngine> _InstanceLazy = new Lazy<PythonEngine>(() => new PythonEngine());
 
         /// <summary>
         ///     The PyEngine Singleton
@@ -372,7 +372,7 @@ namespace PythonEngine
         {
             get
             {
-                return InstanceLazy.Value;
+                return _InstanceLazy.Value;
             }
         }
 

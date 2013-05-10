@@ -471,7 +471,7 @@ namespace Centipede
             Job.FileName = filename;
         }
 
-        private void TakeBackup(string filePath)
+        private void TakeBackup(string filePath )
         {
             if (!File.Exists(filePath))
             {

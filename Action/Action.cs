@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -223,7 +224,7 @@ namespace Centipede
             }
 
 
-            OnMessage(MessageLevel.Core, "String {0} parsed to {1}", orig, str);
+            OnMessage(MessageLevel.Debug, "String {0} parsed to {1}", orig, str);
 
             return str;
         }
@@ -233,7 +234,7 @@ namespace Centipede
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public List<Expression> FindPythonExpressions(string str)
+        public IEnumerable<Expression> FindPythonExpressions(string str)
         {
 
             IPythonEngine pythonEngine = PythonEngine.PythonEngine.Instance;
@@ -248,40 +249,62 @@ namespace Centipede
 
                 int opening = i;
 
-                foreach (var expression in str1.IndexesWhere('}'.Equals)
+                pythonExpressions.AddRange(str1.IndexesWhere('}'.Equals)
                                                .Where(Predicate(opening))
                                                .Select(closing => new Expression
                                                                   {
-                                                                      Template =
-                                                                          str1.Substring(opening, closing - opening + 1),
+                                                                      Template = str1.Substring(opening,
+                                                                                                closing - opening + 1),
                                                                       Code =
                                                                           str1.Substring(opening + 1,
                                                                                          closing - opening - 1),
                                                                       Start = opening,
                                                                       End = closing
-                                                                  }))
-                {
-                    Expression current = expression;
-                    IPythonByteCode compiled;
-                    try
-                    {
-                        current.Compiled = pythonEngine.Compile(expression.Code,
-                                                                PythonByteCode.SourceCodeType.Expression);
-                        pythonExpressions.Add(current);
-                    }
-                    catch (PythonParseException)
-                    {
-                        // not valid python, try next expression
-                        continue;
-                    }
-
-                }
+                                                                  })
+                                               .Where(delegate(Expression expression)
+                                                          {
+                                                              PythonParseException e;
+                                                              bool result = this.Throws<PythonParseException>(() => expression.CompileWith(pythonEngine), out e);
+                                                              OnMessage(MessageLevel.Debug, "Attempted to compile {0}, error was {1}.", expression.Code, e.Message);
+                                                              return !result;
+                                                          }
+                                               )
+                    );
             }
             return pythonExpressions;
         }
 
+        private bool Throws<TException>(System.Action action) where TException : Exception
+        {
+            TException exception;
+            return Throws(action, out exception);
+        }
 
+        protected bool Throws(System.Action action) 
+        {
+            return this.Throws<Exception>(action);
+        }
         
+        protected bool Throws(System.Action action, out Exception exception) 
+        {
+            return this.Throws<Exception>(action, out exception);
+        }
+
+        protected bool Throws<TException>(System.Action action, out TException exception) where TException : Exception
+        {
+            try
+            {
+                action();
+                exception = null;
+                return false;
+            }
+            catch (TException e)
+            {
+                exception = e;
+                return true;
+            }
+        }
+
 
         private static Func<int, bool> Predicate(int opening)
         {
@@ -339,7 +362,7 @@ namespace Centipede
         /// <param name="message">Message to send.  Supports <see cref="string.Format(string,object[])">String.Format()</see>
         /// type formatting arguments.</param>
         /// <param name="args">arguments to format <paramref name="message"/> with.</param>
-        [StringFormatMethod(@"message")]
+        [StringFormatMethod(formatParameterName: @"message")]
         private void OnMessage(MessageLevel level, string message, params object[] args)
         {
             OnMessage(new MessageEventArgs(String.Format(message, args), level));

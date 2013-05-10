@@ -75,7 +75,7 @@ namespace CentipedeInterfaces
         /// </summary>
         event AskEvent AskHandler;
 
-        List<Expression> FindPythonExpressions(string text);
+        IEnumerable<Expression> FindPythonExpressions(string text);
     }
     /// <summary>
     /// 
@@ -139,6 +139,11 @@ namespace CentipedeInterfaces
         public string Template;
         public string Code;
         public IPythonByteCode Compiled;
+
+        public void CompileWith(IPythonEngine engine)
+        {
+            this.Compiled = engine.Compile(Code, PythonByteCode.SourceCodeType.Expression);
+        }
     }
     /// <summary>
     /// 
