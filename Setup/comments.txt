@@ -7,5 +7,9 @@
 Backup code added.
 Alpha version of MathCad Actions added.
 Added Run Excel Macro for testing.
-This version contains extra debug message boxes that will not be in the final version.
+Fixed message handling in loaded jobs.
+
+#<strong style="font-weight: 900; font-size: 1.2em">This version 
+#contains extra debug message boxes that will not be in the final 
+#version.</strong>
 

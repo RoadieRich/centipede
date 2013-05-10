@@ -59,7 +59,7 @@ namespace Centipede
 
                 if (MessageEvent != null)
                 {
-                    instance.MessageHandler += MessageEvent;
+                    //instance.MessageHandler += MessageEvent;
                 }
             }
 
