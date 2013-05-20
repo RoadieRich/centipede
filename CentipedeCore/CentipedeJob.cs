@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml.XPath;
 using ResharperAnnotations;
 
@@ -31,6 +32,14 @@ namespace CentipedeInterfaces
             : this(fileName, new XPathDocument(fileName).CreateNavigator())
         {
             
+        }
+
+        public ToolStripItem CreateToolStripItem()
+        {
+            return new ToolStripMenuItem(this.Name)
+                   {
+                       Tag = this.FileName
+                   };
         }
 
         public CentipedeJob(string filename, XPathNavigator nav) : this()
@@ -149,6 +158,11 @@ namespace CentipedeInterfaces
         }
 
 
+        public static ToolStripItem ToolStripItemFromFilename(string jobFilename)
+        {
+            CentipedeJob job = new CentipedeJob(jobFilename);
+            return job.CreateToolStripItem();
+        }
     }
 
     [Serializable]

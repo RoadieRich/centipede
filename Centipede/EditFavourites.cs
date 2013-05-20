@@ -18,11 +18,11 @@ namespace Centipede
 
         public EditFavourites(FavouriteJobs favouriteJobsDataStore)
         {
-            _favouriteJobs = favouriteJobsDataStore;
+            //_favouriteJobs = favouriteJobsDataStore;
             InitializeComponent();
 
 
-            favouritesBindingSource.DataSource = favouriteJobsDataStore;
+            favouritesBindingSource.DataSource = Properties.Settings.Default.ListOfFavouriteJobs;
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -40,9 +40,11 @@ namespace Centipede
 
         private void AddFavourite(string fileName)
         {
-            CentipedeJob job = new CentipedeJob(fileName);
+            //CentipedeJob job = new CentipedeJob(fileName);
 
-            this._favouriteJobs.Favourites.AddFavouritesRow(job.Name, fileName);
+            //this._favouriteJobs.Favourites.AddFavouritesRow(job.Name, fileName);
+
+            Properties.Settings.Default.ListOfFavouriteJobs.Add(fileName);
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -52,11 +54,12 @@ namespace Centipede
             {
                 try
                 {
-                    _favouriteJobs.Favourites.Rows.RemoveAt(index);
+                    Properties.Settings.Default.ListOfFavouriteJobs.RemoveAt(index);
+                    //_favouriteJobs.Favourites.Rows.RemoveAt(index);
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
+                    MessageBox.Show(exception.Message);
                 }
             }
         }

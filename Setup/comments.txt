@@ -5,3 +5,4 @@
 
 Fixing bugs with variable output tab
 Added installer support for example jobs.  Should make no difference in installer, except for presence of a new (disabled) component.
+Moved favourites out of xml file into integral settings

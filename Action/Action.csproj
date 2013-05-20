@@ -54,13 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Centipede\Properties\Settings.cs">
-      <Link>Properties\Settings.cs</Link>
-    </Compile>
-    <Compile Include="..\Centipede\Properties\Settings.Designer.cs">
-      <Link>Properties\Settings.Designer.cs</Link>
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Action.cs" />
     <Compile Include="Actions\ActionDisplayControl.cs">
       <SubType>UserControl</SubType>
@@ -78,9 +71,6 @@
     <Compile Include="ResharperAttributes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Centipede\Properties\Settings.settings">
-      <Link>Properties\Settings.settings</Link>
-    </None>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>

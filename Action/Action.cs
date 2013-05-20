@@ -44,6 +44,7 @@ namespace Centipede
         protected readonly IDictionary<string, object> Variables;
 
         private ICentipedeCore _core;
+        public static string PluginFolder;
 
         /// <summary>
         /// A (user specified) comment on the purpose of the action.
@@ -531,7 +532,7 @@ namespace Centipede
                 if (location != null)
                 {
                     String asmPath = Path.Combine(location,
-                                                  Path.Combine(Properties.Settings.Default.PluginFolder,
+                                                  Path.Combine(PluginFolder,
                                                                element.SelectSingleNode(@"@Assembly").Value));
                     asm = Assembly.LoadFile(asmPath);
                 }

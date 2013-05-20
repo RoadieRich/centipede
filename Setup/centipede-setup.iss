@@ -37,7 +37,6 @@ ShowLanguageDialog=auto
 Name: "Complete";	Description: "Install all components"
 Name: "Minimal";	Description: "Install only required items"
 Name: "Custom";	Description: "Customise the installation";	Flags: iscustom
-Name: "UserSetup";	Description: "Setup pre-installed Centipede for local user"
 Name: "CompleteSDK";	Description: "Install all components and SDK"
 
 [Components]
@@ -53,11 +52,10 @@ Name: "Actions\Office"; Description: "Office"; Types: Complete Custom CompleteSD
 Name: "Actions\ShellActions"; Description: "Shell Actions"; Types: Complete Custom CompleteSDK
 Name: "Actions\MathCad"; Description: "MathCad Actions"; Types: Complete CompleteSDK
 Name: "SDK"; Description: "CentipedeAction SDK"; Types: CompleteSDK
-Name: "UserFiles"; Description: "User Configuration"; Types: Complete Custom Minimal CompleteSDK UserSetup; Flags: fixed
 
 
 [Dirs]
-Name: "{userappdata}\Centipede";	Components: UserFiles
+Name: "{userappdata}\Centipede";	Components: Centipede
 Name: "{app}\Resources"; Components: Centipede
 Name: "{app}\Plugins"; Components: Centipede
 Name: "{app}\Plugins\Resources"; Components: Centipede
@@ -77,7 +75,7 @@ Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: dele
 Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall; Components: Actions\Python\Python_Engine; Check: IronPythonNotInstalled
 
 ; Program
-Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite uninsneveruninstall; Components: Centipede UserFiles; BeforeInstall: BackupFavourites
+Source: "{#SetupDir}\favourites.xml"; DestDir: "{userappdata}\Centipede"; Flags: confirmoverwrite uninsneveruninstall; Components: Centipede; BeforeInstall: BackupFavourites
 Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 
@@ -116,14 +114,14 @@ Source: "{#SetupDir}\resetDefaults.dll"; DestDir: "{app}"; Flags: ignoreversion;
 ; 
 
 [Icons]
-Name: "{group}\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"; Components: UserFiles
-Name: "{group}\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"; Components: UserFiles
-Name: "{group}\Centipede Help Community"; Filename: "http://getsatisfaction.com/centipede"; Components: UserFiles
+Name: "{group}\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"
+Name: "{group}\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"
+Name: "{group}\Centipede Help Community"; Filename: "http://getsatisfaction.com/centipede"
 
 [Run]
 Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe";	StatusMsg: "Installing the .NET framework";	Components: Centipede;	Check: FrameworkIsNotInstalled
 Filename: "msiexec";	Parameters: "/i {tmp}\IronPython-2.7.3.msi";	Flags: shellexec;	StatusMsg: "Installing IronPython 2.7";	Components: Actions\Python\Python_Engine;	Check: IronPythonNotInstalled
-Filename: "{app}\Centipede.exe";	Flags: nowait postinstall;	Description: "Start Centipede";	StatusMsg: "Starting Centipede";	Components: Centipede UserFiles
+Filename: "{app}\Centipede.exe";	Flags: nowait postinstall;	Description: "Start Centipede";	StatusMsg: "Starting Centipede";	Components: Centipede
 
 [Registry]
 Root: "HKLM";	Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION";	ValueType: dword;	ValueName: "centipede.exe";	ValueData: "{code:GetIEEmulationValue}";	Flags: createvalueifdoesntexist; Components: Centipede
@@ -139,7 +137,7 @@ begin
     { Create custom pages to show during install }
     SdkDirPage := CreateInputDirPage(wpSelectComponents,
         '{#AppName} SDK Directory', '',
-        'Please select a location for the {#AppName} sdk. (We recommend the default.)', False, '');
+        'Please select a location for the {#AppName} sdk.', False, '');
     SdkDirPage.Add('');
     SdkDirPage.Values[0] := GetPreviousData('SdkDir', ExpandConstant('{userdocs}\{#appname}SDK'));
 	
