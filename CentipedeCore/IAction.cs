@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
+using Centipede;
 using PythonEngine;
 using ResharperAnnotations;
 
@@ -132,7 +133,7 @@ namespace CentipedeInterfaces
             Level = level;
         }
     }
-    public struct Expression
+    public class Expression
     {
         public int Start;
         public int End;
@@ -142,9 +143,10 @@ namespace CentipedeInterfaces
 
         public void CompileWith(IPythonEngine engine)
         {
-            this.Compiled = engine.Compile(Code, PythonByteCode.SourceCodeType.Expression);
+            this.Compiled = engine.Compile(Code, SourceCodeType.Expression);
         }
     }
+
     /// <summary>
     /// 
     /// </summary>

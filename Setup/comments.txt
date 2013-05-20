@@ -1,15 +1,7 @@
 # Comments to be shown on the webpage.
 # lines starting with a # are ignored, as are empty lines are ignored.
-# To force a blank line, use one or more spaces.
 # 
-# Lines are wrapped with <p></p> tags, but otherwise any html is fine.
+# Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
-Backup code added.
-Alpha version of MathCad Actions added.
-Added Run Excel Macro for testing.
-Fixed message handling in loaded jobs.
-Fixed Start menu folder, added start menu shortcut to GetSatisfaction
-#<strong style="font-weight: 900; font-size: 1.2em">This version 
-#contains extra debug message boxes that will not be in the final 
-#version.</strong>
-
+Fixing bugs with variable output tab
+Added installer support for example jobs.  Should make no difference in installer, except for presence of a new (disabled) component.

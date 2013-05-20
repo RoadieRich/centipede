@@ -807,8 +807,12 @@ namespace Centipede
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
+            try
+            { 
+                base.Dispose(disposing); 
+            }
+            catch (NullReferenceException)
+            { }
             Core.Dispose();
         }
 
@@ -853,6 +857,7 @@ namespace Centipede
             }
             this.ActionContainer.Controls.Clear();
             Core.Clear();
+
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -917,12 +922,12 @@ namespace Centipede
             MessageDataGridView.Parent.ResumeLayout(true);
         }
 
-        private void MessageDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
+        //private void MessageDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        //{
             //DataGridViewRow row = this.MessageDataGridView.Rows[e.RowIndex];
             //var messageRow = (JobDataSet.MessagesRow)this.jobDataSet1.Messages.Rows[e.RowIndex];
             //row.Visible = this._messageLevelsShown.HasFlag(messageRow.Level);
-        }
+        //}
 
         private void UrlTextbox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -1089,6 +1094,13 @@ namespace Centipede
         }
 
         #endregion
+
+        private void VarDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            DataGridView dgv = (DataGridView)sender;
+            
+            
+        }
     }
 
     [Serializable]

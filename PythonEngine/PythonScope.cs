@@ -13,7 +13,7 @@ namespace PythonEngine
     /// 
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public sealed class PythonScope : IDictionary, IDictionary<String, Object>, IBindingList
+    public sealed class PythonScope : IPythonScope
     {
         /// <summary>
         /// 
@@ -210,7 +210,12 @@ namespace PythonEngine
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary"/> object is read-only. </exception>
         public void Clear()
         {
-            this.Scope.GetItems().ToList().ForEach(kvp => this.Scope.RemoveVariable(kvp.Key));
+            foreach (var keyValuePair in Scope.GetItems())
+            {
+                this.Scope.RemoveVariable(keyValuePair.Key);
+                this.OnVariableChanged(keyValuePair.Key, PythonVariableChangedAction.Delete);
+            }
+            //this.Scope.GetItems().ToList().ForEach(kvp => this.Scope.RemoveVariable(kvp.Key));
         }
 
         /// <summary>
@@ -906,7 +911,7 @@ namespace PythonEngine
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -1000,47 +1005,5 @@ namespace PythonEngine
         }
     }
 
-    /// <summary>Raised when a variable is changed within the <see cref="PythonScope"/>.</summary>
-    /// <param name="sender" />
-    /// <param name="args" />
-    public delegate void PythonVariableChangedEventHandler(object sender, PythonVariableChangedEventArgs args);
-
-    /// <summary />
-    public class PythonVariableChangedEventArgs : PropertyChangedEventArgs
-    {
-        private readonly PythonVariableChangedAction _action;
-
-        /// <summary />
-        public PythonVariableChangedAction Action
-        {
-            get
-            {
-                return this._action;
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> class.
-        /// </summary>
-        /// <param name="propertyName">The name of the property that changed. </param>
-        /// <param name="action">What happened</param>
-        public PythonVariableChangedEventArgs(string propertyName, PythonVariableChangedAction action)
-                : base(propertyName)
-        {
-            _action = action;
-        }
-    }
-
-    /// <summary />
-    public enum PythonVariableChangedAction
-    {
-        /// <summary />
-        Change,
-
-        /// <summary />
-        Add,
-
-        /// <summary />
-        Delete
-    }
+    
 }

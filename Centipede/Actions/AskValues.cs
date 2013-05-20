@@ -117,16 +117,17 @@ namespace Centipede.Actions
             
         }
 
-        private static dynamic TryEvaluate(String str)
+        private dynamic TryEvaluate(String str)
         {
 
             try
             {
-                var compiled = PythonEngine.PythonEngine.Instance.Compile(str, PythonByteCode.SourceCodeType.Expression);
-                var evaluated = PythonEngine.PythonEngine.Instance.Evaluate(compiled);
+                IPythonEngine engine = GetCurrentCore().PythonEngine;
+                var compiled = engine.Compile(str, SourceCodeType.Expression);
+                var evaluated = engine.Evaluate(compiled);
                 return evaluated;
             }
-            catch (PythonEngine.PythonParseException)
+            catch (PythonParseException)
             {
                 return str;
             }

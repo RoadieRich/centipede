@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
+using Centipede;
 using PythonEngine;
 using ResharperAnnotations;
 
@@ -57,7 +58,7 @@ namespace CentipedeInterfaces
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
         ///     I can't figure a way of doing it easily.
         /// </summary>
-        PythonScope Variables { get; }
+        IPythonScope Variables { get; }
 
         new void Dispose();
 

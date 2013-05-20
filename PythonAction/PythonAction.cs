@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
+using Centipede;
 using CentipedeInterfaces;
 using PythonEngine;
 using System.Linq;
@@ -42,9 +43,12 @@ namespace PyAction
             {
                 _source = value;
                 //Complexity is the count of non-black, non-comment lines
-                _complexity = value.Split(Environment.NewLine.ToCharArray())
-                                   .Count(s => !String.IsNullOrWhiteSpace(s)
-                                               || !s.TrimStart().StartsWith(@"#"));
+                int count =
+                    value.Split(Environment.NewLine.ToCharArray()).
+                          Count(
+                              s => !String.IsNullOrWhiteSpace(s)
+                                   || !s.TrimStart().StartsWith(@"#"));
+                _complexity = count;
 
             }
         }
@@ -63,7 +67,7 @@ namespace PyAction
 
         protected override void DoAction()
         {
-            IPythonEngine engine = PythonEngine.PythonEngine.Instance;
+            IPythonEngine engine = GetCurrentCore().PythonEngine;
             //if (!engine.VariableExists(@"variables"))
             //{
             //    engine.SetVariable(@"variables", Variables);
