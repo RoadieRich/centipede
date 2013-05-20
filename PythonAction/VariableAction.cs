@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Centipede;
 using CentipedeInterfaces;
+using PythonEngine;
 using Action = Centipede.Action;
 
 namespace PyAction
@@ -28,8 +30,10 @@ namespace PyAction
         /// </summary>
         protected override void DoAction()
         {
-            var scope = PythonEngine.PythonEngine.Instance.GetNewTypedScope(Variables);
-            Variables[DestinationVarName] = PythonEngine.PythonEngine.Instance.Evaluate<object>(Expresson, scope);
+            IPythonEngine engine = GetCurrentCore().PythonEngine;
+            var scope = engine.GetNewTypedScope(Variables);
+            
+            Variables[DestinationVarName] = engine.Evaluate<object>(Expresson, scope);
         }
     }
 }

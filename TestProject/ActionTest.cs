@@ -110,7 +110,7 @@ namespace TestProject
             mockCore.Stub(c => c.PythonEngine)
                     .Return(pythonEngine);
 
-            pythonEngine.Stub(e => e.Compile("", PythonByteCode.SourceCodeType.AutoDetect))
+            pythonEngine.Stub(e => e.Compile("", SourceCodeType.AutoDetect))
                         .IgnoreArguments()
                         .Return(null);
 
@@ -123,7 +123,7 @@ namespace TestProject
 
             //mocks.VerifyAll();
 
-            pythonEngine.AssertWasNotCalled(e => e.Compile(Arg<String>.Is.Anything, Arg<PythonByteCode.SourceCodeType>.Is.Anything));
+            pythonEngine.AssertWasNotCalled(e => e.Compile(Arg<String>.Is.Anything, Arg<SourceCodeType>.Is.Anything));
         }
 
         [TestMethod]
@@ -136,7 +136,7 @@ namespace TestProject
             mockCore.Stub(c => c.PythonEngine)
                     .Return(pythonEngine);
 
-            pythonEngine.Stub(e => e.Compile("", PythonByteCode.SourceCodeType.AutoDetect))
+            pythonEngine.Stub(e => e.Compile("", SourceCodeType.AutoDetect))
                         .IgnoreArguments();
                   //.Return(null);
 
@@ -148,7 +148,7 @@ namespace TestProject
 
             var result = testAction.ParseStringForVariable(original);
 
-            pythonEngine.AssertWasNotCalled(e => e.Compile("", PythonByteCode.SourceCodeType.Expression));
+            pythonEngine.AssertWasNotCalled(e => e.Compile("", SourceCodeType.Expression));
             Assert.AreEqual(original, result);
         }
 
@@ -163,7 +163,7 @@ namespace TestProject
                     .Return(pythonEngine);
 
             pythonEngine.Expect(e =>e.Compile(Arg<String>.Is.Equal(""),
-                                                   Arg<PythonByteCode.SourceCodeType>.Is.Anything))
+                                                   Arg<SourceCodeType>.Is.Anything))
                     .Throw(new PythonParseException(mocks.Stub<Exception>()));
             
             mocks.ReplayAll();
@@ -191,7 +191,7 @@ namespace TestProject
                     .Return(pythonEngine);
 
             pythonEngine.Expect(e => e.Compile(Arg<String>.Is.Equal("1+2"), 
-                                               Arg<PythonByteCode.SourceCodeType>.Is.Anything))
+                                               Arg<SourceCodeType>.Is.Anything))
                         .Return(mockPythonBytecode);
 
             pythonEngine.Expect(e => e.Evaluate(mockPythonBytecode)).Return(3);
@@ -220,7 +220,7 @@ namespace TestProject
                     .Return(pythonEngine);
 
             pythonEngine.Expect(e => e.Compile(Arg<String>.Is.Equal("this is invalid python"),
-                                               Arg<PythonByteCode.SourceCodeType>.Is.Anything))
+                                               Arg<SourceCodeType>.Is.Anything))
                         .Throw(new PythonParseException(mocks.Stub<Exception>()));
 
             mocks.ReplayAll();
@@ -248,7 +248,7 @@ namespace TestProject
                     .Return(pythonEngine);
 
             pythonEngine.Expect(e => e.Compile(Arg<String>.Is.Equal("\"String\""),
-                                               Arg<PythonByteCode.SourceCodeType>.Is.Anything))
+                                               Arg<SourceCodeType>.Is.Anything))
                         .Return(mockPythonByteCode);
 
             pythonEngine.Expect(e => e.Evaluate(Arg<IPythonByteCode>.Is.Equal(mockPythonByteCode),
@@ -256,7 +256,7 @@ namespace TestProject
                         .Return(3);
 
             pythonEngine.Expect(e => e.Compile(Arg<String>.Is.Equal("this is invalid python"),
-                                               Arg<PythonByteCode.SourceCodeType>.Is.Anything))
+                                               Arg<SourceCodeType>.Is.Anything))
                         .Throw(new PythonParseException(mocks.Stub<Exception>()));
 
 

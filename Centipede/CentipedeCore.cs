@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -62,7 +63,7 @@ namespace Centipede
         /// <summary>
         ///     Dictionary of Variables for use by actions
         /// </summary>
-        public PythonScope Variables { get; private set; }
+        public IPythonScope Variables { get; private set; }
 
         public Form Window { get; set; }
 
@@ -396,7 +397,7 @@ namespace Centipede
 
         public void Clear()
         {
-            Variables.Clear();
+            ((IDictionary<String, Object>)Variables).Clear();
             while (Job.Actions.Count > 0)
             {
                 RemoveAction(Job.Actions.First());

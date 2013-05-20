@@ -237,7 +237,7 @@ namespace Centipede
         public IEnumerable<Expression> FindPythonExpressions(string str)
         {
 
-            IPythonEngine pythonEngine = PythonEngine.PythonEngine.Instance;
+            IPythonEngine pythonEngine = this.GetCurrentCore().PythonEngine;
             List<Expression> pythonExpressions = new List<Expression>();
             for (int i = 0; i < str.Length; i++)
             {
@@ -249,27 +249,46 @@ namespace Centipede
 
                 int opening = i;
 
-                pythonExpressions.AddRange(str1.IndexesWhere('}'.Equals)
-                                               .Where(Predicate(opening))
-                                               .Select(closing => new Expression
-                                                                  {
-                                                                      Template = str1.Substring(opening,
-                                                                                                closing - opening + 1),
-                                                                      Code =
-                                                                          str1.Substring(opening + 1,
-                                                                                         closing - opening - 1),
-                                                                      Start = opening,
-                                                                      End = closing
-                                                                  })
-                                               .Where(delegate(Expression expression)
-                                                          {
-                                                              PythonParseException e;
-                                                              bool result = this.Throws<PythonParseException>(() => expression.CompileWith(pythonEngine), out e);
-                                                              OnMessage(MessageLevel.Debug, "Attempted to compile {0}, error was {1}.", expression.Code, e.Message);
-                                                              return !result;
-                                                          }
-                                               )
-                    );
+                //pythonExpressions.AddRange(
+                //    from clsing in str1.IndexesWhere('}'.Equals)
+                //    where clsing > opening
+                //    select new Expression
+                //           {
+                //               Template = str1.Substring(opening,
+                //                                         clsing - opening +
+                //                                         1),
+                //               Code =
+                //                   str1.Substring(opening + 1,
+                //                                  clsing - opening - 1),
+                //               Start = opening,
+                //               End = clsing
+                //           }
+                //    into expression
+                //        where this.Throws<PythonParseException>(() => expression.CompileWith(pythonEngine))
+                //        //OnMessage(MessageLevel.Debug, "Attempted to compile {0}, error was {1}.", expression.Code, e.Message);
+                //        select expression
+                //    );
+
+                foreach (int clsing in str1.IndexesWhere('}'.Equals))
+                {
+                    if (clsing > opening)
+                    {
+                        Expression expression = new Expression
+                                                {
+                                                    Template = str1.Substring(opening, clsing - opening + 1),
+                                                    Code = str1.Substring(opening + 1, clsing - opening - 1),
+                                                    Start = opening,
+                                                    End = clsing
+                                                };
+
+                        PythonParseException parseException;
+                        if (!this.Throws(expression.CompileWith, pythonEngine, out parseException))
+                        {
+                            this.OnMessage(MessageLevel.Debug, "Parsed {0} as valid python", expression.Template);
+                            pythonExpressions.Add(expression);
+                        }
+                    }
+                }
             }
             return pythonExpressions;
         }
@@ -280,11 +299,19 @@ namespace Centipede
             return Throws(action, out exception);
         }
 
+        private bool Throws<TException, T>(System.Action<T> action, T arg) where TException : Exception
+        {
+            TException exception;
+            return Throws(action, arg, out exception);
+        }
+
         protected bool Throws(System.Action action) 
         {
             return this.Throws<Exception>(action);
         }
         
+
+
         protected bool Throws(System.Action action, out Exception exception) 
         {
             return this.Throws<Exception>(action, out exception);
@@ -295,6 +322,36 @@ namespace Centipede
             try
             {
                 action();
+                exception = null;
+                return false;
+            }
+            catch (TException e)
+            {
+                exception = e;
+                return true;
+            }
+        }
+
+        protected bool Throws<TException, T>(System.Action<T> action, T arg, out TException exception) where TException : Exception
+        {
+            try
+            {
+                action(arg);
+                exception = null;
+                return false;
+            }
+            catch (TException e)
+            {
+                exception = e;
+                return true;
+            }
+        }
+
+        protected bool Throws<TException, T1, T2>(System.Action<T1, T2> action, T1 arg1, T2 arg2, out TException exception) where TException : Exception
+        {
+            try
+            {
+                action(arg1, arg2);
                 exception = null;
                 return false;
             }

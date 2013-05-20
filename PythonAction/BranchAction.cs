@@ -52,7 +52,7 @@ namespace PyAction
         /// </summary>
         protected override void DoAction()
         {
-            var pye = PythonEngine.PythonEngine.Instance;
+            var pye = GetCurrentCore().PythonEngine;
             
             var scope = pye.GetNewScope(Variables);
             _result = pye.Evaluate<bool>(ConditionSource, scope);

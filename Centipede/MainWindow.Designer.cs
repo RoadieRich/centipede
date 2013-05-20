@@ -106,6 +106,7 @@ namespace Centipede
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.pythonReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +126,6 @@ namespace Centipede
             this.miniToolStrip = new System.Windows.Forms.MenuStrip();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.favouriteJobs1 = new Centipede.FavouriteJobs();
-            this.pythonReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -435,7 +435,6 @@ namespace Centipede
             resources.ApplyResources(this.MessageDataGridView, "MessageDataGridView");
             this.MessageDataGridView.Name = "MessageDataGridView";
             this.MessageDataGridView.RowHeadersVisible = false;
-            this.MessageDataGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.MessageDataGridView_RowsAdded);
             // 
             // timestampDataGridViewTextBoxColumn
             // 
@@ -508,6 +507,7 @@ namespace Centipede
             this.VarDataGridView.Name = "VarDataGridView";
             this.VarDataGridView.ReadOnly = true;
             this.VarDataGridView.RowHeadersVisible = false;
+            this.VarDataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.VarDataGridView_DataError);
             // 
             // RunButton
             // 
@@ -778,6 +778,12 @@ namespace Centipede
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
+            // pythonReferenceToolStripMenuItem
+            // 
+            this.pythonReferenceToolStripMenuItem.Name = "pythonReferenceToolStripMenuItem";
+            resources.ApplyResources(this.pythonReferenceToolStripMenuItem, "pythonReferenceToolStripMenuItem");
+            this.pythonReferenceToolStripMenuItem.Click += new System.EventHandler(this.pythonReferenceToolStripMenuItem_Click);
+            // 
             // visitGetSatisfactionToolStripMenuItem
             // 
             this.visitGetSatisfactionToolStripMenuItem.Name = "visitGetSatisfactionToolStripMenuItem";
@@ -889,12 +895,6 @@ namespace Centipede
             // 
             this.favouriteJobs1.DataSetName = "FavouriteJobs";
             this.favouriteJobs1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // pythonReferenceToolStripMenuItem
-            // 
-            this.pythonReferenceToolStripMenuItem.Name = "pythonReferenceToolStripMenuItem";
-            resources.ApplyResources(this.pythonReferenceToolStripMenuItem, "pythonReferenceToolStripMenuItem");
-            this.pythonReferenceToolStripMenuItem.Click += new System.EventHandler(this.pythonReferenceToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
