@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -431,15 +432,39 @@ namespace Centipede
 
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
-            using (FileStream file = File.Open(EditFavourites.GetFaveFilename(), FileMode.OpenOrCreate))
+            Action.PluginFolder = Settings.Default.PluginFolder;
+
+            string faveFilename = EditFavourites.GetFaveFilename();
+            if (Directory.Exists(Path.GetDirectoryName(faveFilename)) && File.Exists(faveFilename))
             {
                 try
                 {
-                    this._favouriteJobsDataStore.Favourites.ReadXml(file);
+                    using (FileStream file = File.Open(faveFilename, FileMode.OpenOrCreate))
+                        this._favouriteJobsDataStore.Favourites.ReadXml(file);
+
+                    if (Settings.Default.ListOfFavouriteJobs == null)
+                    {
+                        Settings.Default.ListOfFavouriteJobs = new StringCollection();
+                    }
+                    else
+                    {
+                        Settings.Default.ListOfFavouriteJobs.AddRange(
+                            from job in this._favouriteJobsDataStore.Favourites
+                            select job.Filename);
+                    }
+                    try
+                    {
+                        Directory.Delete(Path.GetDirectoryName(faveFilename), true);
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
                 }
                 catch (XmlException)
                 { }
             }
+
             UpdateFavourites();
 
             Dirty = false;
@@ -472,14 +497,12 @@ namespace Centipede
         {
             this.FavouritesMenu.DropDownItems.Clear();
 
-            foreach (
-                ToolStripMenuItem item in
-                    this._favouriteJobsDataStore.Favourites.Select(job => new ToolStripMenuItem(job.Name)
-                                                                          {
-                                                                              Tag = job.Filename
-                                                                          }))
+            //foreach (var job in this._favouriteJobsDataStore.Favourites)
+            
+            foreach (string jobFilename in Settings.Default.ListOfFavouriteJobs)
             {
-                item.Click += ItemOnClick;
+                var item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
+                item.Click += this.ItemOnClick;
                 this.FavouritesMenu.DropDownItems.Add(item);
             }
 
@@ -1012,7 +1035,8 @@ namespace Centipede
             try
             {
                 SaveJob();
-                this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
+                //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
+                Properties.Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
             }
             catch (AbortOperationException)
