@@ -5,4 +5,6 @@
 
 Fixing bugs with variable output tab
 Added installer support for example jobs.  Should make no difference in installer, except for presence of a new (disabled) component.
-Moved favourites out of xml file into integral settings
+Moved favourites out of xml file into integral settings &mdash; this may cause loss of favourites information.
+Fixed list of favourites on Edit Favourites form.
+
