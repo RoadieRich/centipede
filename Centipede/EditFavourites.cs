@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using CentipedeInterfaces;
@@ -8,21 +12,20 @@ namespace Centipede
 {
     public partial class EditFavourites : Form
     {
-
-        private readonly FavouriteJobs _favouriteJobs;
-
         public EditFavourites()
         {
             InitializeComponent();
+
+            this.UpdateBinding();
         }
 
-        public EditFavourites(FavouriteJobs favouriteJobsDataStore)
+        private void UpdateBinding()
         {
-            //_favouriteJobs = favouriteJobsDataStore;
-            InitializeComponent();
-
-
-            favouritesBindingSource.DataSource = Properties.Settings.Default.ListOfFavouriteJobs;
+            StringCollection listOfFavouriteJobs = Properties.Settings.Default.ListOfFavouriteJobs;
+            this.FavouriteJobsGridView.DataSource = listOfFavouriteJobs.OfType<String>().Select(s => new
+                                                                                                     {
+                                                                                                         Filename = s
+                                                                                                     }).ToList();
         }
 
         private void AddButton_Click(object sender, EventArgs e)
@@ -45,6 +48,7 @@ namespace Centipede
             //this._favouriteJobs.Favourites.AddFavouritesRow(job.Name, fileName);
 
             Properties.Settings.Default.ListOfFavouriteJobs.Add(fileName);
+            this.UpdateBinding();
         }
 
         private void RemoveButton_Click(object sender, EventArgs e)
@@ -55,7 +59,8 @@ namespace Centipede
                 try
                 {
                     Properties.Settings.Default.ListOfFavouriteJobs.RemoveAt(index);
-                    //_favouriteJobs.Favourites.Rows.RemoveAt(index);
+                    this.UpdateBinding();
+
                 }
                 catch (Exception exception)
                 {
@@ -88,32 +93,32 @@ namespace Centipede
 
         private void EditFavourites_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _favouriteJobs.Favourites.WriteXml(GetFaveFilename(),true);
+            //Properties.Settings.Default.ListOfFavouriteJobs = new StringCollection();
+            //Properties.Settings.Default.ListOfFavouriteJobs.AddRange(_favouriteJobs.Favourites.Select(row => row.Filename));
 
-            
         }
 
-        private void MoveUpButton_Click(object sender, EventArgs e)
-        {
-            FavouriteJobsGridView.SelectedRows.Cast<DataGridViewRow>()
-                                 .Select<DataGridViewRow, FavouriteJobs.FavouritesRow>(
-                                                                                       r =>
-                                                                                       r.DataBoundItem as
-                                                                                       FavouriteJobs.FavouritesRow)
-                                 .Single()
-                                 .MoveDown();
-        }
+        //private void MoveUpButton_Click(object sender, EventArgs e)
+        //{
+        //    FavouriteJobsGridView.SelectedRows.Cast<DataGridViewRow>()
+        //                         .Select<DataGridViewRow, FavouriteJobs.FavouritesRow>(
+        //                                                                               r =>
+        //                                                                               r.DataBoundItem as
+        //                                                                               FavouriteJobs.FavouritesRow)
+        //                         .Single()
+        //                         .MoveDown();
+        //}
 
-        private void MoveDownButton_Click(object sender, EventArgs e)
-        {
-            FavouriteJobsGridView.SelectedRows.Cast<DataGridViewRow>()
-                                 .Select<DataGridViewRow, FavouriteJobs.FavouritesRow>(
-                                                                                       r =>
-                                                                                       r.DataBoundItem as
-                                                                                       FavouriteJobs.FavouritesRow)
-                                 .Single()
-                                 .MoveUp();
-        }
+        //private void MoveDownButton_Click(object sender, EventArgs e)
+        //{
+        //    FavouriteJobsGridView.SelectedRows.Cast<DataGridViewRow>()
+        //                         .Select<DataGridViewRow, FavouriteJobs.FavouritesRow>(
+        //                                                                               r =>
+        //                                                                               r.DataBoundItem as
+        //                                                                               FavouriteJobs.FavouritesRow)
+        //                         .Single()
+        //                         .MoveUp();
+        //}
 
     }
 }

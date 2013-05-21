@@ -434,31 +434,34 @@ namespace Centipede
 
             Action.PluginFolder = Settings.Default.PluginFolder;
 
+            if (Settings.Default.ListOfFavouriteJobs == null)
+            {
+                Settings.Default.ListOfFavouriteJobs = new StringCollection();
+            }
+
+
             string faveFilename = EditFavourites.GetFaveFilename();
             if (Directory.Exists(Path.GetDirectoryName(faveFilename)) && File.Exists(faveFilename))
             {
                 try
                 {
                     using (FileStream file = File.Open(faveFilename, FileMode.OpenOrCreate))
+                    {
                         this._favouriteJobsDataStore.Favourites.ReadXml(file);
+                    }
 
-                    if (Settings.Default.ListOfFavouriteJobs == null)
-                    {
-                        Settings.Default.ListOfFavouriteJobs = new StringCollection();
-                    }
-                    else
-                    {
-                        Settings.Default.ListOfFavouriteJobs.AddRange(
-                            from job in this._favouriteJobsDataStore.Favourites
-                            select job.Filename);
-                    }
+                    Settings.Default.ListOfFavouriteJobs.AddRange(
+                        from job in this._favouriteJobsDataStore.Favourites
+                        select job.Filename
+                    );
+
                     try
                     {
                         Directory.Delete(Path.GetDirectoryName(faveFilename), true);
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine(exception);
+                        Debug.WriteLine(exception);
                     }
                 }
                 catch (XmlException)
@@ -926,7 +929,7 @@ namespace Centipede
         private void EditFavouritesMenuItem_Click(object sender, EventArgs e)
         {
             //var editFavourites = new EditFavourites(Settings.Default.FavouriteJobs);
-            var editFavourites = new EditFavourites(this._favouriteJobsDataStore);
+            var editFavourites = new EditFavourites();
 
             editFavourites.ShowDialog(this);
 

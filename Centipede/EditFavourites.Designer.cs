@@ -39,19 +39,18 @@
             this.CancelBtn = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.FavouriteJobsGridView = new System.Windows.Forms.DataGridView();
-            this.favouriteJobs = new Centipede.FavouriteJobs();
             this.favouritesBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.favouriteJobs = new Centipede.FavouriteJobs();
             ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobsGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.favouritesBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs)).BeginInit();
             this.SuspendLayout();
             // 
             // MoveUpButton
             // 
             this.MoveUpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.MoveUpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.MoveUpButton.Enabled = false;
             this.MoveUpButton.ImageIndex = 0;
             this.MoveUpButton.ImageList = this.imageList1;
             this.MoveUpButton.Location = new System.Drawing.Point(304, 12);
@@ -59,7 +58,6 @@
             this.MoveUpButton.Size = new System.Drawing.Size(43, 42);
             this.MoveUpButton.TabIndex = 1;
             this.MoveUpButton.UseVisualStyleBackColor = true;
-            this.MoveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
             // 
             // imageList1
             // 
@@ -99,6 +97,7 @@
             // MoveDownButton
             // 
             this.MoveDownButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.MoveDownButton.Enabled = false;
             this.MoveDownButton.ImageIndex = 3;
             this.MoveDownButton.ImageList = this.imageList1;
             this.MoveDownButton.Location = new System.Drawing.Point(304, 156);
@@ -106,7 +105,6 @@
             this.MoveDownButton.Size = new System.Drawing.Size(43, 42);
             this.MoveDownButton.TabIndex = 1;
             this.MoveDownButton.UseVisualStyleBackColor = true;
-            this.MoveDownButton.Click += new System.EventHandler(this.MoveDownButton_Click);
             // 
             // OKBtn
             // 
@@ -144,13 +142,8 @@
             this.FavouriteJobsGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.FavouriteJobsGridView.AutoGenerateColumns = false;
             this.FavouriteJobsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FavouriteJobsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.FavouriteJobsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
-            this.FavouriteJobsGridView.DataSource = this.favouritesBindingSource;
             this.FavouriteJobsGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.FavouriteJobsGridView.Location = new System.Drawing.Point(13, 13);
             this.FavouriteJobsGridView.Name = "FavouriteJobsGridView";
@@ -162,28 +155,14 @@
             this.FavouriteJobsGridView.Size = new System.Drawing.Size(285, 285);
             this.FavouriteJobsGridView.TabIndex = 4;
             // 
-            // favouriteJobs
-            // 
-            this.favouriteJobs.DataSetName = "FavouriteJobs";
-            this.favouriteJobs.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // favouritesBindingSource
             // 
             this.favouritesBindingSource.DataMember = "Favourites";
             // 
-            // dataGridViewTextBoxColumn1
+            // favouriteJobs
             // 
-            this.dataGridViewTextBoxColumn1.DataPropertyName = "Name";
-            this.dataGridViewTextBoxColumn1.HeaderText = "Name";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.DataPropertyName = "Filename";
-            this.dataGridViewTextBoxColumn2.HeaderText = "Filename";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.favouriteJobs.DataSetName = "FavouriteJobs";
+            this.favouriteJobs.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // EditFavourites
             // 
@@ -207,8 +186,8 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EditFavourites_FormClosed);
             this.Load += new System.EventHandler(this.EditFavourites_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobsGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.favouritesBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.favouriteJobs)).EndInit();
             this.ResumeLayout(false);
 
         }
