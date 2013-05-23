@@ -507,7 +507,7 @@ namespace Centipede
             this.VarDataGridView.Name = "VarDataGridView";
             this.VarDataGridView.ReadOnly = true;
             this.VarDataGridView.RowHeadersVisible = false;
-            this.VarDataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.VarDataGridView_DataError);
+            
             // 
             // RunButton
             // 

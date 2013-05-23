@@ -4,12 +4,15 @@ using ResharperAnnotations;
 
 namespace CentipedeInterfaces
 {
+#pragma warning disable 612,618
+
     /// <summary>
     ///     Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     [MeansImplicitUse]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [CLSCompliant(false)]
     public sealed class ActionArgumentAttribute : Attribute
     {// ReSharper disable CSharpWarnings::CS0612
 
@@ -45,9 +48,7 @@ namespace CentipedeInterfaces
         {
             get
             {
-
                 return this.displayName;
-// ReSharper restore CSharpWarnings::CS0612
             }
             set
             {
@@ -154,6 +155,7 @@ namespace CentipedeInterfaces
     [AttributeUsage(AttributeTargets.Class)]
     [MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [CLSCompliant(false)]
     public sealed class ActionCategoryAttribute : Attribute
     {
         // ReSharper disable InconsistentNaming
@@ -272,4 +274,6 @@ namespace CentipedeInterfaces
             return strValue;
         }
     }
+#pragma warning restore 618,612
+
 }

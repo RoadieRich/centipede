@@ -25,9 +25,7 @@ namespace PythonEngine
         }
 
         internal readonly ScriptScope Scope;
-        private List<ListChangedEventHandler> _listChanged;
-
-        // 
+        
         /// <summary>
         /// Determines if this context or any outer scope contains the defined name.
         /// </summary>
@@ -695,17 +693,6 @@ namespace PythonEngine
         {
             Scope.GetItems().ToArray().CopyTo(array,index);
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-        /// </returns>
-        //public IEnumerator GetEnumerator()
-        //{
-        //    return this.Scope.GetItems().GetEnumerator();
-        //}
 
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"/>.

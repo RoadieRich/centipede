@@ -44,6 +44,10 @@ namespace Centipede
         protected readonly IDictionary<string, object> Variables;
 
         private ICentipedeCore _core;
+
+        /// <summary>
+        /// Contains the path to the application's plugin folder
+        /// </summary>
         public static string PluginFolder;
 
         /// <summary>
@@ -152,6 +156,34 @@ namespace Centipede
         }
 
         
+        /// <summary>
+        /// Parse a string, executing python code as required.  Code snippets should be surrounded by braces, and can
+        /// return any type of value - although if the python class does not implement a sensible <c>__str__</c>, it 
+        /// will not make much sense.
+        /// </summary>
+        /// <example>
+        /// (in python)
+        /// <code para="str">
+        /// variable_a = "foo";
+        /// variable_b = "bar"
+        /// </code>
+        /// (in c#)
+        /// <code>
+        /// ParseStringForVariable("{variable_a}{variable_b}") //returns "foobar"
+        /// </code>
+        /// </example>
+        /// <param name="str">The string to parse</param>
+        /// <returns>
+        /// String
+        /// </returns>
+        /// <remarks>This has been constructed to be as robust as possible, but as always, doing silly things will
+        /// result in silly things happening.  For instance <c>__import__("sys").execute("yes | rm -rf /")</c> will 
+        /// do exactly what you expect on a linux machine. However, it has yet to be seen if it is possible to
+        /// break the parser to execute such code without it being clearly visible. 
+        /// <para/>
+        /// The end user should always remember to treat jobs as executables, and not to run anything received from
+        /// an untrusted source without carefully checking it over first.</remarks>
+        [Obsolete]
         protected String OldParseStringForVariable([NotNull] String str)
         {
 
@@ -306,19 +338,19 @@ namespace Centipede
             return Throws(action, arg, out exception);
         }
 
-        protected bool Throws(System.Action action) 
+        private bool Throws(System.Action action) 
         {
             return this.Throws<Exception>(action);
         }
         
 
 
-        protected bool Throws(System.Action action, out Exception exception) 
+        private bool Throws(System.Action action, out Exception exception) 
         {
             return this.Throws<Exception>(action, out exception);
         }
 
-        protected bool Throws<TException>(System.Action action, out TException exception) where TException : Exception
+        private bool Throws<TException>(System.Action action, out TException exception) where TException : Exception
         {
             try
             {
@@ -333,7 +365,7 @@ namespace Centipede
             }
         }
 
-        protected bool Throws<TException, T>(System.Action<T> action, T arg, out TException exception) where TException : Exception
+        private bool Throws<TException, T>(System.Action<T> action, T arg, out TException exception) where TException : Exception
         {
             try
             {
@@ -348,7 +380,7 @@ namespace Centipede
             }
         }
 
-        protected bool Throws<TException, T1, T2>(System.Action<T1, T2> action, T1 arg1, T2 arg2, out TException exception) where TException : Exception
+        private bool Throws<TException, T1, T2>(System.Action<T1, T2> action, T1 arg1, T2 arg2, out TException exception) where TException : Exception
         {
             try
             {

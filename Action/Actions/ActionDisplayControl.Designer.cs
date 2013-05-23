@@ -296,7 +296,7 @@ namespace Centipede.Actions
         private ToolStripSeparator toolStripSeparator1;
         private PictureBox ActionIcon;
         private PictureBox StatusIconBox;
-        public ImageList StatusIcons;
-        protected Button ExpandButton;
+        private ImageList StatusIcons;
+        private Button ExpandButton;
     }
 }

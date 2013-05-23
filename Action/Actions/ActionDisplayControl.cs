@@ -32,10 +32,10 @@ namespace Centipede.Actions
             }
         }
         
-        protected ActionDisplayControl()
-        {
-            InitializeComponent();
-        }
+        //protected ActionDisplayControl()
+        //{
+        //    InitializeComponent();
+        //}
 
         /// <summary>
         /// Create a new ActionDisplayControl object

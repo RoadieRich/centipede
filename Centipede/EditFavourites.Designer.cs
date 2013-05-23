@@ -203,8 +203,6 @@
         private System.Windows.Forms.Button CancelBtn;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.DataGridView FavouriteJobsGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.BindingSource favouritesBindingSource;
         private FavouriteJobs favouriteJobs;
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using ResharperAnnotations;
 
@@ -91,6 +92,7 @@ namespace CentipedeInterfaces
         /// 
         /// </summary>
         /// <returns></returns>
+        [CLSCompliant(false)]
         public ActionArgumentAttribute GetArguementAttribute()
         {
             return
@@ -243,6 +245,7 @@ namespace CentipedeInterfaces
         private static readonly Dictionary<MemberInfo, FieldAndPropertyWrapper> Cache =
                 new Dictionary<MemberInfo, FieldAndPropertyWrapper>();
 
+        
         /// <summary>
         /// Wrap <see cref="MemberInfo"/> in <see cref="FieldAndPropertyWrapper"/>
         /// </summary>
@@ -305,6 +308,20 @@ namespace CentipedeInterfaces
             // different signatures, but then this class isn't intended to wrap those.
             return DeclaringType == other.DeclaringType
                    && Name == other.Name;
+        }
+
+        public static void SetPropertyOnObject<TObject, TValue>(Expression<Func<TObject, TValue>> propertySlector, TObject @object, TValue value)
+        {
+            MemberExpression memberAccess = propertySlector.Body as MemberExpression;
+            if (memberAccess == null)
+            {
+                throw new ArgumentNullException("memberAccess");
+            }
+
+            FieldAndPropertyWrapper property = (FieldAndPropertyWrapper)memberAccess.Member;
+
+            property.Set(@object, value);
+
         }
     }
 }

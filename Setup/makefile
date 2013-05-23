@@ -33,7 +33,7 @@ pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksAc
 
 installersource = centipede-setup.iss
     
-setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
+setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi resetDefaults.exe
 
 pagescript = create-webpage.py
 scriptengine = python
@@ -73,8 +73,11 @@ upload: upload.log
 	
 notify: notify.log
 	
-$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
+$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles) resetDefaults.exe resetDefaults.dll
 	$(iscc) $(installersource)
+	
+resetDefaults.exe resetDefaults.dll: resetDefaults.py
+	@cmd /c "ipy pyc.py /target:exe /main:resetDefaults.py"
 
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
@@ -114,18 +117,18 @@ install: $(installerfilepath)
 	$(installerfilepath)
     
 help:
-	@echo Available targets:
+	@echo 'Available targets:'
 	@echo
 	@echo 'installer'
-	@echo ' Compliles the installer executable'
+	@echo '    Compliles the installer executable'
 	@echo 'webpage'
-	@echo ' Generates the download webpage with md5 and sha1 checksums'
+	@echo '    Generates the download webpage with md5 and sha1 checksums'
 	@echo 'upload'
-	@echo ' Uploads the installer and executable to the webserver'
+	@echo '    Uploads the installer and executable to the webserver'
 	@echo 'all (default)'
-	@echo ' Compiles, generates the webpage, and uploads.'
+	@echo '    Compiles, generates the webpage, and uploads.'
 	@echo 'install'
-	@echo ' Runs the installer'
+	@echo '    Runs the installer'
 	@echo 'clean'
-	@echo ' Deletes all files from the output folder'
+	@echo '    Deletes all files from the output folder'
 	
