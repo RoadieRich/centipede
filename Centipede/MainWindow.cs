@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Policy;
@@ -53,44 +54,73 @@ namespace Centipede
             //Visible = false;
 
             InitializeComponent();
+            this.SetUserProperties();
 
-            Height      = Settings.Default.MainWindowHeight;
-            Width       = Settings.Default.MainWindowWidth;
-            Location    = Settings.Default.MainWindowLocation;
-            WindowState = Settings.Default.MainWindowState;
-
-            this.SplitContainer1.SplitterDistance = Settings.Default.SplitContainer1Point;
-            this.SplitContainer2.SplitterDistance = Settings.Default.SplitContainer2Point;
-            this.SplitContainer3.SplitterDistance = Settings.Default.SplitContainer3Point;
-            
             this.WebBrowser.DocumentText = Resources.WelcomeScreen;
 
             //Visible = true;
 
             Core = centipedeCore;
-            
+
             ActionFactory.MessageEvent = OnMessageHandlerDelegate;
 
             this._arguments = arguments;
 
             Core.Variables.PropertyChanged += OnVariablesOnRowChanged;
-            
+
             this._dataSet.Messages.RowChanged += delegate
-                                                 {
-                                                     this.MessageDataGridView.Invalidate();
-                                                     this.MessageDataGridView.Update();
-                                                 };
+                                                     {
+                                                         this.MessageDataGridView.Invalidate();
+                                                         this.MessageDataGridView.Update();
+                                                     };
 
             this.MessageDataGridView.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs args)
-                                                       {
-                                                           if (args.Value is IAction)
-                                                               args.Value = args.Value.ToString();
-                                                       };
+                                                           {
+                                                               if (args.Value is IAction)
+                                                                   args.Value = args.Value.ToString();
+                                                           };
 
             this.DisplayedLevels = Settings.Default.MessageFilterSetting;
 
             this.Core.Window = this;
         }
+
+        private void SetUserProperties()
+        { 
+
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Height, this, Settings.Default.MainWindowHeight);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Width, this, Settings.Default.MainWindowWidth);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Location, this, Settings.Default.MainWindowLocation);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.WindowState, this, Settings.Default.MainWindowState);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer1, Settings.Default.SplitContainer1Point);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer2, Settings.Default.SplitContainer2Point);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer3, Settings.Default.SplitContainer3Point);
+            
+        }
+        
+        private static void IgnoreErrorsIn<T1, T2>(Action<Expression<Func<T1, T2>>, T1, T2> function, Expression<Func<T1, T2>> selector, T1 arg1, T2 arg2, IEnumerable<Type> exceptionsToIgnore = null)
+        {
+            try
+            {
+                function(selector, arg1, arg2);
+            }
+            catch (Exception e)
+            {
+                if (exceptionsToIgnore != null)
+                {
+                    if (exceptionsToIgnore.Contains(e.GetType()))
+                    {
+                        Debug.WriteLine(e);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+
+        
 
         #endregion
 
@@ -440,6 +470,17 @@ namespace Centipede
             }
 
 
+            this.UpdateFromFaveFile();
+
+            UpdateFavourites();
+
+            Dirty = false;
+
+            ActionDisplayControl.SetDirty = delegate { Dirty = true; };
+        }
+
+        private void UpdateFromFaveFile()
+        {
             string faveFilename = EditFavourites.GetFaveFilename();
             if (Directory.Exists(Path.GetDirectoryName(faveFilename)) && File.Exists(faveFilename))
             {
@@ -453,7 +494,7 @@ namespace Centipede
                     Settings.Default.ListOfFavouriteJobs.AddRange(
                         from job in this._favouriteJobsDataStore.Favourites
                         select job.Filename
-                    );
+                        );
 
                     try
                     {
@@ -467,12 +508,6 @@ namespace Centipede
                 catch (XmlException)
                 { }
             }
-
-            UpdateFavourites();
-
-            Dirty = false;
-
-            ActionDisplayControl.SetDirty = delegate { Dirty = true; };
         }
 
         private void CentipedeJobOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -1122,12 +1157,6 @@ namespace Centipede
 
         #endregion
 
-        private void VarDataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            DataGridView dgv = (DataGridView)sender;
-            
-            
-        }
     }
 
     [Serializable]

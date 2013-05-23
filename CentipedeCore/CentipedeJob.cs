@@ -143,8 +143,6 @@ namespace CentipedeInterfaces
 
         public IList<IAction> Actions { get; private set; }
 
-        public event ActionEvent ActionAdded;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

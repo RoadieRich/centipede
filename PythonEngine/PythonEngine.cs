@@ -79,7 +79,7 @@ namespace PythonEngine
         /// <param name="scope">The <see cref="PythonScope"/> to execute the value in</param>
         /// <typeparam name="T">The C# type to interpret the result as</typeparam>
         /// <returns></returns>
-        /// <seealso cref="Evaluate(IPythonByteCode,PythonScope)"/>
+        /// <seealso cref="Evaluate(string,IPythonScope)"/>
         [UsedImplicitly]
         public T Evaluate<T>(IPythonByteCode expression, IPythonScope scope = null)
         {
@@ -93,7 +93,7 @@ namespace PythonEngine
         /// <param name="scope">(Optional) the scope to evaluate the action in</param>
         /// <exception cref="PythonException"></exception>
         /// <returns>The result of the expression</returns>
-        /// <seealso cref="Evaluate{T}(string,PythonScope)"/>
+        /// <seealso cref="Evaluate{T}(string,IPythonScope)"/>
         public dynamic Evaluate(String expression, IPythonScope scope = null)
         {
             try
@@ -127,7 +127,7 @@ namespace PythonEngine
         /// <param name="expression"></param>
         /// <param name="scope"></param>
         /// <returns></returns>
-        /// <seealso cref="Evaluate{T}(IPythonByteCode,PythonScope)"/>
+        /// <seealso cref="Evaluate{T}(IPythonByteCode,IPythonScope)"/>
         public dynamic Evaluate(IPythonByteCode expression, IPythonScope scope=null)
         {
             ScriptScope myscope = scope != null ? ((PythonScope)scope).Scope : this._pyScope;
@@ -309,7 +309,7 @@ namespace PythonEngine
         }
 
         /// <summary>
-        /// Same as <see cref="Execute{T}"/>, but uses RTTI
+        /// Same as <see cref="Execute{T}(IPythonScope)"/>, but uses RTTI
         /// </summary>
         /// <param name="pythonScope"></param>
         /// <returns></returns>

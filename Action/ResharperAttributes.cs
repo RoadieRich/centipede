@@ -15,7 +15,7 @@
  */
 
 using System;
-
+using System.Web;
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
@@ -535,7 +535,7 @@ namespace ResharperAnnotations
     }
 
     // ASP.NET MVC attributes
-    #pragma warning disable 1584,1711,1572,1581,1580
+#pragma warning disable 1584,1711,1572,1581,1580,1574
     /// <summary>
     /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC action.
     /// If applied to a method, the MVC action name is calculated implicitly from the context.
