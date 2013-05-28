@@ -464,32 +464,38 @@ namespace Centipede
         private void UpdateFromFaveFile()
         {
             string faveFilename = EditFavourites.GetFaveFilename();
-            if (Directory.Exists(Path.GetDirectoryName(faveFilename)) && File.Exists(faveFilename))
+            string directoryName = Path.GetDirectoryName(faveFilename);
+            if (directoryName == null)
             {
+                throw new InvalidOperationException("Favourite file is set to root of a drive");
+            }
+
+            if (!Directory.Exists(directoryName) || !File.Exists(faveFilename))
+            {
+                return;
+            }
+            try
+            {
+                using (FileStream file = File.Open(faveFilename, FileMode.OpenOrCreate))
+                {
+                    this._favouriteJobsDataStore.Favourites.ReadXml(file);
+                }
+
+                Settings.Default.ListOfFavouriteJobs.AddRange(
+                    from job in this._favouriteJobsDataStore.Favourites
+                    select job.Filename);
+
                 try
                 {
-                    using (FileStream file = File.Open(faveFilename, FileMode.OpenOrCreate))
-                    {
-                        this._favouriteJobsDataStore.Favourites.ReadXml(file);
-                    }
-
-                    Settings.Default.ListOfFavouriteJobs.AddRange(
-                        from job in this._favouriteJobsDataStore.Favourites
-                        select job.Filename
-                        );
-
-                    try
-                    {
-                        Directory.Delete(Path.GetDirectoryName(faveFilename), true);
-                    }
-                    catch (Exception exception)
-                    {
-                        Debug.WriteLine(exception);
-                    }
+                    Directory.Delete(directoryName, true);
                 }
-                catch (XmlException)
-                { }
+                catch (Exception exception)
+                {
+                    Debug.WriteLine(exception);
+                }
             }
+            catch (XmlException)
+            { }
         }
 
         private void CentipedeJobOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
