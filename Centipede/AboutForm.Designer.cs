@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Windows.Forms;
 
 
 namespace Centipede
@@ -142,76 +143,37 @@ namespace Centipede
 
         private void AboutForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-            switch (e.KeyCode)
+
+            var sequence = new List<Keys>
+                           {
+                               Keys.Up,
+                               Keys.Up,
+                               Keys.Down,
+                               Keys.Down,
+                               Keys.Left,
+                               Keys.Right,
+                               Keys.Left,
+                               Keys.Right,
+                               Keys.B,
+                               Keys.A,
+                               Keys.Enter
+                           };
+
+            if (e.KeyCode == sequence[_easterEggState])
             {
-                case Keys.Up:
-                    {
-                        if (_easterEggState == 0 || _easterEggState == 1)
-                        {
-                            _easterEggState++;
-                        }
-                    }
-                    break;
-                case Keys.Down:
-                    {
-                        if (_easterEggState == 2 || _easterEggState == 3)
-                        {
-                            _easterEggState++;
-                        }
-                        break;
-                    }
-                case Keys.Left:
-                    {
-                        if (_easterEggState == 4 || _easterEggState == 6)
-                        {
-                            _easterEggState++;
-                        }
-                        break;
-                    }
-                case Keys.Right:
-                    {
-                        if (_easterEggState == 5 || _easterEggState == 7)
-                        {
-                            _easterEggState++;
-                        }
+                _easterEggState++;
+                e.IsInputKey = false;
+            }
+            else
+            {
+                _easterEggState = 0;
+                e.IsInputKey = true;
+            }
 
-                        break;
-                    }
-                case Keys.A:
-                    {
-                        if (_easterEggState == 9)
-                        {
-                            _easterEggState++;
-                        }
-
-                        break;
-                    }
-                case Keys.B:
-                    {
-                        if (_easterEggState == 8)
-                        {
-                            _easterEggState++;
-                        }
-
-                        break;
-                    }
-                case Keys.Enter:
-                    {
-                        if (_easterEggState == 10)
-                        {
-                            ShowEasterEgg();
-                            _easterEggState = 0;
-                        }
-                        break;
-                    }
-                default:
-                    {
-                        {
-                            _easterEggState = 0;
-                            e.IsInputKey = true;
-                        }
-                        break;
-                    }
+            if (_easterEggState >= sequence.Count)
+            {
+                this.ShowEasterEgg();
+                _easterEggState = 0;
             }
         }
         private int _easterEggState = 0;

@@ -534,7 +534,7 @@ namespace ResharperAnnotations
 
     // ASP.NET MVC attributes
 
-#pragma warning disable 1584,1711,1572,1581,1580
+#pragma warning disable 1574
 
     /// <summary>
     /// ASP.NET MVC attribute. If applied to a parameter, indicates that the parameter is an MVC action.
@@ -679,4 +679,6 @@ namespace ResharperAnnotations
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, Inherited = true)]
     internal sealed class RazorSectionAttribute : Attribute { }
 
+
+#pragma warning restore 1574
 }

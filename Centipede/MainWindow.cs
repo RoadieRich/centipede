@@ -85,24 +85,41 @@ namespace Centipede
             this.Core.Window = this;
         }
 
+        private void DemoMethod()
+        {
+            Object objectToReflect = null;
+            Type type = objectToReflect.GetType();
+            PropertyInfo property = type.GetProperty("PropertyName");
+            object value1 = property.GetValue(objectToReflect, null);
+            FieldInfo field = type.GetField("FieldName");
+            object value2 = field.GetValue(objectToReflect);
+        }
+
         private void SetUserProperties()
         { 
 
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Height, this, Settings.Default.MainWindowHeight);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Width, this, Settings.Default.MainWindowWidth);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.Location, this, Settings.Default.MainWindowLocation);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, f => f.WindowState, this, Settings.Default.MainWindowState);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer1, Settings.Default.SplitContainer1Point);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer2, Settings.Default.SplitContainer2Point);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, s => s.SplitterDistance, this.SplitContainer3, Settings.Default.SplitContainer3Point);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
+                f => f.Height, Settings.Default.MainWindowHeight);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
+                f => f.Width, Settings.Default.MainWindowWidth);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
+                f => f.Location, Settings.Default.MainWindowLocation);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
+                f => f.WindowState, Settings.Default.MainWindowState);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer1, 
+                s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer2, 
+                s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
+            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer3, 
+                s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
             
         }
         
-        private static void IgnoreErrorsIn<T1, T2>(Action<Expression<Func<T1, T2>>, T1, T2> function, Expression<Func<T1, T2>> selector, T1 arg1, T2 arg2, IEnumerable<Type> exceptionsToIgnore = null)
+        private static void IgnoreErrorsIn<T1, T2>(Action<T1, Expression<Func<T1, T2>>, T2> function, T1 arg1, Expression<Func<T1, T2>> selector, T2 arg2, IEnumerable<Type> exceptionsToIgnore = null)
         {
             try
             {
-                function(selector, arg1, arg2);
+                function(arg1, selector, arg2);
             }
             catch (Exception e)
             {
