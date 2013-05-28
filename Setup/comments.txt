@@ -8,3 +8,4 @@ Added installer support for example jobs.  Should make no difference in installe
 Moved favourites out of xml file into integral settings &mdash; this may cause loss of favourites information.
 Fixed list of favourites on Edit Favourites form.
 Fixed occasional error due to invalid values in user defaults. ResetDefaults.exe is now redundant, but still included.
+Updated installer graphics
