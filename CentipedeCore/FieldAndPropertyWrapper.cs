@@ -310,7 +310,7 @@ namespace CentipedeInterfaces
                    && Name == other.Name;
         }
 
-        public static void SetPropertyOnObject<TObject, TValue>(Expression<Func<TObject, TValue>> propertySlector, TObject @object, TValue value)
+        public static void SetPropertyOnObject<TObject, TValue>(TObject @object, Expression<Func<TObject, TValue>> propertySlector, TValue value)
         {
             MemberExpression memberAccess = propertySlector.Body as MemberExpression;
             if (memberAccess == null)
