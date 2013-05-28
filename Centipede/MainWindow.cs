@@ -85,82 +85,47 @@ namespace Centipede
             this.Core.Window = this;
         }
 
-        private void DemoMethod()
-        {
-            Object objectToReflect = null;
-            Type type = objectToReflect.GetType();
-            PropertyInfo property = type.GetProperty("PropertyName");
-            object value1 = property.GetValue(objectToReflect, null);
-            FieldInfo field = type.GetField("FieldName");
-            object value2 = field.GetValue(objectToReflect);
-        }
-
         private void SetUserProperties()
-        { 
-
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
-                f => f.Height, Settings.Default.MainWindowHeight);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
-                f => f.Width, Settings.Default.MainWindowWidth);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
-                f => f.Location, Settings.Default.MainWindowLocation);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this, 
-                f => f.WindowState, Settings.Default.MainWindowState);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer1, 
-                s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer2, 
-                s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
-            IgnoreErrorsIn(FieldAndPropertyWrapper.SetPropertyOnObject, this.SplitContainer3, 
-                s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
-            
+        {
+            SetAndIgnoreErrors(this, f => f.Height, Settings.Default.MainWindowHeight);
+            SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
+            SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
+            SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
+            SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
+            SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
+            SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
         }
-        
-        private static void IgnoreErrorsIn<T1, T2>(Action<T1, Expression<Func<T1, T2>>, T2> function, T1 arg1, Expression<Func<T1, T2>> selector, T2 arg2, IEnumerable<Type> exceptionsToIgnore = null)
+
+        private static void SetAndIgnoreErrors<T1, T2>(T1 arg1, Expression<Func<T1, T2>> selector, T2 arg2)
         {
             try
             {
-                function(arg1, selector, arg2);
+                FieldAndPropertyWrapper.SetPropertyOnObject(arg1, selector, arg2);
             }
             catch (Exception e)
             {
-                if (exceptionsToIgnore != null)
+                if (e is ArgumentOutOfRangeException || e is InvalidOperationException)
                 {
-                    if (exceptionsToIgnore.Contains(e.GetType()))
-                    {
-                        Debug.WriteLine(e);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Debug.WriteLine(e);
+                }
+                else
+                {
+                    throw;
                 }
             }
         }
-
-        
-
         #endregion
 
         #region Fields
 
-        //private readonly JobDataSet _dataSet = new JobDataSet();
-
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-
-        [UsedImplicitly]
-        private Dictionary<string, string> _arguments;
-
+        [UsedImplicitly] private Dictionary<string, string> _arguments;
         private bool _dirty;
-
         private ToolStripSpringTextBox _urlTextbox;
-
         private MessageLevel _displayedLevels;
-
         private ManualResetEvent _steppingMutex;
-
         private bool _stepping;
         private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
-
         private ActionEventArgs _pendingUpdate;
 
         #endregion
