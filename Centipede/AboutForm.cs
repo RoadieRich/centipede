@@ -24,8 +24,7 @@ namespace Centipede
         {
             pictureBox1.Image = Resources.Centipede.ToBitmap();
 
-            string indent =
-                    String.Concat(new string[_pluginFiles.Keys.Select(fi => fi.Name.Length).Max() + 2].Select(s => " "));
+            string indent = new string(' ', _pluginFiles.Keys.Select(fi => fi.Name.Length).Max() + 2);
 
             StringBuilder sb = new StringBuilder();
 
@@ -33,7 +32,7 @@ namespace Centipede
             {
                 FileInfo file = pluginFile.Key;
                 List<Type> types = pluginFile.Value;
-                sb.Append(file).Append(@": ").Append(indent.Substring(file.Name.Length + 2));
+                sb.Append(file.Name).Append(@": ").Append(indent.Substring(file.Name.Length + 2));
                 foreach (Type action in types)
                 {
                     sb.AppendLine(action.Name).Append(indent);
@@ -51,7 +50,7 @@ namespace Centipede
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(@"mailto:Andrew.Carter@Robn.com");
+            Process.Start(@"mailto:Andrew.Carter@nov.com");
         }
 
         private void button1_Click(object sender, EventArgs e)
