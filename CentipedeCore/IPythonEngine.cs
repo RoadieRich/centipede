@@ -127,6 +127,8 @@ namespace Centipede
         /// The default scope
         /// </summary>
         IPythonScope DefaultScope { get; }
+
+        void ImportModule(string module);
     }
 
     /// <summary>

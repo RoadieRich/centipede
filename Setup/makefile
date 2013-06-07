@@ -14,7 +14,9 @@
 ######################################
 
 iscc = /cygdrive/c/Program\ Files/Inno\ Setup\ 5/ISCC
+
 binfolder = ../bin/Debug
+
 pluginsfolder = $(binfolder)/Plugins
 setupoutputfolder = ./Output
 
@@ -38,6 +40,8 @@ setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronP
 pagescript = create-webpage.py
 scriptengine = python
 
+logDir = .
+
 ifndef comment
     commentsarg = -f comments.txt
 else
@@ -52,7 +56,7 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = ps-der-hg1
 
-all: installer webpage upload notify checksum.log 
+all: installer webpage upload
 
 updatecomments:
 ifdef updateCommand
@@ -69,7 +73,7 @@ installer: $(installerfilepath)
 
 webpage: updatecomments $(webpagefilename)
 	
-upload: upload.log
+upload: upload_installer upload_webpage
 	
 notify: notify.log
 	
@@ -82,36 +86,42 @@ resetDefaults.exe resetDefaults.dll: resetDefaults.py
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
 
-upload.log: $(uploadscript) $(installerfilepath) $(webpagefilename)
+upload_installer: $(installerfilepath) installer_upload.log
+
+installer_upload.log: $(installerfilepath)
 	@date >> upload.log
-	@date > $(setupoutputfolder)/date.txt
-	$(uploadtool) -b $(uploadscript) $(webuser)@$(server) >> upload.log
-	@echo Upload complete.
+	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath)"
+
+upload_webpage:  $(webpagefilename) webpage_upload.log
+
+webpage_upload.log: $(webpagefilename)
+	@date >> upload.log
+	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename)"
 
 notify.log: upload.log
 	@date >> notify.log
     
-checksum: checksum.log
+checksum: $(logDir)/checksum.log
 	@tail -3 checksum.log
     
-checksum.log: upload.log $(installerfilepath)
-	@date >> checksum.log
+$(logDir)/checksum.log: $(logDir)/upload.log $(installerfilepath)
+	@date >> $(logDir)/checksum.log
 	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
 	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
 
 view logs:
 	@echo Upload:
-	@tail -4 upload.log
+	@tail -4 $(logDir)/upload.log
 	@echo
 	@echo Notify:
-	@tail -1 notify.log
+	@tail -1 $(logDir)/notify.log
 	@echo
 	@echo Checksum:
-	@tail -3 checksum.log
+	@tail -3 $(logDir)/checksum.log
         
 clean:
 	@rm -rf $(setupoutputfolder) 
-	@#rm upload.log notify.log
+	@#rm $(logDir)/upload.log $(logDir)/notify.log
     
 install: $(installerfilepath)
 	$(installerfilepath)

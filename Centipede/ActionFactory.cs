@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using CentipedeInterfaces;
@@ -46,34 +47,42 @@ namespace Centipede
 
         public IAction Generate()
         {
+            Type[][] ctorTypeSigs = new[]
+                                    {
+                                        new[] { typeof(IDictionary<String, Object>), typeof(ICentipedeCore) },
+                                        new[] { typeof(Dictionary<String, Object>), typeof(ICentipedeCore) },
+                                        new[]
+                                        { typeof(string), typeof(IDictionary<String, Object>), typeof(ICentipedeCore) },
+                                        new[]
+                                        { typeof(string), typeof(Dictionary<String, Object>), typeof(ICentipedeCore) }
+                                    };
 
-            var ctorTypes1 = new[] { typeof(IDictionary<String, Object>), typeof(ICentipedeCore) };
-            var ctorTypes2 = new[] { typeof(Dictionary<String, Object>), typeof(ICentipedeCore) };
-            IAction instance = null;
-
-            ConstructorInfo constructorInfo = this._actionType.GetConstructor(ctorTypes1) ??
-                                              this._actionType.GetConstructor(ctorTypes2);
+            ConstructorInfo constructorInfo =
+                ctorTypeSigs.Select(types => this._actionType.GetConstructor(types)).FirstOrDefault();
             if (constructorInfo != null)
             {
-                instance = constructorInfo.Invoke<IAction>(new object[] { this._core.Variables, this._core });
-
-                if (MessageEvent != null)
+                IAction instance;
+                try
                 {
-                    //instance.MessageHandler += MessageEvent;
+                    instance = (IAction)constructorInfo.Invoke(new object[] { this._core.Variables, this._core });
                 }
+                catch (TargetParameterCountException)
+                {
+                    instance = (IAction)constructorInfo.Invoke(new object[] { "", this._core.Variables, this._core });
+                }
+                return instance;
             }
-
-            return instance;
+            throw new ActionException("Invalid Type");
         }
 
     }
 
-    internal static class Exts
-    {
-        public static T Invoke<T>(this ConstructorInfo constructorInfo, params object[] parameters)
-        {
-            return (T)constructorInfo.Invoke(parameters);
-        }
-    }
+    //internal static class Exts
+    //{
+    //    public static T Invoke<T>(this ConstructorInfo constructorInfo, params object[] parameters)
+    //    {
+    //        return (T)constructorInfo.Invoke(parameters);
+    //    }
+    //}
 
 }

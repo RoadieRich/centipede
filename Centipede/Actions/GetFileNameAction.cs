@@ -66,11 +66,8 @@ namespace Centipede.Actions
 
         private void GetFileNameDialogue_FileOk(object sender, CancelEventArgs e)
         {
-            FileDialog dialog = sender as FileDialog;
-            if (dialog == null)
-            {
-                throw new ArgumentException("sender");
-            }
+            FileDialog dialog = (FileDialog)sender;
+            
             Variables[ParseStringForVariable(DestinationVariable)] = dialog.FileName;
         }
 

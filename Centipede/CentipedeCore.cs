@@ -25,7 +25,7 @@ namespace Centipede
     {
         #region Constructors
 
-        public CentipedeCore(Dictionary<string, string> arguments)
+        public CentipedeCore(List<string> arguments)
         {
             Variables = PythonEngine.GetScope();
             
@@ -52,7 +52,7 @@ namespace Centipede
         public IAction CurrentAction { get; set; }
 
         [UsedImplicitly]
-        private Dictionary<string, string> _arguments;
+        private List<string> _arguments;
 
         #endregion
 

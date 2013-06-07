@@ -131,8 +131,7 @@ namespace Centipede.Actions
                                           Anchor = AnchorStyles.Top | AnchorStyles.Left,
                                           Checked = arg.Get<Boolean>(ThisAction)
                                       };
-                        cb.CheckedChanged += GetChangedHandler(arg) ??
-                                             ((sender, e) => arg.Set(ThisAction, ((CheckBox)sender).Checked));
+                        cb.CheckedChanged += this.CbOnCheckedChanged;
                         cb.CheckedChanged += SetDirty;
                         attrValue = cb;
 
@@ -179,6 +178,13 @@ namespace Centipede.Actions
                                };
             
             return new[] { attrLabel, attrValue };
+        }
+
+        private void CbOnCheckedChanged(object sender, EventArgs eventArgs)
+        {
+            CheckBox cb = (CheckBox)sender;
+            FieldAndPropertyWrapper arg = (FieldAndPropertyWrapper)cb.Tag;
+            arg.Set(this.ThisAction, cb.Checked);
         }
 
         private void NonLiteralOnTextChanged(object sender, EventArgs eventArgs)

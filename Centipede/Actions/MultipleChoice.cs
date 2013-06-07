@@ -139,21 +139,25 @@ namespace Centipede.Actions
                                                 }, 1, rows);
             this._form.Controls.Add(this._tableLayoutPanel);
 
-            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog), GetCurrentCore().Window);
+            DialogResult result =
+                (DialogResult)GetCurrentCore().
+                    Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
+                                  GetCurrentCore().Window);
+
+            if (result == DialogResult.Cancel)
+            {
+                throw new FatalActionException("Cancel Clicked", this);
+            }
         }
 
         private void CheckBoxFormOnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
         {
             Form form = (Form)sender;
             TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
-            switch (form.DialogResult)
+            if (form.DialogResult ==  DialogResult.OK)
             {
-            case DialogResult.OK:
                 ComboBox comboBox = tableLayoutPanel.Controls.OfType<ComboBox>().First();
                 SetVars((string)comboBox.SelectedItem, comboBox.SelectedIndex);
-                break;
-            case DialogResult.Cancel:
-                throw new FatalActionException("Cancel Clicked", this);
             }
         }
 
@@ -169,13 +173,12 @@ namespace Centipede.Actions
             }
         }
 
-        private void RadioButtonFormOnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
+        private void RadioButtonFormOnFormClosing(object sender, FormClosingEventArgs eventArgs)
         {
             Form form = (Form)sender;
             TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
-            switch (form.DialogResult)
+            if (form.DialogResult == DialogResult.OK)
             {
-            case DialogResult.OK:
                 try
                 {
                     RadioButton checkedButton =
@@ -184,13 +187,11 @@ namespace Centipede.Actions
                     SetVars(checkedButton.Text, (int)checkedButton.Tag);
                 }
 
-                catch (InvalidOperationException e)
+                catch (InvalidOperationException)
                 {
-                    throw new ActionException("No choice selected.", e, this);
+                    MessageBox.Show("No choice selected, please try again");
+                    eventArgs.Cancel = true;
                 }
-                break;
-            case DialogResult.Cancel:
-                throw new FatalActionException("Cancel Clicked", this);
             }
         }
     }

@@ -24,8 +24,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResharperAnnotations", "Res
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentipedeInterfaces", "CentipedeCore\CentipedeInterfaces.csproj", "{D34FC450-055E-4C4E-8293-C324EF5216FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Centipede2.vsmdi
@@ -184,24 +182,6 @@ Global
 		{D34FC450-055E-4C4E-8293-C324EF5216FD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D34FC450-055E-4C4E-8293-C324EF5216FD}.Release|Win32.ActiveCfg = Release|Any CPU
 		{D34FC450-055E-4C4E-8293-C324EF5216FD}.Release|x86.ActiveCfg = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|Any CPU.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|Any CPU.Build.0 = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|Mixed Platforms.Build.0 = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|Win32.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.debug with test actions|x86.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|Win32.ActiveCfg = Release|Any CPU
-		{55267D22-AF55-4FB5-B157-5D56C2ED8FFC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -151,6 +151,13 @@ namespace Centipede.Properties {
             }
         }
         
+        public static System.Drawing.Icon CentipedeFile {
+            get {
+                object obj = ResourceManager.GetObject("CentipedeFile", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap Complete_OK {
             get {
                 object obj = ResourceManager.GetObject("Complete_OK", resourceCulture);
