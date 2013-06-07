@@ -117,5 +117,33 @@ namespace PyAction
         }
     }
 
-    
+    [ActionCategory("Other Actions",
+            iconName = @"pycon",
+            DisplayName = "Import Python Module")]
+    public class Import : Action
+    {
+        public Import(IDictionary<string, object> variables, ICentipedeCore core)
+            : base("Import module", variables, core)
+        { }
+
+        [ActionArgument(Literal=true)]
+        public string Modules = "";
+
+        protected override void DoAction()
+        {
+            IPythonEngine engine = GetCurrentCore().PythonEngine;
+
+            try
+            {
+                foreach (var module in Modules.Split(','))
+                {
+                    engine.ImportModule(module.Trim());
+                }
+            }
+            catch (PythonException e)
+            {
+                throw new ActionException(e, this);
+            }
+        }
+    }
 }

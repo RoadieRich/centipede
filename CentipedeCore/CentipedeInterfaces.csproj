@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,6 +50,10 @@
     <Compile Include="IPythonByteCode.cs" />
     <Compile Include="IPythonEngine.cs" />
     <Compile Include="IPythonScope.cs" />
+    <Compile Include="Variables.cs">
+      <DependentUpon>Variables.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Variables.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

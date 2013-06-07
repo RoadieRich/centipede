@@ -48,7 +48,7 @@ namespace Centipede
     {
         #region Constructors
 
-        public MainWindow(ICentipedeCore centipedeCore, Dictionary<string, string> arguments = null)
+        public MainWindow(ICentipedeCore centipedeCore, List<string> arguments = null)
         {
             this._pendingUpdate = null;
             //Visible = false;
@@ -119,7 +119,7 @@ namespace Centipede
         #region Fields
 
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-        [UsedImplicitly] private Dictionary<string, string> _arguments;
+        [UsedImplicitly] private List<string> _arguments;
         private bool _dirty;
         private ToolStripSpringTextBox _urlTextbox;
         private MessageLevel _displayedLevels;
@@ -467,7 +467,7 @@ namespace Centipede
             string directoryName = Path.GetDirectoryName(faveFilename);
             if (directoryName == null)
             {
-                throw new InvalidOperationException("Favourite file is set to root of a drive");
+                throw new InvalidOperationException(@"Favourite file is set to root of a drive");
             }
 
             if (!Directory.Exists(directoryName) || !File.Exists(faveFilename))
@@ -729,25 +729,9 @@ namespace Centipede
         private void VarMenuDelete_Click(object sender, EventArgs e)
         { }
 
-        private void DoLoad()
+        private void DoLoad(string fileName)
         {
-            try
-            {
-                AskSave();
-            }
-            catch (AbortOperationException)
-            {
-                return;
-            }
-
-            DialogResult result = this.OpenFileDialog.ShowDialog(this);
-
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
-            Core.LoadJob(this.OpenFileDialog.FileName);
+            Core.LoadJob(fileName);
             Text = Core.Job.Name;
         }
 
@@ -911,7 +895,24 @@ namespace Centipede
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DoLoad();
+
+            try
+            {
+                AskSave();
+            }
+            catch (AbortOperationException)
+            {
+                return;
+            }
+
+            DialogResult result = this.OpenFileDialog.ShowDialog(this);
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            DoLoad(this.OpenFileDialog.FileName);
         }
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1143,8 +1144,18 @@ namespace Centipede
             Process.Start(@"http://docs.python.org/2.7/");
         }
 
+        public void LoadJobAfterLoad(string file)
+        {
+            Load += (sender, args) => this.DoLoad(file);
+        }
+
+
         #endregion
 
+        public void RunJobAfterLoad()
+        {
+            this.Load += (sender, args) => this.StartRunning(false);
+        }
     }
 
     [Serializable]

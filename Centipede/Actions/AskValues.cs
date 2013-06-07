@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using CentipedeInterfaces;
 using PythonEngine;
@@ -99,22 +100,22 @@ namespace Centipede.Actions
 
             form.FormClosed += delegate
                                {
-                                   switch (form.DialogResult)
+                                   if (form.DialogResult == DialogResult.OK)
                                    {
-                                   case DialogResult.OK:
                                        foreach (TextBox tb in table.Controls.OfType<TextBox>())
                                        {
                                            dynamic tryEvaluate = Evaluate ? TryEvaluate(tb.Text) : tb.Text;
                                            Variables[(string)tb.Tag] = tryEvaluate;
                                        }
-                                           break;
-                                   case DialogResult.Cancel:
-                                       throw new FatalActionException("Cancel Clicked", this);
                                    }
                                };
 
-            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
-            
+            DialogResult result = (DialogResult)GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
+
+            if (result==DialogResult.Cancel)
+            {
+                throw new FatalActionException("Cancel Clicked", this);
+            }
         }
 
         private dynamic TryEvaluate(String str)
@@ -197,7 +198,7 @@ namespace Centipede.Actions
                                            Dock = DockStyle.Fill
                                        }
                                    });
-
+            
             form.FormClosed += delegate
                                {
                                    switch (form.DialogResult)
@@ -209,12 +210,20 @@ namespace Centipede.Actions
                                        }
                                        break;
                                    case DialogResult.Cancel:
-                                       throw new FatalActionException("Cancel Clicked", this);
+                                           break;
                                    }
+
                                };
 
-            GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
+            DialogResult result =
+                (DialogResult)
+                GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
             
+            if (result == DialogResult.Cancel)
+            {
+                throw new FatalActionException("Cancel clicked", this);
+            }
+
         }
     }
 }

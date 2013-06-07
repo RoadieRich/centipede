@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using NDesk.Options;
 
 
 //  LINQ
@@ -14,36 +16,9 @@ namespace Centipede
     internal static class Program
     {
         private static MainWindow _mainForm;
+        private static bool _run;
 
-        private static Dictionary<string, string> ParseArguments(IEnumerable<string> argv)
-        {
-            IEnumerator<string> enumerator = argv.GetEnumerator();
-
-            Dictionary<string,string> result = new Dictionary<string, string>();
-            
-            string lastKey = String.Empty;
-
-            while (enumerator.MoveNext())
-            {
-                
-                string trimmed = enumerator.Current.TrimStart('/', '-', '+');
-                if (trimmed != enumerator.Current)
-                {
-                    string flag = enumerator.Current.Substring(0, 1);
-                    lastKey = trimmed;
-                    result.Add(trimmed, flag == @"/" ? null : flag);
-                }
-                else
-                {
-                    result[lastKey] = trimmed;
-                }
-            }
-
-            return result;
-
-        }
-
-        private static void RunHeadless(Dictionary<string, string> argv)
+        private static void RunHeadless(List<string> argv)
         {
             throw new NotImplementedException();
         }
@@ -55,24 +30,47 @@ namespace Centipede
         [STAThread]
         private static void Main(String[] argv)
         {
-            Dictionary<String, String> arguments = ParseArguments(argv);
 
-            if (arguments.ContainsKey(@"/nogui"))
+            bool headless = false;
+
+            NDesk.Options.OptionSet options = new OptionSet
+                                              {
+                                                  {
+                                                      "r|run", "run", value => _run = value != null
+                                                  },
+                                                  {
+                                                      "n|nogui", "run without gui", value => headless = value != null
+                                                  }
+                                              };
+
+            List<string> extras = options.Parse(argv);
+
+            if (headless)
             {
-                RunHeadless(arguments);
+                RunHeadless(extras);
             }
             else
             {
-                RunGui(arguments);
+                RunGui(extras);
             }
         }
 
-        private static void RunGui(Dictionary<string, string> arguments)
+        private static void RunGui(List<string> arguments)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            _mainForm = new MainWindow(new CentipedeCore(arguments), arguments);
+            CentipedeCore core = new CentipedeCore(arguments);
+            _mainForm = new MainWindow(core, arguments);
+            if (arguments.Any())
+            {
+                _mainForm.LoadJobAfterLoad(arguments.First());
+                if (_run)
+                {
+                    _mainForm.RunJobAfterLoad();
+                }
+            }
+
             Application.Run(_mainForm);
         }
     }

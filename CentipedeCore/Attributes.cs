@@ -130,7 +130,8 @@ namespace CentipedeInterfaces
 
         /// <summary>
         /// </summary>
-        [CanBeNull, Obsolete]
+        [CanBeNull]
+        [Obsolete]
         public string onChangedHandlerName;
 
         /// <summary>

@@ -273,6 +273,15 @@ namespace PythonEngine
         {
             return (PythonScope)this._pyScope;
         }}
+
+        /// <summary>
+        /// Imports python modules
+        /// </summary>
+        /// <param name="module">the name of the module to import</param>
+        public void ImportModule(string module)
+        {
+            this._pyEngine.ImportModule(module);
+        }
     }
 
     /// <summary>
