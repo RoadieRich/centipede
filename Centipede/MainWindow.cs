@@ -68,10 +68,12 @@ namespace Centipede
 
             Core.Variables.PropertyChanged += OnVariablesOnRowChanged;
 
+
             this._dataSet.Messages.RowChanged += delegate
                                                      {
-                                                         this.MessageDataGridView.Invalidate();
-                                                         this.MessageDataGridView.Update();
+                                                         DataGridView msgDGV = this.MessageDataGridView;
+                                                         msgDGV.Invoke(new System.Action(msgDGV.Invalidate));
+                                                         msgDGV.Invoke(new System.Action(msgDGV.Update));
                                                      };
 
             this.MessageDataGridView.CellFormatting += delegate(object sender, DataGridViewCellFormattingEventArgs args)
@@ -80,9 +82,8 @@ namespace Centipede
                                                                    args.Value = args.Value.ToString();
                                                            };
 
-            this.DisplayedLevels = Settings.Default.MessageFilterSetting;
-
             this.Core.Window = this;
+            
         }
 
         private void SetUserProperties()
@@ -91,6 +92,7 @@ namespace Centipede
             SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
             SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
             SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
+            SetAndIgnoreErrors(this, f => f.DisplayedLevels, Settings.Default.MessageFilterSetting);
             SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
             SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
             SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
@@ -213,8 +215,14 @@ namespace Centipede
         {
             //MessageBox.Show(String.Format("{0}\n\nLevel: {1}", e.Message, e.Level.AsText()), "Message");
 
-            this._dataSet.Messages.AddMessagesRow(DateTime.Now, e.Message, sender as Action, e.Level,
-                                                  DisplayedLevels.HasFlag(e.Level));
+            this.MessageDataGridView.Invoke(
+                new Func<DateTime, String, IAction, MessageLevel, bool, JobDataSet.MessagesRow>(
+                    this._dataSet.Messages.AddMessagesRow),
+                DateTime.Now,
+                e.Message,
+                sender as Action,
+                e.Level,
+                DisplayedLevels.HasFlag(e.Level));
         }
 
         private void ErrorHandler(object sender, ActionErrorEventArgs e)
@@ -255,9 +263,16 @@ namespace Centipede
                                                   Resources.MainWindow_ErrorHandler_Error,
                                                   e.Fatal ? MessageBoxButtons.OK : MessageBoxButtons.AbortRetryIgnore,
                                                   MessageBoxIcon.Exclamation);
+
+            MessageDataGridView.Invoke(
+                new Func<DateTime, string, IAction, MessageLevel, bool, JobDataSet.MessagesRow>(
+                    this._dataSet.Messages.AddMessagesRow),
+                DateTime.Now,
+                messageBuilder.ToString(),
+                e.Action,
+                MessageLevel.Error,
+                this.DisplayedLevels.HasFlag(MessageLevel.Error));
             
-            _dataSet.Messages.AddMessagesRow(DateTime.Now, messageBuilder.ToString(), e.Action, MessageLevel.Error,
-                                             DisplayedLevels.HasFlag(MessageLevel.Error));
 
             SetErrorReturnState(e, result);
             

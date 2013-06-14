@@ -78,9 +78,13 @@ Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Flags: deleteafter
 Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\PythonEngine.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+Source: "{#BinaryDir}\IronPython.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+Source: "{#BinaryDir}\IronPython.Modules.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Centipede
 Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\Resources\CentipedeFile.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
+
+Source: "{#SetupDir}\New Job.100p"; DestDir: "{win}\SHELLNEW"; Components: Centipede
 
 ; Action plugins
 Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
@@ -93,7 +97,6 @@ Source: "{#BinaryDir}\Plugins\OfficeActions.dll"; DestDir: "{app}\Plugins"; Flag
 Source: "{#BinaryDir}\Plugins\ShellActions.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\ShellActions
 Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Text_File
 Source: "{#BinaryDir}\Plugins\MathCADActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\MathCad
-
 
 ; sdk items
 Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
@@ -123,11 +126,14 @@ Filename: "msiexec";	Parameters: "/i {tmp}\IronPython-2.7.3.msi";	Flags: shellex
 Filename: "{app}\Centipede.exe";	Flags: nowait postinstall;	Description: "Start Centipede";	StatusMsg: "Starting Centipede";	Components: Centipede
 
 [Registry]
-Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION";	ValueType: dword;	ValueName: "centipede.exe";	ValueData: "{code:GetIEEmulationValue}";	Flags: createvalueifdoesntexist; Components: Centipede
-Root: "HKCR"; Subkey: ".100p"; ValueType: string; ValueName: ""; ValueData: "CentipedeJob"; Flags: uninsdeletevalue
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION";	ValueType: dword;	ValueName: "centipede.exe";	ValueData: "{code:GetIEEmulationValue}";	Flags: createvalueifdoesntexist uninsdeletevalue; Components: Centipede
+Root: "HKCR"; Subkey: ".100p"; ValueType: string; ValueName: ""; ValueData: "CentipedeJob"; Flags: uninsdeletekey
+Root: "HKCR"; Subkey: ".100p\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{win}\SHELLNEW\New Job.100p"
 Root: "HKCR"; Subkey: "CentipedeJob"; ValueType: string; ValueName: ""; ValueData: "Centipede Job"; Flags: uninsdeletekey
 Root: "HKCR"; Subkey: "CentipedeJob\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\CentipedeFile.ico"
 Root: "HKCR"; Subkey: "CentipedeJob\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" ""%1"""
+Root: "HKCR"; Subkey: "CentipedeJob\shell\run"; ValueType: string; ValueName: ""; ValueData: "&Run";
+Root: "HKCR"; Subkey: "CentipedeJob\shell\run\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" /r ""%1"""  
 
 [Code]
 var

@@ -66,17 +66,17 @@ endif
 #repo:
 #    @hg pull default
 #    @hg update
-    
-    
 
 installer: $(installerfilepath)
 
 webpage: updatecomments $(webpagefilename)
 	
-upload: upload_installer upload_webpage
-	
+upload: upload.log
+
 notify: notify.log
 	
+#upload.log: upload_installer upload_webpage
+
 $(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles) resetDefaults.exe resetDefaults.dll
 	$(iscc) $(installersource)
 	
@@ -86,47 +86,42 @@ resetDefaults.exe resetDefaults.dll: resetDefaults.py
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
 
-upload_installer: $(installerfilepath) installer_upload.log
-
-installer_upload.log: $(installerfilepath)
+upload.log: $(installerfilepath) $(webpagefilename)
 	@date >> upload.log
 	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath)"
-
-upload_webpage:  $(webpagefilename) webpage_upload.log
-
-webpage_upload.log: $(webpagefilename)
-	@date >> upload.log
 	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename)"
 
 notify.log: upload.log
 	@date >> notify.log
     
-checksum: $(logDir)/checksum.log
+checksum: checksum.log
 	@tail -3 checksum.log
     
-$(logDir)/checksum.log: $(logDir)/upload.log $(installerfilepath)
-	@date >> $(logDir)/checksum.log
+checksum.log: upload.log $(installerfilepath)
+	@date >> checksum.log
 	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
 	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
 
 view logs:
 	@echo Upload:
-	@tail -4 $(logDir)/upload.log
+	@tail -6 upload.log
 	@echo
 	@echo Notify:
-	@tail -1 $(logDir)/notify.log
+	@tail -1 notify.log
 	@echo
 	@echo Checksum:
-	@tail -3 $(logDir)/checksum.log
+	@tail -3 checksum.log
         
 clean:
 	@rm -rf $(setupoutputfolder) 
-	@#rm $(logDir)/upload.log $(logDir)/notify.log
+	@#rm upload.log notify.log
     
 install: $(installerfilepath)
 	$(installerfilepath)
     
 help:
+	@echo 'all (default)'
+	@echo '    Compiles, generates the webpage, and uploads.'
 	@echo 'Available targets:'
 	@echo
 	@echo 'installer'
@@ -135,8 +130,6 @@ help:
 	@echo '    Generates the download webpage with md5 and sha1 checksums'
 	@echo 'upload'
 	@echo '    Uploads the installer and executable to the webserver'
-	@echo 'all (default)'
-	@echo '    Compiles, generates the webpage, and uploads.'
 	@echo 'install'
 	@echo '    Runs the installer'
 	@echo 'clean'
