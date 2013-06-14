@@ -11,3 +11,6 @@ Fixed occasional error due to invalid values in user defaults. ResetDefaults.exe
 Updated installer graphics
 You can now open jobs by double clicking in explorer
 Added print and open file shell actions
+You can now create Centipede jobs through the "File > New" menu
+Added some missing .dlls
+fixing error "os module not found"

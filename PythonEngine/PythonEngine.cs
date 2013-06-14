@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using Centipede;
 using IronPython.Hosting;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
+using Microsoft.Win32;
 using ResharperAnnotations;
 
 
@@ -27,6 +29,38 @@ namespace PythonEngine
                 this._pyScope = this._pyEngine.CreateScope();
                 this._pyScope.ImportModule(@"sys");
                 this._pyScope.ImportModule(@"math");
+
+
+                var searchPaths = _pyEngine.GetSearchPaths();
+
+                string ironpythonPathEnv = Environment.GetEnvironmentVariable("IRONPYTHONPATH");
+
+                if (ironpythonPathEnv != null)
+                {
+                    searchPaths.Add(ironpythonPathEnv);
+                }
+
+
+                try
+                {
+                    RegistryKey registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\IronPython\2.7\InstallPath");
+                    if (registryKey != null)
+                    {
+                        string ironPythonLibPath = (registryKey).GetValue(String.Empty) as string;
+
+                        if (ironPythonLibPath != null)
+                        {
+                            ironPythonLibPath = Path.Combine(ironPythonLibPath, @"Lib");
+                            searchPaths.Add(ironPythonLibPath);
+                        }
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    ;
+                }
+
+                _pyEngine.SetSearchPaths(searchPaths);
             }
         }
 
@@ -280,7 +314,7 @@ namespace PythonEngine
         /// <param name="module">the name of the module to import</param>
         public void ImportModule(string module)
         {
-            this._pyEngine.ImportModule(module);
+            this.Execute(string.Format(@"import {0}", module));
         }
     }
 
