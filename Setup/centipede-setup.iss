@@ -108,10 +108,6 @@ Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:G
 Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
-; Reset Defaults app
-Source: "{#SetupDir}\resetDefaults.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-Source: "{#SetupDir}\resetDefaults.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-
 ; Sample Jobs
 ;
 
