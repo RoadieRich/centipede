@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
 using CentipedeInterfaces;
 using PythonEngine;
@@ -67,17 +66,24 @@ namespace Centipede.Actions
             {
                 Label lbl = new Label
                             {
-                                Text = varName
+                                Text = varName,
+                                AutoSize = true
                             };
-                dynamic value;
-
-                Variables.TryGetValue(varName, out value);
 
                 TextBox tb = new TextBox
                              {
-                                 Text = (value ?? "").ToString(),
                                  Tag = varName
                              };
+                
+                dynamic value;
+
+                Variables.TryGetValue(varName, out value);
+                
+                if (value != null)
+                {
+                    tb.Text = value.ToString();
+                }
+                
                 table.Controls.Add(lbl);
                 table.Controls.Add(tb);
             }
