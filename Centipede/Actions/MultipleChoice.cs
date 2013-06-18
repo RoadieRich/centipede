@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using CentipedeInterfaces;
@@ -82,7 +83,8 @@ namespace Centipede.Actions
             {
                 Label label = new Label
                               {
-                                  Text = this.Prompt
+                                  Text = this.Prompt,
+                                  AutoSize = true
                               };
                 this._tableLayoutPanel.Controls.Add(label);
                 this._tableLayoutPanel.SetColumnSpan(label, 2);
@@ -92,13 +94,16 @@ namespace Centipede.Actions
             {
                 int i = 0;
 
-                foreach (var choice in choices.Enumerate())
+                foreach (KeyValuePair<int, String> choice in choices.Enumerate())
                 {
                     RadioButton radioButton = new RadioButton
                                               {
                                                   Text = choice.Value.Trim(),
-                                                  Tag = i++
+                                                  Tag = i++,
+                                                  AutoSize=true
                                               };
+
+                    radioButton.Width = 20 + TextRenderer.MeasureText(choice.Value.Trim(), radioButton.Font).Width;
                     
                     this._tableLayoutPanel.Controls.Add(radioButton, 0, choice.Key);
                     this._tableLayoutPanel.SetColumnSpan(radioButton, 2);
@@ -111,11 +116,13 @@ namespace Centipede.Actions
                 ComboBox comboBox = new ComboBox
                                     {
                                         DropDownStyle = ComboBoxStyle.DropDown,
-                                        AutoSize = true,
+                                        //AutoSize = true,
                                         //AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
+
+                comboBox.Width = 20 + choices.Max(s => TextRenderer.MeasureText(s.Trim(), comboBox.Font).Width);
 
                 this._tableLayoutPanel.Controls.Add(comboBox);
                 this._tableLayoutPanel.SetColumnSpan(comboBox, 2);
