@@ -35,7 +35,7 @@ pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksAc
 
 installersource = centipede-setup.iss
     
-setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi resetDefaults.exe
+setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
 
 pagescript = create-webpage.py
 scriptengine = python
@@ -52,11 +52,12 @@ endif
 uploadscript = sftp-upload.sftpc
 uploadtool = /usr/bin/sftp
 
-#assumes sftp is set up for unattended log in to this account
+#assumes sftp is set up for unattended login to this account
 webuser = www-data
 server = ps-der-hg1
 
-all: installer webpage upload
+
+installer: $(installerfilepath)
 
 updatecomments:
 ifdef updateCommand
@@ -67,8 +68,6 @@ endif
 #    @hg pull default
 #    @hg update
 
-installer: $(installerfilepath)
-
 webpage: updatecomments $(webpagefilename)
 	
 upload: upload.log
@@ -77,19 +76,16 @@ notify: notify.log
 	
 #upload.log: upload_installer upload_webpage
 
-$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles) resetDefaults.exe resetDefaults.dll
+$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
 	$(iscc) $(installersource)
 	
-resetDefaults.exe resetDefaults.dll: resetDefaults.py
-	@cmd /c "ipy pyc.py /target:exe /main:resetDefaults.py"
-
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
 
 upload.log: $(installerfilepath) $(webpagefilename)
 	@date >> upload.log
-	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath)"
-	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename)"
+	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath) /var/www/"
+	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename) /var/www/"
 
 notify.log: upload.log
 	@date >> notify.log
@@ -111,7 +107,7 @@ view logs:
 	@echo
 	@echo Checksum:
 	@tail -3 checksum.log
-        
+
 clean:
 	@rm -rf $(setupoutputfolder) 
 	@#rm upload.log notify.log
@@ -129,7 +125,7 @@ help:
 	@echo 'webpage'
 	@echo '    Generates the download webpage with md5 and sha1 checksums'
 	@echo 'upload'
-	@echo '    Uploads the installer and executable to the webserver'
+	@echo '    Uploads the installer and download page to the webserver'
 	@echo 'install'
 	@echo '    Runs the installer'
 	@echo 'clean'

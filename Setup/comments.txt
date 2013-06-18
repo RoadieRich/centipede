@@ -3,14 +3,9 @@
 # 
 # Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
-Fixing bugs with variable output tab
-Added installer support for example jobs.  Should make no difference in installer, except for presence of a new (disabled) component.
-Moved favourites out of xml file into integral settings &mdash; this may cause loss of favourites information.
-Fixed list of favourites on Edit Favourites form.
-Fixed occasional error due to invalid values in user defaults. ResetDefaults.exe is now redundant, but still included for reasons.
-Updated installer graphics
 You can now open jobs by double clicking in explorer
 Added print and open file shell actions
 You can now create Centipede jobs through the "File > New" menu
 Added some missing .dlls
 fixing error "os module not found"
+Adding code to expand Multiple Choice actions
