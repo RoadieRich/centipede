@@ -144,7 +144,9 @@ namespace Centipede.Actions
                         {
                             attrValue = new TextBox
                                         {
-                                            BackColor = SystemColors.Info
+                                            BackColor = SystemColors.Info,
+                                            ShortcutsEnabled = true,
+                                            ContextMenu = null
                                         };
                         }
                         else
@@ -152,11 +154,15 @@ namespace Centipede.Actions
                             attrValue = new RichTextBox
                                         {
                                             Multiline=false,
-                                            Height = 20
+                                            Height = 20,
+                                            ShortcutsEnabled = true,
+                                            ContextMenu = null
                                         };
                             ((RichTextBox)attrValue).TextChanged += NonLiteralOnTextChanged;
                         }
                         attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                        attrValue.ContextMenu = null;
+                        
                 
                 object obj = arg.Get<Object>(ThisAction); //.ToString();
                     attrValue.Text = (obj ?? "").ToString();
