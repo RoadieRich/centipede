@@ -27,13 +27,7 @@ namespace Centipede
         {
             string displayName = !String.IsNullOrEmpty(catAttribute.DisplayName)
                                      ? catAttribute.DisplayName
-
-#pragma warning disable 612,618 //displayName is obsolete but still supported until we completely eliminate it
-
-                                     : !String.IsNullOrEmpty(catAttribute.displayName)
-                                           ? catAttribute.displayName
-                                           : pluginType.Name;
-#pragma warning restore 612,618
+                                     : pluginType.Name;
 
             Text = displayName;
             ToolTipText = catAttribute.Usage;
@@ -69,6 +63,13 @@ namespace Centipede
                 catch (TargetParameterCountException)
                 {
                     instance = (IAction)constructorInfo.Invoke(new object[] { "", this._core.Variables, this._core });
+                    MessageEvent(this,
+                                 new MessageEventArgs
+                                 {
+                                     Level = MessageLevel.Debug,
+                                     Message =
+                                         "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
+                                 });
                 }
                 return instance;
             }

@@ -41,17 +41,7 @@ namespace Centipede.Actions
             this.StatusIcons = new System.Windows.Forms.ImageList(this.components);
             this.StatusIconBox = new System.Windows.Forms.PictureBox();
             this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.ActMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.ActMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.ActMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.StatusTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.ArgumentTooltips = new System.Windows.Forms.ToolTip(this.components);
@@ -127,78 +117,10 @@ namespace Centipede.Actions
             // ActionContextMenu
             // 
             this.ActionContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSeparator1,
-            this.ActMenuMoveUp,
-            this.ActMenuMoveDown,
-            this.toolStripSeparator3,
-            this.ActMenuUndo,
-            this.ActMenuCut,
-            this.ActMenuCopy,
-            this.ActMenuPaste,
-            this.ActMenuDelete,
-            this.toolStripSeparator2,
-            this.ActMenuSelectAll});
+            this.ActMenuDelete});
             this.ActionContextMenu.Name = "ActionContextMenu";
             this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(143, 198);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuMoveUp
-            // 
-            this.ActMenuMoveUp.Enabled = false;
-            this.ActMenuMoveUp.Name = "ActMenuMoveUp";
-            this.ActMenuMoveUp.ShortcutKeyDisplayString = "[";
-            this.ActMenuMoveUp.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuMoveUp.Text = "Move Up";
-            // 
-            // ActMenuMoveDown
-            // 
-            this.ActMenuMoveDown.Enabled = false;
-            this.ActMenuMoveDown.Name = "ActMenuMoveDown";
-            this.ActMenuMoveDown.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuMoveDown.Text = "Move Down";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuUndo
-            // 
-            this.ActMenuUndo.Enabled = false;
-            this.ActMenuUndo.Name = "ActMenuUndo";
-            this.ActMenuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.ActMenuUndo.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuUndo.Text = "&Undo";
-            // 
-            // ActMenuCut
-            // 
-            this.ActMenuCut.Enabled = false;
-            this.ActMenuCut.Name = "ActMenuCut";
-            this.ActMenuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.ActMenuCut.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuCut.Text = "Cu&t";
-            // 
-            // ActMenuCopy
-            // 
-            this.ActMenuCopy.BackColor = System.Drawing.Color.Transparent;
-            this.ActMenuCopy.Enabled = false;
-            this.ActMenuCopy.Name = "ActMenuCopy";
-            this.ActMenuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.ActMenuCopy.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuCopy.Text = "&Copy";
-            // 
-            // ActMenuPaste
-            // 
-            this.ActMenuPaste.Enabled = false;
-            this.ActMenuPaste.Name = "ActMenuPaste";
-            this.ActMenuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.ActMenuPaste.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuPaste.Text = "&Paste";
+            this.ActionContextMenu.Size = new System.Drawing.Size(128, 48);
             // 
             // ActMenuDelete
             // 
@@ -207,19 +129,6 @@ namespace Centipede.Actions
             this.ActMenuDelete.Size = new System.Drawing.Size(142, 22);
             this.ActMenuDelete.Text = "&Delete";
             this.ActMenuDelete.Click += new System.EventHandler(this.ActMenuDelete_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(139, 6);
-            // 
-            // ActMenuSelectAll
-            // 
-            this.ActMenuSelectAll.Enabled = false;
-            this.ActMenuSelectAll.Name = "ActMenuSelectAll";
-            this.ActMenuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.ActMenuSelectAll.Size = new System.Drawing.Size(142, 22);
-            this.ActMenuSelectAll.Text = "Select &All";
             // 
             // CommentTextBox
             // 
@@ -271,16 +180,7 @@ namespace Centipede.Actions
         #endregion
 
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuMoveUp;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuMoveDown;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuUndo;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuCut;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuCopy;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuPaste;
         private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem ActMenuSelectAll;
         private System.Windows.Forms.TextBox CommentTextBox;
         private System.Windows.Forms.ToolTip StatusTooltip;
         private System.Windows.Forms.ToolTip ArgumentTooltips;
@@ -293,7 +193,6 @@ namespace Centipede.Actions
         /// 
         /// </summary>
         protected Label NameLabel;
-        private ToolStripSeparator toolStripSeparator1;
         private PictureBox ActionIcon;
         private PictureBox StatusIconBox;
         private ImageList StatusIcons;

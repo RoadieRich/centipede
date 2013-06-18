@@ -1078,7 +1078,7 @@ namespace Centipede
             {
                 SaveJob();
                 //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
-                Properties.Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
+                Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
             }
             catch (AbortOperationException)
@@ -1169,7 +1169,7 @@ namespace Centipede
 
         public void RunJobAfterLoad()
         {
-            this.Load += (sender, args) => this.StartRunning(false);
+            Load += (sender, args) => this.StartRunning(false);
         }
     }
 
