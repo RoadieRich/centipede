@@ -79,6 +79,13 @@ namespace Centipede.Actions
                                                 };
             //tableLayoutPanel.ColumnStyles[1].SizeType = SizeType.AutoSize;
             this._tableLayoutPanel = tableLayoutPanel;
+
+            var RowPadding = new System.Windows.Forms.Padding();
+            RowPadding.All = 10;
+
+            this._tableLayoutPanel.Padding = RowPadding;
+            
+
             if (!String.IsNullOrEmpty(Prompt))
             {
                 Label label = new Label
@@ -104,8 +111,8 @@ namespace Centipede.Actions
                                               };
 
                     radioButton.Width = 20 + TextRenderer.MeasureText(choice.Value.Trim(), radioButton.Font).Width;
-                    
-                    this._tableLayoutPanel.Controls.Add(radioButton, 0, choice.Key);
+
+                    this._tableLayoutPanel.Controls.Add(radioButton); //, 0, choice.Key);
                     this._tableLayoutPanel.SetColumnSpan(radioButton, 2);
                 }
 
