@@ -215,7 +215,11 @@ namespace CentipedeInterfaces
         /// <summary>
         ///     name of the icon in the resource file
         /// </summary>
-        public String IconName;
+        public String IconName
+        {
+            get { return iconName; }
+            set { iconName = value; }
+        }
 
 
         /// <summary>
@@ -244,6 +248,9 @@ namespace CentipedeInterfaces
 
         private string _usage;
         private string _helpText;
+
+        [Obsolete("Use IconName")]
+        public string iconName;
 
         /// <summary>
         ///     Marks a class as an Action, to be displayed in the GUI listbox
