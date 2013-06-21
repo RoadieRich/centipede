@@ -310,9 +310,9 @@ namespace CentipedeInterfaces
                    && Name == other.Name;
         }
 
-        public static void SetPropertyOnObject<TObject, TValue>(TObject @object, Expression<Func<TObject, TValue>> propertySlector, TValue value)
+        public static void SetPropertyOnObject<TObject, TValue>(TObject @object, Expression<Func<TObject, TValue>> propertySelector, TValue value)
         {
-            MemberExpression memberAccess = propertySlector.Body as MemberExpression;
+            MemberExpression memberAccess = propertySelector.Body as MemberExpression;
             if (memberAccess == null)
             {
                 throw new ArgumentNullException("memberAccess");
@@ -322,6 +322,19 @@ namespace CentipedeInterfaces
 
             property.Set(@object, value);
 
+        }
+
+        public static TValue GetPropertyOnObject<TObject, TValue>(TObject @object, Expression<Func<TObject, TValue>> propertySelector)
+        {
+            MemberExpression memberAccess = propertySelector.Body as MemberExpression;
+            if (memberAccess == null)
+            {
+                throw new ArgumentNullException("memberAccess");
+            }
+
+            FieldAndPropertyWrapper property = (FieldAndPropertyWrapper)memberAccess.Member;
+
+            return property.Get<TValue>(@object);
         }
     }
 }
