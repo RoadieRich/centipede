@@ -509,7 +509,7 @@ namespace Centipede
                            where member is FieldInfo || member is PropertyInfo
                            select (FieldAndPropertyWrapper)member
                            into wrapped
-                           where wrapped.GetArguementAttribute() != null
+                           where wrapped.GetArgumentAttribute() != null
                            select wrapped;
 
             foreach (FieldAndPropertyWrapper wrappedMember in wrappers)
