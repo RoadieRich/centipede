@@ -4,7 +4,23 @@ using ResharperAnnotations;
 
 namespace CentipedeInterfaces
 {
-#pragma warning disable 612,618
+    public class BaseCentipedeAttribute : Attribute
+    {
+        [UsedImplicitly]
+        public static GetI18nCallbackDelegate I18n;
+
+        protected static void GetI18n(ref string text)
+        {
+
+            GetI18nCallbackDelegate i18nCallback = I18n;
+
+            if (i18nCallback != null)
+            {
+                text = i18nCallback(text);
+            }
+        }
+    }
+
 
     /// <summary>
     ///     Mark a field of a class as an argument for the function, used to format the ActionDisplayControl
@@ -13,7 +29,7 @@ namespace CentipedeInterfaces
     [MeansImplicitUse]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [CLSCompliant(false)]
-    public sealed class ActionArgumentAttribute : Attribute
+    public sealed class ActionArgumentAttribute : BaseCentipedeAttribute
     {// ReSharper disable CSharpWarnings::CS0612
 
         /// <summary>
@@ -48,6 +64,7 @@ namespace CentipedeInterfaces
         {
             get
             {
+                GetI18n(ref this.displayName);
                 return this.displayName;
             }
             set
@@ -108,6 +125,7 @@ namespace CentipedeInterfaces
         {
             get
             {
+                GetI18n(ref this.usage);
                 return this.usage;
             }
             set
@@ -127,6 +145,8 @@ namespace CentipedeInterfaces
         public string HelpUri { get; set; }
 
         public bool Literal { get; set; }
+
+        public int DisplayOrder { get; set; }
 
         /// <summary>
         /// </summary>
@@ -157,7 +177,7 @@ namespace CentipedeInterfaces
     [MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [CLSCompliant(false)]
-    public sealed class ActionCategoryAttribute : Attribute
+    public sealed class ActionCategoryAttribute : BaseCentipedeAttribute
     {
         // ReSharper disable InconsistentNaming
 
@@ -182,12 +202,37 @@ namespace CentipedeInterfaces
         /// <summary>
         ///     helptext for the action, displayed as a tooltip
         /// </summary>
-        public String Usage;
+        public String Usage
+        {
+            get
+            {
+                GetI18n(ref this._usage);
+                return this._usage;
+            }
+            set { this._usage = value; }
+        }
 
         /// <summary>
         ///     name of the icon in the resource file
         /// </summary>
-        public String iconName;
+        public String IconName;
+
+
+        /// <summary>
+        ///     Html text for help related to the action
+        /// </summary>
+        /// <remarks>
+        ///     If both this and <see cref="HelpUri"/> are defined, <see cref="HelpText"/> value has priority.
+        /// </remarks>
+        public string HelpText
+        {
+            get
+            {
+                GetI18n(ref this._helpText);
+                return this._helpText;
+            }
+            set { this._helpText = value; }
+        }
 
         /// <summary>
         ///     Uri of a help file related to the action
@@ -197,13 +242,8 @@ namespace CentipedeInterfaces
         /// </remarks>
         public String HelpUri;
 
-        /// <summary>
-        ///     Html text for help related to the action
-        /// </summary>
-        /// <remarks>
-        ///     If both this and <see cref="HelpUri"/> are defined, <see cref="HelpText"/> value has priority.
-        /// </remarks>
-        public String HelpText;
+        private string _usage;
+        private string _helpText;
 
         /// <summary>
         ///     Marks a class as an Action, to be displayed in the GUI listbox
@@ -220,6 +260,7 @@ namespace CentipedeInterfaces
         {
             get
             {
+                GetI18n(ref this.displayName);
                 return displayName;
             }
             set
@@ -275,6 +316,7 @@ namespace CentipedeInterfaces
             return strValue;
         }
     }
-#pragma warning restore 618,612
+
+    public delegate string GetI18nCallbackDelegate(string text);
 
 }

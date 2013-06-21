@@ -93,7 +93,7 @@ namespace CentipedeInterfaces
         /// </summary>
         /// <returns></returns>
         [CLSCompliant(false)]
-        public ActionArgumentAttribute GetArguementAttribute()
+        public ActionArgumentAttribute GetArgumentAttribute()
         {
             return
                     this._member.GetCustomAttributes(typeof (ActionArgumentAttribute), true)

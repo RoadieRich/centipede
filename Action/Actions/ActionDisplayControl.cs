@@ -103,7 +103,9 @@ namespace Centipede.Actions
                                  where fi is FieldInfo || fi is PropertyInfo
                                  select (FieldAndPropertyWrapper)fi
                                  into wrapped
-                                 where wrapped.GetArguementAttribute() != null
+                                 let argattr = wrapped.GetArgumentAttribute()
+                                 where argattr != null
+                                 orderby argattr.DisplayOrder
                                  select wrapped;
 
             foreach (FieldAndPropertyWrapper arg in fieldArguments)
@@ -114,7 +116,7 @@ namespace Centipede.Actions
 
         private Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
         {
-            ActionArgumentAttribute attrData = arg.GetArguementAttribute();
+            ActionArgumentAttribute attrData = arg.GetArgumentAttribute();
             var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
 
             if (!string.IsNullOrEmpty(attrData.Usage))
@@ -217,7 +219,7 @@ namespace Centipede.Actions
 
         private EventHandler GetChangedHandler(FieldAndPropertyWrapper arg)
         {
-            ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
+            ActionArgumentAttribute argAttr = arg.GetArgumentAttribute();
             if (argAttr.OnChangedHandlerName == null)
             {
                 if (argAttr.OnLeaveHandlerName == null)
@@ -235,7 +237,7 @@ namespace Centipede.Actions
 
         private EventHandler GetLeaveHandler(FieldAndPropertyWrapper arg)
         {
-            ActionArgumentAttribute argAttr = arg.GetArguementAttribute();
+            ActionArgumentAttribute argAttr = arg.GetArgumentAttribute();
 
             if (argAttr.OnLeaveHandlerName == null)
             {
@@ -248,7 +250,7 @@ namespace Centipede.Actions
 
         private static String GetArgumentName(FieldAndPropertyWrapper argument)
         {
-            ActionArgumentAttribute argAttr = argument.GetArguementAttribute();
+            ActionArgumentAttribute argAttr = argument.GetArgumentAttribute();
             return argAttr.DisplayName ?? argument.Name;
         }
 
@@ -265,7 +267,7 @@ namespace Centipede.Actions
             {
                 return;
             }
-            ActionArgumentAttribute argInfo = f.GetArguementAttribute();
+            ActionArgumentAttribute argInfo = f.GetArgumentAttribute();
 
             object value = f.Get<Object>(ThisAction);
             MethodInfo parser = f.MemberType.GetMethod(@"Parse", new[] { typeof (String) });
