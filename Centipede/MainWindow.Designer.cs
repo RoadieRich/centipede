@@ -7,7 +7,6 @@ namespace Centipede
     {
         private System.Windows.Forms.ImageList ActionIcons;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ImageList OtherActIcons;
         private System.Windows.Forms.ContextMenuStrip VarsContextMenu;
         private System.Windows.Forms.ToolStripMenuItem VarMenuUndo;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -48,9 +47,6 @@ namespace Centipede
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
-            this.UIActTab = new System.Windows.Forms.TabPage();
-            this.UIActListBox = new System.Windows.Forms.ListView();
-            this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
             this.RunTabs = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
             this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
@@ -102,7 +98,7 @@ namespace Centipede
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
-            this.OtherActIcons = new System.Windows.Forms.ImageList(this.components);
+            this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -137,8 +133,6 @@ namespace Centipede
             this.SplitContainer3.Panel2.SuspendLayout();
             this.SplitContainer3.SuspendLayout();
             this.VarsContextMenu.SuspendLayout();
-            this.AddActionTabs.SuspendLayout();
-            this.UIActTab.SuspendLayout();
             this.RunTabs.SuspendLayout();
             this.OutputTab.SuspendLayout();
             this.toolStripContainer3.ContentPanel.SuspendLayout();
@@ -342,37 +336,11 @@ namespace Centipede
             // 
             // AddActionTabs
             // 
-            this.AddActionTabs.Controls.Add(this.UIActTab);
             resources.ApplyResources(this.AddActionTabs, "AddActionTabs");
             this.AddActionTabs.HotTrack = true;
             this.AddActionTabs.Multiline = true;
             this.AddActionTabs.Name = "AddActionTabs";
             this.AddActionTabs.SelectedIndex = 0;
-            // 
-            // UIActTab
-            // 
-            this.UIActTab.BackColor = System.Drawing.SystemColors.Window;
-            this.UIActTab.Controls.Add(this.UIActListBox);
-            resources.ApplyResources(this.UIActTab, "UIActTab");
-            this.UIActTab.Name = "UIActTab";
-            // 
-            // UIActListBox
-            // 
-            resources.ApplyResources(this.UIActListBox, "UIActListBox");
-            this.UIActListBox.LargeImageList = this.ActionIcons;
-            this.UIActListBox.Name = "UIActListBox";
-            this.UIActListBox.SmallImageList = this.ActionIcons;
-            this.UIActListBox.UseCompatibleStateImageBehavior = false;
-            this.UIActListBox.View = System.Windows.Forms.View.List;
-            this.UIActListBox.ItemActivate += new System.EventHandler(this.ItemActivate);
-            this.UIActListBox.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.BeginDrag);
-            // 
-            // ActionIcons
-            // 
-            this.ActionIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ActionIcons.ImageStream")));
-            this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
-            this.ActionIcons.Images.SetKeyName(1, "If.ico");
             // 
             // RunTabs
             // 
@@ -746,11 +714,12 @@ namespace Centipede
             resources.ApplyResources(this.toolStripContainer2, "toolStripContainer2");
             this.toolStripContainer2.Name = "toolStripContainer2";
             // 
-            // OtherActIcons
+            // ActionIcons
             // 
-            this.OtherActIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("OtherActIcons.ImageStream")));
-            this.OtherActIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.OtherActIcons.Images.SetKeyName(0, "pycon.ico");
+            this.ActionIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ActionIcons.ImageStream")));
+            this.ActionIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
+            this.ActionIcons.Images.SetKeyName(1, "If.ico");
             // 
             // updateTimer
             // 
@@ -874,8 +843,6 @@ namespace Centipede
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer3)).EndInit();
             this.SplitContainer3.ResumeLayout(false);
             this.VarsContextMenu.ResumeLayout(false);
-            this.AddActionTabs.ResumeLayout(false);
-            this.UIActTab.ResumeLayout(false);
             this.RunTabs.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
             this.toolStripContainer3.ContentPanel.ResumeLayout(false);
@@ -969,8 +936,6 @@ namespace Centipede
         private System.Windows.Forms.DataGridViewTextBoxColumn levelDataGridViewTextBoxColumn;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.TabControl AddActionTabs;
-        private System.Windows.Forms.TabPage UIActTab;
-        private System.Windows.Forms.ListView UIActListBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem visitGetSatisfactionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
