@@ -8,7 +8,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName = "Multiple Choice")]
+    [ActionCategory("UI", DisplayName = "Ask for Input (User Choice)")]
     public class MultipleChoice : Action
     {
         /// <summary>
@@ -17,26 +17,26 @@ namespace Centipede.Actions
         /// <param name="variables"></param>
         /// <param name="core"></param>
         public MultipleChoice(IDictionary<string, object> variables, ICentipedeCore core)
-                : base("Multiple Choice", variables, core)
+            : base("Ask for Input (User Choice)", variables, core)
         { }
 
-        [ActionArgument]
-        public String Choices = "";
-
-        [ActionArgument]
-        public bool RadioButtons;
-
-        [ActionArgument]
-        public String ChoiceNameVar = "";
-
-        [ActionArgument]
-        public String ChoiceIndexVar = "";
-
-        [ActionArgument(Literal = true)]
+        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Choice";
 
-        [ActionArgument]
-        public String Prompt = "";
+        [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
+        public String Prompt = "Please select from the following choices";
+
+        [ActionArgument(Usage = "(Required) List of choices, separated by commas")]
+        public String Choices = "";
+
+        [ActionArgument(Usage = "Controls whether user input is by buttons or drop-down list")]
+        public bool RadioButtons;
+
+        [ActionArgument(Usage = "(Optional) Variable to be updated with the selected choice value")]
+        public String ChoiceNameVar = "";
+
+        [ActionArgument(Usage = "(Optional) Variable to to be updated with the selected choice by index number")]
+        public String ChoiceIndexVar = "";
 
         private TableLayoutPanel _tableLayoutPanel;
         private Form _form;
@@ -123,6 +123,7 @@ namespace Centipede.Actions
                 ComboBox comboBox = new ComboBox
                                     {
                                         DropDownStyle = ComboBoxStyle.DropDown,
+                                        Dock = DockStyle.Fill,
                                         AutoSize = true,
                                         //AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
@@ -139,18 +140,31 @@ namespace Centipede.Actions
 
             this._tableLayoutPanel.ColumnCount = 2;
             int rows = this._tableLayoutPanel.RowCount;
-            this._tableLayoutPanel.Controls.Add(new Button
-                                                {
-                                                    Text = "Cancel",
-                                                    DialogResult = DialogResult.Cancel,
-                                                    Dock = DockStyle.Fill
-                                                }, 0, rows);
-            this._tableLayoutPanel.Controls.Add(new Button
-                                                {
-                                                    Text = "OK",
-                                                    DialogResult = DialogResult.OK,
-                                                    Dock = DockStyle.Fill
-                                                }, 1, rows);
+
+
+            Button btnCancel = new Button
+            {
+                Text = "Cancel",
+                DialogResult = DialogResult.Cancel,
+                Dock = DockStyle.Fill
+            };
+
+            this._form.CancelButton = btnCancel;
+
+            Button btnOK = new Button
+            {
+                Text = "OK",
+                DialogResult = DialogResult.OK,
+                Dock = DockStyle.Fill
+            };
+
+            this._form.AcceptButton = btnOK;
+
+            //table.Controls.Add(btnCancel);  // Removed cancel button for consistent appearance when table columns resize
+            this._tableLayoutPanel.Controls.Add(btnOK);
+            this._tableLayoutPanel.SetColumnSpan(btnOK, 2);
+
+
             this._form.Controls.Add(this._tableLayoutPanel);
 
             DialogResult result =
