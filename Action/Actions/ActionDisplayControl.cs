@@ -143,22 +143,22 @@ namespace Centipede.Actions
                         if (attrData.Literal)
                         {
                             attrValue = new TextBox
-                                        {
-                                            BackColor = SystemColors.Info,
+                                        {                                          
                                             ShortcutsEnabled = true,
                                             ContextMenu = null
                                         };
                         }
                         else
                         {
-                            attrValue = new RichTextBox
+                            attrValue = new TextBox //RichTextBox
                                         {
+                                            BackColor = SystemColors.Info,
                                             Multiline=false,
                                             Height = 20,
                                             ShortcutsEnabled = true,
                                             ContextMenu = null
                                         };
-                            ((RichTextBox)attrValue).TextChanged += NonLiteralOnTextChanged;
+                           // ((RichTextBox)attrValue).TextChanged += NonLiteralOnTextChanged;
                         }
                         attrValue.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                         attrValue.ContextMenu = null;

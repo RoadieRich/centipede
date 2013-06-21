@@ -25,8 +25,14 @@ namespace Centipede.Actions
         public string VariablesToSet = "";
 
 
-        [ActionArgument(DisplayName = "Evaluate")]
-        public Boolean Evaluate = true;
+        [ActionArgument(DisplayName = "Evaluate user input")]
+        public Boolean Evaluate = false;
+
+        [ActionArgument(Literal = true, Usage="Text to display in the titlebar of the popup form")]
+        public string Title = "Input";
+
+        [ActionArgument]
+        public String Prompt = "";
 
 
         /// <summary>
@@ -49,8 +55,12 @@ namespace Centipede.Actions
                             StartPosition = FormStartPosition.CenterParent,
                             MinimizeBox = false,
                             MaximizeBox = false,
-                            SizeGripStyle = SizeGripStyle.Hide
+                            SizeGripStyle = SizeGripStyle.Hide,
+                            ShowIcon = false,
+                            ShowInTaskbar = false,
+                            Text = this.Title
                         };
+
             TableLayoutPanel table = new TableLayoutPanel
                                      {
 
@@ -61,7 +71,25 @@ namespace Centipede.Actions
                                          AutoSizeMode = AutoSizeMode.GrowAndShrink
                                      };
 
+
+            var RowPadding = new System.Windows.Forms.Padding();
+            RowPadding.All = 10;
+
+            table.Padding = RowPadding;
+            
             form.Controls.Add(table);
+
+            if (!String.IsNullOrEmpty(Prompt))
+            {
+                Label label = new Label
+                {
+                    Text = this.Prompt,
+                    AutoSize = true
+                };
+                table.Controls.Add(label);
+                table.SetColumnSpan(label, 2);
+            }
+
             foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
             {
                 Label lbl = new Label
@@ -90,6 +118,7 @@ namespace Centipede.Actions
 
             table.Controls.AddRange(new Control[]
                                     {
+                                        // How do I set form.CancelButton = the new Button?
                                         new Button
                                         {
                                             Text = "Cancel",
@@ -150,12 +179,18 @@ namespace Centipede.Actions
         /// <param name="variables"></param>
         /// <param name="c"></param>
         public AskBooleans(IDictionary<string, object> variables, ICentipedeCore c)
-                : base("Ask For Values", variables, c)
+                : base("Checkboxes", variables, c)
         { }
 
 
         [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
         public string VariablesToSet = "";
+
+        [ActionArgument(Literal = true)]
+        public string Title = "Input";
+
+        [ActionArgument]
+        public String Prompt = "";
 
         /// <summary>
         /// Perform the action
@@ -165,6 +200,11 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
+            if (String.IsNullOrEmpty(VariablesToSet))
+            {
+                throw new ActionException("No variables listed", this);
+            } 
+            
             Form form = new Form
                         {
                             AutoSize = true,
@@ -172,14 +212,68 @@ namespace Centipede.Actions
                             StartPosition = FormStartPosition.CenterParent,
                             MinimizeBox = false,
                             MaximizeBox = false,
-                            SizeGripStyle = SizeGripStyle.Hide
+                            SizeGripStyle = SizeGripStyle.Hide,
+                            ShowIcon = false,
+                            ShowInTaskbar = false,
+                            Text = this.Title
                         };
-            
-            if (String.IsNullOrEmpty(VariablesToSet))
+
+            TableLayoutPanel table = new TableLayoutPanel
             {
-                throw new ActionException("No variables listed", this);
+
+                ColumnCount = 2,
+                GrowStyle = TableLayoutPanelGrowStyle.AddRows,
+                Dock = DockStyle.Fill,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
+
+
+            var RowPadding = new System.Windows.Forms.Padding();
+            RowPadding.All = 10;
+
+            table.Padding = RowPadding;
+
+            form.Controls.Add(table);
+
+            if (!String.IsNullOrEmpty(Prompt))
+            {
+                Label label = new Label
+                {
+                    Text = this.Prompt,
+                    AutoSize = true
+                };
+                table.Controls.Add(label);
+                table.SetColumnSpan(label, 2);
             }
 
+            foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
+            {
+                Label lbl = new Label
+                {
+                    Text = varName,
+                    AutoSize = true
+                };
+
+                CheckBox cb = new CheckBox
+                {
+                    Tag = varName
+                };
+
+                dynamic value;
+
+                Variables.TryGetValue(varName, out value);
+
+                if (value != null)
+                {
+                    cb.Checked = Convert.ToBoolean(value);
+                }
+
+                table.Controls.Add(lbl);
+                table.Controls.Add(cb);
+            }
+            
+            /*
             form.Controls.AddRange(this.VariablesToSet.Split(',')
                                        .Select(var => var.Trim())
                                        .Select(varName => new CheckBox
@@ -187,9 +281,9 @@ namespace Centipede.Actions
                                                               Text = varName
                                                           }));
 
+            */
 
-
-            form.Controls.AddRange(new Control[]
+            table.Controls.AddRange(new Control[]
                                    {
                                        new Button
                                        {
@@ -210,9 +304,9 @@ namespace Centipede.Actions
                                    switch (form.DialogResult)
                                    {
                                    case DialogResult.OK:
-                                       foreach (CheckBox checkBox in form.Controls.OfType<CheckBox>())
+                                       foreach (CheckBox checkBox in table.Controls.OfType<CheckBox>())
                                        {
-                                           Variables[checkBox.Text] = checkBox.Checked;
+                                           Variables[(string)checkBox.Tag] = checkBox.Checked;
                                        }
                                        break;
                                    case DialogResult.Cancel:

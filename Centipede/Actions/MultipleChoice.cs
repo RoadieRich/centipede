@@ -31,6 +31,7 @@ namespace Centipede.Actions
 
         [ActionArgument]
         public String ChoiceIndexVar = "";
+
         [ActionArgument(Literal = true)]
         public string Title = "Choice";
 
@@ -85,7 +86,6 @@ namespace Centipede.Actions
 
             this._tableLayoutPanel.Padding = RowPadding;
             
-
             if (!String.IsNullOrEmpty(Prompt))
             {
                 Label label = new Label
@@ -123,7 +123,7 @@ namespace Centipede.Actions
                 ComboBox comboBox = new ComboBox
                                     {
                                         DropDownStyle = ComboBoxStyle.DropDown,
-                                        //AutoSize = true,
+                                        AutoSize = true,
                                         //AutoCompleteMode = AutoCompleteMode.SuggestAppend
                                     };
 

@@ -87,15 +87,16 @@ namespace Centipede
         }
 
         private void SetUserProperties()
-        {
-            SetAndIgnoreErrors(this, f => f.Height, Settings.Default.MainWindowHeight);
-            SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
-            SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
-            SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
-            SetAndIgnoreErrors(this, f => f.DisplayedLevels, Settings.Default.MessageFilterSetting);
-            SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
-            SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
-            SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
+        {/*
+                SetAndIgnoreErrors(this, f => f.Height, Settings.Default.MainWindowHeight);
+                SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
+                SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
+                SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
+                SetAndIgnoreErrors(this, f => f.DisplayedLevels, Settings.Default.MessageFilterSetting);
+                SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
+                SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
+                SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
+          * */
         }
 
         private static void SetAndIgnoreErrors<T1, T2>(T1 arg1, Expression<Func<T1, T2>> selector, T2 arg2)
@@ -542,9 +543,12 @@ namespace Centipede
             
             foreach (string jobFilename in Settings.Default.ListOfFavouriteJobs)
             {
+                if (File.Exists(jobFilename))
+                {
                 var item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
                 item.Click += this.ItemOnClick;
                 this.FavouritesMenu.DropDownItems.Add(item);
+                }
             }
 
             this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
