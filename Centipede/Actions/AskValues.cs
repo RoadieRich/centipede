@@ -8,7 +8,7 @@ using PythonEngine;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName = "Ask for values")]
+    [ActionCategory("UI", DisplayName = "Ask for Input (Text or Numeric)")]
     class AskValues : Action
     {
         /// <summary>
@@ -17,22 +17,24 @@ namespace Centipede.Actions
         /// <param name="variables"></param>
         /// <param name="c"></param>
         public AskValues(IDictionary<string, object> variables, ICentipedeCore c)
-                : base("Ask For Values", variables, c)
+                : base("Ask for Input (Text or Numeric)", variables, c)
         { }
 
 
-        [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
-        public string VariablesToSet = "";
-
-
-        [ActionArgument(DisplayName = "Evaluate user input")]
-        public Boolean Evaluate = false;
-
-        [ActionArgument(Literal = true, Usage="Text to display in the titlebar of the popup form")]
+        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Input";
 
-        [ActionArgument]
-        public String Prompt = "";
+        [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
+        public String Prompt = "Please enter the following values";
+
+        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas", Literal = true)]
+        public string VariablesToSet = "";
+
+        [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
+        public string LabelsToDisplay = "";
+
+        [ActionArgument(DisplayName = "Evaluate user input", Usage="Controls whether user input is evaluated or taken literally")]
+        public Boolean Evaluate = false;
 
 
         /// <summary>
@@ -72,10 +74,9 @@ namespace Centipede.Actions
                                      };
 
 
-            var RowPadding = new System.Windows.Forms.Padding();
-            RowPadding.All = 10;
-
-            table.Padding = RowPadding;
+            Padding TablePadding = new Padding();
+            TablePadding.All = 10;
+            table.Padding = TablePadding;
             
             form.Controls.Add(table);
 
@@ -90,22 +91,33 @@ namespace Centipede.Actions
                 table.SetColumnSpan(label, 2);
             }
 
-            foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
+
+            // Get list of labels
+            string[] lblStrings = ParseStringForVariable(LabelsToDisplay).Split(',');
+            
+            // Get list of variables
+            string[] varNames = VariablesToSet.Split(',');
+
+            // Create label and text box for each variable
+            for (int i = 0; i < varNames.Length; i++)
             {
                 Label lbl = new Label
                             {
-                                Text = varName,
+                                Text = lblStrings.Length == varNames.Length ? lblStrings[i].Trim() : varNames[i].Trim(),  // If labels list is wrong size, use varNames instead
+                                TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
+                                Dock = DockStyle.Fill,
                                 AutoSize = true
                             };
 
                 TextBox tb = new TextBox
                              {
-                                 Tag = varName
+                                 Tag = varNames[i].Trim(),
+                                 Dock = DockStyle.Fill
                              };
                 
                 dynamic value;
 
-                Variables.TryGetValue(varName, out value);
+                Variables.TryGetValue(varNames[i].Trim(), out value);
                 
                 if (value != null)
                 {
@@ -116,22 +128,27 @@ namespace Centipede.Actions
                 table.Controls.Add(tb);
             }
 
-            table.Controls.AddRange(new Control[]
-                                    {
-                                        // How do I set form.CancelButton = the new Button?
-                                        new Button
-                                        {
-                                            Text = "Cancel",
-                                            DialogResult = DialogResult.Cancel,
-                                            Dock = DockStyle.Fill
-                                        },
-                                        new Button
-                                        {
-                                            Text = "OK",
-                                            DialogResult = DialogResult.OK,
-                                            Dock = DockStyle.Fill
-                                        }
-                                    });
+            Button btnCancel = new Button
+            {
+                Text = "Cancel",
+                DialogResult = DialogResult.Cancel,
+                Dock = DockStyle.Fill
+            };
+
+            form.CancelButton = btnCancel;
+
+            Button btnOK = new Button
+            {
+                Text = "OK",
+                DialogResult = DialogResult.OK,
+                Dock = DockStyle.Fill
+            };
+
+            form.AcceptButton = btnOK;
+
+            //table.Controls.Add(btnCancel);  // Removed cancel button for consistent appearance when table columns resize
+            table.Controls.Add(btnOK);
+            table.SetColumnSpan(btnOK, 2);
 
             form.FormClosed += delegate
                                {
@@ -170,7 +187,9 @@ namespace Centipede.Actions
         }
     }
 
-    [ActionCategory("UI", DisplayName = "Checkboxes")]
+    //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    [ActionCategory("UI", DisplayName = "Ask for Input (True / False)")]
     class AskBooleans : Action
     {
         /// <summary>
@@ -179,18 +198,21 @@ namespace Centipede.Actions
         /// <param name="variables"></param>
         /// <param name="c"></param>
         public AskBooleans(IDictionary<string, object> variables, ICentipedeCore c)
-                : base("Checkboxes", variables, c)
+                : base("Ask for Input (True / False)", variables, c)
         { }
 
-
-        [ActionArgument(DisplayName = "Variables", Usage="Variable names, separated by commas", Literal=true)]
-        public string VariablesToSet = "";
-
-        [ActionArgument(Literal = true)]
+        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Input";
 
-        [ActionArgument]
-        public String Prompt = "";
+        [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
+        public String Prompt = "Please set the following values";
+
+        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and stores variables as True or False", Literal = true)]
+        public string VariablesToSet = "";
+
+        [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
+        public string LabelsToDisplay = "";
+
 
         /// <summary>
         /// Perform the action
@@ -229,10 +251,9 @@ namespace Centipede.Actions
             };
 
 
-            var RowPadding = new System.Windows.Forms.Padding();
-            RowPadding.All = 10;
-
-            table.Padding = RowPadding;
+            Padding TablePadding = new Padding();
+            TablePadding.All = 10;
+            table.Padding = TablePadding;
 
             form.Controls.Add(table);
 
@@ -247,22 +268,31 @@ namespace Centipede.Actions
                 table.SetColumnSpan(label, 2);
             }
 
-            foreach (string varName in VariablesToSet.Split(',').Select(var => var.Trim()))
+            // Get list of labels
+            string[] lblStrings = ParseStringForVariable(LabelsToDisplay).Split(',');
+
+            // Get list of variables
+            string[] varNames = VariablesToSet.Split(',');
+
+            // Create label and text box for each variable
+            for (int i = 0; i < varNames.Length; i++)
             {
                 Label lbl = new Label
                 {
-                    Text = varName,
+                    Text = lblStrings.Length == varNames.Length ? lblStrings[i].Trim() : varNames[i].Trim(),  // If labels list is wrong size, use varNames instead
+                    TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
+                    Dock = DockStyle.Fill,
                     AutoSize = true
                 };
 
                 CheckBox cb = new CheckBox
                 {
-                    Tag = varName
+                    Tag = varNames[i].Trim()
                 };
 
                 dynamic value;
 
-                Variables.TryGetValue(varName, out value);
+                Variables.TryGetValue(varNames[i].Trim(), out value);
 
                 if (value != null)
                 {
@@ -272,32 +302,29 @@ namespace Centipede.Actions
                 table.Controls.Add(lbl);
                 table.Controls.Add(cb);
             }
-            
-            /*
-            form.Controls.AddRange(this.VariablesToSet.Split(',')
-                                       .Select(var => var.Trim())
-                                       .Select(varName => new CheckBox
-                                                          {
-                                                              Text = varName
-                                                          }));
 
-            */
 
-            table.Controls.AddRange(new Control[]
-                                   {
-                                       new Button
-                                       {
-                                           Text = "Cancel",
-                                           DialogResult = DialogResult.Cancel,
-                                           Dock = DockStyle.Fill
-                                       },
-                                       new Button
-                                       {
-                                           Text = "OK",
-                                           DialogResult = DialogResult.OK,
-                                           Dock = DockStyle.Fill
-                                       }
-                                   });
+            Button btnCancel = new Button
+            {
+                Text = "Cancel",
+                DialogResult = DialogResult.Cancel,
+                Dock = DockStyle.Fill
+            };
+
+            form.CancelButton = btnCancel;
+
+            Button btnOK = new Button
+            {
+                Text = "OK",
+                DialogResult = DialogResult.OK,
+                Dock = DockStyle.Fill
+            };
+
+            form.AcceptButton = btnOK;
+
+            //table.Controls.Add(btnCancel);  // Removed cancel button for consistent appearance when table columns resize
+            table.Controls.Add(btnOK);
+            table.SetColumnSpan(btnOK, 2);
             
             form.FormClosed += delegate
                                {
