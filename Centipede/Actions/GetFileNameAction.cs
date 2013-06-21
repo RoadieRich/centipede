@@ -44,7 +44,7 @@ namespace Centipede.Actions
 
 
             this._mainWindow.GetFileNameDialogue.FileOk += GetFileNameDialogue_FileOk;
-            this._mainWindow.GetFileNameDialogue.Title = Caption;
+            this._mainWindow.GetFileNameDialogue.Title = Prompt;
             this._mainWindow.GetFileNameDialogue.Filter = Filter;
             this._mainWindow.GetFileNameDialogue.FileName = ParseStringForVariable(this.DefaultFilename);
             
@@ -62,7 +62,7 @@ namespace Centipede.Actions
                                        GetCurrentCore().Window);
             if (result == DialogResult.Cancel)
             {
-                throw new FatalActionException(string.Format("Cancel clicked on {0} dialog.", Caption), this);
+                throw new FatalActionException(string.Format("Cancel clicked on {0} dialog.", Prompt), this);
             }
         }
 
