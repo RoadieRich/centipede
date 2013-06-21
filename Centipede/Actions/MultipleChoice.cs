@@ -8,7 +8,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName = "Ask for Input (User Choice)")]
+    [ActionCategory("UI", DisplayName = "Ask for Input (Multiple Choice)")]
     public class MultipleChoice : Action
     {
         /// <summary>
@@ -17,7 +17,7 @@ namespace Centipede.Actions
         /// <param name="variables"></param>
         /// <param name="core"></param>
         public MultipleChoice(IDictionary<string, object> variables, ICentipedeCore core)
-            : base("Ask for Input (User Choice)", variables, core)
+            : base("Ask for Input (Multiple Choice)", variables, core)
         { }
 
         [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
@@ -32,10 +32,10 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "Controls whether user input is by buttons or drop-down list")]
         public bool RadioButtons;
 
-        [ActionArgument(Usage = "(Optional) Variable to be updated with the selected choice value")]
+        [ActionArgument(Usage = "(Optional) Variable to be updated with the value of the selected choice")]
         public String ChoiceNameVar = "";
 
-        [ActionArgument(Usage = "(Optional) Variable to to be updated with the selected choice by index number")]
+        [ActionArgument(Usage = "(Optional) Variable to to be updated with the index number of the selected choice ")]
         public String ChoiceIndexVar = "";
 
         private TableLayoutPanel _tableLayoutPanel;
