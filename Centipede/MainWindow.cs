@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -667,7 +669,8 @@ namespace Centipede
                      {
                          LargeImageList = this.ActionIcons,
                          SmallImageList = this.ActionIcons,
-                         View = View.List
+                         View = View.List,
+                         ListViewItemSorter = new ActionFactoryComparer()
                      };
 
             var tabPage = new TabPage(category);
@@ -1174,6 +1177,16 @@ namespace Centipede
         public void RunJobAfterLoad()
         {
             Load += (sender, args) => this.StartRunning(false);
+        }
+    }
+
+    internal class ActionFactoryComparer : IComparer
+    {
+        public int Compare(object x, object y)
+        {
+            ActionFactory a = (ActionFactory)x;
+            ActionFactory b = (ActionFactory)y;
+            return String.Compare(a.Text, b.Text, CultureInfo.CurrentCulture, CompareOptions.StringSort);
         }
     }
 
