@@ -89,34 +89,27 @@ namespace Centipede
         }
 
         private void SetUserProperties()
-        {/*
-                SetAndIgnoreErrors(this, f => f.Height, Settings.Default.MainWindowHeight);
-                SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
-                SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
-                SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
-                SetAndIgnoreErrors(this, f => f.DisplayedLevels, Settings.Default.MessageFilterSetting);
-                SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
-                SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
-                SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
-          * */
+        {
+            SetAndIgnoreErrors(this, f => f.Height, Settings.Default.MainWindowHeight);
+            SetAndIgnoreErrors(this, f => f.Width, Settings.Default.MainWindowWidth);
+            SetAndIgnoreErrors(this, f => f.Location, Settings.Default.MainWindowLocation);
+            SetAndIgnoreErrors(this, f => f.WindowState, Settings.Default.MainWindowState);
+            SetAndIgnoreErrors(this, f => f.DisplayedLevels, Settings.Default.MessageFilterSetting);
+            SetAndIgnoreErrors(this.SplitContainer1, s => s.SplitterDistance, Settings.Default.SplitContainer1Point);
+            SetAndIgnoreErrors(this.SplitContainer2, s => s.SplitterDistance, Settings.Default.SplitContainer2Point);
+            SetAndIgnoreErrors(this.SplitContainer3, s => s.SplitterDistance, Settings.Default.SplitContainer3Point);
         }
 
         private static void SetAndIgnoreErrors<T1, T2>(T1 arg1, Expression<Func<T1, T2>> selector, T2 arg2)
         {
             try
             {
+                
                 FieldAndPropertyWrapper.SetPropertyOnObject(arg1, selector, arg2);
             }
-            catch (Exception e)
+            catch
             {
-                if (e is ArgumentOutOfRangeException || e is InvalidOperationException)
-                {
-                    Debug.WriteLine(e);
-                }
-                else
-                {
-                    throw;
-                }
+                ;
             }
         }
         #endregion
