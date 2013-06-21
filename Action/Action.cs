@@ -317,7 +317,7 @@ namespace Centipede
                         PythonParseException parseException;
                         if (!this.Throws(expression.CompileWith, pythonEngine, out parseException))
                         {
-                            this.OnMessage(MessageLevel.Debug, "Parsed {0} as valid python", expression.Template);
+                            //this.OnMessage(MessageLevel.Debug, "Parsed {0} as valid python", expression.Template);
                             pythonExpressions.Add(expression);
                         }
                     }
