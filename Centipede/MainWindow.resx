@@ -508,7 +508,7 @@
     <value>0</value>
   </data>
   <data name="ActionContainer.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641,Absolute,641" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls /&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647,Absolute,647" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;SplitContainer3.Panel1.Name" xml:space="preserve">
     <value>SplitContainer3.Panel1</value>
@@ -522,86 +522,6 @@
   <data name="&gt;&gt;SplitContainer3.Panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="UIActListBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <metadata name="ActionIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>270, 17</value>
-  </metadata>
-  <data name="ActionIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAE
-        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
-        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
-        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
-        Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
-        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAOAAf8DgAH/A4AB/wOAAf8DgAH/A4AB/wwA
-        A4AB/wOAAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAOA
-        Af8UAAOAAf8DgAH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
-        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAOAAf8UAAOAAf8DgAH/kAADZAH2
-        AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
-        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA4AB/xQAA4AB/wOAAf+QAAT/AaQCgQH/AZkCgQH/
-        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAOA
-        Af8UAAOAAf8DgAH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
-        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA4AB/wOAAf8DgAH/A4AB/wwA
-        A4AB/wOAAf8DgAH/A4AB/wOAAf8DgAH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
-        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAOAAf8DgAH/lAADWwG4
-        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA4AB/xQAA4AB/wOAAf+gAAT/AZsCgQH/
-        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADgAH/GAADgAH/A4AB/wOAAf8DgAH/lAADcgH1AaYCgQH/
-        AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
-        AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
-        AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
-        AQEBgQHPBgAB9wHPBgAB9wHPBgAB9wHPBgAB9wHPBgABhwEDBgAB/wHPBAABgAEBAfcBzwQAAfABDwH3
-        AeEEAAHwAQ8C/wQAAfABDwL/BAAB+AEfAv8EAAs=
-</value>
-  </data>
-  <data name="UIActListBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="UIActListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>413, 89</value>
-  </data>
-  <data name="UIActListBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Name" xml:space="preserve">
-    <value>UIActListBox</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.Parent" xml:space="preserve">
-    <value>UIActTab</value>
-  </data>
-  <data name="&gt;&gt;UIActListBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="UIActTab.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 22</value>
-  </data>
-  <data name="UIActTab.Size" type="System.Drawing.Size, System.Drawing">
-    <value>413, 89</value>
-  </data>
-  <data name="UIActTab.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="UIActTab.Text" xml:space="preserve">
-    <value>UI</value>
-  </data>
-  <data name="&gt;&gt;UIActTab.Name" xml:space="preserve">
-    <value>UIActTab</value>
-  </data>
-  <data name="&gt;&gt;UIActTab.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;UIActTab.Parent" xml:space="preserve">
-    <value>AddActionTabs</value>
-  </data>
-  <data name="&gt;&gt;UIActTab.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="AddActionTabs.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -612,7 +532,7 @@
     <value>421, 115</value>
   </data>
   <data name="AddActionTabs.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>0</value>
   </data>
   <data name="&gt;&gt;AddActionTabs.Name" xml:space="preserve">
     <value>AddActionTabs</value>
@@ -1157,7 +1077,7 @@
     <value>Ctrl+N</value>
   </data>
   <data name="newToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="newToolStripMenuItem1.Text" xml:space="preserve">
     <value>&amp;New</value>
@@ -1186,13 +1106,13 @@
     <value>Ctrl+O</value>
   </data>
   <data name="openToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="openToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Open</value>
   </data>
   <data name="toolStripSeparator.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>148, 6</value>
   </data>
   <data name="saveToolStripMenuItem1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1217,19 +1137,19 @@
     <value>Ctrl+S</value>
   </data>
   <data name="saveToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="saveToolStripMenuItem1.Text" xml:space="preserve">
     <value>&amp;Save</value>
   </data>
   <data name="saveAsToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="saveAsToolStripMenuItem1.Text" xml:space="preserve">
     <value>Save &amp;As</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>148, 6</value>
   </data>
   <data name="printToolStripMenuItem1.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1257,7 +1177,7 @@
     <value>Ctrl+P</value>
   </data>
   <data name="printToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="printToolStripMenuItem1.Text" xml:space="preserve">
     <value>&amp;Print</value>
@@ -1282,13 +1202,13 @@
     <value>Magenta</value>
   </data>
   <data name="printPreviewToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="printPreviewToolStripMenuItem.Text" xml:space="preserve">
     <value>Print Pre&amp;view</value>
   </data>
   <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>148, 6</value>
   </data>
   <data name="toolStripMenuItem1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1307,16 +1227,16 @@
 </value>
   </data>
   <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="toolStripMenuItem1.Text" xml:space="preserve">
     <value>Properties</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>148, 6</value>
   </data>
   <data name="exitToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="exitToolStripMenuItem1.Text" xml:space="preserve">
     <value>E&amp;xit</value>
@@ -1328,28 +1248,28 @@
     <value>&amp;File</value>
   </data>
   <data name="runToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="runToolStripMenuItem1.Text" xml:space="preserve">
     <value>Run</value>
   </data>
   <data name="abortToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="abortToolStripMenuItem.Text" xml:space="preserve">
     <value>Abort</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>147, 6</value>
   </data>
   <data name="resetJobToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="resetJobToolStripMenuItem.Text" xml:space="preserve">
     <value>Reset Job</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>150, 22</value>
   </data>
   <data name="stepThroughToolStripMenuItem.Text" xml:space="preserve">
     <value>Step Through</value>
@@ -1585,32 +1505,36 @@
   <data name="&gt;&gt;toolStripContainer2.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <metadata name="OtherActIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>379, 17</value>
+  <metadata name="ActionIcons.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>270, 17</value>
   </metadata>
-  <data name="OtherActIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+  <data name="ActionIcons.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAC
-        BAAAAk1TRnQBSQFMAwEBAAEEAQABBAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMA
-        ARADAAEBAQABIAYAARAmAAQGAxQBGgMZASEDGQEhAxMBGAQF5AADGgEjA18BwwN/AfgE/wN/AfgDXwHN
-        AzMBUAQG4AADWwG4AbMB9QL/AYEB4wL/AYEB2QL/AYEB0wL/AaAB5gL/A2IBzwMWARzgAANkAfYBgQHt
-        Av8BgQHoAv8BgQHgAv8B1QH2Av8BgQHQAv8DawH5Ax4BKNQABAYDFAQZASEE/wGBAe0C/wGBAe0C/wGB
-        AecC/wGBAd4C/wGBAdYG/wMoATsDGQEgAxIBFwQFxAADGgEjA10BwgN/AfgI/wGBAe0C/wGBAe0C/wG+
-        AfcS/wN/AfgDXwHNAzMBUAQGwAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/
-        AYEB6wL/AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR3AAANkAfYBoQKBAf8BjwKB
-        Af8BhAKBAf8B8QHuAeoB/wGbAfQC/wGBAe0C/wGBAe0C/wGBAe0C/wGBAeoC/wGBAeIC/wGBAdkC/wGB
-        AdEC/wGBAcwC/wNrAfkDHgEpwAAE/wGkAoEB/wGZAoEB/wGNAoEB/wGjAY4BgQH/AfAB7gHqDf8B7QH9
-        Av8BhQHtAv8BgQHgAv8BgQHYAv8BgQHPBv8DHwEqwAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKB
-        Af8DgQH/A4EB/wOBAf8DgQH/AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIcAA
-        A1kBtgHcAcIBogH/Aa0CgQH/AaACgQH/AZQCgQH/AYkCgQH/A4EB/wOBAf8DgQH/A4EF/wGBAewC/wGB
-        AeYC/wGsAe8C/wNdAcQDCgELxAADWwG4A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJdQA
-        BP8BmwKBAf8BkAKBAf8BhQKBAf8DgQH/A4EF/wMeASngAANyAfUBpgKBAf8B6AHfAdMB/wGOAoEB/wGC
-        AoEB/wOBAf8DfwH4AxkBIeAAA1kBtgHYAcABowH/AagCgQH/AZcCgQH/AZMCgQH/AcQBtwGoAf8DXQHE
-        AwoBC+QAA1sBuANwAfcE/wNyAfUDWgG5AxwBJdQAAUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEB
-        BQABgBcAA/8BAAH4AR8GAAHwAQ8GAAHwAQ8GAAHwAQ8GAAGAAQE2AAGAAQEGAAHwAQ8GAAHwAQ8GAAHw
-        AQ8GAAH4AR8GAAs=
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAE
+        BQAAAk1TRnQBSQFMAgEBAgEAAQQBAAEEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABECYABAYDFAEaAxkBIQMZASEDEwEYBAXkAAMaASMDXwHDA38B+AT/A38B+ANf
+        Ac0DMwFQBAbgAANbAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DYgHPAxYBHOAAA2QB9gGB
+        Ae0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNrAfkDHgEo1AAEBgMUBBkBIQT/AYEB7QL/AYEB7QL/
+        AYEB5wL/AYEB3gL/AYEB1gb/AygBOwMZASADEgEXBAUIAAOBAf8DgQH/A4EB/wOBAf8DgQH/A4EB/wwA
+        A4EB/wOBAf+QAAMaASMDXQHCA38B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A38B+ANfAc0DMwFQBAYQAAOB
+        Af8UAAOBAf8DgQH/kAADWgG5AcwBugGlAf8BiAKBAf8DgQX/AYEB7QL/AYEB7QL/AYEB7QL/AYEB6wL/
+        AYEB4wL/AYEB2wL/AYEB0gL/AYEBywL/AZ0B5AL/A2IBzwMXAR0QAAOBAf8UAAOBAf8DgQH/kAADZAH2
+        AaECgQH/AY8CgQH/AYQCgQH/AfEB7gHqAf8BmwH0Av8BgQHtAv8BgQHtAv8BgQHtAv8BgQHqAv8BgQHi
+        Av8BgQHZAv8BgQHRAv8BgQHMAv8DawH5Ax4BKRAAA4EB/xQAA4EB/wOBAf+QAAT/AaQCgQH/AZkCgQH/
+        AY0CgQH/AaMBjgGBAf8B8AHuAeoN/wHtAf0C/wGFAe0C/wGBAeAC/wGBAdgC/wGBAc8G/wMfASoQAAOB
+        Af8UAAOBAf8DgQH/kAADcgH1AbIBggGBAf8BogKBAf8BlgKBAf8BiwKBAf8DgQH/A4EB/wOBAf8DgQH/
+        AawBnAGJAf8B7QH9Av8BgQHnAv8BgQHfAv8BgQHZAv8DfwH4AxkBIQQAA4EB/wOBAf8DgQH/A4EB/wwA
+        A4EB/wOBAf8DgQH/A4EB/wOBAf8DgQH/iAADWQG2AdwBwgGiAf8BrQKBAf8BoAKBAf8BlAKBAf8BiQKB
+        Af8DgQH/A4EB/wOBAf8DgQX/AYEB7AL/AYEB5gL/AawB7wL/A10BxAMKAQsoAAOBAf8DgQH/lAADWwG4
+        A3AB9xD/AckBvgGxAf8DgQH/A4EJ/wNyAfUDWwG4AxwBJRQAA4EB/xQAA4EB/wOBAf+gAAT/AZsCgQH/
+        AZACgQH/AYUCgQH/A4EB/wOBBf8DHgEpIAADgQH/GAADgQH/A4EB/wOBAf8DgQH/lAADcgH1AaYCgQH/
+        AegB3wHTAf8BjgKBAf8BggKBAf8DgQH/A38B+AMZASHgAANZAbYB2AHAAaMB/wGoAoEB/wGXAoEB/wGT
+        AoEB/wHEAbcBqAH/A10BxAMKAQvkAANbAbgDcAH3BP8DcgH1A1oBuQMcASXUAAFCAU0BPgcAAT4DAAEo
+        AwABQAMAARADAAEBAQABAQUAAYAXAAP/AQAB+AEfAv8EAAHwAQ8C/wQAAfABDwL/BAAB8AEPAv8EAAGA
+        AQEBgQHPBgAB9wHPBgAB9wHPBgAB9wHPBgAB9wHPBgABhwEDBgAB/wHPBAABgAEBAfcBzwQAAfABDwH3
+        AeEEAAHwAQ8C/wQAAfABDwL/BAAB+AEfAv8EAAs=
 </value>
   </data>
   <metadata name="updateTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -1858,12 +1782,6 @@
   <data name="&gt;&gt;VarMenuSelectAll.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;ActionIcons.Name" xml:space="preserve">
-    <value>ActionIcons</value>
-  </data>
-  <data name="&gt;&gt;ActionIcons.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;timestampDataGridViewTextBoxColumn.Name" xml:space="preserve">
     <value>timestampDataGridViewTextBoxColumn</value>
   </data>
@@ -2104,10 +2022,10 @@
   <data name="&gt;&gt;aboutToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;OtherActIcons.Name" xml:space="preserve">
-    <value>OtherActIcons</value>
+  <data name="&gt;&gt;ActionIcons.Name" xml:space="preserve">
+    <value>ActionIcons</value>
   </data>
-  <data name="&gt;&gt;OtherActIcons.Type" xml:space="preserve">
+  <data name="&gt;&gt;ActionIcons.Type" xml:space="preserve">
     <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;updateTimer.Name" xml:space="preserve">

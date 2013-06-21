@@ -412,9 +412,9 @@ namespace Centipede
                 this.MessageFilterToolStrip.Items.Add(button);
             }
 
-            this.UIActListBox.LargeImageList.Images.Add(@"generic", Resources.generic);
+            ActionIcons.Images.Add(@"generic", Resources.generic);
 
-            this.UIActTab.Tag = this.UIActListBox;
+            //this.UIActTab.Tag = this.UIActListBox;
 
             AddToActionTab( typeof( DemoAction        ));
             AddToActionTab( typeof( GetFileNameAction ));
