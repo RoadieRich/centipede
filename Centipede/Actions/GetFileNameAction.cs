@@ -16,17 +16,19 @@ namespace Centipede.Actions
             
         }
 
-        [ActionArgument(Literal = true)]
-        public String DestinationVariable = "Filename";
+        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
+        public string Title = "Choose File";
 
-        [ActionArgument(Literal = true)]
-        public String Caption = "Choose File";
-        
-        [ActionArgument(DisplayName = "Filter")]
+        [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
+        public String Prompt = "Please browse to file";
+
+        [ActionArgument(Literal = true, Usage = "(Required) Name of variable to store the chosen filename")]
+        public String DestinationVariable = "Filename";
+      
+        [ActionArgument(DisplayName = "Filter", Usage = "(Optional) Filter the browse dialog to only show certain file types")]
         public String Filter = "All Files (*.*)|*.*";
 
-
-        [ActionArgument(DisplayName = "Default filename")]
+        [ActionArgument(DisplayName = "Default filename", Usage = "(Optional) ")]
         public String DefaultFilename = "";
 
         private OpenFileDialog _dialog;
