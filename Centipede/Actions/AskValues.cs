@@ -8,7 +8,7 @@ using PythonEngine;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (Text or Numeric)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (Text or Numeric)", IconName="ui")]
     class AskValues : Action
     {
         /// <summary>
