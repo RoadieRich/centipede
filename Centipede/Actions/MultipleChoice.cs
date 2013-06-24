@@ -20,7 +20,7 @@ namespace Centipede.Actions
             : base("Ask for Input (Multiple Choice)", variables, core)
         { }
 
-        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
+        [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Choice";
 
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
@@ -32,10 +32,10 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "Controls whether user input is by buttons or drop-down list")]
         public bool RadioButtons = true;
 
-        [ActionArgument(Literal = true, Usage = "Optional) Variable to be updated with the value of the selected choice")]
+        [ActionArgument(Usage = "Optional) Variable to be updated with the value of the selected choice")]
         public String ChoiceNameVar = "ChoiceResult";
 
-        [ActionArgument(Literal = true, Usage = "(Optional) Variable to to be updated with the index number of the selected choice")]
+        [ActionArgument(Usage = "(Optional) Variable to to be updated with the index number of the selected choice")]
         public String ChoiceIndexVar = "";
 
         private TableLayoutPanel _tableLayoutPanel;
@@ -50,10 +50,13 @@ namespace Centipede.Actions
         /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected override void DoAction()
         {
+            string myTitle = ParseStringForVariable(Title); 
             string myPrompt = ParseStringForVariable(Prompt);
             string myChoices = ParseStringForVariable(Choices);
+            string myChoiceNameVar = ParseStringForVariable(ChoiceNameVar);
+            string myChoiceIndexVar = ParseStringForVariable(ChoiceIndexVar);
 
-            if (String.IsNullOrEmpty(Choices))
+            if (String.IsNullOrEmpty(myChoices))
             {
                 throw new ActionException("No choices provided", this);
             } 
@@ -68,7 +71,7 @@ namespace Centipede.Actions
                              SizeGripStyle = SizeGripStyle.Hide,
                              ShowIcon = false,
                              ShowInTaskbar = false,
-                             Text = this.Title
+                             Text = myTitle
                          };
             
 
@@ -184,29 +187,32 @@ namespace Centipede.Actions
                         RadioButton checkedButton =
                                     tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked);
 
-                        SetVars(checkedButton.Text, (int)checkedButton.Tag);
+                        if (!String.IsNullOrEmpty(myChoiceNameVar))
+                        {
+                            Variables[myChoiceNameVar] = checkedButton.Text;
+                        }
+                        if (!String.IsNullOrEmpty(myChoiceIndexVar))
+                        {
+                            Variables[myChoiceIndexVar] = (int) checkedButton.Tag;
+                        }
                     }
                     else
                     {
                         ComboBox comboBox = tableLayoutPanel.Controls.OfType<ComboBox>().First();
-                        SetVars((string)comboBox.SelectedItem, comboBox.SelectedIndex);
+
+                        if (!String.IsNullOrEmpty(myChoiceNameVar))
+                        {
+                            Variables[myChoiceNameVar] = (string) comboBox.SelectedItem;
+                        }
+                        if (!String.IsNullOrEmpty(myChoiceIndexVar))
+                        {
+                            Variables[myChoiceIndexVar] = comboBox.SelectedIndex;
+                        }
                     }
                     break;
 
                 case DialogResult.Cancel:
                     throw new FatalActionException("User input cancelled", this);
-            }
-        }
-
-        private void SetVars(string item, int index)
-        {
-            if (!String.IsNullOrEmpty(this.ChoiceNameVar))
-            {
-                Variables[this.ChoiceNameVar] = item;
-            }
-            if (!String.IsNullOrEmpty(this.ChoiceIndexVar))
-            {
-                Variables[this.ChoiceIndexVar] = index;
             }
         }
 

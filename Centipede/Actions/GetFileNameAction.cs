@@ -16,13 +16,13 @@ namespace Centipede.Actions
             
         }
 
-        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
+        [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Choose File";
 
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "";
 
-        [ActionArgument(Literal = true, Usage = "(Required) Name of variable to store the chosen filename")]
+        [ActionArgument(Usage = "(Required) Name of variable to store the chosen filename")]
         public String DestinationVariable = "Filename";
       
         [ActionArgument(DisplayName = "Filter", Usage = "(Optional) Filter the browse dialog to only show certain file types")]
@@ -36,14 +36,16 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
 
-            if (String.IsNullOrEmpty(DestinationVariable))
+            string myTitle = ParseStringForVariable(Title); 
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myDestinationVariable = ParseStringForVariable(DestinationVariable);
+            string myFilter = ParseStringForVariable(Filter); 
+
+            if (String.IsNullOrEmpty(myDestinationVariable))
             {
                 throw new ActionException("No variable name provided", this);
             }
-
-            string myPrompt = ParseStringForVariable(Prompt);
-            string myFilter = ParseStringForVariable(Filter); 
-            
+                        
             this._form = new Form
             {
                 AutoSize = true,
@@ -54,15 +56,15 @@ namespace Centipede.Actions
                 SizeGripStyle = SizeGripStyle.Hide,
                 ShowIcon = false,
                 ShowInTaskbar = false,
-                Text = this.Title
+                Text = myTitle
             };
 
             object oldFilename;
-            bool hasOldFilename = Variables.TryGetValue(DestinationVariable, out oldFilename);
+            bool hasOldFilename = Variables.TryGetValue(myDestinationVariable, out oldFilename);
 
             this._dialog = new OpenFileDialog
             {
-                Title = String.IsNullOrEmpty(myPrompt) ? "Open File" : myPrompt,
+                Title = String.IsNullOrEmpty(myTitle) ? "Open File" : myTitle,
                 Filter = String.IsNullOrEmpty(myFilter) ? "All Files (*.*)|*.*" : myFilter
             };
 
@@ -137,7 +139,7 @@ namespace Centipede.Actions
             {
                 case DialogResult.OK:
                     //Save
-                    Variables[DestinationVariable] = _tb.Text;
+                    Variables[myDestinationVariable] = _tb.Text;
                     break;
 
                 case DialogResult.Cancel:
