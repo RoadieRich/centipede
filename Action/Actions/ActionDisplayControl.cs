@@ -393,6 +393,11 @@ namespace Centipede.Actions
         /// </summary>
         public static EventHandler SetDirty;
 
+        protected ActionDisplayControl()
+        {
+            this.InitializeComponent();
+        }
+
         /// <summary>
         /// raised when the actiuon is deleted
         /// </summary>

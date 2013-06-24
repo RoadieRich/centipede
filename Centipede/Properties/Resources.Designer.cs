@@ -181,13 +181,6 @@ namespace Centipede.Properties {
             }
         }
         
-        public static System.Drawing.Icon exit {
-            get {
-                object obj = ResourceManager.GetObject("exit", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
         public static System.Drawing.Icon generic {
             get {
                 object obj = ResourceManager.GetObject("generic", resourceCulture);

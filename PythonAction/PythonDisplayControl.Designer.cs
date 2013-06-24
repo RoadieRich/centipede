@@ -47,7 +47,7 @@ namespace PyAction
             
             this.ResumeLayout(false);
             this.PerformLayout();
-            base.InitializeComponent();
+            //base.InitializeComponent();
 
         }
 
