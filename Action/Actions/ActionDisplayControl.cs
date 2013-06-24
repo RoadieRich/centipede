@@ -68,6 +68,7 @@ namespace Centipede.Actions
             {
                 GenerateArguments();
             }
+
         }
 
         private static Image GetActionIcon(IAction action)
@@ -311,9 +312,7 @@ namespace Centipede.Actions
 
         private void ExpandButton_Click(object sender, EventArgs e)
         {
-
             Button button = (Button)sender;
-
             if (!AttributeTable.Visible)
             {
                 AttributeTable.Visible = true;
@@ -324,8 +323,6 @@ namespace Centipede.Actions
                 AttributeTable.Visible = false;
                 button.Text = @"+";
             }
-            //ExpandButton.Invalidate(ExpandButton.Region, true);
-            //ExpandButton.Refresh();
         }
 
         private ActionState _state = ActionState.None;
@@ -342,24 +339,23 @@ namespace Centipede.Actions
             }
             set
             {
-                
-                // Image changes commented out (it causes the control to grow every time the image changes)
+
                 switch (value)
                 {
                 case ActionState.None:
-                    //StatusIconBox.Image = null;
+                    StatusIconBox.Image = null;
                     BackColor = SystemColors.Control;
                     break;
                 case ActionState.Running:
-                    //StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
-                    BackColor = Color.DarkGray;
+                    StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
+                    //BackColor = Color.DarkGray;
                     break;
                 case ActionState.Error:
-                    //StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
+                    StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
                     BackColor = Color.DarkRed;
                     break;
                 case ActionState.Completed:
-                    //StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
+                    StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
                     BackColor = SystemColors.Control;
                     break;
                 }
