@@ -66,5 +66,12 @@ namespace Centipede.Actions.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        public static System.Drawing.Icon ui {
+            get {
+                object obj = ResourceManager.GetObject("ui", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

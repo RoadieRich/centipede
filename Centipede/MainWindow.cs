@@ -615,17 +615,21 @@ namespace Centipede
 
             var af = new ActionFactory(catAttribute, pluginType, Core);
 
-            if (!string.IsNullOrEmpty(catAttribute.iconName))
+            if (!string.IsNullOrEmpty(catAttribute.IconName))
             {
                 Type t = asm.GetType(string.Format(@"{0}.Properties.Resources", pluginType.Namespace));
                 
                 if (t != null)
                 {
-                    var icon = t.GetProperty(catAttribute.iconName, typeof(Icon)).GetValue(t, null) as Icon;
-                    if (icon != null)
+                    PropertyInfo iconProperty = t.GetProperty(catAttribute.IconName, typeof(Icon));
+                    if (iconProperty != null)
                     {
-                        catListView.LargeImageList.Images.Add(pluginType.Name, icon);
-                        af.ImageKey = pluginType.Name;
+                        var icon = iconProperty.GetValue(t, null) as Icon;
+                        if (icon != null)
+                        {
+                            catListView.LargeImageList.Images.Add(pluginType.Name, icon);
+                            af.ImageKey = pluginType.Name;
+                        }
                     }
                 }
             }

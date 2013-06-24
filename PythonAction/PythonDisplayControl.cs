@@ -10,7 +10,6 @@ namespace PyAction
     {
 
         public PythonDisplayControl()
-            : base(null, false)
         {
             InitializeComponent();
         }
@@ -25,7 +24,8 @@ namespace PyAction
                                 ConfigurationManager = { Language = @"python" },
                                 Dock = DockStyle.Fill,
                                 Margins = { Margin0 = { Width = 20 } },
-                                Text = action.Source
+                                Text = action.Source,
+                                Scrolling = { ScrollBars=ScrollBars.Vertical }
                             };
             
             scintilla.TextChanged += sourceControl_TextChanged;

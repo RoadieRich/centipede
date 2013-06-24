@@ -127,7 +127,6 @@ namespace PyAction
             
             ResumeLayout(false);
             PerformLayout();
-            base.InitializeComponent();
 
         }
     }

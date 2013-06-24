@@ -8,7 +8,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (Multiple Choice)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (Multiple Choice)", IconName="generic")]
     public class MultipleChoice : Action
     {
         /// <summary>
