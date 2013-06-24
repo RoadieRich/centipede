@@ -554,7 +554,7 @@ namespace Centipede
             Assembly asm;
 
             //if action is not a plugin:
-            if (element.LocalName.StartsWith(@"Centipede"))
+            if (element.LocalName.StartsWith(@"Centipede."))
             {
                 asm = Assembly.GetEntryAssembly();
             }
@@ -563,9 +563,13 @@ namespace Centipede
                 string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 if (location != null)
                 {
-                    String asmPath = Path.Combine(location,
-                                                  Path.Combine(PluginFolder,
-                                                               element.SelectSingleNode(@"@Assembly").Value));
+                    string pluginFile = Path.Combine(location, Path.Combine(PluginFolder, element.SelectSingleNode(@"@Assembly").Value));
+                    if (!File.Exists(pluginFile))
+                    {
+                        throw new PluginNotFoundException("Cannot find plugin file", element.LocalName, pluginFile);
+                    }
+                    
+                    String asmPath = pluginFile;
                     asm = Assembly.LoadFile(asmPath);
                 }
                 else

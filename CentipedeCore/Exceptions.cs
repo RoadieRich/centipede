@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization;
 using ResharperAnnotations;
 
 
@@ -155,5 +157,46 @@ namespace CentipedeInterfaces
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         { }
+    }
+
+    [Serializable]
+    public class PluginNotFoundException : FileNotFoundException
+    {
+        //
+        // For guidelines regarding the creation of new exception types, see
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
+        // and
+        //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
+        //
+
+        public PluginNotFoundException(string message, string actionName, string filename)
+            : base(message,filename)
+        {
+            ActionName = actionName;
+        }
+
+        public PluginNotFoundException(string message, string actionName)
+            : base(message)
+        {
+            ActionName = actionName;
+        }
+
+        public PluginNotFoundException(string message, Exception inner, string actionName)
+            : base(message, inner)
+        {
+            ActionName = actionName;
+        }
+
+        protected PluginNotFoundException(
+            SerializationInfo info,
+            StreamingContext context, string actionName)
+            : base(info, context)
+        {
+            ActionName = actionName;
+        }
+
+        public String ActionName { get; private set; }
+        
+
     }
 }
