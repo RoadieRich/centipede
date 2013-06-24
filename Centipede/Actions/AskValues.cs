@@ -215,7 +215,7 @@ namespace Centipede.Actions
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (True / False)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (True / False)", IconName = "ui")]
     class AskBooleans : Action
     {
         /// <summary>
