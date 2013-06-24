@@ -8,7 +8,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName = "Ask for Input (Multiple Choice)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (Multiple Choice)")]
     public class MultipleChoice : Action
     {
         /// <summary>
@@ -27,15 +27,15 @@ namespace Centipede.Actions
         public String Prompt = "Please select from the following choices";
 
         [ActionArgument(Usage = "(Required) List of choices, separated by commas")]
-        public String Choices = "";
+        public String Choices = "Choice 1, Choice 2, Choice 3";
 
         [ActionArgument(Usage = "Controls whether user input is by buttons or drop-down list")]
-        public bool RadioButtons;
+        public bool RadioButtons = true;
 
-        [ActionArgument(Usage = "(Optional) Variable to be updated with the value of the selected choice")]
-        public String ChoiceNameVar = "";
+        [ActionArgument(Literal = true, Usage = "Optional) Variable to be updated with the value of the selected choice")]
+        public String ChoiceNameVar = "ChoiceResult";
 
-        [ActionArgument(Usage = "(Optional) Variable to to be updated with the index number of the selected choice ")]
+        [ActionArgument(Literal = true, Usage = "(Optional) Variable to to be updated with the index number of the selected choice")]
         public String ChoiceIndexVar = "";
 
         private TableLayoutPanel _tableLayoutPanel;
@@ -50,6 +50,14 @@ namespace Centipede.Actions
         /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected override void DoAction()
         {
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myChoices = ParseStringForVariable(Choices);
+
+            if (String.IsNullOrEmpty(Choices))
+            {
+                throw new ActionException("No choices provided", this);
+            } 
+            
             this._form = new Form
                          {
                              AutoSize = true,
@@ -63,11 +71,9 @@ namespace Centipede.Actions
                              Text = this.Title
                          };
             
-            if (String.IsNullOrEmpty(Choices))
-            {
-                throw new ActionException("No choices listed", this);
-            }
-            var choices = ParseStringForVariable(this.Choices).Split(',');
+
+            var choices = myChoices.Split(',');
+            
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
                                                 {
                                                     Dock = DockStyle.Fill,
@@ -81,16 +87,15 @@ namespace Centipede.Actions
             //tableLayoutPanel.ColumnStyles[1].SizeType = SizeType.AutoSize;
             this._tableLayoutPanel = tableLayoutPanel;
 
-            var RowPadding = new System.Windows.Forms.Padding();
-            RowPadding.All = 10;
-
-            this._tableLayoutPanel.Padding = RowPadding;
+            Padding TablePadding = new Padding();
+            TablePadding.All = 10;
+            this._tableLayoutPanel.Padding = TablePadding;
             
-            if (!String.IsNullOrEmpty(Prompt))
+            if (!String.IsNullOrEmpty(myPrompt))
             {
                 Label label = new Label
                               {
-                                  Text = this.Prompt,
+                                  Text = myPrompt,
                                   AutoSize = true
                               };
                 this._tableLayoutPanel.Controls.Add(label);
@@ -106,17 +111,16 @@ namespace Centipede.Actions
                     RadioButton radioButton = new RadioButton
                                               {
                                                   Text = choice.Value.Trim(),
+                                                  Checked = i == 0 ? true : false,
                                                   Tag = i++,
                                                   AutoSize=true
                                               };
 
-                    radioButton.Width = 20 + TextRenderer.MeasureText(choice.Value.Trim(), radioButton.Font).Width;
+                    //radioButton.Width = 20 + TextRenderer.MeasureText(choice.Value.Trim(), radioButton.Font).Width;
 
-                    this._tableLayoutPanel.Controls.Add(radioButton); //, 0, choice.Key);
+                    this._tableLayoutPanel.Controls.Add(radioButton);
                     this._tableLayoutPanel.SetColumnSpan(radioButton, 2);
                 }
-
-                this._form.FormClosing += RadioButtonFormOnFormClosing;
             }
             else
             {
@@ -129,18 +133,18 @@ namespace Centipede.Actions
                                     };
 
                 comboBox.Items.AddRange(choices.Select(s => s.Trim()));
+                comboBox.SelectedIndex = 0;
 
-                comboBox.Width = 20 + choices.Max(s => TextRenderer.MeasureText(s.Trim(), comboBox.Font).Width);
+                //comboBox.Width = 20 + choices.Max(s => TextRenderer.MeasureText(s.Trim(), comboBox.Font).Width);
 
                 this._tableLayoutPanel.Controls.Add(comboBox);
-                this._tableLayoutPanel.SetColumnSpan(comboBox, 2);
-
-                this._form.FormClosing += CheckBoxFormOnFormClosing; //+= (sender, e) => { }
+                this._tableLayoutPanel.SetColumnSpan(comboBox, 2);    
             }
 
             this._tableLayoutPanel.ColumnCount = 2;
             int rows = this._tableLayoutPanel.RowCount;
 
+            this._form.FormClosing += FormClosing;
 
             Button btnCancel = new Button
             {
@@ -164,7 +168,6 @@ namespace Centipede.Actions
             this._tableLayoutPanel.Controls.Add(btnOK);
             this._tableLayoutPanel.SetColumnSpan(btnOK, 2);
 
-
             this._form.Controls.Add(this._tableLayoutPanel);
 
             DialogResult result =
@@ -172,20 +175,26 @@ namespace Centipede.Actions
                     Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
                                   GetCurrentCore().Window);
 
-            if (result == DialogResult.Cancel)
+            switch (result)
             {
-                throw new FatalActionException("Cancel Clicked", this);
-            }
-        }
+                case DialogResult.OK:
+                    // Save choice
+                    if (RadioButtons)
+                    {
+                        RadioButton checkedButton =
+                                    tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked);
 
-        private void CheckBoxFormOnFormClosing(object sender, FormClosingEventArgs formClosingEventArgs)
-        {
-            Form form = (Form)sender;
-            TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
-            if (form.DialogResult ==  DialogResult.OK)
-            {
-                ComboBox comboBox = tableLayoutPanel.Controls.OfType<ComboBox>().First();
-                SetVars((string)comboBox.SelectedItem, comboBox.SelectedIndex);
+                        SetVars(checkedButton.Text, (int)checkedButton.Tag);
+                    }
+                    else
+                    {
+                        ComboBox comboBox = tableLayoutPanel.Controls.OfType<ComboBox>().First();
+                        SetVars((string)comboBox.SelectedItem, comboBox.SelectedIndex);
+                    }
+                    break;
+
+                case DialogResult.Cancel:
+                    throw new FatalActionException("User input cancelled", this);
             }
         }
 
@@ -201,25 +210,20 @@ namespace Centipede.Actions
             }
         }
 
-        private void RadioButtonFormOnFormClosing(object sender, FormClosingEventArgs eventArgs)
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        private void FormClosing(object sender, FormClosingEventArgs a)
         {
-            Form form = (Form)sender;
-            TableLayoutPanel tableLayoutPanel = form.Controls.OfType<TableLayoutPanel>().First();
-            if (form.DialogResult == DialogResult.OK)
+            Form dialog = (Form)sender;
+
+            switch (dialog.DialogResult)
             {
-                try
-                {
-                    RadioButton checkedButton =
-                            tableLayoutPanel.Controls.OfType<RadioButton>().First(button => button.Checked);
-
-                    SetVars(checkedButton.Text, (int)checkedButton.Tag);
-                }
-
-                catch (InvalidOperationException)
-                {
-                    MessageBox.Show("No choice selected, please try again");
-                    eventArgs.Cancel = true;
-                }
+                case DialogResult.OK:
+                    break;
+                case DialogResult.Cancel:
+                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Retry) a.Cancel = true;
+                    break;
             }
         }
     }
