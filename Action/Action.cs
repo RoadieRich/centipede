@@ -554,6 +554,7 @@ namespace Centipede
             Assembly asm;
 
             //if action is not a plugin:
+            Action instance = null;
             if (element.LocalName.StartsWith(@"Centipede."))
             {
                 asm = Assembly.GetEntryAssembly();
@@ -563,14 +564,16 @@ namespace Centipede
                 string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
                 if (location != null)
                 {
-                    string pluginFile = Path.Combine(location, Path.Combine(PluginFolder, element.SelectSingleNode(@"@Assembly").Value));
-                    if (!File.Exists(pluginFile))
+                    String asmPath = Path.Combine(location, Path.Combine(PluginFolder, element.SelectSingleNode(@"@Assembly").Value));
+
+                    if (File.Exists(asmPath))
                     {
-                        throw new PluginNotFoundException("Cannot find plugin file", element.LocalName, pluginFile);
+                        asm = Assembly.LoadFile(asmPath);
                     }
-                    
-                    String asmPath = pluginFile;
-                    asm = Assembly.LoadFile(asmPath);
+                    else
+                    {
+                        asm = null;
+                    }
                 }
                 else
                 {
@@ -578,19 +581,30 @@ namespace Centipede
                 }
             }
 
-            Type t = asm.GetType(element.LocalName);
-
-            Action instance = null;
-            ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
-            if (constructorInfo != null)
+            if (asm != null)
             {
-                instance = (Action)constructorInfo.Invoke(new object[] { variables, core });
+                Type t = asm.GetType(element.LocalName);
+
+                if (t != null)
+                {
+                    ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
+                    if (constructorInfo != null)
+                    {
+                        instance = (Action)constructorInfo.Invoke(new object[] { variables, core });
+                    }
+                }
             }
 
-            if (instance == null)
+            if(instance == null)
             {
-                throw new ApplicationException();
+                instance = new MissingAction(element.LocalName, variables, core);
             }
+        
+
+            //if (instance == null)
+            //{
+            //    throw new ApplicationException();
+            //}
 
             instance.PopulateMembersFromXml(element);
 

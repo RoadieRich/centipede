@@ -95,7 +95,7 @@ namespace Centipede.Actions
             return image;
         }
 
-        private void GenerateArguments()
+        protected void GenerateArguments()
         {
             Type actionType = ThisAction.GetType();
 
@@ -114,7 +114,7 @@ namespace Centipede.Actions
             }
         }
 
-        private Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
+        protected Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute attrData = arg.GetArgumentAttribute();
             var attrLabel = new Label { Text = GetArgumentName(arg), Dock = DockStyle.Fill };
