@@ -750,8 +750,15 @@ namespace Centipede
 
         private void DoLoad(string fileName)
         {
-            Core.LoadJob(fileName);
-            Text = Core.Job.Name;
+            try
+            {
+                Core.LoadJob(fileName);
+                Text = Core.Job.Name;
+            }
+            catch (PluginNotFoundException e)
+            {
+                MessageBox.Show(string.Format("Cannot load action {0}. {1}", e.ActionName, e.Message), "Error loading job", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void RunButton_Click(object sender, EventArgs e)
