@@ -9,7 +9,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName="Demo Action")]
+    [ActionCategory("Demo", DisplayName="Demo Action")]
     public class DemoAction : Action
     {
         [Localizable(false)]
