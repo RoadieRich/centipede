@@ -313,7 +313,7 @@
     <None Include="Resources\CentipedeFile.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\ui.ico" />
+     <None Include="Resources\ui.ico" />
     <Content Include="Resources\WelcomeScreen.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
