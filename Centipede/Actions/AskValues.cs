@@ -21,13 +21,13 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
+        [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Input";
 
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "Please enter the following values";
 
-        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas", Literal = true)]
+        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas")]
         public string VariablesToSet = "Var1, Var2, Var3";
 
         [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
@@ -45,13 +45,16 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            if (String.IsNullOrEmpty(this.VariablesToSet))
+            string myTitle = ParseStringForVariable(Title); 
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myVariablesToSet = ParseStringForVariable(VariablesToSet);
+            string myLabels = ParseStringForVariable(LabelsToDisplay); 
+            
+            if (String.IsNullOrEmpty(myVariablesToSet))
             {
                 throw new ActionException("No variable names provided", this);
             }
 
-            string myPrompt = ParseStringForVariable(Prompt);
-            string myLabels = ParseStringForVariable(LabelsToDisplay);
 
             Form form = new Form
                         {
@@ -63,7 +66,7 @@ namespace Centipede.Actions
                             SizeGripStyle = SizeGripStyle.Hide,
                             ShowIcon = false,
                             ShowInTaskbar = false,
-                            Text = this.Title
+                            Text = myTitle
                         };
 
             TableLayoutPanel table = new TableLayoutPanel
@@ -99,7 +102,7 @@ namespace Centipede.Actions
             string[] lblStrings = myLabels.Split(',');
             
             // Get list of variables
-            string[] varNames = VariablesToSet.Split(',');
+            string[] varNames = myVariablesToSet.Split(',');
 
             // Create label and text box for each variable
             for (int i = 0; i < varNames.Length; i++)
@@ -224,13 +227,13 @@ namespace Centipede.Actions
                 : base("Ask for Input (True / False)", variables, c)
         { }
 
-        [ActionArgument(Literal = true, Usage = "(Optional) Text to display in the titlebar of the popup form")]
+        [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Input";
 
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "Please set the following values";
 
-        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and stores variables as True or False", Literal = true)]
+        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and stores variables as True or False")]
         public string VariablesToSet = "Boolean1, Boolean2, Boolean3";
 
         [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
@@ -245,13 +248,16 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            if (String.IsNullOrEmpty(VariablesToSet))
+            string myTitle = ParseStringForVariable(Title);
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myVariablesToSet = ParseStringForVariable(VariablesToSet);
+            string myLabels = ParseStringForVariable(LabelsToDisplay); 
+            
+            if (String.IsNullOrEmpty(myVariablesToSet))
             {
                 throw new ActionException("No variable names provided", this);
             }
 
-            string myPrompt = ParseStringForVariable(Prompt);
-            string myLabels = ParseStringForVariable(LabelsToDisplay);
 
             Form form = new Form
                         {
@@ -263,7 +269,7 @@ namespace Centipede.Actions
                             SizeGripStyle = SizeGripStyle.Hide,
                             ShowIcon = false,
                             ShowInTaskbar = false,
-                            Text = this.Title
+                            Text = myTitle
                         };
 
             TableLayoutPanel table = new TableLayoutPanel
@@ -298,7 +304,7 @@ namespace Centipede.Actions
             string[] lblStrings = myLabels.Split(',');
 
             // Get list of variables
-            string[] varNames = VariablesToSet.Split(',');
+            string[] varNames = myVariablesToSet.Split(',');
 
             // Create label and text box for each variable
             for (int i = 0; i < varNames.Length; i++)
