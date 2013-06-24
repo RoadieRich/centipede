@@ -342,24 +342,22 @@ namespace Centipede.Actions
             }
             set
             {
-                
-                // Image changes commented out (it causes the control to grow every time the image changes)
                 switch (value)
                 {
                 case ActionState.None:
-                    //StatusIconBox.Image = null;
+                    StatusIconBox.Image = null;
                     BackColor = SystemColors.Control;
                     break;
                 case ActionState.Running:
-                    //StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
+                    StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
                     BackColor = Color.DarkGray;
                     break;
                 case ActionState.Error:
-                    //StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
+                    StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
                     BackColor = Color.DarkRed;
                     break;
                 case ActionState.Completed:
-                    //StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
+                    StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
                     BackColor = SystemColors.Control;
                     break;
                 }
