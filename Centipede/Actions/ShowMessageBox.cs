@@ -6,7 +6,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Show Messagebox")]
+    [ActionCategory("User Interface", DisplayName = "Show Messagebox", IconName = "ui")]
     class ShowMessageBox : Action
     {
         public ShowMessageBox(IDictionary<string, object> variables, ICentipedeCore c)

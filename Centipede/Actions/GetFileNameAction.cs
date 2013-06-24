@@ -7,7 +7,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")]
     class GetFileNameAction : Action
     {
         public GetFileNameAction(IDictionary<string, object> variables, ICentipedeCore c)
