@@ -202,7 +202,7 @@ namespace Centipede.Actions
             this.Controls.Add(this.BottomPanel);
             this.Controls.Add(this.TopPanel);
             this.Controls.Add(this.splitter1);
-            this.MinimumSize = new System.Drawing.Size(250, 0);
+            this.MinimumSize = new System.Drawing.Size(250, 4);
             this.Name = "ActionDisplayControl";
             this.Size = new System.Drawing.Size(246, 67);
             this.Load += new System.EventHandler(this.ActionDisplayControl_Load);
@@ -222,7 +222,6 @@ namespace Centipede.Actions
 
         private System.Windows.Forms.ContextMenuStrip ActionContextMenu;
         private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
-        private System.Windows.Forms.TextBox CommentTextBox;
         private System.Windows.Forms.ToolTip StatusTooltip;
         private System.Windows.Forms.ToolTip ArgumentTooltips;
 
@@ -241,5 +240,6 @@ namespace Centipede.Actions
         private Panel TopPanel;
         private Panel BottomPanel;
         private Splitter splitter1;
+        protected internal TextBox CommentTextBox;
     }
 }
