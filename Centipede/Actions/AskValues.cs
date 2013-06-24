@@ -8,7 +8,7 @@ using PythonEngine;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("UI", DisplayName = "Ask for Input (Text or Numeric)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (Text or Numeric)")]
     class AskValues : Action
     {
         /// <summary>
@@ -28,7 +28,7 @@ namespace Centipede.Actions
         public String Prompt = "Please enter the following values";
 
         [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas", Literal = true)]
-        public string VariablesToSet = "";
+        public string VariablesToSet = "Var1, Var2, Var3";
 
         [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
         public string LabelsToDisplay = "";
@@ -47,8 +47,11 @@ namespace Centipede.Actions
         {
             if (String.IsNullOrEmpty(this.VariablesToSet))
             {
-                throw new ActionException("No variables listed", this);
+                throw new ActionException("No variable names provided", this);
             }
+
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myLabels = ParseStringForVariable(LabelsToDisplay);
 
             Form form = new Form
                         {
@@ -80,11 +83,11 @@ namespace Centipede.Actions
             
             form.Controls.Add(table);
 
-            if (!String.IsNullOrEmpty(Prompt))
+            if (!String.IsNullOrEmpty(myPrompt))
             {
                 Label label = new Label
                 {
-                    Text = this.Prompt,
+                    Text = myPrompt,
                     AutoSize = true
                 };
                 table.Controls.Add(label);
@@ -93,7 +96,7 @@ namespace Centipede.Actions
 
 
             // Get list of labels
-            string[] lblStrings = ParseStringForVariable(LabelsToDisplay).Split(',');
+            string[] lblStrings = myLabels.Split(',');
             
             // Get list of variables
             string[] varNames = VariablesToSet.Split(',');
@@ -121,6 +124,8 @@ namespace Centipede.Actions
                 
                 if (value != null)
                 {
+                    MessageEventArgs msg = new MessageEventArgs("Setting textbox (" + varNames[i].Trim() + ") using existing value : " + value, MessageLevel.Debug);
+                    OnMessage(msg);
                     tb.Text = value.ToString();
                 }
                 
@@ -150,23 +155,24 @@ namespace Centipede.Actions
             table.Controls.Add(btnOK);
             table.SetColumnSpan(btnOK, 2);
 
-            form.FormClosed += delegate
-                               {
-                                   if (form.DialogResult == DialogResult.OK)
-                                   {
-                                       foreach (TextBox tb in table.Controls.OfType<TextBox>())
-                                       {
-                                           dynamic tryEvaluate = Evaluate ? TryEvaluate(tb.Text) : tb.Text;
-                                           Variables[(string)tb.Tag] = tryEvaluate;
-                                       }
-                                   }
-                               };
+            form.FormClosing += FormClosing;
 
-            DialogResult result = (DialogResult)GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
+            DialogResult result =
+                (DialogResult)
+                GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
 
-            if (result==DialogResult.Cancel)
+            switch (result)
             {
-                throw new FatalActionException("Cancel Clicked", this);
+                case DialogResult.OK:
+                    foreach (TextBox tb in table.Controls.OfType<TextBox>())
+                    {
+                        dynamic tryEvaluate = Evaluate ? TryEvaluate(tb.Text) : tb.Text;
+                        Variables[(string)tb.Tag] = tryEvaluate;
+                    }
+                    break;
+
+                case DialogResult.Cancel:
+                    throw new FatalActionException("User input cancelled", this);
             }
         }
 
@@ -185,11 +191,28 @@ namespace Centipede.Actions
                 return str;
             }
         }
+        
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        private void FormClosing(object sender, FormClosingEventArgs a)
+        {
+            Form dialog = (Form)sender;
+
+            switch (dialog.DialogResult)
+            {
+                case DialogResult.OK:
+                    break;
+                case DialogResult.Cancel:
+                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Retry) a.Cancel = true;
+                    break;
+            }
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    [ActionCategory("UI", DisplayName = "Ask for Input (True / False)")]
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (True / False)")]
     class AskBooleans : Action
     {
         /// <summary>
@@ -208,7 +231,7 @@ namespace Centipede.Actions
         public String Prompt = "Please set the following values";
 
         [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and stores variables as True or False", Literal = true)]
-        public string VariablesToSet = "";
+        public string VariablesToSet = "Boolean1, Boolean2, Boolean3";
 
         [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
         public string LabelsToDisplay = "";
@@ -224,9 +247,12 @@ namespace Centipede.Actions
         {
             if (String.IsNullOrEmpty(VariablesToSet))
             {
-                throw new ActionException("No variables listed", this);
-            } 
-            
+                throw new ActionException("No variable names provided", this);
+            }
+
+            string myPrompt = ParseStringForVariable(Prompt);
+            string myLabels = ParseStringForVariable(LabelsToDisplay);
+
             Form form = new Form
                         {
                             AutoSize = true,
@@ -257,11 +283,11 @@ namespace Centipede.Actions
 
             form.Controls.Add(table);
 
-            if (!String.IsNullOrEmpty(Prompt))
+            if (!String.IsNullOrEmpty(myPrompt))
             {
                 Label label = new Label
                 {
-                    Text = this.Prompt,
+                    Text = myPrompt,
                     AutoSize = true
                 };
                 table.Controls.Add(label);
@@ -269,7 +295,7 @@ namespace Centipede.Actions
             }
 
             // Get list of labels
-            string[] lblStrings = ParseStringForVariable(LabelsToDisplay).Split(',');
+            string[] lblStrings = myLabels.Split(',');
 
             // Get list of variables
             string[] varNames = VariablesToSet.Split(',');
@@ -296,6 +322,8 @@ namespace Centipede.Actions
 
                 if (value != null)
                 {
+                    MessageEventArgs msg = new MessageEventArgs("Setting checkbox (" + varNames[i].Trim() + ") using existing value : " + value, MessageLevel.Debug);
+                    OnMessage(msg);
                     cb.Checked = Convert.ToBoolean(value);
                 }
 
@@ -325,32 +353,43 @@ namespace Centipede.Actions
             //table.Controls.Add(btnCancel);  // Removed cancel button for consistent appearance when table columns resize
             table.Controls.Add(btnOK);
             table.SetColumnSpan(btnOK, 2);
-            
-            form.FormClosed += delegate
-                               {
-                                   switch (form.DialogResult)
-                                   {
-                                   case DialogResult.OK:
-                                       foreach (CheckBox checkBox in table.Controls.OfType<CheckBox>())
-                                       {
-                                           Variables[(string)checkBox.Tag] = checkBox.Checked;
-                                       }
-                                       break;
-                                   case DialogResult.Cancel:
-                                           break;
-                                   }
 
-                               };
+            form.FormClosing += FormClosing;
 
             DialogResult result =
                 (DialogResult)
                 GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
-            
-            if (result == DialogResult.Cancel)
+
+            switch (result)
             {
-                throw new FatalActionException("Cancel clicked", this);
+                case DialogResult.OK:
+                    foreach (CheckBox checkBox in table.Controls.OfType<CheckBox>())
+                    {
+                        Variables[(string)checkBox.Tag] = checkBox.Checked;
+                    }                    
+                    break;
+
+                case DialogResult.Cancel:
+                    throw new FatalActionException("User input cancelled", this);
             }
 
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        private void FormClosing(object sender, FormClosingEventArgs a)
+        {
+            Form dialog = (Form)sender;
+
+            switch (dialog.DialogResult)
+            {
+                case DialogResult.OK:
+                    break;
+                case DialogResult.Cancel:
+                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Retry) a.Cancel = true;
+                    break;
+            }
         }
     }
 }
