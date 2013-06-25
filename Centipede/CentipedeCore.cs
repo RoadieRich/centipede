@@ -352,7 +352,8 @@ namespace Centipede
             OnActionAdded(new ActionEventArgs
                           {
                               Action = action,
-                              Index = index
+                              Index = index,
+                              LoadedSuccessfully = !(action is Actions.MissingAction)
                           });
 
         }

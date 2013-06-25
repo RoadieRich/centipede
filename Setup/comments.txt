@@ -3,9 +3,4 @@
 # 
 # Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
-You can now open jobs by double clicking in explorer
-Added print and open file shell actions
-You can now create Centipede jobs through the "File > New" menu
-Added some missing .dlls
-fixing error "os module not found"
-Adding code to expand Multiple Choice actions
+Added support to display missing actions.
