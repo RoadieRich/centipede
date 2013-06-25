@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.XPath;
 using ResharperAnnotations;
 
@@ -50,8 +51,19 @@ namespace CentipedeInterfaces
             InfoUrl = nav.SelectSingleNode("//Metadata/Info/@Url").Value;
             FileName = filename;
         }
-        
-        
+
+        public CentipedeJob(string jobFileName, XmlDocument xmlDocument) : this()
+        {
+            XmlElement metaElement = (XmlElement)xmlDocument.GetElementsByTagName("Metadata")[0];
+            Name = metaElement.GetFirstElementByName("Name").InnerText;
+            XmlElement authorElement = metaElement.GetFirstElementByName("Author");
+            Author = authorElement.GetFirstElementByName("Name").InnerText;
+            AuthorContact = authorElement.GetFirstElementByName("Contact").InnerText;
+            InfoUrl = metaElement.GetFirstElementByName("Info").GetAttribute("Url");
+            FileName = jobFileName;
+        }
+
+
         public Int32 Complexity
         {
             get

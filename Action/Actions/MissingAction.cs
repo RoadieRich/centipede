@@ -24,16 +24,13 @@ namespace Centipede.Actions
         }
 
         internal string Value;
-        private XmlNode _element;
+        private string _element;
+        private string _name;
 
         protected override void PopulateMembersFromXml(XPathNavigator element)
         {
-            XmlNode xmlNode = element.UnderlyingObject as XmlNode;
 
-            if (xmlNode == null)
-            {throw new ApplicationException(); }
-            
-            this._element = xmlNode.CloneNode(true);
+            this._element = _generateElementFromNav(element).OuterXml;
 
             var attributes = from attr in element.Select(@"./@*").OfType<XPathNavigator>()
                              where attr.LocalName != "Assembly"
@@ -49,12 +46,21 @@ namespace Centipede.Actions
                 this.Fields.Add(attribute.LocalName, attribute.Value);
             }
             this.Value = element.Value;
-            Name = "Missing Action: " + new String(element.LocalName.SkipWhile(c => c != '.').Skip(1).ToArray());
+            this._name = element.LocalName;
+            Name = "Missing Action: " + new String(_name.SkipWhile(c => c != '.').Skip(1).ToArray());
+        }
+
+        private XmlNode _generateElementFromNav(XPathNavigator element)
+        {
+            return (XmlNode)element.UnderlyingObject;
         }
 
         public override void AddToXmlElement(XmlElement rootElement)
         {
-            rootElement.AppendChild(this._element);
+            XmlDocument doc = rootElement.OwnerDocument;
+            var e = doc.CreateElement(_name);
+            e.InnerXml = _element;
+            rootElement.AppendChild(e.FirstChild);
         }
        
     }
