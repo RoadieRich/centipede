@@ -109,7 +109,7 @@ namespace Centipede.Actions
             {
                 Label lbl = new Label
                             {
-                                Text = lblStrings.Length == varNames.Length ? lblStrings[i].Trim() : varNames[i].Trim(),  // If labels list is wrong size, use varNames instead
+                                Text = lblStrings.Length != varNames.Length || string.IsNullOrEmpty(myLabels) ? varNames[i].Trim() : lblStrings[i].Trim(),  // If labels list is wrong size, use varNames instead
                                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
                                 Dock = DockStyle.Fill,
                                 AutoSize = true
@@ -311,7 +311,7 @@ namespace Centipede.Actions
             {
                 Label lbl = new Label
                 {
-                    Text = lblStrings.Length == varNames.Length ? lblStrings[i].Trim() : varNames[i].Trim(),  // If labels list is wrong size, use varNames instead
+                    Text = lblStrings.Length == varNames.Length || string.IsNullOrEmpty(myLabels) ? varNames[i].Trim() : lblStrings[i].Trim(),  // If labels list is wrong size, use varNames instead
                     TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
                     Dock = DockStyle.Fill,
                     AutoSize = true
