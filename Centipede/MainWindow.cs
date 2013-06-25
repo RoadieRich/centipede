@@ -125,6 +125,7 @@ namespace Centipede
         private bool _stepping;
         private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
         private ActionEventArgs _pendingUpdate;
+        private bool _unloadablePlugins;
 
         #endregion
 
@@ -739,7 +740,7 @@ namespace Centipede
 
             if (!e.LoadedSuccessfully)
             {
-                MessageBox.Show(string.Format("Could not load plugin for action {0}.", action.Name), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _unloadablePlugins = true;
             }
 
         }
@@ -755,6 +756,7 @@ namespace Centipede
 
         private void DoLoad(string fileName)
         {
+            _unloadablePlugins = false;
             try
             {
                 Core.LoadJob(fileName);
@@ -763,6 +765,14 @@ namespace Centipede
             catch (PluginNotFoundException e)
             {
                 MessageBox.Show(string.Format("Cannot load action {0}. {1}", e.ActionName, e.Message), "Error loading job", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            if (_unloadablePlugins)
+            {
+                MessageBox.Show("Some plugins could not be loaded",
+                                "Warning",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
             }
         }
 
