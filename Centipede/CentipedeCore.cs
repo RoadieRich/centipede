@@ -517,14 +517,19 @@ namespace Centipede
                 throw new FileNotFoundException();
             }
 
+            XmlDocument doc = new XmlDocument();
+            doc.Load(jobFileName);
 
-            XPathDocument xPathDoc = new XPathDocument(jobFileName);
-            XPathNavigator nav = xPathDoc.CreateNavigator();
-            CentipedeJob job = new CentipedeJob(jobFileName, nav) { FileName = jobFileName };
 
-            var it = nav.Select("//Actions/*");
+            //XPathDocument xPathDoc = new XPathDocument(jobFileName);
+            //XPathNavigator nav = xPathDoc.CreateNavigator();
+            CentipedeJob job = new CentipedeJob(jobFileName, doc) { FileName = jobFileName };
 
-            foreach (XPathNavigator actionElement in it)
+            //var it = nav.Select("//Actions/*");
+
+            var it = doc.GetElementsByTagName("Actions")[0].ChildNodes.OfType<XmlElement>();
+
+            foreach (XmlElement actionElement in it)
             {
                 AddAction(job, Action.FromXml(actionElement, Variables, this));
             }

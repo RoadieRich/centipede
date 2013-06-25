@@ -2,12 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 
 
 namespace CentipedeInterfaces
 {
     public static class Extensions
     {
+
+        public static XmlElement GetFirstElementByName(this XmlElement e, string name)
+        {
+            XmlNodeList elementsByTagName = e.GetElementsByTagName(name);
+            return (XmlElement)elementsByTagName[0];
+        }
+
         public static String AsText(this MessageLevel e)
         {
             return DisplayTextAttribute.ToDisplayString(e);
@@ -124,5 +132,6 @@ namespace CentipedeInterfaces
             return (a, b, c) => !function(a, b, c);
         }
     }
+
 
 }
