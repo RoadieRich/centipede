@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using System.Xml.XPath;
 using CentipedeInterfaces;
 
@@ -10,37 +10,52 @@ namespace Centipede.Actions
 {
 
     [ActionCategory("", DisplayControl = "MissingActionDisplayControl", IconName = "missing")]
-    class MissingAction : Action
+    public class MissingAction : Action
     {
         public MissingAction(string name, IDictionary<string, object> variables, ICentipedeCore core)
             : base(name, variables, core)
         { }
 
-        public Dictionary<string, object> fields = new Dictionary<string, object>();
+        internal Dictionary<string, object> Fields = new Dictionary<string, object>();
 
         protected override void DoAction()
         {
             throw new FatalActionException("Cannot run action from missing plugin", this);
         }
 
-        public string value;
+        internal string Value;
+        private XmlNode _element;
 
         protected override void PopulateMembersFromXml(XPathNavigator element)
         {
-            foreach (XPathNavigator attribute in element.Select(@"./@*"))
+            XmlNode xmlNode = element.UnderlyingObject as XmlNode;
+
+            if (xmlNode == null)
+            {throw new ApplicationException(); }
+            
+            this._element = xmlNode.CloneNode(true);
+
+            var attributes = from attr in element.Select(@"./@*").OfType<XPathNavigator>()
+                             where attr.LocalName != "Assembly"
+                             select attr;
+            
+            foreach (XPathNavigator attribute in attributes)
             {
-                if(attribute.LocalName == "Assembly") continue;
                 if (attribute.LocalName == "Comment")
                 {
                     Comment = attribute.Value;
                     continue;
                 }
-                fields.Add(attribute.LocalName, attribute.Value);
+                this.Fields.Add(attribute.LocalName, attribute.Value);
             }
-            value = element.Value;
+            this.Value = element.Value;
             Name = "Missing Action: " + new String(element.LocalName.SkipWhile(c => c != '.').Skip(1).ToArray());
         }
 
+        public override void AddToXmlElement(XmlElement rootElement)
+        {
+            rootElement.AppendChild(this._element);
+        }
        
     }
 
@@ -50,9 +65,9 @@ namespace Centipede.Actions
         public MissingActionDisplayControl(IAction action)
             : base(action, false)
         {
-            MissingAction missingAction = action as MissingAction;
+            MissingAction missingAction = (MissingAction)action;
 
-            var fieldControls = from field in missingAction.fields
+            var fieldControls = from field in missingAction.Fields
                                 select new Control[]
                                        {
                                            new Label
@@ -70,6 +85,8 @@ namespace Centipede.Actions
             {
                 AttributeTable.Controls.AddRange(fieldControl);
             }
+
+            CommentTextBox.ReadOnly = true;
         }
 
         

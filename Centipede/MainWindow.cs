@@ -737,6 +737,11 @@ namespace Centipede
             this.ActionContainer.SetRow(adc, e.Index);
             Dirty = true;
 
+            if (!e.LoadedSuccessfully)
+            {
+                MessageBox.Show(string.Format("Could not load plugin for action {0}.", action.Name), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void adc_Deleted(object sender, CentipedeEventArgs e)

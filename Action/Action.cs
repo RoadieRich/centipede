@@ -544,7 +544,7 @@ namespace Centipede
         /// </param>
         /// <param name="core"></param>
         /// <returns></returns>
-        public static Action FromXml(XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
+        public static Action FromXml([NotNull]XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
         {
 
             //This is probably broken somewhere.

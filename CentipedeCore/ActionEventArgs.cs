@@ -15,6 +15,8 @@ namespace CentipedeInterfaces
         public virtual IAction Action { get; set; }
 
         public Int32 Index { get; set; }
+
+        public bool LoadedSuccessfully { get; set; }
     }
 
     public class ActionErrorEventArgs : ActionEventArgs
