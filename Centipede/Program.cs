@@ -33,6 +33,7 @@ namespace Centipede
 
             bool headless = false;
 
+            Dictionary<string, object> variables = new Dictionary<string, object>();
             NDesk.Options.OptionSet options = new OptionSet
                                               {
                                                   {

@@ -193,7 +193,14 @@ namespace Centipede
                                                              MessageLevel.VariableChange,
                                                              DisplayedLevels.HasFlag(MessageLevel.VariableChange));
 
-            Invoke(action);
+            try
+            {
+                Invoke(action);
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         private void ItemOnClick(object sender, EventArgs eventArgs)
@@ -882,12 +889,13 @@ namespace Centipede
         protected override void Dispose(bool disposing)
         {
             try
-            { 
-                base.Dispose(disposing); 
+            {
+                base.Dispose(disposing);
             }
             catch (NullReferenceException)
             { }
-            Core.Dispose();
+            catch (InvalidOperationException)
+            { }
         }
 
         /// <summary>
