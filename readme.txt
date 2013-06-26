@@ -1,3 +1,8 @@
+Conventions:
+
+Action Arguments similar to "Variable Name" are always Literal.
+
+
 Known bugs:
 
 Removed variables are still listed on Variables tab

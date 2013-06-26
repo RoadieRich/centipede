@@ -22,7 +22,7 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "";
 
-        [ActionArgument(Usage = "(Required) Name of variable to store the chosen filename")]
+        [ActionArgument(Usage = "(Required) Name of variable to store the chosen filename", Literal=true)]
         public String DestinationVariable = "Filename";
       
         [ActionArgument(DisplayName = "Filter", Usage = "(Optional) Filter the browse dialog to only show certain file types")]
