@@ -27,11 +27,11 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "Please enter the following values";
 
-        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas")]
-        public string VariablesToSet = "Var1, Var2, Var3";
+        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas.  You can optionally add a label for the variable by adding a colon and the text to display")]
+        public string VariablesToSet = "Var1:text to display for var1, Var2, Var3:text to display for var3";
 
-        [ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
-        public string LabelsToDisplay = "";
+        //[ActionArgument(DisplayName = "Labels", Usage = "(Optional) Labels for each variable, separated by commas")]
+        //public string LabelsToDisplay = "";
 
         [ActionArgument(DisplayName = "Evaluate user input", Usage="Controls whether user input is evaluated or taken literally")]
         public Boolean Evaluate = false;
@@ -48,7 +48,7 @@ namespace Centipede.Actions
             string myTitle = ParseStringForVariable(Title); 
             string myPrompt = ParseStringForVariable(Prompt);
             string myVariablesToSet = ParseStringForVariable(VariablesToSet);
-            string myLabels = ParseStringForVariable(LabelsToDisplay); 
+            //string myLabels = ParseStringForVariable(LabelsToDisplay); 
             
             if (String.IsNullOrEmpty(myVariablesToSet))
             {
@@ -80,9 +80,8 @@ namespace Centipede.Actions
                                      };
 
 
-            Padding TablePadding = new Padding();
-            TablePadding.All = 10;
-            table.Padding = TablePadding;
+            Padding tablePadding = new Padding { All = 10 };
+            table.Padding = tablePadding;
             
             form.Controls.Add(table);
 
@@ -99,17 +98,30 @@ namespace Centipede.Actions
 
 
             // Get list of labels
-            string[] lblStrings = myLabels.Split(',');
+            //string[] lblStrings = myLabels.Split(',');
             
             // Get list of variables
             string[] varNames = myVariablesToSet.Split(',');
 
             // Create label and text box for each variable
-            for (int i = 0; i < varNames.Length; i++)
+            foreach (string varName in varNames)
             {
+                string labelText, actualVarName;
+                if (varName.Contains(':'))
+                {
+                    var parts = varName.Split(':');
+                    labelText = parts[1];
+                    actualVarName = parts[0];
+                }
+                else
+                {
+                    labelText = varName;
+                    actualVarName = varName;
+                }
+
                 Label lbl = new Label
                             {
-                                Text = lblStrings.Length != varNames.Length || string.IsNullOrEmpty(myLabels) ? varNames[i].Trim() : lblStrings[i].Trim(),  // If labels list is wrong size, use varNames instead
+                                Text = labelText.Trim(),
                                 TextAlign = System.Drawing.ContentAlignment.MiddleLeft,
                                 Dock = DockStyle.Fill,
                                 AutoSize = true
@@ -117,17 +129,17 @@ namespace Centipede.Actions
 
                 TextBox tb = new TextBox
                              {
-                                 Tag = varNames[i].Trim(),
+                                 Tag = actualVarName.Trim(),
                                  Dock = DockStyle.Fill
                              };
                 
                 dynamic value;
 
-                Variables.TryGetValue(varNames[i].Trim(), out value);
+                Variables.TryGetValue(actualVarName.Trim(), out value);
                 
                 if (value != null)
                 {
-                    MessageEventArgs msg = new MessageEventArgs("Setting textbox (" + varNames[i].Trim() + ") using existing value : " + value, MessageLevel.Debug);
+                    MessageEventArgs msg = new MessageEventArgs("Setting textbox (" + actualVarName.Trim() + ") using existing value : " + value, MessageLevel.Debug);
                     OnMessage(msg);
                     tb.Text = value.ToString();
                 }
@@ -283,9 +295,8 @@ namespace Centipede.Actions
             };
 
 
-            Padding TablePadding = new Padding();
-            TablePadding.All = 10;
-            table.Padding = TablePadding;
+            Padding tablePadding = new Padding { All = 10 };
+            table.Padding = tablePadding;
 
             form.Controls.Add(table);
 
