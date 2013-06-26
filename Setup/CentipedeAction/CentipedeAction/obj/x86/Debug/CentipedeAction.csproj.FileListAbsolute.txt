@@ -1,0 +1,5 @@
+c:\documents and settings\rlovely\my documents\visual studio 2010\Projects\CentipedeAction\CentipedeAction\bin\Debug\CentipedeAction.dll
+c:\documents and settings\rlovely\my documents\visual studio 2010\Projects\CentipedeAction\CentipedeAction\bin\Debug\CentipedeAction.pdb
+c:\documents and settings\rlovely\my documents\visual studio 2010\Projects\CentipedeAction\CentipedeAction\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\documents and settings\rlovely\my documents\visual studio 2010\Projects\CentipedeAction\CentipedeAction\obj\x86\Debug\CentipedeAction.dll
+c:\documents and settings\rlovely\my documents\visual studio 2010\Projects\CentipedeAction\CentipedeAction\obj\x86\Debug\CentipedeAction.pdb

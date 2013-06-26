@@ -4,7 +4,7 @@
 #define ProjectDir ".."
 #define SetupDir ProjectDir + "\Setup"
 #define BinaryDir ProjectDir + "\bin\Debug"
-#define SDKDir "..\..\CentipedeAction"
+#define SDKDir SetupDir + "\CentipedeAction"
 
 [Setup]
 AppName={#AppName}
