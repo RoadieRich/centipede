@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using CentipedeInterfaces;
 
@@ -35,6 +37,10 @@ namespace Centipede.Actions
                 Literal = true)]
         public String OutputVars = "";
 
+        private ICentipedeCore _centipedeCore;
+        private Form _targetwindow;
+        private AutoResetEvent _are;
+
         /// <summary>
         /// Perform the action
         /// </summary>
@@ -43,37 +49,44 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            ICentipedeCore core = new CentipedeCore(null);
 
-            foreach (String inputVarName in InputVars.Split(',').Select(s => s.Trim()))
+            this._targetwindow = GetCurrentCore().Window;
+
+            //BackgroundWorker bgw = new BackgroundWorker();
+            //bgw.DoWork += this.Target;
+            this._are = new AutoResetEvent(false);
+            //GetCurrentCore().Window.Invoke(new System.Action(bgw.RunWorkerAsync));
+
+            Thread t = new Thread(this.Target);
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            this._are.WaitOne();
+        }
+
+        private void Target()
+        {
+            this._centipedeCore = new CentipedeCore(null);
+            
+            MainWindow newMain = new MainWindow(this._centipedeCore);
+            
+            foreach (String inputVarName in this.InputVars.Split(',').Select(s => s.Trim()))
             {
-                core.Variables.SetVariable(inputVarName, Variables[inputVarName]);
+                this._centipedeCore.Variables.SetVariable(inputVarName, Variables[inputVarName]);
             }
-
-            core.LoadJob(ParseStringForVariable(JobFileName));
-
-            MainWindow newMain = new MainWindow(core);
+            newMain.LoadJobAfterLoad(JobFileName);
+            newMain.RunJobAfterLoad();
             newMain.FormClosed += delegate
-                                  {
-                                      foreach (var outputVar in OutputVars.Split(',').Select(s => s.Trim()))
                                       {
-                                          Variables[outputVar] = core.Variables[outputVar];
-                                          core.Variables[outputVar] = null;
-                                      }
-                                  };
-            
-            newMain.ShowDialog(GetCurrentCore().Window);
-            Thread runjobThread = new Thread(delegate(object o)
-                                             {
-                                                 using (this)
-                                                 {
-                                                     core.RunJob((Boolean)o);
-                                                 }
-                                             });
-                                             
-            runjobThread.Start(GetCurrentCore().IsStepping);
-            runjobThread.Join();
-            
+                                          foreach (var outputVar in this.OutputVars.Split(',').Select(s => s.Trim()))
+                                          {
+                                              Variables[outputVar] = this._centipedeCore.Variables[outputVar];
+                                              this._centipedeCore.Variables[outputVar] = null;
+                                              this._are.Set();
+                                          }
+                                      };
+
+
+            newMain.Show();
         }
 
         public override int Complexity
@@ -83,7 +96,7 @@ namespace Centipede.Actions
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(ParseStringForVariable(JobFileName));
                 var nav = xmlDocument.CreateNavigator();
-                return (int)nav.Evaluate(@"number(Actions/*)");
+                return (int)(double)nav.Evaluate(@"count(//Actions/*)");
             }
         }
     }
