@@ -7,7 +7,7 @@ using Action = Centipede.Action;
 
 namespace PyAction
 {
-    [ActionCategory("Flow Control", DisplayName="Variable", IconName=@"variable")]
+    [ActionCategory("Flow Control", DisplayName="Variable", iconName=@"variable")]
     public class VariableAction : Action
     {
         /// <summary>
@@ -19,10 +19,10 @@ namespace PyAction
                 : base("Variable", variables, c)
         { }
 
-        [ActionArgument(DisplayName="Expression",Usage="(Required) A valid python expression")]
-        public string Expression = "";
+        [ActionArgument]
+        public String Expresson = "";
 
-        [ActionArgument(DisplayName = "Destination Variable Name", Usage="(Required) Name of variable to store the result of the expression")]
+        [ActionArgument(DisplayName = "Destination Variable Name")]
         public string DestinationVarName = "";
 
         /// <summary>
@@ -30,13 +30,10 @@ namespace PyAction
         /// </summary>
         protected override void DoAction()
         {
-            string myExpression = ParseStringForVariable(Expression);
-            string myDestinationVarName = ParseStringForVariable(DestinationVarName);
-
             IPythonEngine engine = GetCurrentCore().PythonEngine;
             var scope = engine.GetNewTypedScope(Variables);
-
-            Variables[myDestinationVarName] = engine.Evaluate<object>(myExpression, scope);
+            
+            Variables[DestinationVarName] = engine.Evaluate<object>(Expresson, scope);
         }
     }
 }
