@@ -1,11 +1,10 @@
 #define OutputFileBaseName "CentipedeSetup"
 #define OutputDir "Output"
 #define AppName "Centipede"
-#define ProjectDir "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\Centipede"
+#define ProjectDir ".."
 #define SetupDir ProjectDir + "\Setup"
 #define BinaryDir ProjectDir + "\bin\Debug"
-#define SDKDir "C:\Documents and Settings\RLovely\My Documents\Visual Studio 2010\Projects\CentipedeAction"
-#define CygwinSetupDir "/home/RLovely/MyDocuments/Visual\ Studio\ 2010/Projects/Centipede/Setup"
+#define SDKDir "..\..\CentipedeAction"
 
 [Setup]
 AppName={#AppName}
