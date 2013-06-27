@@ -41,14 +41,12 @@ namespace Centipede.Actions
         )]
         public Int32 Test1 = 1;
 
-        
         [ActionArgument(DisplayName = "Message", Literal=true)]
         public String MessageText = "This is sent as a message";
 
 
         public void Test1Set(Object sender, EventArgs e)
         {
-
             TextBox textBox = (TextBox)sender;
             Int32 oldVal = Test1;
             if (Int32.TryParse(textBox.Text, out Test1) || Int32.TryParse(ParseStringForVariable(textBox.Text), out Test1))

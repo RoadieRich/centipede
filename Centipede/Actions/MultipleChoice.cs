@@ -32,10 +32,10 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "Controls whether user input is by buttons or drop-down list")]
         public bool RadioButtons = true;
 
-        [ActionArgument(Usage = "Optional) Variable to be updated with the value of the selected choice")]
+        [ActionArgument(DisplayName = "Variable (value)", Usage = "(Optional) Variable to be updated with the value of the selected choice")]
         public String ChoiceNameVar = "ChoiceResult";
 
-        [ActionArgument(Usage = "(Optional) Variable to to be updated with the index number of the selected choice")]
+        [ActionArgument(DisplayName = "Variable (index)", Usage = "(Optional) Variable to to be updated with the index number of the selected choice")]
         public String ChoiceIndexVar = "";
 
         private TableLayoutPanel _tableLayoutPanel;
