@@ -253,7 +253,7 @@ namespace Centipede
                                    e.Message);
                 }
                 str = str.Replace(expression.Template, result);
-                break;
+                //break;
             }
 
 
