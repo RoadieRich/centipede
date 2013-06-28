@@ -542,17 +542,37 @@ namespace Centipede
         {
             this.FavouritesMenu.DropDownItems.Clear();
 
-            //foreach (var job in this._favouriteJobsDataStore.Favourites)
-            
+            bool itemsAdded = false;
+
             foreach (string jobFilename in Settings.Default.ListOfFavouriteJobs)
             {
+                ToolStripItem item;
                 if (File.Exists(jobFilename))
                 {
-                var item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
-                item.Click += this.ItemOnClick;
-                this.FavouritesMenu.DropDownItems.Add(item);
+                    item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
+                    item.Click += this.ItemOnClick;
                 }
+                else
+                {
+                    item = new ToolStripMenuItem
+                           {
+                               Text = "<Favourite item file not found>",
+                               Enabled = false
+                           };
+                }
+                this.FavouritesMenu.DropDownItems.Add(item);
+                itemsAdded = true;
             }
+
+            if (!itemsAdded)
+            {
+                this.FavouritesMenu.DropDownItems.Add(new ToolStripMenuItem
+                           {
+                               Text = "<No favourites set>",
+                               Enabled = false
+                           });
+            }
+            
 
             this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
             this.FavouritesMenu.DropDownItems.Add(this.addCurrentToolStripMenuItem);
