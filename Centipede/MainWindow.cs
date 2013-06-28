@@ -871,18 +871,15 @@ namespace Centipede
 
         private void SaveJob()
         {
+            if (!Dirty)
+            {
+                return;
+            }
             if (String.IsNullOrEmpty(Core.Job.Name))
             {
-                CentipedeJob job = Core.Job;
-                var jobPropertyForm = new JobPropertyForm(ref job);
-                DialogResult result = jobPropertyForm.ShowDialog(this);
-                Core.Job = job;
-                if (result == DialogResult.Cancel)
-                {
-                    throw new AbortOperationException();
-                }
-                
+                this.SetJobProperties();
             }
+
             this.SaveFileDialog.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
                                                     ? Core.Job.FileName
                                                     : Core.Job.Name;
@@ -936,7 +933,7 @@ namespace Centipede
 
             if (dialogResult == DialogResult.Yes)
             {
-                SaveJob();
+                Save();
                 return;
             }
 
@@ -986,11 +983,16 @@ namespace Centipede
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(Core.Job.FileName))
+            this.Save();
+        }
+
+        private void Save()
+        {
+            if (String.IsNullOrEmpty(this.Core.Job.FileName))
             {
                 try
                 {
-                    SaveJob();
+                    this.SaveJob();
                 }
                 catch (AbortOperationException)
                 {
@@ -999,9 +1001,9 @@ namespace Centipede
             }
             else
             {
-                Core.SaveJob(Core.Job.FileName);
+                this.Core.SaveJob(this.Core.Job.FileName);
             }
-            Dirty = false;
+            this.Dirty = false;
         }
 
         private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1097,15 +1099,36 @@ namespace Centipede
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            CentipedeJob centipedeJob = Core.Job;
-            var form = new JobPropertyForm(ref centipedeJob);
-            form.ShowDialog(this);
-            if (!form.Dirty)
+            bool changed;
+            try
+            {
+                changed = this.SetJobProperties();
+            }
+            catch (AbortOperationException)
             {
                 return;
             }
-            Dirty = true;
-            this.WebBrowser.Navigate(Core.Job.InfoUrl);
+
+            if (changed)
+            {
+                this.Dirty = true;
+                this.WebBrowser.Navigate(this.Core.Job.InfoUrl);
+            }
+        }
+
+        private bool SetJobProperties()
+        {
+            CentipedeJob centipedeJob = this.Core.Job;
+            var form = new JobPropertyForm(ref centipedeJob);
+
+            var result = form.ShowDialog(this);
+
+            if (result == DialogResult.Cancel)
+            {
+                throw new AbortOperationException();
+            }
+
+            return form.Dirty;
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -1124,13 +1147,14 @@ namespace Centipede
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(Core.Job.Name))
-            {
-                return;
-            }
+            //if (!String.IsNullOrEmpty(Core.Job.Name))
+            //{
+            //    return;
+            //}
             try
             {
-                SaveJob();
+
+                this.AskSave();
                 //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
                 Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
