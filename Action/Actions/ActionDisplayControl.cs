@@ -346,19 +346,19 @@ namespace Centipede.Actions
                 {
                 case ActionState.None:
                     StatusIconBox.Image = null;
-                    BackColor = SystemColors.Control;
+                    //BackColor = SystemColors.Control;
                     break;
                 case ActionState.Running:
                     StatusIconBox.Image = StatusIcons.Images[@"Run.png"];
-                    BackColor = Color.DarkGray;
+                    //BackColor = Color.DarkGray;
                     break;
                 case ActionState.Error:
                     StatusIconBox.Image = StatusIcons.Images[@"Error.png"];
-                    BackColor = Color.DarkRed;
+                    //BackColor = Color.DarkRed;
                     break;
                 case ActionState.Completed:
                     StatusIconBox.Image = StatusIcons.Images[@"OK.png"];
-                    BackColor = SystemColors.Control;
+                    //BackColor = SystemColors.Control;
                     break;
                 }
                 _state = value;
@@ -449,6 +449,8 @@ namespace Centipede.Actions
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public delegate void DeletedEventHandler(object sender, CentipedeEventArgs e);
+
+
     }
 
     /// <summary>

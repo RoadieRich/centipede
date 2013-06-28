@@ -58,13 +58,13 @@ namespace Centipede.Actions
             // 
             // NameLabel
             // 
-            this.NameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.NameLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.NameLabel.AutoEllipsis = true;
             this.NameLabel.BackColor = System.Drawing.Color.Transparent;
             this.NameLabel.Location = new System.Drawing.Point(24, 3);
             this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(165, 20);
+            this.NameLabel.Size = new System.Drawing.Size(169, 20);
             this.NameLabel.TabIndex = 0;
             this.NameLabel.Text = "<NAME>";
             // 
@@ -94,7 +94,7 @@ namespace Centipede.Actions
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(246, 10);
+            this.AttributeTable.Size = new System.Drawing.Size(250, 10);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -111,7 +111,7 @@ namespace Centipede.Actions
             this.StatusIconBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.StatusIconBox.BackColor = System.Drawing.Color.Transparent;
             this.StatusIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.StatusIconBox.Location = new System.Drawing.Point(195, 3);
+            this.StatusIconBox.Location = new System.Drawing.Point(199, 3);
             this.StatusIconBox.Name = "StatusIconBox";
             this.StatusIconBox.Size = new System.Drawing.Size(48, 48);
             this.StatusIconBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -136,11 +136,11 @@ namespace Centipede.Actions
             // 
             // CommentTextBox
             // 
-            this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.CommentTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.CommentTextBox.Location = new System.Drawing.Point(27, 27);
             this.CommentTextBox.Name = "CommentTextBox";
-            this.CommentTextBox.Size = new System.Drawing.Size(162, 20);
+            this.CommentTextBox.Size = new System.Drawing.Size(166, 20);
             this.CommentTextBox.TabIndex = 4;
             this.CommentTextBox.WordWrap = false;
             this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBox_TextChanged);
@@ -166,7 +166,7 @@ namespace Centipede.Actions
             this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.TopPanel.Location = new System.Drawing.Point(0, 3);
             this.TopPanel.Name = "TopPanel";
-            this.TopPanel.Size = new System.Drawing.Size(246, 54);
+            this.TopPanel.Size = new System.Drawing.Size(250, 54);
             this.TopPanel.TabIndex = 7;
             // 
             // BottomPanel
@@ -177,7 +177,7 @@ namespace Centipede.Actions
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BottomPanel.Location = new System.Drawing.Point(0, 57);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(246, 10);
+            this.BottomPanel.Size = new System.Drawing.Size(250, 10);
             this.BottomPanel.TabIndex = 0;
             // 
             // splitter1
@@ -185,7 +185,7 @@ namespace Centipede.Actions
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(246, 3);
+            this.splitter1.Size = new System.Drawing.Size(250, 3);
             this.splitter1.TabIndex = 8;
             this.splitter1.TabStop = false;
             // 
@@ -197,14 +197,13 @@ namespace Centipede.Actions
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ContextMenuStrip = this.ActionContextMenu;
             this.Controls.Add(this.BottomPanel);
             this.Controls.Add(this.TopPanel);
             this.Controls.Add(this.splitter1);
             this.MinimumSize = new System.Drawing.Size(250, 4);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(246, 67);
+            this.Size = new System.Drawing.Size(250, 67);
             this.Load += new System.EventHandler(this.ActionDisplayControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
