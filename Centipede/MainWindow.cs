@@ -208,7 +208,7 @@ namespace Centipede
             var item = (ToolStripDropDownItem)sender;
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             { }
@@ -333,7 +333,7 @@ namespace Centipede
             SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
             //this is supposed to be a percentage, but this works.
-            this.backgroundWorker1.ReportProgress(action.Complexity);
+            this.BackgroundWorker.ReportProgress(action.Complexity);
         }
 
         private static void SetState([NotNull] ActionDisplayControl adc, ActionState state,
@@ -574,9 +574,9 @@ namespace Centipede
             }
             
 
-            this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
-            this.FavouritesMenu.DropDownItems.Add(this.addCurrentToolStripMenuItem);
-            this.FavouritesMenu.DropDownItems.Add(this.EditFavouritesMenuItem);
+            this.FavouritesMenu.DropDownItems.Add(this.FavoutiesMenuSeparator);
+            this.FavouritesMenu.DropDownItems.Add(this.FavouritesAddCurrentMenuItem);
+            this.FavouritesMenu.DropDownItems.Add(this.FavouritesEditFavouritesMenuItem);
         }
 
         private void GetActionPlugins()
@@ -670,7 +670,7 @@ namespace Centipede
             Dirty = false;
             Core.Job.PropertyChanged += CentipedeJobOnPropertyChanged;
             Text = Core.Job.Name;
-            progressBar1.Value = 0;
+            ProgressBar.Value = 0;
 
             this.WebBrowser.Navigate(Core.Job.InfoUrl);
             this.ActionContainer.VerticalScroll.Maximum = 0;
@@ -774,7 +774,7 @@ namespace Centipede
 
         private void adc_Deleted(object sender, CentipedeEventArgs e)
         {
-            var adc = (ActionDisplayControl)sender;  
+            var adc = (ActionDisplayControl)sender;
             Core.RemoveAction(adc.ThisAction);
         }
 
@@ -819,7 +819,7 @@ namespace Centipede
         {
             this._stepping = step;
             ResetDisplay();
-            this.backgroundWorker1.RunWorkerAsync(step);
+            this.BackgroundWorker.RunWorkerAsync(step);
         }
 
         private void ResetDisplay()
@@ -828,8 +828,8 @@ namespace Centipede
             {
                 SetState(adc, ActionState.None, String.Empty);
             }
-            this.progressBar1.Value = 0;
-            this.progressBar1.Maximum = Core.Job.Complexity;
+            this.ProgressBar.Value = 0;
+            this.ProgressBar.Maximum = Core.Job.Complexity;
         }
 
         [STAThread]
@@ -869,67 +869,38 @@ namespace Centipede
             e.Effect = DragDropEffects.Move;
         }
 
-        private void SaveJob()
+        private void ShowSaveDialogs()
         {
-            if (String.IsNullOrEmpty(Core.Job.FileName))
+            if (!Dirty)
             {
-                try
-                {
-                    SaveUnnamedJob();
-                }
-                catch (AbortOperationException)
-                {
-                    return;
-                }
+                return;
             }
-            else
-            {
-                SaveNamedJob();
-            }
-        }
-
-        private void SaveUnnamedJob()
-        {
             if (String.IsNullOrEmpty(Core.Job.Name))
             {
-                CentipedeJob job = Core.Job;
-                var jobPropertyForm = new JobPropertyForm(ref job);
-                DialogResult result = jobPropertyForm.ShowDialog(this);
-                Core.Job = job;
-                if (result == DialogResult.Cancel)
-                {
-                    throw new AbortOperationException();
-                }
-                
+                this.SetJobProperties();
             }
 
-            this.saveFileDialog1.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
+            this.SaveFileDialog.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
                                                     ? Core.Job.FileName
                                                     : Core.Job.Name;
 
-            if (this.saveFileDialog1.ShowDialog(this) == DialogResult.Cancel)
+            if (this.SaveFileDialog.ShowDialog(this) == DialogResult.Cancel)
             {
                 throw new AbortOperationException();
             }
 
         }
 
-        private void SaveNamedJob()
-        {
-            Core.SaveJob(Core.Job.FileName);
-            Dirty = false;
-        }
-
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Core.SaveJob(this.saveFileDialog1.FileName);
+            Core.SaveJob(this.SaveFileDialog.FileName);
             Dirty = false;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
-            this.progressBar1.Increment(e.ProgressPercentage);
+            this.ProgressBar.Increment(e.ProgressPercentage);
         }
 
         protected override void Dispose(bool disposing)
@@ -949,7 +920,7 @@ namespace Centipede
         /// </summary>
         /// <exception cref="AbortOperationException">Throws abort operation exception if cancel is clicked at any 
         /// point</exception>
-        private void AskSave()
+        private void AskToSave()
         {
             if (!Dirty)
             {
@@ -962,7 +933,7 @@ namespace Centipede
 
             if (dialogResult == DialogResult.Yes)
             {
-                SaveJob();
+                Save();
                 return;
             }
 
@@ -970,7 +941,6 @@ namespace Centipede
             {
                 return;
             }
-
             throw new AbortOperationException();
         }
 
@@ -978,7 +948,7 @@ namespace Centipede
         {
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
@@ -994,7 +964,7 @@ namespace Centipede
 
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
@@ -1013,14 +983,34 @@ namespace Centipede
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveJob();
+            this.Save();
+        }
+
+        private void Save()
+        {
+            if (String.IsNullOrEmpty(this.Core.Job.FileName))
+            {
+                try
+                {
+                    this.ShowSaveDialogs();
+                }
+                catch (AbortOperationException)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                this.Core.SaveJob(this.Core.Job.FileName);
+            }
+            this.Dirty = false;
         }
 
         private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
             {
-                SaveUnnamedJob();
+                this.ShowSaveDialogs();
             }
             catch (AbortOperationException)
             { }
@@ -1109,15 +1099,36 @@ namespace Centipede
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            CentipedeJob centipedeJob = Core.Job;
-            var form = new JobPropertyForm(ref centipedeJob);
-            form.ShowDialog(this);
-            if (!form.Dirty)
+            bool changed;
+            try
+            {
+                changed = this.SetJobProperties();
+            }
+            catch (AbortOperationException)
             {
                 return;
             }
-            Dirty = true;
-            this.WebBrowser.Navigate(Core.Job.InfoUrl);
+
+            if (changed)
+            {
+                this.Dirty = true;
+                this.WebBrowser.Navigate(this.Core.Job.InfoUrl);
+            }
+        }
+
+        private bool SetJobProperties()
+        {
+            CentipedeJob centipedeJob = this.Core.Job;
+            var form = new JobPropertyForm(ref centipedeJob);
+
+            var result = form.ShowDialog(this);
+
+            if (result == DialogResult.Cancel)
+            {
+                throw new AbortOperationException();
+            }
+
+            return form.Dirty;
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -1136,28 +1147,20 @@ namespace Centipede
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            if (String.IsNullOrEmpty(Core.Job.FileName))
+            //if (!String.IsNullOrEmpty(Core.Job.Name))
+            //{
+            //    return;
+            //}
+            try
             {
-                // Job must be saved before it can be added as favourite
-                try
-                {
-                    DialogResult result = MessageBox.Show("Job must be saved before it can be added as favourite\n\nDo you want to Save now?", "Centipede", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
-                    
-                    if (result == System.Windows.Forms.DialogResult.OK) SaveUnnamedJob();
-                }
-                catch (AbortOperationException)
-                {
-                    return;
-                }
-            }
 
-            if (!Settings.Default.ListOfFavouriteJobs.Contains(Core.Job.FileName))
-            {
+                this.AskToSave();
+                //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
                 Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
             }
-
+            catch (AbortOperationException)
+            { }
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
@@ -1169,7 +1172,7 @@ namespace Centipede
         {
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
