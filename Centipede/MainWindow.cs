@@ -942,7 +942,7 @@ namespace Centipede
 
             if (dialogResult == DialogResult.Yes)
             {
-                saveToolStripMenuItem1_Click(null, null);
+                SaveJob();
                 return;
             }
 
@@ -1122,7 +1122,9 @@ namespace Centipede
                 // Job must be saved before it can be added as favourite
                 try
                 {
-                    SaveUnnamedJob();
+                    DialogResult result = MessageBox.Show("Job must be saved before it can be added as favourite\n\nDo you want to Save now?", "Centipede", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                    
+                    if (result == System.Windows.Forms.DialogResult.OK) SaveUnnamedJob();
                 }
                 catch (AbortOperationException)
                 {
