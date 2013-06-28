@@ -238,7 +238,7 @@ namespace Centipede
             var expressions = FindPythonExpressions(str);
             foreach (Expression expression in expressions)
             {
-                String result = expression.Template;
+                string result = expression.Template;
                 try
                 {
                     this.OnMessage(MessageLevel.Debug, "Python expression found: {0}", expression.Code);
@@ -269,56 +269,35 @@ namespace Centipede
         /// <returns></returns>
         public IEnumerable<Expression> FindPythonExpressions(string str)
         {
+            // XXX : May break on set literals
 
             IPythonEngine pythonEngine = this.GetCurrentCore().PythonEngine;
             List<Expression> pythonExpressions = new List<Expression>();
-            for (int i = 0; i < str.Length; i++)
+            foreach (int i in str.IndexesWhere('{'.Equals))
             {
-                string str1 = str;
-                if (str[i] != '{')
-                {
-                    continue;
-                }
-
+                //string str1 = str;
                 int opening = i;
 
-                //pythonExpressions.AddRange(
-                //    from clsing in str1.IndexesWhere('}'.Equals)
-                //    where clsing > opening
-                //    select new Expression
-                //           {
-                //               Template = str1.Substring(opening,
-                //                                         clsing - opening +
-                //                                         1),
-                //               Code =
-                //                   str1.Substring(opening + 1,
-                //                                  clsing - opening - 1),
-                //               Start = opening,
-                //               End = clsing
-                //           }
-                //    into expression
-                //        where this.Throws<PythonParseException>(() => expression.CompileWith(pythonEngine))
-                //        //OnMessage(MessageLevel.Debug, "Attempted to compile {0}, error was {1}.", expression.Code, e.Message);
-                //        select expression
-                //    );
-
-                foreach (int clsing in str1.IndexesWhere('}'.Equals))
+                foreach (int closing in str.IndexesWhere('}'.Equals))
                 {
-                    if (clsing > opening)
+                    if (closing > opening)
                     {
                         Expression expression = new Expression
                                                 {
-                                                    Template = str1.Substring(opening, clsing - opening + 1),
-                                                    Code = str1.Substring(opening + 1, clsing - opening - 1),
+                                                    Template = str.Substring(opening, closing - opening + 1), // Template is the string between & including opening and closing braces
+                                                    Code = str.Substring(opening + 1, closing - opening - 1), // Code is the bit between the braces, it isn't neccessarily valid pyton
                                                     Start = opening,
-                                                    End = clsing
+                                                    End = closing
                                                 };
 
                         PythonParseException parseException;
                         if (!this.Throws(expression.CompileWith, pythonEngine, out parseException))
                         {
+                            // Code is valid pyton
+
                             //this.OnMessage(MessageLevel.Debug, "Parsed {0} as valid python", expression.Template);
                             pythonExpressions.Add(expression);
+                            break;
                         }
                     }
                 }
