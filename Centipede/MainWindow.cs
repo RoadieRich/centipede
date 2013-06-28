@@ -774,7 +774,7 @@ namespace Centipede
 
         private void adc_Deleted(object sender, CentipedeEventArgs e)
         {
-            var adc = (ActionDisplayControl)sender;  
+            var adc = (ActionDisplayControl)sender;
             Core.RemoveAction(adc.ThisAction);
         }
 
@@ -871,25 +871,6 @@ namespace Centipede
 
         private void SaveJob()
         {
-            if (String.IsNullOrEmpty(Core.Job.FileName))
-            {
-                try
-                {
-                    SaveUnnamedJob();
-                }
-                catch (AbortOperationException)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                SaveNamedJob();
-            }
-        }
-
-        private void SaveUnnamedJob()
-        {
             if (String.IsNullOrEmpty(Core.Job.Name))
             {
                 CentipedeJob job = Core.Job;
@@ -902,7 +883,6 @@ namespace Centipede
                 }
                 
             }
-
             this.saveFileDialog1.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
                                                     ? Core.Job.FileName
                                                     : Core.Job.Name;
@@ -912,12 +892,6 @@ namespace Centipede
                 throw new AbortOperationException();
             }
 
-        }
-
-        private void SaveNamedJob()
-        {
-            Core.SaveJob(Core.Job.FileName);
-            Dirty = false;
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -962,7 +936,7 @@ namespace Centipede
 
             if (dialogResult == DialogResult.Yes)
             {
-                saveToolStripMenuItem1_Click(null, null);
+                SaveJob();
                 return;
             }
 
@@ -970,7 +944,6 @@ namespace Centipede
             {
                 return;
             }
-
             throw new AbortOperationException();
         }
 
@@ -1013,14 +986,29 @@ namespace Centipede
 
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveJob();
+            if (String.IsNullOrEmpty(Core.Job.FileName))
+            {
+                try
+                {
+                    SaveJob();
+                }
+                catch (AbortOperationException)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Core.SaveJob(Core.Job.FileName);
+            }
+            Dirty = false;
         }
 
         private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             try
             {
-                SaveUnnamedJob();
+                SaveJob();
             }
             catch (AbortOperationException)
             { }
@@ -1136,26 +1124,19 @@ namespace Centipede
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            if (String.IsNullOrEmpty(Core.Job.FileName))
+            if (!String.IsNullOrEmpty(Core.Job.Name))
             {
-                // Job must be saved before it can be added as favourite
-                try
-                {
-                    SaveUnnamedJob();
-                }
-                catch (AbortOperationException)
-                {
-                    return;
-                }
+                return;
             }
-
-            if (!Settings.Default.ListOfFavouriteJobs.Contains(Core.Job.FileName))
+            try
             {
+                SaveJob();
+                //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
                 Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
             }
-
+            catch (AbortOperationException)
+            { }
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
