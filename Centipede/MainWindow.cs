@@ -208,7 +208,7 @@ namespace Centipede
             var item = (ToolStripDropDownItem)sender;
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             { }
@@ -869,7 +869,7 @@ namespace Centipede
             e.Effect = DragDropEffects.Move;
         }
 
-        private void SaveJob()
+        private void ShowSaveDialogs()
         {
             if (!Dirty)
             {
@@ -920,7 +920,7 @@ namespace Centipede
         /// </summary>
         /// <exception cref="AbortOperationException">Throws abort operation exception if cancel is clicked at any 
         /// point</exception>
-        private void AskSave()
+        private void AskToSave()
         {
             if (!Dirty)
             {
@@ -948,7 +948,7 @@ namespace Centipede
         {
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
@@ -964,7 +964,7 @@ namespace Centipede
 
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
@@ -992,7 +992,7 @@ namespace Centipede
             {
                 try
                 {
-                    this.SaveJob();
+                    this.ShowSaveDialogs();
                 }
                 catch (AbortOperationException)
                 {
@@ -1010,7 +1010,7 @@ namespace Centipede
         {
             try
             {
-                SaveJob();
+                this.ShowSaveDialogs();
             }
             catch (AbortOperationException)
             { }
@@ -1154,7 +1154,7 @@ namespace Centipede
             try
             {
 
-                this.AskSave();
+                this.AskToSave();
                 //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
                 Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
                 UpdateFavourites();
@@ -1172,7 +1172,7 @@ namespace Centipede
         {
             try
             {
-                AskSave();
+                this.AskToSave();
             }
             catch (AbortOperationException)
             {
