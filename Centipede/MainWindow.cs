@@ -333,7 +333,7 @@ namespace Centipede
             SetState(adc, ActionState.Completed, Resources.MainWindow_UpdateHandlerDone_Completed);
 
             //this is supposed to be a percentage, but this works.
-            this.backgroundWorker1.ReportProgress(action.Complexity);
+            this.BackgroundWorker.ReportProgress(action.Complexity);
         }
 
         private static void SetState([NotNull] ActionDisplayControl adc, ActionState state,
@@ -574,9 +574,9 @@ namespace Centipede
             }
             
 
-            this.FavouritesMenu.DropDownItems.Add(this.FaveMenuSeparator);
-            this.FavouritesMenu.DropDownItems.Add(this.addCurrentToolStripMenuItem);
-            this.FavouritesMenu.DropDownItems.Add(this.EditFavouritesMenuItem);
+            this.FavouritesMenu.DropDownItems.Add(this.FavoutiesMenuSeparator);
+            this.FavouritesMenu.DropDownItems.Add(this.FavouritesAddCurrentMenuItem);
+            this.FavouritesMenu.DropDownItems.Add(this.FavouritesEditFavouritesMenuItem);
         }
 
         private void GetActionPlugins()
@@ -670,7 +670,7 @@ namespace Centipede
             Dirty = false;
             Core.Job.PropertyChanged += CentipedeJobOnPropertyChanged;
             Text = Core.Job.Name;
-            progressBar1.Value = 0;
+            ProgressBar.Value = 0;
 
             this.WebBrowser.Navigate(Core.Job.InfoUrl);
             this.ActionContainer.VerticalScroll.Maximum = 0;
@@ -819,7 +819,7 @@ namespace Centipede
         {
             this._stepping = step;
             ResetDisplay();
-            this.backgroundWorker1.RunWorkerAsync(step);
+            this.BackgroundWorker.RunWorkerAsync(step);
         }
 
         private void ResetDisplay()
@@ -828,8 +828,8 @@ namespace Centipede
             {
                 SetState(adc, ActionState.None, String.Empty);
             }
-            this.progressBar1.Value = 0;
-            this.progressBar1.Maximum = Core.Job.Complexity;
+            this.ProgressBar.Value = 0;
+            this.ProgressBar.Maximum = Core.Job.Complexity;
         }
 
         [STAThread]
@@ -883,11 +883,11 @@ namespace Centipede
                 }
                 
             }
-            this.saveFileDialog1.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
+            this.SaveFileDialog.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
                                                     ? Core.Job.FileName
                                                     : Core.Job.Name;
 
-            if (this.saveFileDialog1.ShowDialog(this) == DialogResult.Cancel)
+            if (this.SaveFileDialog.ShowDialog(this) == DialogResult.Cancel)
             {
                 throw new AbortOperationException();
             }
@@ -896,14 +896,14 @@ namespace Centipede
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            Core.SaveJob(this.saveFileDialog1.FileName);
+            Core.SaveJob(this.SaveFileDialog.FileName);
             Dirty = false;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
-            this.progressBar1.Increment(e.ProgressPercentage);
+            this.ProgressBar.Increment(e.ProgressPercentage);
         }
 
         protected override void Dispose(bool disposing)
