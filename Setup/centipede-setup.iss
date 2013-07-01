@@ -2,7 +2,7 @@
 #define OutputDir "Output"
 #define AppName "Centipede"
 #define ProjectDir ".."
-#define SetupDir ProjectDir + "\Setup"
+#define SetupDir "."
 #define BinaryDir ProjectDir + "\bin\Debug"
 #define SDKDir SetupDir + "\CentipedeAction"
 
@@ -55,23 +55,23 @@ Name: "SDK"; Description: "CentipedeAction SDK"; Types: CompleteSDK
 
 [Dirs]
 Name: "{userappdata}\Centipede";	Components: Centipede
-;Name: "{app}\Resources"; Components: Centipede
+Name: "{app}\Resources"; Components: Centipede
 Name: "{app}\Plugins"; Components: Centipede
 Name: "{app}\Plugins\Resources"; Components: Centipede
 
 ; SDK items
-Name: "{code:GetSdkDir}";	Components: SDK
-Name: "{code:GetSdkDir}\CentipedeAction";	Components: SDK
-Name: "{code:GetSdkDir}\CentipedeAction\Resources";	Components: SDK
-Name: "{code:GetSdkDir}\CentipedeAction\Properties";	Components: SDK
+Name: "{code:GetSdkDestDir}";	Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction";	Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction\Resources";	Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction\Properties";	Components: SDK
 
 ; Example job folder
 Name: "{code:GetExampleDir}";	Components: ExampleJobs
 
 [Files]
 ; Dependencies
-Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall external; ExternalSize: 182; Components: Centipede; Check: FrameworkIsNotInstalled
-Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall external; ExternalSize: 35; Components: Centipede; Check: IronPythonNotInstalled
+Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{app}\Resources"; Components: Centipede; Check: FrameworkIsNotInstalled
+Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{app}\Resources"; Components: Centipede; Check: IronPythonNotInstalled
 
 ; Program
 Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
@@ -98,14 +98,14 @@ Source: "{#BinaryDir}\Plugins\TextFile.dll"; DestDir: "{app}\Plugins"; Flags: ig
 Source: "{#BinaryDir}\Plugins\MathCADActions.dll"; DestDir: "{app}\Plugins"; Components: Actions\MathCad
 
 ; sdk items
-Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDir}\sdk"; Flags: confirmoverwrite; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
-Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction.sln"; DestDir: "{code:GetSdkDestDir}\sdk"; Flags: confirmoverwrite; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Program.cs"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\CustomActionDisplayControl.cs"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction"; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\MyCentipedeAction.csproj"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Resources\MyIcon.ico"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction\Resources"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.resx"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
+Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 ; Sample Jobs
 ;
@@ -116,8 +116,8 @@ Name: "{group}\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "
 Name: "{group}\Centipede Help Community"; Filename: "http://getsatisfaction.com/centipede"
 
 [Run]
-Filename: "{tmp}\dotNetFx40_Full_x86_x64.exe";	StatusMsg: "Installing the .NET framework";	Components: Centipede;	Check: FrameworkIsNotInstalled
-Filename: "msiexec";	Parameters: "/i {tmp}\IronPython-2.7.3.msi";	Flags: shellexec;	StatusMsg: "Installing IronPython 2.7"; Components: Centipede;	Check: IronPythonNotInstalled
+Filename: "{app}\Resources\dotNetFx40_Full_x86_x64.exe"; StatusMsg: "Installing the .NET framework";	Components: Centipede;	Check: FrameworkIsNotInstalled
+Filename: "msiexec.exe"; Parameters: "/i ""{app}\Resources\IronPython-2.7.3.msi"" /qb"; WorkingDir: "{app}\Resources"; Flags: shellexec;	StatusMsg: "Installing IronPython 2.7"; Components: Centipede;	Check: IronPythonNotInstalled
 Filename: "{app}\Centipede.exe";	Flags: nowait postinstall;	Description: "Start Centipede";	StatusMsg: "Starting Centipede";	Components: Centipede
 
 [Registry]
@@ -193,7 +193,7 @@ begin
 	
 end;
 
-function GetSdkDir(param: String): String;
+function GetSdkDestDir(param: String): String;
 begin
     { Return the selected DataDir }
     Result := SdkDirPage.Values[0];
