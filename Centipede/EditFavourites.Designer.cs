@@ -50,7 +50,6 @@
             // 
             this.MoveUpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.MoveUpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.MoveUpButton.Enabled = false;
             this.MoveUpButton.ImageIndex = 0;
             this.MoveUpButton.ImageList = this.imageList1;
             this.MoveUpButton.Location = new System.Drawing.Point(304, 12);
@@ -58,6 +57,7 @@
             this.MoveUpButton.Size = new System.Drawing.Size(43, 42);
             this.MoveUpButton.TabIndex = 1;
             this.MoveUpButton.UseVisualStyleBackColor = true;
+            this.MoveUpButton.Click += new System.EventHandler(this.MoveUpButton_Click);
             // 
             // imageList1
             // 
@@ -97,7 +97,6 @@
             // MoveDownButton
             // 
             this.MoveDownButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.MoveDownButton.Enabled = false;
             this.MoveDownButton.ImageIndex = 3;
             this.MoveDownButton.ImageList = this.imageList1;
             this.MoveDownButton.Location = new System.Drawing.Point(304, 156);
@@ -105,6 +104,7 @@
             this.MoveDownButton.Size = new System.Drawing.Size(43, 42);
             this.MoveDownButton.TabIndex = 1;
             this.MoveDownButton.UseVisualStyleBackColor = true;
+            this.MoveDownButton.Click += new System.EventHandler(this.MoveDownButton_Click);
             // 
             // OKBtn
             // 
@@ -139,13 +139,14 @@
             // 
             this.FavouriteJobsGridView.AllowUserToAddRows = false;
             this.FavouriteJobsGridView.AllowUserToDeleteRows = false;
-            this.FavouriteJobsGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.FavouriteJobsGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FavouriteJobsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.FavouriteJobsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.FavouriteJobsGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.FavouriteJobsGridView.Location = new System.Drawing.Point(13, 13);
+            this.FavouriteJobsGridView.MultiSelect = false;
             this.FavouriteJobsGridView.Name = "FavouriteJobsGridView";
             this.FavouriteJobsGridView.ReadOnly = true;
             this.FavouriteJobsGridView.RowHeadersVisible = false;

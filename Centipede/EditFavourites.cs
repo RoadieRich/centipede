@@ -99,6 +99,44 @@ namespace Centipede
 
         }
 
+        private void MoveDownButton_Click(object sender, EventArgs e)
+        {
+            // Only works for Multiselect = false
+            if (FavouriteJobsGridView.SelectedRows.Count == 1)
+            {
+                int index = FavouriteJobsGridView.SelectedRows[0].Index;
+
+                if (index != FavouriteJobsGridView.RowCount - 1)
+                {
+                    string faveJob = Properties.Settings.Default.ListOfFavouriteJobs[index];
+                    Properties.Settings.Default.ListOfFavouriteJobs.RemoveAt(index);
+                    Properties.Settings.Default.ListOfFavouriteJobs.Insert(index + 1, faveJob);
+                    this.UpdateBinding();
+
+                    FavouriteJobsGridView.Rows[index + 1].Selected = true;
+                }
+            }
+        }
+
+        private void MoveUpButton_Click(object sender, EventArgs e)
+        {
+            // Only works for Multiselect = false
+            if (FavouriteJobsGridView.SelectedRows.Count == 1)
+            {
+                int index = FavouriteJobsGridView.SelectedRows[0].Index;
+
+                if (index != 0)
+                {
+                    string faveJob = Properties.Settings.Default.ListOfFavouriteJobs[index];
+                    Properties.Settings.Default.ListOfFavouriteJobs.RemoveAt(index);
+                    Properties.Settings.Default.ListOfFavouriteJobs.Insert(index - 1, faveJob);
+                    this.UpdateBinding();
+
+                    FavouriteJobsGridView.Rows[index - 1].Selected = true;
+                }
+            }
+        }
+
         //private void MoveUpButton_Click(object sender, EventArgs e)
         //{
         //    FavouriteJobsGridView.SelectedRows.Cast<DataGridViewRow>()
