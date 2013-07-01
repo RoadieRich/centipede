@@ -3,5 +3,7 @@
 # 
 # Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
+This version fixes the missing dependency installers.
 Added support to display missing actions.
 Run Subjob is currently broken.  We are working on a fix.
+Previous version had unremoved testing code.
