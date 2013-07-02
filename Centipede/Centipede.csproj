@@ -93,11 +93,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -115,6 +117,7 @@
     </Compile>
     <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\SubJobAction.cs" />
+    <Compile Include="Actions\TestSerialize.cs" />
     <Compile Include="CentipedeCore.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="AboutForm.cs">
@@ -313,7 +316,7 @@
     <None Include="Resources\CentipedeFile.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-     <None Include="Resources\ui.ico" />
+    <None Include="Resources\ui.ico" />
     <Content Include="Resources\WelcomeScreen.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
