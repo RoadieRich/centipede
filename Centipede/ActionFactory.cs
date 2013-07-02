@@ -51,29 +51,38 @@ namespace Centipede
                                         { typeof(string), typeof(Dictionary<String, Object>), typeof(ICentipedeCore) }
                                     };
 
-            ConstructorInfo constructorInfo =
-                ctorTypeSigs.Select(types => this._actionType.GetConstructor(types)).FirstOrDefault();
-            if (constructorInfo != null)
+            var ctors = from types in ctorTypeSigs
+                        let ctor = this._actionType.GetConstructor(types)
+                        where ctor != null
+                        select new
+                               {
+                                   Ctor = ctor,
+                                   ArgCount = types.Length
+                               };
+
+            var constructorInfo = ctors.FirstOrDefault();
+            if (constructorInfo == null)
             {
-                IAction instance;
-                try
-                {
-                    instance = (IAction)constructorInfo.Invoke(new object[] { this._core.Variables, this._core });
-                }
-                catch (TargetParameterCountException)
-                {
-                    instance = (IAction)constructorInfo.Invoke(new object[] { "", this._core.Variables, this._core });
-                    MessageEvent(this,
-                                 new MessageEventArgs
-                                 {
-                                     Level = MessageLevel.Debug,
-                                     Message =
-                                         "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
-                                 });
-                }
-                return instance;
+                throw new ActionException("Invalid Type");
             }
-            throw new ActionException("Invalid Type");
+
+            object[] parameters;
+            if (constructorInfo.ArgCount == 2)
+            {
+                parameters = new object[] { this._core.Variables, this._core };
+            }
+            else
+            {
+                parameters = new object[] { "", this._core.Variables, this._core };
+                MessageEvent(this,
+                             new MessageEventArgs
+                             {
+                                 Level = MessageLevel.Debug,
+                                 Message =
+                                     "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
+                             });
+            }
+            return (IAction)constructorInfo.Ctor.Invoke(parameters);
         }
 
     }
