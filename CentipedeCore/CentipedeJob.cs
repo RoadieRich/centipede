@@ -45,10 +45,53 @@ namespace CentipedeInterfaces
 
         public CentipedeJob(string filename, XPathNavigator nav) : this()
         {
-            Name = nav.SelectSingleNode("//Metadata/Name").Value;
-            Author = nav.SelectSingleNode("//Metadata/Author/Name").Value;
-            AuthorContact = nav.SelectSingleNode("//Metadata/Author/Contact").Value;
-            InfoUrl = nav.SelectSingleNode("//Metadata/Info/@Url").Value;
+            try
+            {
+                var nameNode = nav.SelectSingleNode("//Metadata/Name");
+                if (nameNode != null)
+                {
+                    this.Name = nameNode.Value;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var authorNameNode = nav.SelectSingleNode("//Metadata/Author/Name");
+                if (authorNameNode != null)
+                {
+                    this.Author = authorNameNode.Value;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var authorContactNode = nav.SelectSingleNode("//Metadata/Author/Contact");
+                if (authorContactNode != null)
+                {
+                    this.AuthorContact = authorContactNode.Value;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+
+                var urlNode = nav.SelectSingleNode("//Metadata/Info/@Url");
+                if (urlNode != null)
+                {
+                    this.InfoUrl = urlNode.Value;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException("Invalid or missing metadata in job file");
+            }
+            
             FileName = filename;
         }
 

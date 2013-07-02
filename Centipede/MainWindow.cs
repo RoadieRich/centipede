@@ -549,8 +549,20 @@ namespace Centipede
                 ToolStripItem item;
                 if (File.Exists(jobFilename))
                 {
-                    item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
-                    item.Click += this.FavouriteItemOnClick;
+
+                    try
+                    {
+                        item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
+                        item.Click += this.FavouriteItemOnClick;
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        item = new ToolStripMenuItem
+                               {
+                                   Text = "<Invalid file format>",
+                                   Enabled = false
+                               };
+                    }
                 }
                 else
                 {
@@ -567,12 +579,12 @@ namespace Centipede
             if (!itemsAdded)
             {
                 this.FavouritesMenu.DropDownItems.Add(new ToolStripMenuItem
-                           {
-                               Text = "<No favourites set>",
-                               Enabled = false
-                           });
+                                                      {
+                                                          Text = "<No favourites set>",
+                                                          Enabled = false
+                                                      });
             }
-            
+
 
             this.FavouritesMenu.DropDownItems.Add(this.FavoutiesMenuSeparator);
             this.FavouritesMenu.DropDownItems.Add(this.FavouritesAddCurrentMenuItem);
