@@ -1026,10 +1026,10 @@
   <data name="MainToolStripContainer.Text" xml:space="preserve">
     <value>toolStripContainer1</value>
   </data>
-  <metadata name="MainMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="MainMenuStrip_.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>303, 54</value>
   </metadata>
-  <data name="MainMenuStrip.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="MainMenuStrip_.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="FileNewMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -1338,28 +1338,28 @@
   <data name="HelpMenuItem.Text" xml:space="preserve">
     <value>&amp;Help</value>
   </data>
-  <data name="MainMenuStrip.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="MainMenuStrip_.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="MainMenuStrip.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="MainMenuStrip_.Size" type="System.Drawing.Size, System.Drawing">
     <value>641, 24</value>
   </data>
-  <data name="MainMenuStrip.TabIndex" type="System.Int32, mscorlib">
+  <data name="MainMenuStrip_.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="MainMenuStrip.Text" xml:space="preserve">
+  <data name="MainMenuStrip_.Text" xml:space="preserve">
     <value>menuStrip1</value>
   </data>
-  <data name="&gt;&gt;MainMenuStrip.Name" xml:space="preserve">
-    <value>MainMenuStrip</value>
+  <data name="&gt;&gt;MainMenuStrip_.Name" xml:space="preserve">
+    <value>MainMenuStrip_</value>
   </data>
-  <data name="&gt;&gt;MainMenuStrip.Type" xml:space="preserve">
+  <data name="&gt;&gt;MainMenuStrip_.Type" xml:space="preserve">
     <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;MainMenuStrip.Parent" xml:space="preserve">
+  <data name="&gt;&gt;MainMenuStrip_.Parent" xml:space="preserve">
     <value>MainToolStripContainer.TopToolStripPanel</value>
   </data>
-  <data name="&gt;&gt;MainMenuStrip.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;MainMenuStrip_.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;MainToolStripContainer.TopToolStripPanel.Name" xml:space="preserve">

@@ -129,8 +129,6 @@ namespace Centipede
 
         #endregion
 
-        #region Properties
-
         public override String Text
         {
             set
@@ -147,6 +145,8 @@ namespace Centipede
                 return base.Text;
             }
         }
+
+        #region Properties
 
         private bool Dirty
         {
@@ -203,7 +203,7 @@ namespace Centipede
             }
         }
 
-        private void ItemOnClick(object sender, EventArgs eventArgs)
+        private void FavouriteItemOnClick(object sender, EventArgs eventArgs)
         {
             var item = (ToolStripDropDownItem)sender;
             try
@@ -550,7 +550,7 @@ namespace Centipede
                 if (File.Exists(jobFilename))
                 {
                     item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
-                    item.Click += this.ItemOnClick;
+                    item.Click += this.FavouriteItemOnClick;
                 }
                 else
                 {
@@ -869,34 +869,6 @@ namespace Centipede
             e.Effect = DragDropEffects.Move;
         }
 
-        private void ShowSaveDialogs()
-        {
-            if (!Dirty)
-            {
-                return;
-            }
-            if (String.IsNullOrEmpty(Core.Job.Name))
-            {
-                this.SetJobProperties();
-            }
-
-            this.SaveFileDialog.FileName = !String.IsNullOrEmpty(Core.Job.FileName)
-                                                    ? Core.Job.FileName
-                                                    : Core.Job.Name;
-
-            if (this.SaveFileDialog.ShowDialog(this) == DialogResult.Cancel)
-            {
-                throw new AbortOperationException();
-            }
-
-        }
-
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-            Core.SaveJob(this.SaveFileDialog.FileName);
-            Dirty = false;
-        }
-
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
@@ -915,36 +887,9 @@ namespace Centipede
             { }
         }
 
-        /// <summary>
-        /// Check if save needed, ask to save, and save
-        /// </summary>
-        /// <exception cref="AbortOperationException">Throws abort operation exception if cancel is clicked at any 
-        /// point</exception>
-        private void AskToSave()
-        {
-            if (!Dirty)
-            {
-                return;
-            }
+        private const string _Placeholder = "@~:@:";
 
-            DialogResult dialogResult = MessageBox.Show(Resources.MainWindow_AskSave_Do_you_wish_to_save,
-                                                        Resources.MainWindow_AskSave_Unsaved_Changes,
-                                                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                Save();
-                return;
-            }
-
-            if (dialogResult == DialogResult.No)
-            {
-                return;
-            }
-            throw new AbortOperationException();
-        }
-
-        private void newToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FileNewMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -959,7 +904,7 @@ namespace Centipede
 
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FileOpenMenuItem_Click(object sender, EventArgs e)
         {
 
             try
@@ -981,6 +926,37 @@ namespace Centipede
             DoLoad(this.OpenFileDialog.FileName);
         }
 
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            this.Core.SaveJob(this.SaveFileDialog.FileName);
+            this.Dirty = false;
+        }
+
+        /// <summary>
+        /// Check if save needed, ask to save, and save
+        /// </summary>
+        /// <exception cref="AbortOperationException">Throws abort operation exception if cancel is clicked at any 
+        /// point</exception>
+        private void AskToSave()
+        {
+            if (!this.Dirty)
+            {
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(Resources.MainWindow_AskSave_Do_you_wish_to_save, Resources.MainWindow_AskSave_Unsaved_Changes, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            switch (result)
+            {
+                case DialogResult.Yes:
+                    this.Save();
+                    break;
+                case DialogResult.No:
+                    break;
+                default:
+                    throw new AbortOperationException();
+            }
+        }
+
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             this.Save();
@@ -988,7 +964,7 @@ namespace Centipede
 
         private void Save()
         {
-            if (String.IsNullOrEmpty(this.Core.Job.FileName))
+            if (Core.Job.HasBeenSaved)
             {
                 try
                 {
@@ -1004,6 +980,28 @@ namespace Centipede
                 this.Core.SaveJob(this.Core.Job.FileName);
             }
             this.Dirty = false;
+        }
+
+        private void ShowSaveDialogs()
+        {
+            if (!this.Dirty)
+            {
+                return;
+            }
+            if (String.IsNullOrEmpty(this.Core.Job.Name))
+            {
+                this.SetJobProperties();
+            }
+
+            this.SaveFileDialog.FileName = String.IsNullOrEmpty(this.Core.Job.FileName)
+                                               ? this.Core.Job.FileName
+                                               : this.Core.Job.Name;
+
+            if (this.SaveFileDialog.ShowDialog(this) == DialogResult.Cancel)
+            {
+                throw new AbortOperationException();
+            }
+
         }
 
         private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -1147,20 +1145,30 @@ namespace Centipede
 
         private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //if (!String.IsNullOrEmpty(Core.Job.Name))
-            //{
-            //    return;
-            //}
-            try
+            if (Dirty || !Core.Job.HasBeenSaved)
             {
-
-                this.AskToSave();
-                //this._favouriteJobsDataStore.Favourites.AddFavouritesRow(Core.Job.Name, Core.Job.FileName);
-                Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
-                UpdateFavourites();
+                if (MessageBox.Show("File must be saved first",
+                                    "Save File",
+                                    MessageBoxButtons.OKCancel,
+                                    MessageBoxIcon.Question) == DialogResult.OK)
+                {
+                    try
+                    {
+                        this.Save();
+                    }
+                    catch (AbortOperationException)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
-            catch (AbortOperationException)
-            { }
+
+            Settings.Default.ListOfFavouriteJobs.Add(Core.Job.FileName);
+            UpdateFavourites();
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)

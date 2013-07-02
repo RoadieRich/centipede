@@ -173,6 +173,11 @@ namespace CentipedeInterfaces
             CentipedeJob job = new CentipedeJob(jobFilename);
             return job.CreateToolStripItem();
         }
+
+        public bool HasBeenSaved
+        {
+            get { return String.IsNullOrEmpty(FileName) || String.IsNullOrEmpty(Name); }
+        }
     }
 
     [Serializable]
