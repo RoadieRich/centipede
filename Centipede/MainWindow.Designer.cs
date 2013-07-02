@@ -62,7 +62,7 @@ namespace Centipede
             this.VarDataGridView = new System.Windows.Forms.DataGridView();
             this.RunButton = new System.Windows.Forms.Button();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
-            this.MainMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.MainMenuStrip_ = new System.Windows.Forms.MenuStrip();
             this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FileNewMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FileOpenMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,7 +142,7 @@ namespace Centipede
             this.MessageFilterToolStrip.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
-            this.MainMenuStrip.SuspendLayout();
+            this.MainMenuStrip_.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobs)).BeginInit();
             this.SuspendLayout();
             // 
@@ -161,7 +161,7 @@ namespace Centipede
             // 
             // MainToolStripContainer.TopToolStripPanel
             // 
-            this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainMenuStrip);
+            this.MainToolStripContainer.TopToolStripPanel.Controls.Add(this.MainMenuStrip_);
             // 
             // SplitContainer1
             // 
@@ -479,13 +479,13 @@ namespace Centipede
             // 
             // MainMenuStrip
             // 
-            resources.ApplyResources(this.MainMenuStrip, "MainMenuStrip");
-            this.MainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            resources.ApplyResources(this.MainMenuStrip_, "MainMenuStrip_");
+            this.MainMenuStrip_.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenuItem,
             this.RunMenu,
             this.FavouritesMenu,
             this.HelpMenuItem});
-            this.MainMenuStrip.Name = "MainMenuStrip";
+            this.MainMenuStrip_.Name = "MainMenuStrip_";
             // 
             // FileMenuItem
             // 
@@ -509,13 +509,13 @@ namespace Centipede
             // 
             resources.ApplyResources(this.FileNewMenuItem, "FileNewMenuItem");
             this.FileNewMenuItem.Name = "FileNewMenuItem";
-            this.FileNewMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem1_Click);
+            this.FileNewMenuItem.Click += new System.EventHandler(this.FileNewMenuItem_Click);
             // 
             // FileOpenMenuItem
             // 
             resources.ApplyResources(this.FileOpenMenuItem, "FileOpenMenuItem");
             this.FileOpenMenuItem.Name = "FileOpenMenuItem";
-            this.FileOpenMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.FileOpenMenuItem.Click += new System.EventHandler(this.FileOpenMenuItem_Click);
             // 
             // FileMenuSeparator1
             // 
@@ -843,8 +843,8 @@ namespace Centipede
             this.MessageFilterToolStrip.PerformLayout();
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
-            this.MainMenuStrip.ResumeLayout(false);
-            this.MainMenuStrip.PerformLayout();
+            this.MainMenuStrip_.ResumeLayout(false);
+            this.MainMenuStrip_.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobs)).EndInit();
             this.ResumeLayout(false);
 
@@ -867,7 +867,7 @@ namespace Centipede
         private System.Windows.Forms.DataGridView VarDataGridView;
         private System.Windows.Forms.Button RunButton;
         private System.Windows.Forms.ProgressBar ProgressBar;
-        private System.Windows.Forms.MenuStrip MainMenuStrip;
+        private System.Windows.Forms.MenuStrip MainMenuStrip_;
         private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FileNewMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FileOpenMenuItem;
