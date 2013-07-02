@@ -425,6 +425,8 @@ namespace Centipede
             AddToActionTab( typeof( SubJobAction      ));
             AddToActionTab( typeof( MultipleChoice    ));
             AddToActionTab( typeof( AskBooleans       ));
+            AddToActionTab( typeof( TestSerialize     ));
+            AddToActionTab( typeof( TestDeserialize   ));
 
             this._urlTextbox               = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp        += UrlTextbox_KeyUp;
