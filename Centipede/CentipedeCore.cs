@@ -65,7 +65,7 @@ namespace Centipede
         /// </summary>
         public IPythonScope Variables { get; private set; }
 
-        public Form Window { get; set; }
+        public object Tag { get; set; }
 
         #endregion
 
@@ -473,7 +473,7 @@ namespace Centipede
             Job.FileName = filename;
         }
 
-        private void TakeBackup(string filePath )
+        private void TakeBackup(string filePath)
         {
             if (!File.Exists(filePath))
             {
@@ -484,21 +484,17 @@ namespace Centipede
             string filename = Path.GetFileName(filePath);
             string backupDir = Path.Combine(directory, @"backups");
 
-            DirectoryInfo dir;
             if (!Directory.Exists(backupDir))
             {
                 Directory.CreateDirectory(backupDir);
             }
-            
-            dir = new DirectoryInfo(backupDir);
-            int numberOfBackups = dir.GetFiles().Length;
 
-
-
-            string backupFilename = string.Format(@"{0}.{1}", filename, numberOfBackups);
+            string backupFilename = string.Format(@"{0}-{1}{2}",
+                                                  Path.GetFileNameWithoutExtension(filename),
+                                                  DateTime.Now.ToString("yyyy'-'MM'-'dd'('ddd')-'HH'-'mm'-'ss"),
+                                                  Path.GetExtension(filename));
 
             File.Copy(filePath, Path.Combine(backupDir, backupFilename));
-
         }
 
         /// <summary>
