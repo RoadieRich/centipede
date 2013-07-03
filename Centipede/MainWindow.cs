@@ -1244,6 +1244,12 @@ namespace Centipede
         {
             Load += (sender, args) => this.StartRunning(false);
         }
+
+        private void HelpOpenTutorialMenuItem_Click(object sender, EventArgs e)
+        {
+            string appDir = Path.GetDirectoryName(Application.ExecutablePath);
+            WebBrowser.Navigate(Path.Combine(appDir, "Tutorial","Tutorial.htm"));
+        }
     }
 
     internal class ActionFactoryComparer : IComparer
