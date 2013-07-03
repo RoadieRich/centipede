@@ -54,8 +54,8 @@ Name: "Actions\MathCad"; Description: "MathCad Actions"; Types: Complete Complet
 Name: "SDK"; Description: "CentipedeAction SDK"; Types: CompleteSDK
 
 [Dirs]
-Name: "{userappdata}\Centipede";	Components: Centipede
 Name: "{app}\Resources"; Components: Centipede
+Name: "{app}\Tutorial"; Components: Centipede
 Name: "{app}\Plugins"; Components: Centipede
 Name: "{app}\Plugins\Resources"; Components: Centipede
 
@@ -70,8 +70,8 @@ Name: "{code:GetExampleDir}";	Components: ExampleJobs
 
 [Files]
 ; Dependencies
-Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{app}\Resources"; Components: Centipede; Check: FrameworkIsNotInstalled
-Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{app}\Resources"; Components: Centipede; Check: IronPythonNotInstalled
+Source: "{#SetupDir}\dotNetFx40_Full_x86_x64.exe"; DestDir: "{app}\Resources"; Components: Centipede;
+Source: "{#SetupDir}\IronPython-2.7.3.msi"; DestDir: "{app}\Resources"; Components: Centipede;
 
 ; Program
 Source: "{#BinaryDir}\Centipede.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
@@ -84,6 +84,9 @@ Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Compo
 Source: "{#BinaryDir}\Resources\CentipedeFile.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 
 Source: "{#SetupDir}\New Job.100p"; DestDir: "{win}\SHELLNEW"; Components: Centipede
+
+; Tutorial
+Source: "{#BinaryDir}\Tutorial\*"; DestDir: "{app}\Tutorial"; Components: Centipede
 
 ; Action plugins
 Source: "{#BinaryDir}\Plugins\PythonAction.dll"; DestDir: "{app}\Plugins"; Flags: ignoreversion; Components: Actions\Python
@@ -108,7 +111,7 @@ Source: "{#SDKDir}\CentipedeAction\Properties\AssemblyInfo.cs"; DestDir: "{code:
 Source: "{#SDKDir}\CentipedeAction\Properties\Resources.Designer.cs"; DestDir: "{code:GetSdkDestDir}\sdk\CentipedeAction\Properties"; Flags: ignoreversion; Components: SDK
 
 ; Sample Jobs
-;
+Source: "{#SetupDir}\Samples\*"; DestDir: "{code:GetExampleDir}"; Components: Centipede
 
 [Icons]
 Name: "{group}\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"
