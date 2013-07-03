@@ -12,7 +12,7 @@ namespace Centipede
     internal class ActionFactory : ListViewItem
     {
         [UsedImplicitly]
-        public static volatile MessageEvent MessageEvent;
+        public static volatile MessageEvent MessageHandler;
 
         [UsedImplicitly]
         internal ActionFactory(String displayName, Type actionType, ICentipedeCore core)
@@ -74,7 +74,7 @@ namespace Centipede
             else
             {
                 parameters = new object[] { "", this._core.Variables, this._core };
-                MessageEvent(this,
+                MessageHandler(this,
                              new MessageEventArgs
                              {
                                  Level = MessageLevel.Debug,
