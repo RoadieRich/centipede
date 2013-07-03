@@ -1,16 +1,61 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-	<head>
-		<title>Centipede Tutorial</title>
-	</head>
-	<body>
-	    <h1>Centipede Tutorial</h1>
-        <h2>Introduction</h2>
-        <h2>Actions</h2>
-        <h2>Action Arguments</h2>
-        <h2>Running</h2>
-        <h2>Getting User Input</h2>
-        <h2>Flow Control</h2>
-        <h2>Custom Actions</h2>
-	</body>
+<head>
+    <title>Centipede Tutorial</title>
+    <style type="text/css">
+        body
+        {
+            counter-reset: h2counter;
+        }
+        h1
+        {
+            counter-reset: h2counter;
+        }
+        h2:before
+        {
+            content: counter(h2counter) ".\0000a0\0000a0";
+            counter-increment: h2counter;
+            counter-reset: h3counter;
+        }
+        h3:before
+        {
+            content: counter(h2counter) "." counter(h3counter) ".\0000a0\0000a0";
+            counter-increment: h3counter;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>
+            Centipede Tutorial</h1>
+        <div>
+            <div>
+                <h2>
+                    Introduction</h2>
+            </div>
+            <div>
+                <h2>Actions</h2>
+                <div>
+                    <h3>Adding</h3>
+                </div>
+                <div>
+                    <h3>Deleting</h3>
+                </div>
+            </div>
+            <div><h2>Action Arguments</h2>
+            <h3>Literal vs Interpolated</h3>
+            <h3>Exercise: Hello World Message Box</h3></div>
+            <div><h2>Running</h2>
+            <h3>Messages</h3>
+            <h3>Stepping</h3>
+            <h3>Debugging</h3>
+            <h3>Exercise: Stepping a loop with incrementing variable</h3></div>
+            <div><h2>Getting User Input</h2>
+            <h3>Exercise: Ask for input</h3></div>
+            <div><h2>Flow Control</h2></div>
+            <div><h2>Custom Actions</h2>
+            <h3>Exercise: Getting data from ODBC database in Python Action</h3></div>
+        </div>
+    </div>
+</body>
 </html>
