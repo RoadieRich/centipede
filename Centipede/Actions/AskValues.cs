@@ -27,11 +27,15 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public string Prompt = "Please enter the following values";
 
-        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas.  You can optionally add a label for the variable by adding a colon and the text to display")]
+        [ActionArgument(DisplayName = "Variables", 
+                        Usage = "(Required) Names of variables to be updated, separated by commas.  You can " + 
+                                "optionally add a label for the variable by adding a colon and the text to display"
+            )]
         public string VariablesToSet = "Var1:Label for Var1, Var2, Var3";
 
-        [ActionArgument(DisplayName = "Evaluate user input", Usage="Controls whether user input is evaluated or taken literally")]
-        public bool Evaluate = false;
+        [ActionArgument(DisplayName = "Evaluate user input",
+                        Usage = "Controls whether user input is evaluated or taken literally")]
+        public bool Evaluate;
 
         
         /// <summary>
@@ -128,14 +132,17 @@ namespace Centipede.Actions
                 dynamic value;
 
                 Variables.TryGetValue(actualVarName.Trim(), out value);
-                
+
                 if (value != null)
                 {
-                    MessageEventArgs msg = new MessageEventArgs("Setting textbox (" + actualVarName.Trim() + ") using existing value : " + value, MessageLevel.Debug);
+                    MessageEventArgs msg =
+                        new MessageEventArgs(
+                            "Setting textbox (" + actualVarName.Trim() + ") using existing value : " + value,
+                            MessageLevel.Debug);
                     OnMessage(msg);
                     tb.Text = value.ToString();
                 }
-                
+
                 table.Controls.Add(lbl);
                 table.Controls.Add(tb);
             }
@@ -164,9 +171,10 @@ namespace Centipede.Actions
 
             form.FormClosing += FormClosing;
 
+            var mainform = (Form)GetCurrentCore().Tag;
             DialogResult result =
                 (DialogResult)
-                GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
+                mainform.Invoke(new Func<Form, DialogResult>(form.ShowDialog), mainform);
 
             switch (result)
             {
@@ -210,7 +218,10 @@ namespace Centipede.Actions
                 case DialogResult.OK:
                     break;
                 case DialogResult.Cancel:
-                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
+                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?",
+                                                          "Centipede",
+                                                          MessageBoxButtons.RetryCancel,
+                                                          MessageBoxIcon.Warning);
                     if (result == DialogResult.Retry) a.Cancel = true;
                     break;
             }
@@ -237,7 +248,11 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "Please set the following values";
 
-        [ActionArgument(DisplayName = "Variables", Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and stores variables as True or False.  You can optionally add a label for the variable by adding a colon and the text to display")]
+        [ActionArgument(DisplayName = "Variables",
+            Usage = "(Required) Names of variables to be updated, separated by commas, the checkbox action reads and " +
+                    "stores variables as True or False.  You can optionally add a label for the variable by adding a " +
+                    "colon and the text to display"
+            )]
         public string VariablesToSet = "Boolean1:Label for Boolean1, Boolean2, Boolean3";
 
 
@@ -337,7 +352,10 @@ namespace Centipede.Actions
 
                 if (value != null)
                 {
-                    MessageEventArgs msg = new MessageEventArgs("Setting checkbox (" + actualVarName.Trim() + ") using existing value : " + value, MessageLevel.Debug);
+                    MessageEventArgs msg =
+                        new MessageEventArgs(
+                            "Setting checkbox (" + actualVarName.Trim() + ") using existing value : " + value,
+                            MessageLevel.Debug);
                     OnMessage(msg);
                     cb.Checked = Convert.ToBoolean(value);
                 }
@@ -365,15 +383,17 @@ namespace Centipede.Actions
 
             form.AcceptButton = btnOK;
 
-            //table.Controls.Add(btnCancel);  // Removed cancel button for consistent appearance when table columns resize
+            // Removed cancel button for consistent appearance when table columns resize
+            //table.Controls.Add(btnCancel);  
             table.Controls.Add(btnOK);
             table.SetColumnSpan(btnOK, 2);
 
             form.FormClosing += FormClosing;
 
+            var mainform = (Form)GetCurrentCore().Tag;
             DialogResult result =
                 (DialogResult)
-                GetCurrentCore().Window.Invoke(new Func<Form, DialogResult>(form.ShowDialog), GetCurrentCore().Window);
+                mainform.Invoke(new Func<Form, DialogResult>(form.ShowDialog), mainform);
 
             switch (result)
             {
@@ -390,7 +410,7 @@ namespace Centipede.Actions
 
         }
 
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------
 
         private void FormClosing(object sender, FormClosingEventArgs a)
         {
@@ -401,7 +421,10 @@ namespace Centipede.Actions
                 case DialogResult.OK:
                     break;
                 case DialogResult.Cancel:
-                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
+                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?",
+                                                          "Centipede",
+                                                          MessageBoxButtons.RetryCancel,
+                                                          MessageBoxIcon.Warning);
                     if (result == DialogResult.Retry) a.Cancel = true;
                     break;
             }

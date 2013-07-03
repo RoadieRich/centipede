@@ -21,7 +21,7 @@ namespace Centipede.Actions
         
         protected override void DoAction()
         {
-            Form window = GetCurrentCore().Window;
+            Form window = (Form)GetCurrentCore().Tag;
             
             window.Invoke(new Func<DialogResult>(() => MessageBox.Show(window,
                               String.Format("Test 1 attribute value: {0}\r\nTest 2 attribute value: {1}",

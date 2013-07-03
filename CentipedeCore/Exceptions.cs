@@ -71,6 +71,7 @@ namespace CentipedeInterfaces
         public readonly IAction ErrorAction;
     }
 
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public class FatalActionException : ActionException
     {
         /// <summary>
@@ -118,47 +119,6 @@ namespace CentipedeInterfaces
         { }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    [Serializable]
-    public class ValidationException : Exception
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        public ValidationException()
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        public ValidationException(string message)
-            : base(message)
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="inner"></param>
-        public ValidationException(string message, Exception inner)
-            : base(message, inner)
-        { }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        protected ValidationException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
-            : base(info, context)
-        { }
-    }
-
     [Serializable]
     public class PluginNotFoundException : FileNotFoundException
     {
@@ -169,6 +129,7 @@ namespace CentipedeInterfaces
         //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
         //
 
+        [UsedImplicitly]
         public PluginNotFoundException(string message, string actionName, string filename)
             : base(message,filename)
         {

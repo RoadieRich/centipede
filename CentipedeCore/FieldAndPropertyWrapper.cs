@@ -28,7 +28,7 @@ namespace CentipedeInterfaces
             this._setter = (o, v) => prop.SetValue(o, v, null);
             this._memberType = prop.PropertyType;
 
-            Cache[prop] = this;
+            _Cache[prop] = this;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace CentipedeInterfaces
             this._setter = field.SetValue;
             this._memberType = field.FieldType;
 
-            Cache[field] = this;
+            _Cache[field] = this;
         }
 
 
@@ -150,7 +150,7 @@ namespace CentipedeInterfaces
             Boolean,
         }
 
-        private static readonly Dictionary<Type, FieldType> TypeMapping = new Dictionary<Type, FieldType>
+        private static readonly Dictionary<Type, FieldType> _TypeMapping = new Dictionary<Type, FieldType>
                                                                           {
                                                                               { typeof (bool),   FieldType.Boolean },
                                                                               { typeof (byte),   FieldType.Numeric },
@@ -177,13 +177,13 @@ namespace CentipedeInterfaces
 
             Type baseType = MemberType;
 
-            while (!TypeMapping.ContainsKey(baseType) && baseType != typeof (object))
+            while (!_TypeMapping.ContainsKey(baseType) && baseType != typeof (object))
             {
                 baseType = baseType.BaseType ?? typeof (Object);
             }
 
             FieldType fieldType;
-            return TypeMapping.TryGetValue(baseType, out fieldType) ? fieldType : FieldType.Other;
+            return _TypeMapping.TryGetValue(baseType, out fieldType) ? fieldType : FieldType.Other;
         }
 
         /// <summary>
@@ -193,12 +193,12 @@ namespace CentipedeInterfaces
         /// <returns><see cref="FieldAndPropertyWrapper"/> wrapping <paramref name="f"/>.</returns>
         public static implicit operator FieldAndPropertyWrapper(FieldInfo f)
         {
-            if (Cache.ContainsKey(f))
+            if (_Cache.ContainsKey(f))
             {
-                Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache hit {0}", f));
-                return Cache[f];
+                Debug.WriteLine(@"FieldAndPropertyWrapper Cache hit {0}", f);
+                return _Cache[f];
             }
-            Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache miss {0}", f));
+            Debug.WriteLine(@"FieldAndPropertyWrapper Cache miss {0}", f);
             return new FieldAndPropertyWrapper(f);
         }
 
@@ -224,7 +224,7 @@ namespace CentipedeInterfaces
         /// <returns><see cref="FieldAndPropertyWrapper"/> wrapping <paramref name="p"/>.</returns>
         public static implicit operator FieldAndPropertyWrapper(PropertyInfo p)
         {
-            return Cache.ContainsKey(p) ? Cache[p] : new FieldAndPropertyWrapper(p);
+            return _Cache.ContainsKey(p) ? _Cache[p] : new FieldAndPropertyWrapper(p);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace CentipedeInterfaces
             throw new InvalidCastException();
         }
 
-        private static readonly Dictionary<MemberInfo, FieldAndPropertyWrapper> Cache =
+        private static readonly Dictionary<MemberInfo, FieldAndPropertyWrapper> _Cache =
                 new Dictionary<MemberInfo, FieldAndPropertyWrapper>();
 
         
@@ -255,13 +255,13 @@ namespace CentipedeInterfaces
         /// or <see cref="PropertyInfo"/></exception>
         public static explicit operator FieldAndPropertyWrapper(MemberInfo m)
         {
-            if (Cache.ContainsKey(m))
+            if (_Cache.ContainsKey(m))
             {
-                Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache hit {0}", m));
-                return Cache[m];
+                Debug.WriteLine(@"FieldAndPropertyWrapper Cache hit {0}", m);
+                return _Cache[m];
             }
 
-            Debug.WriteLine(string.Format(@"FieldAndPropertyWrapper Cache miss {0}", m));
+            Debug.WriteLine(@"FieldAndPropertyWrapper Cache miss {0}", m);
             FieldInfo f = m as FieldInfo;
             if (f != null)
             {   
@@ -292,7 +292,7 @@ namespace CentipedeInterfaces
         /// </summary>
         void IDisposable.Dispose()
         {
-            Cache.Clear();
+            _Cache.Clear();
         }
 
         /// <summary>

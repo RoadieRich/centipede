@@ -16,7 +16,8 @@ namespace PyAction
     /// Basic branch action - has two possible "next" actions, 
     /// which are chosen according to condition.
     /// </summary>
-    [ActionCategory(@"Flow Control", DisplayName = "Branch", DisplayControl = @"BranchDisplayControl", iconName = @"branch")]
+    [ActionCategory(@"Flow Control", DisplayName = "Branch", DisplayControl = @"BranchDisplayControl",
+                    IconName = @"branch")]
     public class BranchAction : Action
     {
         /// <summary>
@@ -26,13 +27,14 @@ namespace PyAction
         /// <param name="c"></param>
         public BranchAction(IDictionary<string, object> variables, ICentipedeCore c)
             : base(Resources.BranchAction_BranchAction_Branch, variables, c)
-        {
-        }
+        { }
 
         /// <summary>
         /// A simple python expression, evaluated and interpreted as a bool to determine which action to exceute nexrt.
         /// </summary>
-        /// <remarks>ConditionSource is evalutated in a "safe" scope - changes made to any variables will be discarded.</remarks>
+        /// <remarks>
+        ///     ConditionSource is evalutated in a "safe" scope - changes made to any variables will be discarded.
+        /// </remarks>
         [ActionArgument(DisplayName = @"Condition")]
         public String ConditionSource = @"False";
 
@@ -42,7 +44,7 @@ namespace PyAction
         [ActionArgument(
             Usage = @"Next action if condition returns true (otherwise, proceed normally)",
             DisplayName = @"Next Action if True"
-        )]
+            )]
         public Action NextIfTrue;
 
         private Boolean _result;
@@ -53,7 +55,7 @@ namespace PyAction
         protected override void DoAction()
         {
             var pye = GetCurrentCore().PythonEngine;
-            
+
             var scope = pye.GetNewScope(Variables);
             _result = pye.Evaluate<bool>(ConditionSource, scope);
         }
@@ -66,7 +68,8 @@ namespace PyAction
         [Localizable(false)]
         protected override void PopulateXmlTag(XmlElement element)
         {
-            element.SetAttribute("Target", GetCurrentCore().Job.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
+            element.SetAttribute("Target",
+                                 GetCurrentCore().Job.Actions.IndexOf(NextIfTrue).ToString(CultureInfo.InvariantCulture));
             element.InnerText = ConditionSource;
         }
 
@@ -77,11 +80,12 @@ namespace PyAction
             ConditionSource = element.Value;
             int index = int.Parse(element.SelectSingleNode("@Target").Value);
             AfterLoadEvent instanceOnAfterLoad = null;
-            instanceOnAfterLoad = delegate{
-                NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
-                GetCurrentCore().AfterLoad -= instanceOnAfterLoad;
-                ((ActionDisplayControl)Tag).UpdateControls();
-            };
+            instanceOnAfterLoad = delegate
+                                      {
+                                          NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
+                                          GetCurrentCore().AfterLoad -= instanceOnAfterLoad;
+                                          ((ActionDisplayControl)Tag).UpdateControls();
+                                      };
             GetCurrentCore().AfterLoad += instanceOnAfterLoad;
         }
     }

@@ -50,7 +50,7 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
 
-            this._targetwindow = GetCurrentCore().Window;
+            this._targetwindow = (Form)GetCurrentCore().Tag;
 
             //BackgroundWorker bgw = new BackgroundWorker();
             //bgw.DoWork += this.Target;

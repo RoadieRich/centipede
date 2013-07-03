@@ -22,10 +22,12 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "";
 
-        [ActionArgument(DisplayName = "Variable", Usage = "(Required) Name of variable to store the chosen filename")]
+        [ActionArgument(DisplayName = "Variable", 
+                        Usage = "(Required) Name of variable to store the chosen filename")]
         public String DestinationVariable = "Filename";
-      
-        [ActionArgument(DisplayName = "Filter", Usage = "(Optional) Filter the browse dialog to only show certain file types")]
+
+        [ActionArgument(DisplayName = "Filter",
+                        Usage = "(Optional) Filter the browse dialog to only show certain file types")]
         public String Filter = "All Files (*.*)|*.*";
 
         private OpenFileDialog _dialog;
@@ -71,19 +73,23 @@ namespace Centipede.Actions
             _dialog.FileOk += GetFileNameDialogue_FileOk;
 
             TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                ColumnCount = 2,
-                ColumnStyles = { new ColumnStyle(), new ColumnStyle(SizeType.AutoSize) }
-            };
+                                                {
+                                                    Dock = DockStyle.Fill,
+                                                    AutoSize = true,
+                                                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                                                    ColumnCount = 2,
+                                                    ColumnStyles =
+                                                    {
+                                                        new ColumnStyle(),
+                                                        new ColumnStyle(SizeType.AutoSize)
+                                                    },
+                                                    Padding = new Padding
+                                                              {
+                                                                  All = 10
+                                                              }
+                                                };
 
             this._tableLayoutPanel = tableLayoutPanel;
-
-            Padding TablePadding = new Padding();
-            TablePadding.All = 10;
-            this._tableLayoutPanel.Padding = TablePadding;
 
             if (!String.IsNullOrEmpty(myPrompt))
             {
@@ -130,10 +136,10 @@ namespace Centipede.Actions
 
             _form.FormClosing += FormClosing;
 
+            var form = (Form)GetCurrentCore().Tag;
             DialogResult result =
-                (DialogResult)GetCurrentCore().
-                    Window.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
-                                  GetCurrentCore().Window);
+                (DialogResult)form.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
+                                  form);
 
             switch (result)
             {

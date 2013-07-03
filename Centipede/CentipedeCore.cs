@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using System.Xml;
-using System.Xml.XPath;
+using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
 using PythonEngine;
@@ -27,9 +25,9 @@ namespace Centipede
 
         public CentipedeCore(List<string> arguments)
         {
-            Variables = PythonEngine.GetScope();
-            
-            Job = new CentipedeJob();
+            this.Variables = this.PythonEngine.GetScope();
+
+            this.Job = new CentipedeJob();
             this._arguments = arguments;
         }
 
@@ -49,17 +47,17 @@ namespace Centipede
 
         #region Fields
 
-        public IAction CurrentAction { get; set; }
-
         [UsedImplicitly]
         private List<string> _arguments;
+
+        public IAction CurrentAction { get; set; }
 
         #endregion
 
         #region Properties
 
         public CentipedeJob Job { get; set; }
-        
+
         /// <summary>
         ///     Dictionary of Variables for use by actions
         /// </summary>
@@ -71,9 +69,13 @@ namespace Centipede
 
         #region Methods
 
+        private volatile Object _abortRequested = false;
+        private IPythonEngine _pythonEngine = PyEngine.Instance;
+        private ManualResetEvent _resetEvent;
+
         public void Dispose()
         {
-            foreach (IDisposable action in Job.Actions)
+            foreach (IDisposable action in this.Job.Actions)
             {
                 action.Dispose();
             }
@@ -85,38 +87,40 @@ namespace Centipede
         [STAThread]
         public void RunJob(bool stepping = false)
         {
-            PrepareStepping(stepping);
+            this.PrepareStepping(stepping);
 
-            _abortRequested = false;
-            
-            OnStartRun(new StartRunEventArgs(this._resetEvent));
-            
+            this._abortRequested = false;
+
+            this.OnStartRun(new StartRunEventArgs(this._resetEvent));
+
             try
             {
-                CurrentAction = Job.Actions.First();
+                this.CurrentAction = this.Job.Actions.First();
             }
             catch (InvalidOperationException)
             {
-                OnActionError(new ActionErrorEventArgs
-                {
-                    Action = CurrentAction,
-                    Exception = new FatalActionException(Resources.Program_RunJob_No_Actions_Added)
-                });
+                this.OnActionError(new ActionErrorEventArgs
+                                   {
+                                       Action = this.CurrentAction,
+                                       Exception = new FatalActionException(Resources.Program_RunJob_No_Actions_Added)
+                                   });
             }
 
             Boolean jobFailed = false;
             try
             {
-                while (CurrentAction != null)
+                while (this.CurrentAction != null)
                 {
-                    ShouldPauseStepping();
+                    this.ShouldPauseStepping();
 
-                    ContinueState continueState = RunStep(CurrentAction);
-                    
-                    if (NeedsRetry(continueState))
+                    ContinueState continueState = this.RunStep(this.CurrentAction);
+
+                    if (this.NeedsRetry(continueState))
+                    {
                         continue;
+                    }
 
-                    ResetSteppingPause();
+                    this.ResetSteppingPause();
 
                     lock (this._abortRequested)
                     {
@@ -132,19 +136,36 @@ namespace Centipede
             {
                 jobFailed = true;
             }
-            OnCompleted(!jobFailed);
-            FinishedStepping();
+            this.OnCompleted(!jobFailed);
+            this.FinishedStepping();
+        }
+
+        public event StartSteppingEvent StartRun;
+        public bool IsStepping { get; private set; }
+
+        public void AbortRun()
+        {
+            lock (this._abortRequested)
+            {
+                this._abortRequested = true;
+            }
+        }
+
+        public IPythonEngine PythonEngine
+        {
+            get { return this._pythonEngine; }
+            private set { this._pythonEngine = value; }
         }
 
         private void FinishedStepping()
         {
-            IsStepping = false;
+            this.IsStepping = false;
             this._resetEvent = null;
         }
 
         private void PrepareStepping(bool stepping)
         {
-            IsStepping = stepping;
+            this.IsStepping = stepping;
             if (stepping)
             {
                 this._resetEvent = new ManualResetEvent(true);
@@ -153,7 +174,7 @@ namespace Centipede
 
         private void ResetSteppingPause()
         {
-            if (IsStepping)
+            if (this.IsStepping)
             {
                 this._resetEvent.Reset();
             }
@@ -161,7 +182,7 @@ namespace Centipede
 
         private void ShouldPauseStepping()
         {
-            if (IsStepping)
+            if (this.IsStepping)
             {
                 this._resetEvent.WaitOne();
             }
@@ -171,23 +192,23 @@ namespace Centipede
         {
             switch (continueState)
             {
-            case ContinueState.Abort:
-                throw new AbortOperationException();
-            case ContinueState.Retry:
-                return true;
-            default:
-                CurrentAction = CurrentAction.GetNext();
-                return false;
+                case ContinueState.Abort:
+                    throw new AbortOperationException();
+                case ContinueState.Retry:
+                    return true;
+                default:
+                    this.CurrentAction = this.CurrentAction.GetNext();
+                    return false;
             }
         }
 
-        public event StartSteppingEvent StartRun;
-
         private void OnStartRun(StartRunEventArgs e)
         {
-            if(e.ResetEvent == null)
+            if (e.ResetEvent == null)
+            {
                 return;
-            StartSteppingEvent handler = StartRun;
+            }
+            StartSteppingEvent handler = this.StartRun;
             if (handler != null)
             {
                 handler(this, e);
@@ -199,75 +220,49 @@ namespace Centipede
         {
             try
             {
-                ActionEventArgs args = new ActionEventArgs
-                                       {
-                                           Action = currentAction,
-                                           Stepping = IsStepping
-                                       };
-                
-                OnBeforeAction(args);
+                var args = new ActionEventArgs
+                           {
+                               Action = currentAction,
+                               Stepping = this.IsStepping
+                           };
+
+                this.OnBeforeAction(args);
                 currentAction.Run();
-                OnAfterAction(args);
+                this.OnAfterAction(args);
 
                 return ContinueState.Continue;
-
             }
             catch (FatalActionException e)
             {
-                ActionErrorEventArgs args = new ActionErrorEventArgs
-                                            {
-                                                Action = currentAction,
-                                                Exception = new FatalActionException(
-                                                    string.Format(Resources.CentipedeCore_RunJob_FatalError,
-                                                                  e.Message, e)),
-                                                Fatal = true
-                                            };
-                OnActionError(args);
+                var args = new ActionErrorEventArgs
+                           {
+                               Action = currentAction,
+                               Exception = new FatalActionException(
+                                   string.Format(Resources.CentipedeCore_RunJob_FatalError,
+                                                 e.Message,
+                                                 e)),
+                               Fatal = true
+                           };
+                this.OnActionError(args);
                 throw new AbortOperationException();
             }
             catch (Exception e)
             {
-                ActionErrorEventArgs args = new ActionErrorEventArgs
-                                            {
-                                                Action = currentAction,
-                                                Exception = (e as ActionException) ??
-                                                            new ActionException(e, CurrentAction)
-                                            };
-                OnActionError(args);
-                
+                var args = new ActionErrorEventArgs
+                           {
+                               Action = currentAction,
+                               Exception = (e as ActionException) ??
+                                           new ActionException(e, this.CurrentAction)
+                           };
+                this.OnActionError(args);
+
                 return args.Continue;
-            }
-        }
-
-        private volatile Object _abortRequested = false;
-        private IPythonEngine _pythonEngine = PyEngine.Instance;
-        private ManualResetEvent _resetEvent;
-
-        public bool IsStepping { get; private set; }
-
-        public void AbortRun()
-        {
-            lock (_abortRequested)
-            {
-                _abortRequested = true;
-            }
-        }
-
-        public IPythonEngine PythonEngine
-        {
-            get
-            {
-                return this._pythonEngine;
-            }
-            private set
-            {
-                this._pythonEngine = value;
             }
         }
 
         private void OnAfterAction(ActionEventArgs args)
         {
-            ActionEvent handler = ActionCompleted;
+            ActionEvent handler = this.ActionCompleted;
             if (handler != null)
             {
                 handler(this, args);
@@ -276,7 +271,7 @@ namespace Centipede
 
         private void OnBeforeAction(ActionEventArgs e)
         {
-            ActionEvent handler = BeforeAction;
+            ActionEvent handler = this.BeforeAction;
             if (handler != null)
             {
                 handler(this, e);
@@ -285,16 +280,20 @@ namespace Centipede
 
         private void OnCompleted(bool completed)
         {
-            JobCompletedEvent handler = JobCompleted;
+            JobCompletedEvent handler = this.JobCompleted;
             if (handler != null)
             {
-                handler(this, new JobCompletedEventArgs { Completed = completed });
+                handler(this,
+                        new JobCompletedEventArgs
+                        {
+                            Completed = completed
+                        });
             }
         }
 
         private void OnActionRemoved(ActionEventArgs args)
         {
-            var handler = ActionRemoved;
+            ActionEvent handler = this.ActionRemoved;
             if (handler != null)
             {
                 handler(this, args);
@@ -303,7 +302,7 @@ namespace Centipede
 
         private void OnActionError(ActionErrorEventArgs args)
         {
-            ActionErrorEvent handler = ActionErrorOccurred;
+            ActionErrorEvent handler = this.ActionErrorOccurred;
             if (handler != null)
             {
                 handler(this, args);
@@ -322,24 +321,24 @@ namespace Centipede
         {
             switch (index)
             {
-            case -1:
-                if (job.Actions.Count > 0)
-                {
-                    IAction last = job.Actions[job.Actions.Count - 1];
+                case -1:
+                    if (job.Actions.Count > 0)
+                    {
+                        IAction last = job.Actions[job.Actions.Count - 1];
 
-                    last.Next = action;
-                }
-                job.Actions.Add(action);
-                index = Job.Actions.Count - 1;
-                break;
-            case 0:
+                        last.Next = action;
+                    }
+                    job.Actions.Add(action);
+                    index = this.Job.Actions.Count - 1;
+                    break;
+                case 0:
                 {
                     IAction oldFirst = job.Actions[0];
                     job.Actions.Insert(0, action);
                     action.Next = oldFirst;
                 }
-                break;
-            default:
+                    break;
+                default:
                 {
                     IAction prevAction = job.Actions[index - 1];
                     IAction nextAction = job.Actions[index];
@@ -347,38 +346,30 @@ namespace Centipede
                     action.Next = nextAction;
                     job.Actions.Insert(index, action);
                 }
-                break;
+                    break;
             }
-            OnActionAdded(new ActionEventArgs
-                          {
-                              Action = action,
-                              Index = index,
-                              LoadedSuccessfully = !(action is Actions.MissingAction)
-                          });
-
-        }
-
-        private void OnActionAdded(ActionEventArgs args)
-        {
-            ActionEvent handler = ActionAdded;
-            if (handler != null)
-            {
-                handler(this, args);
-            }
+            this.OnActionAdded(new ActionEventArgs
+                               {
+                                   Action = action,
+                                   Index = index,
+                                   LoadedSuccessfully = !(action is MissingAction)
+                               });
         }
 
         public void AddAction(IAction action, Int32 index = -1)
         {
-            AddAction(Job, action, index);
+            this.AddAction(this.Job, action, index);
         }
 
         /// <summary>
         ///     Remove action from the current job
         /// </summary>
-        /// <param name="action"><see cref="Action"/> to remove</param>
+        /// <param name="action">
+        ///     <see cref="Action" /> to remove
+        /// </param>
         public void RemoveAction(IAction action)
         {
-            IAction prevAction = Job.Actions.SingleOrDefault(a => a.Next == action);
+            IAction prevAction = this.Job.Actions.SingleOrDefault(a => a.Next == action);
 
             IAction nextAction = action.Next;
 
@@ -386,30 +377,37 @@ namespace Centipede
             {
                 prevAction.Next = nextAction;
             }
-            Job.Actions.Remove(action);
+            this.Job.Actions.Remove(action);
             {
-
-                OnActionRemoved(new ActionEventArgs
-                                {
-                                    Action = action
-                                });
+                this.OnActionRemoved(new ActionEventArgs
+                                     {
+                                         Action = action
+                                     });
             }
         }
 
         public void Clear()
         {
-            ((IDictionary<String, Object>)Variables).Clear();
-            while (Job.Actions.Count > 0)
+            ((IDictionary<String, Object>)this.Variables).Clear();
+            while (this.Job.Actions.Count > 0)
             {
-                RemoveAction(Job.Actions.First());
+                this.RemoveAction(this.Job.Actions.First());
             }
-            Job.Author        = Settings.Default.DefaultAuthor;
-            Job.AuthorContact = Settings.Default.DefaultContact;
-            Job.FileName      = "";
-            Job.InfoUrl       = "";
-            Job.Name          = "";
-            OnAfterLoad(EventArgs.Empty);
-            
+            this.Job.Author = Settings.Default.DefaultAuthor;
+            this.Job.AuthorContact = Settings.Default.DefaultContact;
+            this.Job.FileName = "";
+            this.Job.InfoUrl = "";
+            this.Job.Name = "";
+            this.OnAfterLoad(EventArgs.Empty);
+        }
+
+        private void OnActionAdded(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionAdded;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
         }
 
         #endregion
@@ -423,37 +421,36 @@ namespace Centipede
         [Localizable(false)]
         public void SaveJob(String filename)
         {
-
-            TakeBackup(filename);
+            this.TakeBackup(filename);
             var xmlDoc = new XmlDocument();
-            XmlElement xmlRoot      = xmlDoc.CreateElement("CentipedeJob");
+            XmlElement xmlRoot = xmlDoc.CreateElement("CentipedeJob");
             XmlElement metaElement1 = xmlDoc.CreateElement("Metadata");
             XmlElement metaElement2 = xmlDoc.CreateElement("Name");
-            
-            metaElement2.AppendChild(xmlDoc.CreateTextNode(Job.Name));
+
+            metaElement2.AppendChild(xmlDoc.CreateTextNode(this.Job.Name));
             metaElement1.AppendChild(metaElement2);
 
-            metaElement2            = xmlDoc.CreateElement("Author");
+            metaElement2 = xmlDoc.CreateElement("Author");
             XmlElement metaElement3 = xmlDoc.CreateElement("Name");
-            metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.Author));
+            metaElement3.AppendChild(xmlDoc.CreateTextNode(this.Job.Author));
             metaElement2.AppendChild(metaElement3);
-            metaElement3            = xmlDoc.CreateElement("Contact");
-            metaElement3.AppendChild(xmlDoc.CreateTextNode(Job.AuthorContact));
+            metaElement3 = xmlDoc.CreateElement("Contact");
+            metaElement3.AppendChild(xmlDoc.CreateTextNode(this.Job.AuthorContact));
             metaElement2.AppendChild(metaElement3);
             metaElement1.AppendChild(metaElement2);
 
-            metaElement2            = xmlDoc.CreateElement("Info");
-            metaElement2.SetAttribute("Url", Job.InfoUrl);
+            metaElement2 = xmlDoc.CreateElement("Info");
+            metaElement2.SetAttribute("Url", this.Job.InfoUrl);
             metaElement1.AppendChild(metaElement2);
 
             xmlRoot.AppendChild(metaElement1);
-            
+
             xmlDoc.AppendChild(xmlRoot);
 
             XmlElement actionsElement = xmlDoc.CreateElement("Actions");
             xmlRoot.AppendChild(actionsElement);
 
-            foreach (Action action in Job.Actions)
+            foreach (Action action in this.Job.Actions)
             {
                 action.AddToXmlElement(actionsElement);
             }
@@ -470,7 +467,46 @@ namespace Centipede
             {
                 xmlDoc.WriteTo(w);
             }
-            Job.FileName = filename;
+            this.Job.FileName = filename;
+        }
+
+        /// <summary>
+        ///     Load a job with a given name
+        /// </summary>
+        /// <param name="jobFileName">Name of the job to load</param>
+        [Localizable(false)]
+        public void LoadJob(string jobFileName)
+        {
+            this.Clear();
+
+            //var xmlDoc = new XmlDocument();
+            if (!File.Exists(jobFileName))
+            {
+                throw new FileNotFoundException();
+            }
+
+            var doc = new XmlDocument();
+            doc.Load(jobFileName);
+
+            //XPathDocument xPathDoc = new XPathDocument(jobFileName);
+            //XPathNavigator nav = xPathDoc.CreateNavigator();
+            var job = new CentipedeJob(jobFileName, doc)
+                      {
+                          FileName = jobFileName
+                      };
+
+            //var it = nav.Select("//Actions/*");
+
+            IEnumerable<XmlElement> it = doc.GetElementsByTagName("Actions")[0].ChildNodes.OfType<XmlElement>();
+
+            foreach (XmlElement actionElement in it)
+            {
+                AddAction(job, Action.FromXml(actionElement, this.Variables, this));
+            }
+
+            this.Job = job;
+
+            this.OnAfterLoad(EventArgs.Empty);
         }
 
         private void TakeBackup(string filePath)
@@ -497,47 +533,9 @@ namespace Centipede
             File.Copy(filePath, Path.Combine(backupDir, backupFilename));
         }
 
-        /// <summary>
-        ///     Load a job with a given name
-        /// </summary>
-        /// <param name="jobFileName">Name of the job to load</param>
-        [Localizable(false)]
-        public void LoadJob(string jobFileName)
-        {
-
-            Clear();
-            
-            //var xmlDoc = new XmlDocument();
-            if (!File.Exists(jobFileName))
-            {
-                throw new FileNotFoundException();
-            }
-
-            XmlDocument doc = new XmlDocument();
-            doc.Load(jobFileName);
-
-
-            //XPathDocument xPathDoc = new XPathDocument(jobFileName);
-            //XPathNavigator nav = xPathDoc.CreateNavigator();
-            CentipedeJob job = new CentipedeJob(jobFileName, doc) { FileName = jobFileName };
-
-            //var it = nav.Select("//Actions/*");
-
-            var it = doc.GetElementsByTagName("Actions")[0].ChildNodes.OfType<XmlElement>();
-
-            foreach (XmlElement actionElement in it)
-            {
-                AddAction(job, Action.FromXml(actionElement, Variables, this));
-            }
-
-            Job = job;
-            
-            OnAfterLoad(EventArgs.Empty);
-        }
-
         private void OnAfterLoad(EventArgs eventArgs)
         {
-            AfterLoadEvent handler = AfterLoad;
+            AfterLoadEvent handler = this.AfterLoad;
             if (handler != null)
             {
                 handler(this, eventArgs);

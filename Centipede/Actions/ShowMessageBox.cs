@@ -23,7 +23,7 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
-            Form form = GetCurrentCore().Window;
+            Form form = (Form)GetCurrentCore().Tag;
 
             String parsedMessage = ParseStringForVariable(MessageText);
             String parsedTitle = ParseStringForVariable(Title);
