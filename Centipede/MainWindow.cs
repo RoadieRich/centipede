@@ -64,11 +64,11 @@ namespace Centipede
 
             Core = centipedeCore;
 
-            ActionFactory.MessageEvent = OnMessageHandlerDelegate;
+            ActionFactory.MessageHandler = this.Action_MessageHandler;
 
             this._arguments = arguments;
 
-            Core.Variables.PropertyChanged += OnVariablesOnRowChanged;
+            Core.Variables.PropertyChanged += this.Core_Variables_PropertyChanged;
 
 
             this._dataSet.Messages.RowChanged += delegate
@@ -180,7 +180,7 @@ namespace Centipede
 
         #region Methods
 
-        private void OnVariablesOnRowChanged(object sender, PythonVariableChangedEventArgs args)
+        private void Core_Variables_PropertyChanged(object sender, PythonVariableChangedEventArgs args)
         {
             var scope = (PythonScope)sender;
             var name = args.PropertyName;
@@ -203,7 +203,7 @@ namespace Centipede
             }
         }
 
-        private void FavouriteItemOnClick(object sender, EventArgs eventArgs)
+        private void FavouriteItem_Click(object sender, EventArgs eventArgs)
         {
             var item = (ToolStripDropDownItem)sender;
             try
@@ -215,7 +215,7 @@ namespace Centipede
             Core.LoadJob((String)item.Tag);
         }
 
-        private void OnMessageHandlerDelegate(object sender, MessageEventArgs e)
+        private void Action_MessageHandler(object sender, MessageEventArgs e)
         {
             //MessageBox.Show(String.Format("{0}\n\nLevel: {1}", e.Message, e.Level.AsText()), "Message");
 
@@ -229,7 +229,7 @@ namespace Centipede
                 DisplayedLevels.HasFlag(e.Level));
         }
 
-        private void ErrorHandler(object sender, ActionErrorEventArgs e)
+        private void Core_ActionErrorOccurred(object sender, ActionErrorEventArgs e)
         {
             var messageBuilder = new StringBuilder();
             ActionException exception = (ActionException)e.Exception;
@@ -314,7 +314,7 @@ namespace Centipede
             }
         }
 
-        private void UpdateHandlerDone(object sender, ActionEventArgs actionEventArgs)
+        private void Core_ActionCompleted(object sender, ActionEventArgs actionEventArgs)
         {
             if (actionEventArgs.Stepping)
             {
@@ -341,16 +341,16 @@ namespace Centipede
         {
             if (adc.InvokeRequired)
             {
-                adc.Invoke(new Action<ActionDisplayControl, ActionState, string>(_setActionDisplayedState), adc, state,
+                adc.Invoke(new Action<ActionDisplayControl, ActionState, string>(SetActionDisplayedState), adc, state,
                            message);
             }
             else
             {
-                _setActionDisplayedState(adc, state, message);
+                SetActionDisplayedState(adc, state, message);
             }
         }
 
-        private void CompletedHandler(object sender, JobCompletedEventArgs e)
+        private void Core_JobCompleted(object sender, JobCompletedEventArgs e)
         {
             String message;
             MessageBoxIcon icon;
@@ -370,7 +370,7 @@ namespace Centipede
             this.RunButton.Text = Resources.MainWindow_CompletedHandler_Run;
         }
 
-        private void ItemActivate(object sender, EventArgs e)
+        private void TabPageListView_ItemActivate(object sender, EventArgs e)
         {
             var sendingListView = (ListView)sender;
 
@@ -379,7 +379,7 @@ namespace Centipede
             Core.AddAction(sendingActionFactory.Generate());
         }
 
-        private static void _setActionDisplayedState([NotNull] ActionDisplayControl adc,
+        private static void SetActionDisplayedState([NotNull] ActionDisplayControl adc,
                                                      ActionState state, String message)
         {
             lock (adc)
@@ -454,14 +454,14 @@ namespace Centipede
 
             MessageDataGridView.DataSource = this.messagesBindingSource; //this._messageFilterBindingSource;
 
-            Core.ActionCompleted     += UpdateHandlerDone;
-            Core.BeforeAction        += Program_BeforeAction;
-            Core.JobCompleted        += CompletedHandler;
-            Core.ActionErrorOccurred += ErrorHandler;
-            Core.ActionAdded         += Program_ActionAdded;
-            Core.ActionRemoved       += Program_ActionRemoved;
-            Core.AfterLoad           += Program_AfterLoad;
-            Core.StartRun            += CoreOnStartRun;
+            Core.ActionCompleted     += this.Core_ActionCompleted;
+            Core.BeforeAction        += this.Core_BeforeAction;
+            Core.JobCompleted        += this.Core_JobCompleted;
+            Core.ActionErrorOccurred += this.Core_ActionErrorOccurred;
+            Core.ActionAdded         += this.Core_ActionAdded;
+            Core.ActionRemoved       += this.Core_ActionRemoved;
+            Core.AfterLoad           += this.Core_AfterLoad;
+            Core.StartRun            += this.Core_StartRun;
 
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
@@ -519,7 +519,7 @@ namespace Centipede
             { }
         }
 
-        private void CentipedeJobOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void Core_Job_PropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
             CentipedeJob job = (CentipedeJob)sender;
 
@@ -534,7 +534,7 @@ namespace Centipede
             }
         }
 
-        private void CoreOnStartRun(object sender, StartRunEventArgs startRunEventArgs)
+        private void Core_StartRun(object sender, StartRunEventArgs startRunEventArgs)
         {
             this._steppingMutex = startRunEventArgs.ResetEvent;
             //this._stepping = true;
@@ -555,7 +555,7 @@ namespace Centipede
                     try
                     {
                         item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
-                        item.Click += this.FavouriteItemOnClick;
+                        item.Click += this.FavouriteItem_Click;
                     }
                     catch (InvalidOperationException e)
                     {
@@ -679,10 +679,10 @@ namespace Centipede
             catListView.Items.Add(af);
         }
 
-        private void Program_AfterLoad(object sender, EventArgs e)
+        private void Core_AfterLoad(object sender, EventArgs e)
         {
             Dirty = false;
-            Core.Job.PropertyChanged += CentipedeJobOnPropertyChanged;
+            Core.Job.PropertyChanged += this.Core_Job_PropertyChanged;
             Text = Core.Job.Name;
             ProgressBar.Value = 0;
 
@@ -690,7 +690,7 @@ namespace Centipede
             this.ActionContainer.VerticalScroll.Maximum = 0;
         }
 
-        private void Program_ActionRemoved(object sender, ActionEventArgs e)
+        private void Core_ActionRemoved(object sender, ActionEventArgs e)
         {
             IAction action = e.Action;
             ActionDisplayControl adc = (ActionDisplayControl)action.Tag;
@@ -716,14 +716,14 @@ namespace Centipede
             tabPage.Controls.Add(lv);
             lv.Dock = DockStyle.Fill;
             tabPage.Tag = lv;
-            lv.ItemDrag += BeginDrag;
-            lv.ItemActivate += ItemActivate;
+            lv.ItemDrag += this.TabPageListView_BeginDrag;
+            lv.ItemActivate += this.TabPageListView_ItemActivate;
             this.AddActionTabs.TabPages.Add(tabPage);
 
             return lv;
         }
 
-        private void Program_BeforeAction(object sender, ActionEventArgs e)
+        private void Core_BeforeAction(object sender, ActionEventArgs e)
         {
             if (this._pendingUpdate != null)
             {
@@ -745,7 +745,7 @@ namespace Centipede
             }
         }
 
-        private void Program_ActionAdded(object sender, ActionEventArgs e)
+        private void Core_ActionAdded(object sender, ActionEventArgs e)
         {
             IAction action = e.Action;
             Type actionType = action.GetType();
@@ -770,8 +770,8 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
-            action.MessageHandler += this.OnMessageHandlerDelegate;
-            adc.Deleted += adc_Deleted;
+            action.MessageHandler += this.Action_MessageHandler;
+            adc.Deleted += this.ActionDisplayControl_Deleted;
             adc.DragEnter += ActionContainer_DragEnter;
             adc.DragDrop += ActionContainer_DragDrop;
             this.ActionContainer.Controls.Add(adc, 0, e.Index);
@@ -786,13 +786,13 @@ namespace Centipede
 
         }
 
-        private void adc_Deleted(object sender, CentipedeEventArgs e)
+        private void ActionDisplayControl_Deleted(object sender, CentipedeEventArgs e)
         {
             var adc = (ActionDisplayControl)sender;
             Core.RemoveAction(adc.ThisAction);
         }
 
-        private void VarMenuDelete_Click(object sender, EventArgs e)
+        private void ActionMenuDelete_Click(object sender, EventArgs e)
         { }
 
         private void DoLoad(string fileName)
@@ -847,7 +847,7 @@ namespace Centipede
         }
 
         [STAThread]
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             Core.RunJob(_stepping);
         }
@@ -872,7 +872,7 @@ namespace Centipede
             Core.AddAction(((ActionFactory)data).Generate(), index);
         }
 
-        private void BeginDrag(object sender, ItemDragEventArgs e)
+        private void TabPageListView_BeginDrag(object sender, ItemDragEventArgs e)
         {
             DoDragDrop(e.Item, DragDropEffects.Move);
         }
@@ -883,7 +883,7 @@ namespace Centipede
             e.Effect = DragDropEffects.Move;
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //It's not really a percentage, but it serves the purpose
             this.ProgressBar.Increment(e.ProgressPercentage);
@@ -940,9 +940,10 @@ namespace Centipede
             DoLoad(this.OpenFileDialog.FileName);
         }
 
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        private void SaveFileDialog_FileOk(object sender, CancelEventArgs e)
         {
-            this.Core.SaveJob(this.SaveFileDialog.FileName);
+            SaveFileDialog dlg = (SaveFileDialog)sender;
+            this.Core.SaveJob(dlg.FileName);
             this.Dirty = false;
         }
 
@@ -971,7 +972,7 @@ namespace Centipede
             }
         }
 
-        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FileSaveMenuItem_Click(object sender, EventArgs e)
         {
             this.Save();
         }
@@ -1018,7 +1019,7 @@ namespace Centipede
 
         }
 
-        private void saveAsToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FileSaveAsMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1028,7 +1029,7 @@ namespace Centipede
             { }
         }
 
-        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FileExitMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -1086,17 +1087,17 @@ namespace Centipede
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void NavigationBackButton_Click(object sender, EventArgs e)
         {
             this.WebBrowser.GoBack();
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void NavigationForwardButton_Click(object sender, EventArgs e)
         {
             this.WebBrowser.GoForward();
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void NavigationRefresh_Click(object sender, EventArgs e)
         {
             this.WebBrowser.Refresh();
         }
@@ -1109,7 +1110,7 @@ namespace Centipede
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FilePropertiesMenuItem_Click(object sender, EventArgs e)
         {
             bool changed;
             try
@@ -1157,11 +1158,11 @@ namespace Centipede
         {
         }
 
-        private void addCurrentToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FavouritesAddCurrentMenuItem_Click(object sender, EventArgs e)
         {
             if (Dirty || !Core.Job.HasBeenSaved)
             {
-                if (MessageBox.Show("File must be saved first",
+                if (MessageBox.Show("This job must be saved before it can be added as a favourite.",
                                     "Save File",
                                     MessageBoxButtons.OKCancel,
                                     MessageBoxIcon.Question) == DialogResult.OK)
@@ -1185,7 +1186,7 @@ namespace Centipede
             UpdateFavourites();
         }
 
-        private void toolStripButton4_Click(object sender, EventArgs e)
+        private void OutputClear_Click(object sender, EventArgs e)
         {
             _dataSet.Messages.Clear();
         }
@@ -1217,12 +1218,12 @@ namespace Centipede
             Process.Start(Resources.MainWindow_visitGetSatisfactionToolStripMenuItem_Click_GetSatisfaction_Url);
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpAboutMenuItem_Click(object sender, EventArgs e)
         {
             (new AboutForm(this._pluginFiles)).Show(this);
         }
 
-        private void stepThroughToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RunStepThroughMenuItem_Click(object sender, EventArgs e)
         {
             if (!this._stepping)
             {
@@ -1240,12 +1241,12 @@ namespace Centipede
             this._steppingMutex.Set();
         }
 
-        private void abortToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RunAbortMenuItem_Click(object sender, EventArgs e)
         {
             Core.AbortRun();
         }
 
-        private void resetJobToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RunResetJobMenuItem_Click(object sender, EventArgs e)
         {
             Core.AbortRun();
             
@@ -1254,7 +1255,7 @@ namespace Centipede
             
         }
 
-        private void pythonReferenceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HelpPythonReferenceMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(@"http://docs.python.org/2.7/");
         }
@@ -1270,6 +1271,11 @@ namespace Centipede
         public void RunJobAfterLoad()
         {
             Load += (sender, args) => this.StartRunning(false);
+        }
+
+        private void FavouriteJobs_Initialized(object sender, EventArgs e)
+        {
+
         }
     }
 

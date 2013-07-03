@@ -7,16 +7,6 @@ namespace Centipede
     {
         private System.Windows.Forms.ImageList ActionIcons;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ContextMenuStrip VarsContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuUndo;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuCut;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuCopy;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuPaste;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuDelete;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem VarMenuSelectAll;
-        private System.Windows.Forms.Timer updateTimer;
         private System.ComponentModel.BackgroundWorker BackgroundWorker;
 
         #region Windows Form Designer generated code
@@ -36,15 +26,6 @@ namespace Centipede
             this.NavigationRefresh = new System.Windows.Forms.ToolStripButton();
             this.SplitContainer3 = new System.Windows.Forms.SplitContainer();
             this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
-            this.VarsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.VarMenuUndo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.VarMenuCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.VarMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.VarMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.RunTabs = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
@@ -98,7 +79,6 @@ namespace Centipede
             this.HelpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MiniToolStrip = new System.Windows.Forms.MenuStrip();
             this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
-            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.BackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.GetFileNameDialogue = new System.Windows.Forms.OpenFileDialog();
@@ -109,7 +89,6 @@ namespace Centipede
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FavouriteJobs = new Centipede.FavouriteJobs();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -130,7 +109,6 @@ namespace Centipede
             this.SplitContainer3.Panel1.SuspendLayout();
             this.SplitContainer3.Panel2.SuspendLayout();
             this.SplitContainer3.SuspendLayout();
-            this.VarsContextMenu.SuspendLayout();
             this.RunTabs.SuspendLayout();
             this.OutputTab.SuspendLayout();
             this.OutputToolStripContainer.ContentPanel.SuspendLayout();
@@ -143,7 +121,6 @@ namespace Centipede
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
             this.MainMenuStrip_.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobs)).BeginInit();
             this.SuspendLayout();
             // 
             // MainToolStripContainer
@@ -234,21 +211,21 @@ namespace Centipede
             this.NavigationBackButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             resources.ApplyResources(this.NavigationBackButton, "NavigationBackButton");
             this.NavigationBackButton.Name = "NavigationBackButton";
-            this.NavigationBackButton.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.NavigationBackButton.Click += new System.EventHandler(this.NavigationBackButton_Click);
             // 
             // NavigationForwardButton
             // 
             this.NavigationForwardButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.NavigationForwardButton.Name = "NavigationForwardButton";
             resources.ApplyResources(this.NavigationForwardButton, "NavigationForwardButton");
-            this.NavigationForwardButton.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.NavigationForwardButton.Click += new System.EventHandler(this.NavigationForwardButton_Click);
             // 
             // NavigationRefresh
             // 
             this.NavigationRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             resources.ApplyResources(this.NavigationRefresh, "NavigationRefresh");
             this.NavigationRefresh.Name = "NavigationRefresh";
-            this.NavigationRefresh.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.NavigationRefresh.Click += new System.EventHandler(this.NavigationRefresh_Click);
             // 
             // SplitContainer3
             // 
@@ -269,67 +246,9 @@ namespace Centipede
             this.ActionContainer.AllowDrop = true;
             resources.ApplyResources(this.ActionContainer, "ActionContainer");
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ActionContainer.ContextMenuStrip = this.VarsContextMenu;
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
             this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
-            // 
-            // VarsContextMenu
-            // 
-            this.VarsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VarMenuUndo,
-            this.toolStripSeparator5,
-            this.VarMenuCut,
-            this.VarMenuCopy,
-            this.VarMenuPaste,
-            this.VarMenuDelete,
-            this.toolStripSeparator6,
-            this.VarMenuSelectAll});
-            this.VarsContextMenu.Name = "ActionContextMenu";
-            this.VarsContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.VarsContextMenu.ShowImageMargin = false;
-            resources.ApplyResources(this.VarsContextMenu, "VarsContextMenu");
-            // 
-            // VarMenuUndo
-            // 
-            resources.ApplyResources(this.VarMenuUndo, "VarMenuUndo");
-            this.VarMenuUndo.Name = "VarMenuUndo";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
-            // 
-            // VarMenuCut
-            // 
-            this.VarMenuCut.Name = "VarMenuCut";
-            resources.ApplyResources(this.VarMenuCut, "VarMenuCut");
-            // 
-            // VarMenuCopy
-            // 
-            this.VarMenuCopy.Name = "VarMenuCopy";
-            resources.ApplyResources(this.VarMenuCopy, "VarMenuCopy");
-            // 
-            // VarMenuPaste
-            // 
-            this.VarMenuPaste.Name = "VarMenuPaste";
-            resources.ApplyResources(this.VarMenuPaste, "VarMenuPaste");
-            // 
-            // VarMenuDelete
-            // 
-            this.VarMenuDelete.Name = "VarMenuDelete";
-            resources.ApplyResources(this.VarMenuDelete, "VarMenuDelete");
-            this.VarMenuDelete.Click += new System.EventHandler(this.VarMenuDelete_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
-            // 
-            // VarMenuSelectAll
-            // 
-            this.VarMenuSelectAll.Name = "VarMenuSelectAll";
-            resources.ApplyResources(this.VarMenuSelectAll, "VarMenuSelectAll");
             // 
             // AddActionTabs
             // 
@@ -440,7 +359,7 @@ namespace Centipede
             this.OutputClear.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             resources.ApplyResources(this.OutputClear, "OutputClear");
             this.OutputClear.Name = "OutputClear";
-            this.OutputClear.Click += new System.EventHandler(this.toolStripButton4_Click);
+            this.OutputClear.Click += new System.EventHandler(this.OutputClear_Click);
             // 
             // VarsTab
             // 
@@ -477,7 +396,7 @@ namespace Centipede
             this.ProgressBar.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.ProgressBar.Name = "ProgressBar";
             // 
-            // MainMenuStrip
+            // MainMenuStrip_
             // 
             resources.ApplyResources(this.MainMenuStrip_, "MainMenuStrip_");
             this.MainMenuStrip_.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -526,13 +445,13 @@ namespace Centipede
             // 
             resources.ApplyResources(this.FileSaveMenuItem, "FileSaveMenuItem");
             this.FileSaveMenuItem.Name = "FileSaveMenuItem";
-            this.FileSaveMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
+            this.FileSaveMenuItem.Click += new System.EventHandler(this.FileSaveMenuItem_Click);
             // 
             // FileSaveAsMenuItem
             // 
             this.FileSaveAsMenuItem.Name = "FileSaveAsMenuItem";
             resources.ApplyResources(this.FileSaveAsMenuItem, "FileSaveAsMenuItem");
-            this.FileSaveAsMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem1_Click);
+            this.FileSaveAsMenuItem.Click += new System.EventHandler(this.FileSaveAsMenuItem_Click);
             // 
             // FileMenuSeparator2
             // 
@@ -558,7 +477,7 @@ namespace Centipede
             // 
             resources.ApplyResources(this.FilePropertiesMenuItem, "FilePropertiesMenuItem");
             this.FilePropertiesMenuItem.Name = "FilePropertiesMenuItem";
-            this.FilePropertiesMenuItem.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.FilePropertiesMenuItem.Click += new System.EventHandler(this.FilePropertiesMenuItem_Click);
             // 
             // FileMenuSeparator4
             // 
@@ -569,7 +488,7 @@ namespace Centipede
             // 
             this.FileExitMenuItem.Name = "FileExitMenuItem";
             resources.ApplyResources(this.FileExitMenuItem, "FileExitMenuItem");
-            this.FileExitMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem1_Click);
+            this.FileExitMenuItem.Click += new System.EventHandler(this.FileExitMenuItem_Click);
             // 
             // RunMenu
             // 
@@ -593,7 +512,7 @@ namespace Centipede
             // 
             this.RunAbortMenuItem.Name = "RunAbortMenuItem";
             resources.ApplyResources(this.RunAbortMenuItem, "RunAbortMenuItem");
-            this.RunAbortMenuItem.Click += new System.EventHandler(this.abortToolStripMenuItem_Click);
+            this.RunAbortMenuItem.Click += new System.EventHandler(this.RunAbortMenuItem_Click);
             // 
             // RunMenuSeparator1
             // 
@@ -604,13 +523,13 @@ namespace Centipede
             // 
             this.RunResetJobMenuItem.Name = "RunResetJobMenuItem";
             resources.ApplyResources(this.RunResetJobMenuItem, "RunResetJobMenuItem");
-            this.RunResetJobMenuItem.Click += new System.EventHandler(this.resetJobToolStripMenuItem_Click);
+            this.RunResetJobMenuItem.Click += new System.EventHandler(this.RunResetJobMenuItem_Click);
             // 
             // RunStepThroughMenuItem
             // 
             this.RunStepThroughMenuItem.Name = "RunStepThroughMenuItem";
             resources.ApplyResources(this.RunStepThroughMenuItem, "RunStepThroughMenuItem");
-            this.RunStepThroughMenuItem.Click += new System.EventHandler(this.stepThroughToolStripMenuItem_Click);
+            this.RunStepThroughMenuItem.Click += new System.EventHandler(this.RunStepThroughMenuItem_Click);
             // 
             // FavouritesMenu
             // 
@@ -636,7 +555,7 @@ namespace Centipede
             // 
             this.FavouritesAddCurrentMenuItem.Name = "FavouritesAddCurrentMenuItem";
             resources.ApplyResources(this.FavouritesAddCurrentMenuItem, "FavouritesAddCurrentMenuItem");
-            this.FavouritesAddCurrentMenuItem.Click += new System.EventHandler(this.addCurrentToolStripMenuItem_Click);
+            this.FavouritesAddCurrentMenuItem.Click += new System.EventHandler(this.FavouritesAddCurrentMenuItem_Click);
             // 
             // FavouritesEditFavouritesMenuItem
             // 
@@ -682,7 +601,7 @@ namespace Centipede
             // 
             this.HelpPythonReferenceooMenuItem.Name = "HelpPythonReferenceooMenuItem";
             resources.ApplyResources(this.HelpPythonReferenceooMenuItem, "HelpPythonReferenceooMenuItem");
-            this.HelpPythonReferenceooMenuItem.Click += new System.EventHandler(this.pythonReferenceToolStripMenuItem_Click);
+            this.HelpPythonReferenceooMenuItem.Click += new System.EventHandler(this.HelpPythonReferenceMenuItem_Click);
             // 
             // visitGetSatisfactionToolStripMenuItem
             // 
@@ -699,7 +618,7 @@ namespace Centipede
             // 
             this.HelpAboutMenuItem.Name = "HelpAboutMenuItem";
             resources.ApplyResources(this.HelpAboutMenuItem, "HelpAboutMenuItem");
-            this.HelpAboutMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.HelpAboutMenuItem.Click += new System.EventHandler(this.HelpAboutMenuItem_Click);
             // 
             // MiniToolStrip
             // 
@@ -713,21 +632,17 @@ namespace Centipede
             this.ActionIcons.Images.SetKeyName(0, "pycon.ico");
             this.ActionIcons.Images.SetKeyName(1, "If.ico");
             // 
-            // updateTimer
-            // 
-            this.updateTimer.Enabled = true;
-            // 
             // BackgroundWorker
             // 
             this.BackgroundWorker.WorkerReportsProgress = true;
             this.BackgroundWorker.WorkerSupportsCancellation = true;
-            this.BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.BackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.BackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker_DoWork);
+            this.BackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.BackgroundWorker_ProgressChanged);
             // 
             // SaveFileDialog
             // 
             resources.ApplyResources(this.SaveFileDialog, "SaveFileDialog");
-            this.SaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+            this.SaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveFileDialog_FileOk);
             // 
             // GetFileNameDialogue
             // 
@@ -777,11 +692,6 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn1, "dataGridViewTextBoxColumn1");
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
-            // FavouriteJobs
-            // 
-            this.FavouriteJobs.DataSetName = "FavouriteJobs";
-            this.FavouriteJobs.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.DataPropertyName = "Action";
@@ -828,7 +738,6 @@ namespace Centipede
             this.SplitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer3)).EndInit();
             this.SplitContainer3.ResumeLayout(false);
-            this.VarsContextMenu.ResumeLayout(false);
             this.RunTabs.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
             this.OutputToolStripContainer.ContentPanel.ResumeLayout(false);
@@ -845,7 +754,6 @@ namespace Centipede
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.MainMenuStrip_.ResumeLayout(false);
             this.MainMenuStrip_.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.FavouriteJobs)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -855,7 +763,6 @@ namespace Centipede
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
         internal System.Windows.Forms.OpenFileDialog GetFileNameDialogue;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
-        internal FavouriteJobs FavouriteJobs;
         private System.Windows.Forms.BindingSource messagesBindingSource;
         private System.Windows.Forms.ToolStripContainer MainToolStripContainer;
         private System.Windows.Forms.SplitContainer SplitContainer1;
