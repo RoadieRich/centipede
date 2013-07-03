@@ -26,9 +26,10 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            if (GetCurrentCore().Window.InvokeRequired)
+            Form form = (Form)GetCurrentCore().Tag;
+            if (form.InvokeRequired)
             {
-                GetCurrentCore().Window.Invoke(new System.Action(GetCurrentCore().Window.Close));
+                form.Invoke(new System.Action(form.Close));
             }
         }
 

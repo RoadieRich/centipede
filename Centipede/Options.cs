@@ -1,3 +1,5 @@
+// ReSharper disable RedundantExplicitArrayCreation
+
 //
 // Options.cs
 //
@@ -360,7 +362,9 @@ namespace NDesk.Options {
 		internal string[] Names           {get {return names;}}
 		internal string[] ValueSeparators {get {return separators;}}
 
+
 		static readonly char[] NameTerminator = new char[]{'=', ':'};
+
 
 		private OptionValueType ParsePrototype ()
 		{
@@ -1101,3 +1105,4 @@ namespace NDesk.Options {
 	}
 }
 
+// ReSharper restore RedundantExplicitArrayCreation

@@ -226,10 +226,7 @@ namespace Centipede.Actions
                 {
                     return this.attrValue_TextChanged;
                 }
-                else
-                {
-                    return delegate { };
-                }
+                return delegate { };
             }
             MethodInfo method = arg.DeclaringType.GetMethod(argAttr.OnChangedHandlerName);
             return (sender, e) => method.Invoke(ThisAction, new[] { sender, e });

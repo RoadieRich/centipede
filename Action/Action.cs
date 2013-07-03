@@ -545,14 +545,7 @@ namespace Centipede
                 {
                     String asmPath = Path.Combine(location, Path.Combine(PluginFolder, element.SelectSingleNode(@"@Assembly").Value));
 
-                    if (File.Exists(asmPath))
-                    {
-                        asm = Assembly.LoadFile(asmPath);
-                    }
-                    else
-                    {
-                        asm = null;
-                    }
+                    asm = File.Exists(asmPath) ? Assembly.LoadFile(asmPath) : null;
                 }
                 else
                 {

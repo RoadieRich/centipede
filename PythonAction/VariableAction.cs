@@ -7,7 +7,7 @@ using Action = Centipede.Action;
 
 namespace PyAction
 {
-    [ActionCategory("Flow Control", DisplayName="Assign to Variable", IconName=@"variable")]
+    [ActionCategory("Flow Control", DisplayName = "Assign to Variable", IconName = @"variable")]
     public class VariableAction : Action
     {
         /// <summary>
@@ -16,13 +16,14 @@ namespace PyAction
         /// <param name="variables"></param>
         /// <param name="c"></param>
         public VariableAction(IDictionary<string, object> variables, ICentipedeCore c)
-                : base("Assign to Variable", variables, c)
+            : base("Assign to Variable", variables, c)
         { }
 
         [ActionArgument(DisplayName = "Expression", Usage = "(Required) A valid python expression", Literal = true)]
         public string Expresson = "";
 
-        [ActionArgument(DisplayName = "Variable", Usage = "(Required) Name of variable to store the expression result")]
+        [ActionArgument(DisplayName = "Variable", Usage = "(Required) Name of variable to store the expression result",
+            Literal = true)]
         public string DestinationVarName = "";
 
         /// <summary>
@@ -30,12 +31,12 @@ namespace PyAction
         /// </summary>
         protected override void DoAction()
         {
-            string myDestinationVariable = ParseStringForVariable(DestinationVarName); 
-            
+            ParseStringForVariable(this.DestinationVarName);
+
             IPythonEngine engine = GetCurrentCore().PythonEngine;
             var scope = engine.GetNewTypedScope(Variables);
-            
-            Variables[myDestinationVariable] = engine.Evaluate<object>(Expresson, scope);
+
+            Variables[DestinationVarName] = engine.Evaluate<object>(Expresson, scope);
         }
     }
 }

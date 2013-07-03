@@ -113,28 +113,12 @@ namespace CentipedeInterfaces
         void AbortRun();
 
         IPythonEngine PythonEngine { get; }
-        Form Window { get; set; }
+        object Tag { get; set; }
     }
-
-    public delegate void ActionRemovedHandler(IAction action);
-
-    /// <summary>
-    ///     Called after executing an action
-    /// </summary>
-    /// <param name="action">The action that has just been executed.</param>
-    public delegate void ActionUpdateCallback(IAction action);
 
     public delegate void ActionEvent(object sender, ActionEventArgs e);
 
-    public delegate void AddActionCallback(IAction action, Int32 index);
-
     public delegate void AfterLoadEvent(Object sender, EventArgs e);
-
-    /// <summary>
-    ///     Handler for job completion
-    /// </summary>
-    /// <param name="succeeded">True if all actions completed successfully.</param>
-    public delegate void CompletedHandler(Boolean succeeded);
 
     public delegate void JobCompletedEvent(object sender, JobCompletedEventArgs e);
 
