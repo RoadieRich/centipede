@@ -247,6 +247,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Tutorial\style.css" />
     <Content Include="Tutorial\Tutorial.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
