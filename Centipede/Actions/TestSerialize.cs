@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -18,22 +20,23 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variable to Serialize", Literal = true)]
-        public String InVar = "";
         [ActionArgument(displayName = "Destination Variable", Literal = true)]
-        public String OutVar = "";
+        public String OutVar = "serialized";
 
 
         protected override void DoAction()
         {
-            object obj = Variables[InVar];
-            XmlSerializer xmlSerializer = new XmlSerializer(obj.GetType());
-            
-            MemoryStream memoryStream = new MemoryStream();
-            
-            xmlSerializer.Serialize(memoryStream, obj);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            string text = (new StreamReader(memoryStream)).ReadToEnd();
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+            Stream stream = new MemoryStream();
+
+            Dictionary<String, Object> vars = Variables.Where(kvp => !(kvp.Key == "sys" || kvp.Key == "math")).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            binaryFormatter.Serialize(stream, vars);
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            string text = new StreamReader(stream).ReadToEnd();
 
             if (!String.IsNullOrEmpty(OutVar))
             {
@@ -55,25 +58,32 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variable to Deserialize", Literal = true, DisplayOrder = 0)]
-        public String InVar = "";
+        [ActionArgument(displayName = "Variable to Deserialize", Literal = true, DisplayOrder = 1)]
+        public String InVar = "serialized";
 
-        [ActionArgument(displayName = "Variable to Deserialize", DisplayOrder = 1)]
+        [ActionArgument(displayName = "Target Variable", DisplayOrder = 0)]
         public String TypeName = "";
 
 
         [ActionArgument(displayName = "Destination Variable", Literal = true, DisplayOrder=2)]
-        public String OutVar = "";
+        public String OutVar = "deserialized";
 
 
         protected override void DoAction()
         {
-            Type t = Assembly.GetCallingAssembly().GetType(ParseStringForVariable(TypeName));
-            XmlSerializer xmlSerializer = new XmlSerializer(t);
+            BinaryFormatter binaryFormatter = new BinaryFormatter();
 
-            object obj = xmlSerializer.Deserialize(new StringReader((string)Variables[this.InVar]));
-            
-            Variables[OutVar] = obj;
+            MemoryStream stream = new MemoryStream();
+
+            StreamWriter sw = new StreamWriter(stream);
+            sw.Write(Variables[InVar]);
+            sw.Flush();
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            IDictionary<String, object> vars = (IDictionary<string, object>)binaryFormatter.Deserialize(stream);
+
+            Variables[OutVar] = vars[InVar];
         }
     }
 }

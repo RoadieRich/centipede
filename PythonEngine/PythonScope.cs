@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using Microsoft.Scripting.Hosting;
 using ResharperAnnotations;
 
@@ -13,7 +14,7 @@ namespace PythonEngine
     /// 
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public sealed class PythonScope : IPythonScope
+    public sealed class PythonScope : IPythonScope, ISerializable 
     {
         /// <summary>
         /// 
@@ -24,7 +25,9 @@ namespace PythonEngine
             this.Scope = scope;
         }
 
+        [NonSerialized]
         internal readonly ScriptScope Scope;
+        
         
         /// <summary>
         /// Determines if this context or any outer scope contains the defined name.
@@ -988,6 +991,15 @@ namespace PythonEngine
                 {
                     handler(this, args);
                 }
+            }
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.SetType(typeof(Dictionary<string,object>));
+            foreach (var varPair in this)
+            {
+                info.AddValue(varPair.Key,varPair.Value);
             }
         }
     }

@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,8 +46,10 @@
     <Compile Include="AskEvent.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="CentipedeJob.cs" />
+    <Compile Include="CentipedeSerializer.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FieldAndPropertyWrapper.cs" />
+    <Compile Include="Interface1.cs" />
     <Compile Include="IPythonByteCode.cs" />
     <Compile Include="IPythonEngine.cs" />
     <Compile Include="IPythonScope.cs" />

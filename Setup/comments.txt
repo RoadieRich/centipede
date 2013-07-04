@@ -7,3 +7,4 @@ This version fixes the missing dependency installers.
 Added support to display missing actions.
 Run Subjob is currently broken.  We are working on a fix.
 Previous version had unremoved testing code.
+Added option to display tutorial.  Actual tutorial has yet to be written.

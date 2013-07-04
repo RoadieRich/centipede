@@ -84,7 +84,6 @@ namespace Centipede
             }
             return (IAction)constructorInfo.Ctor.Invoke(parameters);
         }
-
     }
 
     //internal static class Exts
