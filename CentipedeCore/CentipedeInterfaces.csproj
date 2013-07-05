@@ -50,7 +50,6 @@
     <Compile Include="CentipedeSerializer.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FieldAndPropertyWrapper.cs" />
-    <Compile Include="Interface1.cs" />
     <Compile Include="IPythonByteCode.cs" />
     <Compile Include="IPythonEngine.cs" />
     <Compile Include="IPythonScope.cs" />
