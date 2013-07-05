@@ -3,409 +3,309 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Numerics;
 using System.Text;
 
 namespace Centipede
 {
-    public class CentipedeSerializer : Formatter
+    public static class CentipedeSerializer
     {
-        public override object Deserialize(Stream serializationStream)
+        public static object Deserialize(Stream serializationStream)
         {
             if (serializationStream == null)
             {
                 throw new ArgumentNullException("serializationStream");
             }
 
-            return _typereaders[ReadTypeCode(serializationStream)](serializationStream);
-            
+            var typeCode = ReadTypeCode(serializationStream);
+            return _Typereaders[typeCode](serializationStream);
+
         }
 
-        private static Dictionary<TypeCode, Func<Stream, object>> _typereaders;
+        private static readonly Dictionary<TypeCode, Func<Stream, dynamic>> _Typereaders;
+        private static readonly Dictionary<TypeCode, Action<Stream, dynamic>> _Typewriters;
+        private static List<Type> _registeredTypes;
 
         static CentipedeSerializer()
         {
-            _typereaders = new Dictionary<TypeCode, Func<Stream, object>>()
+            _Typereaders = new Dictionary<TypeCode, Func<Stream, dynamic>>
+                           {
                                {
-                                   {
-                                       TypeCode.Boolean, stream => ReadBool(stream)
-                                   },
-                                   {
-                                       TypeCode.Char, stream => ReadChar(stream)
-                                   },
-                                   {
-                                       TypeCode.SByte, stream => ReadSByte(stream)
-                                   },
-                                   {
-                                       TypeCode.Byte, stream => ReadByte(stream)
-                                   },
-                                   {
-                                       TypeCode.Int16, stream => ReadInt16(stream)
-                                   },
-                                   {
-                                       TypeCode.UInt16, stream => ReadUInt16(stream)
-                                   },
-                                   {
-                                       TypeCode.Int32, stream => ReadInt32(stream)
-                                   },
-                                   {
-                                       TypeCode.UInt32, stream => ReadUInt32(stream)
-                                   },
-                                   {
-                                       TypeCode.Int64, stream => ReadInt64(stream)
-                                   },
-                                   {
-                                       TypeCode.UInt64, stream => ReadUInt64(stream)
-                                   },
-                                   {
-                                       TypeCode.Single, stream => ReadSingle(stream)
-                                   },
-                                   {
-                                       TypeCode.Double, stream => ReadDouble(stream)
-                                   },
-                                   {
-                                       TypeCode.Decimal, stream => ReadDecimal(stream)
-                                   },
-                                   {
-                                       TypeCode.DateTime, serializationStream =>
-                                       new DateTime(ReadInt64(serializationStream))
-                                   },
-                                   {
-                                       TypeCode.String, ReadString
-                                   },
-                                   {
-                                       (TypeCode)int.MaxValue, ReadDictionary
-                                   },
-                                   {
-                                       (TypeCode)int.MaxValue - 1, ReadSequence
-                                   }
-                               };
+                                   TypeCode.Boolean, stream => BitConverter.ToBoolean(stream.ReadBytes(1).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Char, stream => BitConverter.ToChar(stream.ReadBytes(2).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.SByte, stream => (SByte)stream.ReadByte()
+                               },
+                               {
+                                   TypeCode.Byte, stream => (byte)stream.ReadByte()
+                               },
+                               {
+                                   TypeCode.Int16, stream => BitConverter.ToInt16(stream.ReadBytes(2).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.UInt16, stream => BitConverter.ToUInt16(stream.ReadBytes(2).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Int32, stream => ReadInt32(stream)
+                               },
+                               {
+                                   TypeCode.UInt32, stream => BitConverter.ToUInt32(stream.ReadBytes(4).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Int64, stream => BitConverter.ToInt64(stream.ReadBytes(8).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.UInt64, stream => BitConverter.ToUInt64(stream.ReadBytes(8).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Single, stream => BitConverter.ToSingle(stream.ReadBytes(4).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Double, stream => BitConverter.ToDouble(stream.ReadBytes(8).ToArray(), 0)
+                               },
+                               {
+                                   TypeCode.Decimal, stream =>
+                                                         {
+                                                             int[] bits = new[]
+                                                                          {
+                                                                              ReadInt32(stream),
+                                                                              ReadInt32(stream),
+                                                                              ReadInt32(stream),
+                                                                              ReadInt32(stream)
+                                                                          };
+                                                             return new Decimal(bits);
+                                                         }
+                               },
+                               {
+                                   TypeCode.DateTime, serializationStream =>
+                                                      new DateTime(BitConverter.ToInt64(
+                                                          serializationStream.ReadBytes(8).ToArray(), 0))
+                               },
+                               {
+                                   TypeCode.String,
+                                   serializationStream =>
+                                   Encoding.Unicode.GetString(
+                                       serializationStream.ReadBytes(ReadInt32(serializationStream)).ToArray())
+                               },
+                               {
+                                   (TypeCode)(-1), ReadDictionary
+                               },
+                               {
+                                   (TypeCode)(-2), ReadSequence
+                               },
+                               {
+                                   (TypeCode)(-3), s => new BigInteger(s.ReadBytes(ReadLength(s)).ToArray())
+                               }
+                           };
+
+            _Typewriters = new Dictionary<TypeCode, Action<Stream, dynamic>>
+                           {
+
+                               {
+                                   TypeCode.Boolean, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Char, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.SByte, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Byte, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Int16, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.UInt16, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Int32, (stream, o) => WriteInt32(stream, o)
+                               },
+                               {
+                                   TypeCode.UInt32, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Int64, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.UInt64, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Single, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Double, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
+                               },
+                               {
+                                   TypeCode.Decimal, (stream, o) => stream.WriteBytes((Byte[])Decimal.GetBits(o))
+                               },
+                               {
+                                   TypeCode.DateTime,
+                                   (stream, o) => stream.WriteBytes(BitConverter.GetBytes(((DateTime)o).Ticks))
+                               },
+                               {
+                                   TypeCode.String, (stream, o) =>
+                                                        {
+                                                            byte[] bytes = Encoding.Unicode.GetBytes(o);
+                                                            stream.WriteBytes(BitConverter.GetBytes(bytes.Length));
+                                                            stream.WriteBytes(bytes);
+                                                        }
+                               },
+                               {
+                                   (TypeCode)(-1), (stream, o) => WriteDictionary(stream, o)
+                               },
+                               {
+                                   (TypeCode)(-2), (stream, o) => WriteSequence(stream, o)
+                               },
+                               { (TypeCode)(-3), (stream, o) =>
+                                                     {
+                                                         var bytes = ((BigInteger)o).ToByteArray();
+                                                         
+                                                         WriteLength(stream, bytes.Length);
+                                                         stream.WriteBytes(bytes);
+                                                     }}
+
+                           };
+            _registeredTypes = new List<Type>
+                              {
+                                  typeof(IDictionary),
+                                  typeof(ICollection),
+                                  typeof(BigInteger)
+                              };
         }
 
+        private static void WriteSequence<T>(Stream stream, ICollection<T> list)
+        {
+            var valType = GetTypeCode(list.First());
+            var valWriter = _Typewriters[valType];
+
+            WriteLength(stream, list.Count);
+            WriteTypeCode(stream, valType);
+            
+            foreach (T item in list)
+            {
+                valWriter(stream, item);
+            }
+        }
+
+        public static void RegisterSerializableType(Type type,
+                                                       Action<Stream, dynamic> serializer,
+                                                       Func<Stream, dynamic> deserializer)
+        {
+            int index = ((IList)_registeredTypes).Add(type);
+
+            TypeCode typeCode = (TypeCode)(-1 - index);
+            
+            _Typewriters.Add(typeCode, serializer);
+            _Typereaders.Add(typeCode, deserializer);
+        }
+
+        private static void WriteInt32(Stream stream, Int32 i)
+        {
+            stream.WriteBytes(BitConverter.GetBytes(i));
+        }
+
+
+        private static int ReadInt32(Stream stream)
+        {
+            return BitConverter.ToInt32(stream.ReadBytes(4).ToArray(), 0);
+        }
 
         private static List<dynamic> ReadSequence(Stream serializationStream)
         {
             TypeCode itemType = ReadTypeCode(serializationStream);
-            int length = ReadInt32(serializationStream);
-            return Enumerable.Range(0, length).Select(i => _typereaders[itemType](serializationStream)).ToList();
+            int length = ReadLength(serializationStream);
+            return Enumerable.Range(0, length).Select(i => _Typereaders[itemType](serializationStream)).ToList();
         }
 
         private static Dictionary<dynamic, dynamic> ReadDictionary(Stream serializationStream)
         {
             Dictionary<dynamic, dynamic> dictionary = new Dictionary<dynamic, dynamic>();
-            int length = ReadInt32(serializationStream);
+            int length = ReadLength(serializationStream);
             TypeCode keytype = ReadTypeCode(serializationStream);
             TypeCode valType = ReadTypeCode(serializationStream);
 
-            var keyReader = _typereaders[keytype];
-            var valReader = _typereaders[valType];
+            var keyReader = _Typereaders[keytype];
+            var valReader = _Typereaders[valType];
 
-            for (int i = 0; i < length; i++ )
+            for (int i = 0; i < length; i++)
             {
                 dynamic key = keyReader(serializationStream);
                 dynamic val = valReader(serializationStream);
                 dictionary.Add(key, val);
             }
-            
+
             return dictionary;
+        }
+
+        private static void WriteDictionary<TKey, TVal>(Stream stream, IDictionary<TKey, TVal> dictionary)
+        {
+            WriteLength(stream, dictionary.Count);
+            TypeCode keyType = GetTypeCode(dictionary.Keys.First());
+            TypeCode valType = GetTypeCode(dictionary.Values.First());
+
+            var valWriter = _Typewriters[valType];
+            var keyWriter = _Typewriters[keyType];
+
+            foreach (KeyValuePair<TKey, TVal> keyValuePair in dictionary)
+            {
+                keyWriter(stream, keyValuePair.Key);
+                valWriter(stream, keyValuePair.Value);
+            }
+        }
+
+        private static int ReadLength(Stream serializationStream)
+        {
+            return BitConverter.ToInt32(serializationStream.ReadBytes(4).ToArray(), 0);
+        }
+
+        private static void WriteLength(Stream serializationStream, int l)
+        {
+            serializationStream.WriteBytes(BitConverter.GetBytes(l));
         }
 
         private static TypeCode ReadTypeCode(Stream serializationStream)
         {
-            return (TypeCode)ReadInt32(serializationStream);
+            return (TypeCode)BitConverter.ToInt32(serializationStream.ReadBytes(4).ToArray(), 0);
         }
 
-        private static String ReadString(Stream serializationStream)
+        private static void WriteTypeCode(Stream stream, TypeCode typeCode)
         {
-            int length = BitConverter.ToInt32(serializationStream.ReadBytes(4), 0);
-            return Encoding.Unicode.GetString(serializationStream.ReadBytes(length));
+            stream.WriteBytes(BitConverter.GetBytes((int)typeCode));
         }
-
-        private static Decimal ReadDecimal(Stream serializationStream)
+        public static void Serialize(Stream serializationStream, object graph)
         {
-            int[] bits = new[]
-                         {
-                             ReadInt32(serializationStream),
-                             ReadInt32(serializationStream),
-                             ReadInt32(serializationStream),
-                             ReadInt32(serializationStream)
-                         };
-            return new Decimal(bits);
-        }
-
-        private static double ReadDouble(Stream serializationStream)
-        {
-            return BitConverter.ToDouble(serializationStream.ReadBytes(8), 0);
-        }
-
-        private static float ReadSingle(Stream serializationStream)
-        {
-            return BitConverter.ToSingle(serializationStream.ReadBytes(4), 0);
-        }
-
-        private static ulong ReadUInt64(Stream serializationStream)
-        {
-            return BitConverter.ToUInt64(serializationStream.ReadBytes(8), 0);
-        }
-
-        private static long ReadInt64(Stream serializationStream)
-        {
-            return BitConverter.ToInt64(serializationStream.ReadBytes(8), 0);
-        }
-
-        private static uint ReadUInt32(Stream serializationStream)
-        {
-            return BitConverter.ToUInt32(serializationStream.ReadBytes(4), 0);
-        }
-
-        private static int ReadInt32(Stream serializationStream)
-        {
-            return BitConverter.ToInt32(serializationStream.ReadBytes(4), 0);
-        }
-
-        private static ushort ReadUInt16(Stream serializationStream)
-        {
-            return BitConverter.ToUInt16(serializationStream.ReadBytes(2), 0);
-        }
-
-        private static short ReadInt16(Stream serializationStream)
-        {
-            return BitConverter.ToInt16(serializationStream.ReadBytes(2), 0);
-        }
-
-        private static byte ReadByte(Stream serializationStream)
-        {
-            return (byte)serializationStream.ReadByte();
-        }
-
-        private static sbyte ReadSByte(Stream serializationStream)
-        {
-            return (SByte)serializationStream.ReadByte();
-        }
-
-        private static char ReadChar(Stream serializationStream)
-        {
-            return BitConverter.ToChar(serializationStream.ReadBytes(2), 0);
-        }
-
-        private static bool ReadBool(Stream serializationStream)
-        {
-            return BitConverter.ToBoolean(serializationStream.ReadBytes(1), 0);
-        }
-
-        public override void Serialize(Stream serializationStream, object graph)
-        {
-            var typeCode = Type.GetTypeCode(graph.GetType());
+            var typeCode = GetTypeCode(graph);
             serializationStream.WriteBytes(BitConverter.GetBytes((int)typeCode));
-
-            switch (typeCode)
-            {
-                case TypeCode.Empty:
-                    break;
-                case TypeCode.Object:
-                    break;
-                case TypeCode.DBNull:
-                    break;
-                case TypeCode.Boolean:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Boolean)graph));
-                    return;
-                case TypeCode.Char:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Char)graph));
-                    return;
-                case TypeCode.SByte:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((SByte)graph));
-                    return;
-                case TypeCode.Byte:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Byte)graph));
-                    return;
-                case TypeCode.Int16:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Int16)graph));
-                    return;
-                case TypeCode.UInt16:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((UInt16)graph));
-                    return;
-                case TypeCode.Int32:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Int32)graph));
-                    return;
-                case TypeCode.UInt32:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((UInt32)graph));
-                    return;
-                case TypeCode.Int64:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Int64)graph));
-                    return;
-                case TypeCode.UInt64:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((UInt64)graph));
-                    return;
-                case TypeCode.Single:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((Single)graph));
-                    return;
-                case TypeCode.Double:
-                    serializationStream.WriteBytes(BitConverter.GetBytes((double)graph));
-                    return;
-                case TypeCode.Decimal:
-                    var parts = Decimal.GetBits((decimal)graph);
-                    foreach (int i in parts)
-                    {
-                        serializationStream.WriteBytes(BitConverter.GetBytes(i));
-                    }
-
-                    return;
-                case TypeCode.DateTime:
-                    DateTime dt = (DateTime)graph;
-                    serializationStream.WriteBytes(BitConverter.GetBytes(dt.Ticks));
-                    return;
-                case TypeCode.String:
-                    byte[] bytes = Encoding.Unicode.GetBytes((string)graph);
-                    serializationStream.WriteBytes(BitConverter.GetBytes(bytes.Length));
-                    serializationStream.WriteBytes(bytes);
-                    return;
-            }
-
-            IEnumerable enumerable = graph as IEnumerable;
-            if (enumerable != null)
-            {
-                IDictionary<dynamic, dynamic> dictionary = enumerable as IDictionary<dynamic, dynamic>;
-                if (dictionary != null)
-                {
-                    Type keyType = dictionary.Keys.First().GetType();
-                    Type valType = dictionary.Values.First().GetType();
-
-                    serializationStream.WriteBytes(BitConverter.GetBytes(int.MaxValue));
-                    
-                }
-                else
-                {
-
-                    foreach (object item in enumerable)
-                    {
-                        this.Serialize(serializationStream, item);
-                    }
-                }
-            }
+            _Typewriters[typeCode](serializationStream, graph);
+            
+            serializationStream.Flush();
         }
 
-        public override ISurrogateSelector SurrogateSelector { get; set; }
-        public override SerializationBinder Binder { get; set; }
-        public override StreamingContext Context { get; set; }
-
-        protected override void WriteArray(object obj, string name, Type memberType)
+        private static TypeCode GetTypeCode(object o)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteBoolean(bool val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteByte(byte val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteChar(char val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteDateTime(DateTime val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteDecimal(decimal val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteDouble(double val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteInt16(short val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteInt32(int val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteInt64(long val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteObjectRef(object obj, string name, Type memberType)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteSByte(sbyte val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteSingle(float val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteTimeSpan(TimeSpan val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteUInt16(ushort val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteUInt32(uint val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteUInt64(ulong val, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void WriteValueType(object obj, string name, Type memberType)
-        {
-            throw new NotImplementedException();
+            var index = _registeredTypes.FindIndex(t => t.IsInstanceOfType(o));
+            return index != -1 ? (TypeCode)(-1 - index) : Type.GetTypeCode(o.GetType());
         }
     }
-    internal static class SerializerExtension
-    {
-        public static byte[] GetBytes(this Int64 i)
-        {
-            return new[] { (byte)(i / 0xffffff), (byte)(i / 0xffff), (byte)(i / 0xff), (byte)(i & 0xff) };
-        }
 
+    internal static class SerializerStreamExtensions
+    {
         public static void WriteBytes(this Stream s, IEnumerable<byte> bytes)
         {
             foreach (var b in bytes)
             {
                 s.WriteByte(b);
             }
-
         }
-        private static IEnumerable<byte> ReadBytesHelper(Stream s, int n)
+
+        public static IEnumerable<byte> ReadBytes(this Stream s, int n)
         {
-            List<byte> bytes = new List<byte>(n);
-            for (int i = 0; i < n; i++)
-            {
-                yield return (byte)s.ReadByte();
-            }
-
+            return Enumerable.Range(0, n).Select(_ => (Byte)s.ReadByte());
         }
-        public static byte[] ReadBytes(this Stream s, int n)
-        {
-            return ReadBytesHelper(s, n).ToArray();
-        }
-
     }
 }
