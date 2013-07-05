@@ -26,13 +26,11 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-
             Stream stream = new MemoryStream();
 
-            Dictionary<String, Object> vars = Variables.Where(kvp => !(kvp.Key == "sys" || kvp.Key == "math")).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            var variable = Variables[InVar];
 
-            binaryFormatter.Serialize(stream, vars);
+            CentipedeSerializer.Serialize(stream, variable);
 
             stream.Seek(0, SeekOrigin.Begin);
 
@@ -48,6 +46,8 @@ namespace Centipede.Actions
             }
 
         }
+        [ActionArgument]
+        public string InVar;
     }
 
     [ActionCategory("Other Actions")]
@@ -60,19 +60,13 @@ namespace Centipede.Actions
 
         [ActionArgument(displayName = "Variable to Deserialize", Literal = true, DisplayOrder = 1)]
         public String InVar = "serialized";
-
-        [ActionArgument(displayName = "Target Variable", DisplayOrder = 0)]
-        public String TypeName = "";
-
-
+        
         [ActionArgument(displayName = "Destination Variable", Literal = true, DisplayOrder=2)]
         public String OutVar = "deserialized";
 
 
         protected override void DoAction()
         {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-
             MemoryStream stream = new MemoryStream();
 
             StreamWriter sw = new StreamWriter(stream);
@@ -80,10 +74,8 @@ namespace Centipede.Actions
             sw.Flush();
 
             stream.Seek(0, SeekOrigin.Begin);
-
-            IDictionary<String, object> vars = (IDictionary<string, object>)binaryFormatter.Deserialize(stream);
-
-            Variables[OutVar] = vars[InVar];
+            
+            Variables[OutVar] = CentipedeSerializer.Deserialize(stream);
         }
     }
 }

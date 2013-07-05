@@ -30,31 +30,27 @@ namespace CentipedeInterfaces
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [CLSCompliant(false)]
     public sealed class ActionArgumentAttribute : BaseCentipedeAttribute
-    {// ReSharper disable CSharpWarnings::CS0612
+    { // ReSharper disable CSharpWarnings::CS0612
 
         /// <summary>
         /// 
         /// </summary>
-        [CanBeNull, Obsolete("use DisplayControl")]
+        [CanBeNull]
+        [Obsolete("use DisplayControl")]
         public string displayControl;
 
         public String DisplayControl
         {
-            get
-            {
-                return displayControl;
-            }
-            set
-            {
-                displayControl = value;
-            }
+            get { return displayControl; }
+            set { displayControl = value; }
         }
 
 
 
         /// <summary>
         /// </summary>
-        [CanBeNull, Obsolete]
+        [CanBeNull]
+        [Obsolete]
         public String displayName;
 
         /// <summary>
@@ -67,10 +63,7 @@ namespace CentipedeInterfaces
                 GetI18n(ref this.displayName);
                 return this.displayName;
             }
-            set
-            {
-                this.displayName = value;
-            }
+            set { this.displayName = value; }
         }
 
         /// <summary>
@@ -78,14 +71,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string OnChangedHandlerName
         {
-            get
-            {
-                return this.onChangedHandlerName;
-            }
-            set
-            {
-                this.onChangedHandlerName = value;
-            }
+            get { return this.onChangedHandlerName; }
+            set { this.onChangedHandlerName = value; }
         }
 
         /// <summary>
@@ -93,14 +80,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string OnLeaveHandlerName
         {
-            get
-            {
-                return this.onLeaveHandlerName;
-            }
-            set
-            {
-                this.onLeaveHandlerName = value;
-            }
+            get { return this.onLeaveHandlerName; }
+            set { this.onLeaveHandlerName = value; }
         }
 
         /// <summary>
@@ -108,14 +89,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string SetterMethodName
         {
-            get
-            {
-                return this.setterMethodName;
-            }
-            set
-            {
-                this.setterMethodName = value;
-            }
+            get { return this.setterMethodName; }
+            set { this.setterMethodName = value; }
         }
 
         /// <summary>
@@ -128,10 +103,7 @@ namespace CentipedeInterfaces
                 GetI18n(ref this.usage);
                 return this.usage;
             }
-            set
-            {
-                this.usage = value;
-            }
+            set { this.usage = value; }
         }
 
         /// <summary>
@@ -156,17 +128,20 @@ namespace CentipedeInterfaces
 
         /// <summary>
         /// </summary>
-        [CanBeNull, Obsolete]
+        [CanBeNull]
+        [Obsolete]
         public String onLeaveHandlerName;
 
         /// <summary>
         /// </summary>
-        [CanBeNull, Obsolete]
+        [CanBeNull]
+        [Obsolete]
         public string setterMethodName;
 
         /// <summary>
         /// </summary>
-        [CanBeNull, Obsolete]
+        [CanBeNull]
+        [Obsolete]
         public String usage;
     }
 
@@ -270,22 +245,13 @@ namespace CentipedeInterfaces
                 GetI18n(ref this.displayName);
                 return displayName;
             }
-            set
-            {
-                displayName = value;
-            }
+            set { displayName = value; }
         }
 
         public string DisplayControl
         {
-            get
-            {
-                return displayControl;
-            }
-            set
-            {
-                displayControl = value;
-            }
+            get { return displayControl; }
+            set { displayControl = value; }
         }
     }
 
@@ -311,7 +277,8 @@ namespace CentipedeInterfaces
             System.Reflection.FieldInfo fieldInfo = type.GetField(value.ToString());
 
             // Get the attributes
-            DisplayTextAttribute[] attribs = fieldInfo.GetCustomAttributes(typeof(DisplayTextAttribute), false) as DisplayTextAttribute[];
+            DisplayTextAttribute[] attribs =
+                fieldInfo.GetCustomAttributes(typeof(DisplayTextAttribute), false) as DisplayTextAttribute[];
 
             string strValue = value.ToString();
 
@@ -326,4 +293,8 @@ namespace CentipedeInterfaces
 
     public delegate string GetI18nCallbackDelegate(string text);
 
+
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    internal sealed class SerializerRegisterAttribute : Attribute
+    { }
 }
