@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using Centipede;
@@ -114,6 +116,9 @@ namespace CentipedeInterfaces
 
         IPythonEngine PythonEngine { get; }
         object Tag { get; set; }
+
+        Dictionary<FileInfo, List<Type>> PluginFiles { get; }
+        void LoadActionPlugins();
     }
 
     public delegate void ActionEvent(object sender, ActionEventArgs e);

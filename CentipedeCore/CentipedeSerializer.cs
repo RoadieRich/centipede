@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 
 namespace Centipede
@@ -192,15 +193,31 @@ namespace Centipede
             }
         }
 
+        public static void RegisterSerializableType(Type type)
+        {
+            var serializerMethod = type.GetMethod("Serializer", BindingFlags.Static);
+            Action<Stream, dynamic> serializer =
+                (stream, o) =>
+                serializerMethod.Invoke(null, new object[] { stream, o });
+
+            var deserializerMethod = type.GetMethod("Deserializer", BindingFlags.Static);
+            Func<Stream, ICentipedeSerializable> deserializer =
+                stream =>
+                (ICentipedeSerializable)
+                deserializerMethod.Invoke(null, new object[] { stream });
+
+            RegisterSerializableType(type, null, deserializer);
+        }
+
         public static void RegisterSerializableType(Type type,
-                                                       Action<Stream, dynamic> serializer,
-                                                       Func<Stream, dynamic> deserializer)
+                                                    Action<Stream, ICentipedeSerializable> serializer,
+                                                    Func<Stream, ICentipedeSerializable> deserializer)
         {
             int index = ((IList)_registeredTypes).Add(type);
 
             TypeCode typeCode = (TypeCode)(-1 - index);
-            
-            _Typewriters.Add(typeCode, serializer);
+
+            _Typewriters.Add(typeCode, (Action<Stream, dynamic>)serializer);
             _Typereaders.Add(typeCode, deserializer);
         }
 

@@ -297,4 +297,8 @@ namespace CentipedeInterfaces
     [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     internal sealed class SerializerRegisterAttribute : Attribute
     { }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct, Inherited = true)]
+    public sealed class CustomSerializableDataTypeAttribute : Attribute
+    { }
 }
