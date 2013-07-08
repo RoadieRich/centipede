@@ -47,8 +47,7 @@ namespace Centipede
     public partial class MainWindow : Form
     {
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-        private readonly Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
-
+        
         [UsedImplicitly]
         private List<string> _arguments;
 
@@ -573,43 +572,11 @@ namespace Centipede
 
         private void GetActionPlugins()
         {
-            var dir = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
+            Core.LoadActionPlugins();
 
-            IEnumerable<FileInfo> dlls = dir.EnumerateFiles(@"*.dll", SearchOption.AllDirectories);
-
-            foreach (FileInfo fi in dlls)
+            foreach (var action in Core.PluginFiles.SelectMany(kvp=>kvp.Value))
             {
-                var evidence = new Evidence();
-                var appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
-                evidence.AddAssemblyEvidence(appDir);
-                Assembly asm;
-                try
-                {
-                    asm = Assembly.LoadFrom(fi.FullName);
-                }
-                catch (BadImageFormatException)
-                {
-                    continue;
-                }
-
-                Type[] pluginsInFile = asm.GetExportedTypes();
-
-                Type[] actionTypes = (from type in pluginsInFile
-                                      where !type.IsAbstract
-                                      where type.GetCustomAttributes(typeof(ActionCategoryAttribute), true).Any()
-                                      select type).ToArray();
-
-                if (!actionTypes.Any())
-                {
-                    continue;
-                }
-                this._pluginFiles.Add(fi, new List<Type>());
-
-                foreach (Type pluginType in actionTypes)
-                {
-                    this._pluginFiles[fi].Add(pluginType);
-                    this.AddToActionTab(pluginType);
-                }
+                this.AddToActionTab(action);
             }
         }
 

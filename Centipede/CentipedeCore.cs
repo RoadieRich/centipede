@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Security.Policy;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using Centipede.Actions;
 using Centipede.Properties;
@@ -64,6 +67,53 @@ namespace Centipede
         public IPythonScope Variables { get; private set; }
 
         public object Tag { get; set; }
+        public Dictionary<FileInfo, List<Type>> PluginFiles { get; protected set; }
+        public void LoadActionPlugins()
+        {
+            var dir = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
+
+            IEnumerable<FileInfo> dlls = dir.EnumerateFiles(@"*.dll", SearchOption.AllDirectories);
+
+            List<Type> actions = new List<Type>();
+            foreach (FileInfo fi in dlls)
+            {
+                var evidence = new Evidence();
+                var appDir = new ApplicationDirectory(Assembly.GetEntryAssembly().CodeBase);
+                evidence.AddAssemblyEvidence(appDir);
+                Assembly asm;
+                try
+                {
+                    asm = Assembly.LoadFrom(fi.FullName);
+                }
+                catch (BadImageFormatException)
+                {
+                    continue;
+                }
+
+                Type[] typesInFile = asm.GetExportedTypes();
+
+                var actionTypes = (from type in typesInFile
+                                   where !type.IsAbstract
+                                   where type.GetCustomAttributes(typeof(ActionCategoryAttribute), true).Any()
+                                   select type);
+
+                List<Type> actionTypeList = actionTypes.ToList();
+                if (actionTypeList.Any())
+                {
+                    this.PluginFiles.Add(fi, actionTypeList);
+                }
+
+                var customDataTypes = from type in typesInFile
+                                      where !type.IsAbstract
+                                      where type.IsAssignableFrom(typeof(ICentipedeSerializable))
+                                      select type;
+
+                foreach (Type t in customDataTypes)
+                {
+                    CentipedeSerializer.RegisterSerializableType(t);
+                }
+            }
+        }
 
         #endregion
 
