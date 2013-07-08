@@ -38,13 +38,101 @@ namespace Centipede
 
         #region Events
 
-        public event ActionErrorEvent ActionErrorOccurred;
-        public event AfterLoadEvent AfterLoad;
-        public event JobCompletedEvent JobCompleted;
         public event ActionEvent ActionAdded;
+
+        private void OnActionAdded(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionAdded;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
+        }
+
         public event ActionEvent ActionCompleted;
+
+        private void OnActionCompleted(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionCompleted;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
+        }
+
         public event ActionEvent ActionRemoved;
+
+        private void OnActionRemoved(ActionEventArgs args)
+        {
+            ActionEvent handler = this.ActionRemoved;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
+        }
+
         public event ActionEvent BeforeAction;
+
+        private void OnBeforeAction(ActionEventArgs e)
+        {
+            ActionEvent handler = this.BeforeAction;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public event ActionErrorEvent ActionErrorOccurred;
+
+        private void OnActionErrorOccurred(ActionErrorEventArgs args)
+        {
+            ActionErrorEvent handler = this.ActionErrorOccurred;
+            if (handler != null)
+            {
+                handler(this, args);
+            }
+        }
+
+        public event AfterLoadEvent AfterLoad;
+
+        private void OnAfterLoad(EventArgs eventArgs)
+        {
+            AfterLoadEvent handler = this.AfterLoad;
+            if (handler != null)
+            {
+                handler(this, eventArgs);
+            }
+        }
+
+        public event JobCompletedEvent JobCompleted;
+
+        private void OnJobCompleted(bool completed)
+        {
+            JobCompletedEvent handler = this.JobCompleted;
+            if (handler != null)
+            {
+                handler(this,
+                        new JobCompletedEventArgs
+                        {
+                            Completed = completed
+                        });
+            }
+        }
+
+        public event StartSteppingEvent StartRun;
+
+        private void OnStartRun(StartRunEventArgs e)
+        {
+            if (e.ResetEvent == null)
+            {
+                return;
+            }
+            StartSteppingEvent handler = this.StartRun;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         #endregion
 
@@ -53,11 +141,19 @@ namespace Centipede
         [UsedImplicitly]
         private List<string> _arguments;
 
-        public IAction CurrentAction { get; set; }
+        private volatile Object _abortRequested = false;
+
+        private IPythonEngine _pythonEngine = PyEngine.Instance;
+
+        private ManualResetEvent _resetEvent;
+
+        private Dictionary<FileInfo, List<Type>> _pluginFiles = new Dictionary<FileInfo, List<Type>>();
 
         #endregion
 
         #region Properties
+
+        public IAction CurrentAction { get; set; }
 
         public CentipedeJob Job { get; set; }
 
@@ -67,7 +163,25 @@ namespace Centipede
         public IPythonScope Variables { get; private set; }
 
         public object Tag { get; set; }
-        public Dictionary<FileInfo, List<Type>> PluginFiles { get; protected set; }
+
+        public Dictionary<FileInfo, List<Type>> PluginFiles
+        {
+            get { return this._pluginFiles; }
+            protected set { this._pluginFiles = value; }
+        }
+
+        public IPythonEngine PythonEngine
+        {
+            get { return this._pythonEngine; }
+            private set { this._pythonEngine = value; }
+        }
+
+        public bool IsStepping { get; private set; }
+
+        #endregion
+
+        #region Methods
+
         public void LoadActionPlugins()
         {
             var dir = new DirectoryInfo(Path.Combine(Application.StartupPath, Settings.Default.PluginFolder));
@@ -98,14 +212,16 @@ namespace Centipede
                                    select type);
 
                 List<Type> actionTypeList = actionTypes.ToList();
-                if (actionTypeList.Any())
+                if (!actionTypeList.Any())
                 {
-                    this.PluginFiles.Add(fi, actionTypeList);
+                    continue;
                 }
+                
+                this.PluginFiles.Add(fi, actionTypeList);
 
                 var customDataTypes = from type in typesInFile
                                       where !type.IsAbstract
-                                      where type.IsAssignableFrom(typeof(ICentipedeSerializable))
+                                      where type.IsAssignableFrom(typeof(ICentipedeDataType))
                                       select type;
 
                 foreach (Type t in customDataTypes)
@@ -114,14 +230,6 @@ namespace Centipede
                 }
             }
         }
-
-        #endregion
-
-        #region Methods
-
-        private volatile Object _abortRequested = false;
-        private IPythonEngine _pythonEngine = PyEngine.Instance;
-        private ManualResetEvent _resetEvent;
 
         public void Dispose()
         {
@@ -149,7 +257,7 @@ namespace Centipede
             }
             catch (InvalidOperationException)
             {
-                this.OnActionError(new ActionErrorEventArgs
+                this.OnActionErrorOccurred(new ActionErrorEventArgs
                                    {
                                        Action = this.CurrentAction,
                                        Exception = new FatalActionException(Resources.Program_RunJob_No_Actions_Added)
@@ -186,12 +294,9 @@ namespace Centipede
             {
                 jobFailed = true;
             }
-            this.OnCompleted(!jobFailed);
+            this.OnJobCompleted(!jobFailed);
             this.FinishedStepping();
         }
-
-        public event StartSteppingEvent StartRun;
-        public bool IsStepping { get; private set; }
 
         public void AbortRun()
         {
@@ -199,12 +304,6 @@ namespace Centipede
             {
                 this._abortRequested = true;
             }
-        }
-
-        public IPythonEngine PythonEngine
-        {
-            get { return this._pythonEngine; }
-            private set { this._pythonEngine = value; }
         }
 
         private void FinishedStepping()
@@ -252,19 +351,6 @@ namespace Centipede
             }
         }
 
-        private void OnStartRun(StartRunEventArgs e)
-        {
-            if (e.ResetEvent == null)
-            {
-                return;
-            }
-            StartSteppingEvent handler = this.StartRun;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
         [STAThread]
         private ContinueState RunStep(IAction currentAction)
         {
@@ -278,7 +364,7 @@ namespace Centipede
 
                 this.OnBeforeAction(args);
                 currentAction.Run();
-                this.OnAfterAction(args);
+                this.OnActionCompleted(args);
 
                 return ContinueState.Continue;
             }
@@ -293,7 +379,7 @@ namespace Centipede
                                                  e)),
                                Fatal = true
                            };
-                this.OnActionError(args);
+                this.OnActionErrorOccurred(args);
                 throw new AbortOperationException();
             }
             catch (Exception e)
@@ -304,58 +390,9 @@ namespace Centipede
                                Exception = (e as ActionException) ??
                                            new ActionException(e, this.CurrentAction)
                            };
-                this.OnActionError(args);
+                this.OnActionErrorOccurred(args);
 
                 return args.Continue;
-            }
-        }
-
-        private void OnAfterAction(ActionEventArgs args)
-        {
-            ActionEvent handler = this.ActionCompleted;
-            if (handler != null)
-            {
-                handler(this, args);
-            }
-        }
-
-        private void OnBeforeAction(ActionEventArgs e)
-        {
-            ActionEvent handler = this.BeforeAction;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        private void OnCompleted(bool completed)
-        {
-            JobCompletedEvent handler = this.JobCompleted;
-            if (handler != null)
-            {
-                handler(this,
-                        new JobCompletedEventArgs
-                        {
-                            Completed = completed
-                        });
-            }
-        }
-
-        private void OnActionRemoved(ActionEventArgs args)
-        {
-            ActionEvent handler = this.ActionRemoved;
-            if (handler != null)
-            {
-                handler(this, args);
-            }
-        }
-
-        private void OnActionError(ActionErrorEventArgs args)
-        {
-            ActionErrorEvent handler = this.ActionErrorOccurred;
-            if (handler != null)
-            {
-                handler(this, args);
             }
         }
 
@@ -449,15 +486,6 @@ namespace Centipede
             this.Job.InfoUrl = "";
             this.Job.Name = "";
             this.OnAfterLoad(EventArgs.Empty);
-        }
-
-        private void OnActionAdded(ActionEventArgs args)
-        {
-            ActionEvent handler = this.ActionAdded;
-            if (handler != null)
-            {
-                handler(this, args);
-            }
         }
 
         #endregion
@@ -581,15 +609,6 @@ namespace Centipede
                                                   Path.GetExtension(filename));
 
             File.Copy(filePath, Path.Combine(backupDir, backupFilename));
-        }
-
-        private void OnAfterLoad(EventArgs eventArgs)
-        {
-            AfterLoadEvent handler = this.AfterLoad;
-            if (handler != null)
-            {
-                handler(this, eventArgs);
-            }
         }
 
         #endregion
