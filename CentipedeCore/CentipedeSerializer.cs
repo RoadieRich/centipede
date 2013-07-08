@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
+using CentipedeInterfaces;
+using ResharperAnnotations;
 
 namespace Centipede
 {
@@ -31,152 +34,86 @@ namespace Centipede
         {
             _Typereaders = new Dictionary<TypeCode, Func<Stream, dynamic>>
                            {
-                               {
-                                   TypeCode.Boolean, stream => BitConverter.ToBoolean(stream.ReadBytes(1).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Char, stream => BitConverter.ToChar(stream.ReadBytes(2).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.SByte, stream => (SByte)stream.ReadByte()
-                               },
-                               {
-                                   TypeCode.Byte, stream => (byte)stream.ReadByte()
-                               },
-                               {
-                                   TypeCode.Int16, stream => BitConverter.ToInt16(stream.ReadBytes(2).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.UInt16, stream => BitConverter.ToUInt16(stream.ReadBytes(2).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Int32, stream => ReadInt32(stream)
-                               },
-                               {
-                                   TypeCode.UInt32, stream => BitConverter.ToUInt32(stream.ReadBytes(4).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Int64, stream => BitConverter.ToInt64(stream.ReadBytes(8).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.UInt64, stream => BitConverter.ToUInt64(stream.ReadBytes(8).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Single, stream => BitConverter.ToSingle(stream.ReadBytes(4).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Double, stream => BitConverter.ToDouble(stream.ReadBytes(8).ToArray(), 0)
-                               },
-                               {
-                                   TypeCode.Decimal, stream =>
-                                                         {
-                                                             int[] bits = new[]
-                                                                          {
-                                                                              ReadInt32(stream),
-                                                                              ReadInt32(stream),
-                                                                              ReadInt32(stream),
-                                                                              ReadInt32(stream)
-                                                                          };
-                                                             return new Decimal(bits);
-                                                         }
-                               },
-                               {
-                                   TypeCode.DateTime, serializationStream =>
-                                                      new DateTime(BitConverter.ToInt64(
-                                                          serializationStream.ReadBytes(8).ToArray(), 0))
-                               },
-                               {
-                                   TypeCode.String,
-                                   serializationStream =>
-                                   Encoding.Unicode.GetString(
-                                       serializationStream.ReadBytes(ReadInt32(serializationStream)).ToArray())
-                               },
-                               {
-                                   (TypeCode)(-1), ReadDictionary
-                               },
-                               {
-                                   (TypeCode)(-2), ReadSequence
-                               },
-                               {
-                                   (TypeCode)(-3), s => new BigInteger(s.ReadBytes(ReadLength(s)).ToArray())
-                               }
+                               { TypeCode.Boolean, stream => BitConverter.ToBoolean(stream.ReadBytes(1).ToArray(), 0) },
+                               { TypeCode.Char, stream => BitConverter.ToChar(stream.ReadBytes(2).ToArray(), 0) },
+                               { TypeCode.SByte, stream => (SByte)stream.ReadByte() },
+                               { TypeCode.Byte, stream => (byte)stream.ReadByte() },
+                               { TypeCode.Int16, stream => BitConverter.ToInt16(stream.ReadBytes(2).ToArray(), 0) },
+                               { TypeCode.UInt16, stream => BitConverter.ToUInt16(stream.ReadBytes(2).ToArray(), 0) },
+                               { TypeCode.Int32, stream => ReadInt32(stream) },
+                               { TypeCode.UInt32, stream => BitConverter.ToUInt32(stream.ReadBytes(4).ToArray(), 0) },
+                               { TypeCode.Int64, stream => BitConverter.ToInt64(stream.ReadBytes(8).ToArray(), 0) },
+                               { TypeCode.UInt64, stream => BitConverter.ToUInt64(stream.ReadBytes(8).ToArray(), 0) },
+                               { TypeCode.Single, stream => BitConverter.ToSingle(stream.ReadBytes(4).ToArray(), 0) },
+                               { TypeCode.Double, stream => BitConverter.ToDouble(stream.ReadBytes(8).ToArray(), 0) },
+                               { TypeCode.Decimal, ReadDecimal },
+                               { TypeCode.DateTime, ReadDateTime },
+                               { TypeCode.String, ReadString }
                            };
 
             _Typewriters = new Dictionary<TypeCode, Action<Stream, dynamic>>
                            {
-
-                               {
-                                   TypeCode.Boolean, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Char, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.SByte, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Byte, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Int16, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.UInt16, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Int32, (stream, o) => WriteInt32(stream, o)
-                               },
-                               {
-                                   TypeCode.UInt32, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Int64, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.UInt64, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Single, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Double, (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o))
-                               },
-                               {
-                                   TypeCode.Decimal, (stream, o) => stream.WriteBytes((Byte[])Decimal.GetBits(o))
-                               },
-                               {
-                                   TypeCode.DateTime,
-                                   (stream, o) => stream.WriteBytes(BitConverter.GetBytes(((DateTime)o).Ticks))
-                               },
-                               {
-                                   TypeCode.String, (stream, o) =>
-                                                        {
-                                                            byte[] bytes = Encoding.Unicode.GetBytes(o);
-                                                            stream.WriteBytes(BitConverter.GetBytes(bytes.Length));
-                                                            stream.WriteBytes(bytes);
-                                                        }
-                               },
-                               {
-                                   (TypeCode)(-1), (stream, o) => WriteDictionary(stream, o)
-                               },
-                               {
-                                   (TypeCode)(-2), (stream, o) => WriteSequence(stream, o)
-                               },
-                               { (TypeCode)(-3), (stream, o) =>
-                                                     {
-                                                         var bytes = ((BigInteger)o).ToByteArray();
-                                                         
-                                                         WriteLength(stream, bytes.Length);
-                                                         stream.WriteBytes(bytes);
-                                                     }}
-
+                               { TypeCode.Decimal,  (stream, o) => stream.WriteBytes((Byte[])Decimal.GetBits(o)) },
+                               { TypeCode.Int32,    (stream, o) => WriteInt32(stream, o) },
+                               { TypeCode.DateTime, (stream, o) => WriteDateTime(stream, o) },
+                               { TypeCode.String,   (stream, o) => WriteString(stream, o) },
                            };
-            _registeredTypes = new List<Type>
-                              {
-                                  typeof(IDictionary),
-                                  typeof(ICollection),
-                                  typeof(BigInteger)
-                              };
+
+            _Typewriters.AddKeysWithValue(new[]
+                                          {
+                                              TypeCode.Boolean,
+                                              TypeCode.Char,
+                                              TypeCode.SByte,
+                                              TypeCode.Byte,
+                                              TypeCode.Int16,
+                                              TypeCode.UInt16,
+                                              TypeCode.UInt32,
+                                              TypeCode.Int64,
+                                              TypeCode.UInt64,
+                                              TypeCode.Single,
+                                              TypeCode.Double
+                                          },
+                                          (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o)));
+            
+            RegisterSerializableType(typeof(ICollection));
+            RegisterSerializableType(typeof(IDictionary));
+            RegisterSerializableType(typeof(BigInteger));
+
+        }
+
+        private static void WriteDateTime(Stream stream, DateTime o)
+        {
+            stream.WriteBytes(BitConverter.GetBytes(((DateTime)o).Ticks));
+        }
+
+        private static void WriteString(Stream stream, [NotNull] String o)
+        {
+            if (o == null)
+            {
+                throw new ArgumentNullException("o");
+            }
+            byte[] bytes = Encoding.Unicode.GetBytes(o);
+            stream.WriteBytes(BitConverter.GetBytes(bytes.Length));
+            stream.WriteBytes(bytes);
+        }
+
+        private static dynamic ReadDateTime(Stream serializationStream)
+        {
+            return new DateTime(BitConverter.ToInt64(serializationStream.ReadBytes(8).ToArray(), 0));
+        }
+
+        private static dynamic ReadDecimal(Stream stream)
+        {
+            int[] bits = new[]
+                         {
+                             ReadInt32(stream), ReadInt32(stream), ReadInt32(stream), ReadInt32(stream)
+                         };
+            return new Decimal(bits);
+        }
+
+        private static String ReadString(Stream serializationStream)
+        {
+            return Encoding.Unicode.GetString(serializationStream.ReadBytes(ReadInt32(serializationStream)).ToArray());
         }
 
         private static void WriteSequence<T>(Stream stream, ICollection<T> list)
@@ -201,18 +138,20 @@ namespace Centipede
                 serializerMethod.Invoke(null, new object[] { stream, o });
 
             var deserializerMethod = type.GetMethod("Deserializer", BindingFlags.Static);
-            Func<Stream, ICentipedeSerializable> deserializer =
+            Func<Stream, ICentipedeDataType> deserializer =
                 stream =>
-                (ICentipedeSerializable)
+                (ICentipedeDataType)
                 deserializerMethod.Invoke(null, new object[] { stream });
 
             RegisterSerializableType(type, null, deserializer);
         }
 
         public static void RegisterSerializableType(Type type,
-                                                    Action<Stream, ICentipedeSerializable> serializer,
-                                                    Func<Stream, ICentipedeSerializable> deserializer)
+                                                    Action<Stream, ICentipedeDataType> serializer,
+                                                    Func<Stream, ICentipedeDataType> deserializer)
         {
+
+            Debug.Assert(type.IsSubclassOf(typeof(ICentipedeDataType)));
             int index = ((IList)_registeredTypes).Add(type);
 
             TypeCode typeCode = (TypeCode)(-1 - index);
@@ -305,8 +244,16 @@ namespace Centipede
 
         private static TypeCode GetTypeCode(object o)
         {
-            var index = _registeredTypes.FindIndex(t => t.IsInstanceOfType(o));
-            return index != -1 ? (TypeCode)(-1 - index) : Type.GetTypeCode(o.GetType());
+            try
+            {
+                int index = _registeredTypes.OfType<Type>().Reverse().Enumerate().First(t => t.Value.IsInstanceOfType(o)).Key;
+                return (TypeCode)(-1 - index);
+            }
+            catch (InvalidOperationException)
+            {
+                return Type.GetTypeCode(o.GetType());
+            }
+            
         }
     }
 

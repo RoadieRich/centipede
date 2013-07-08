@@ -1163,7 +1163,7 @@ namespace Centipede
 
         private void HelpAboutMenuItem_Click(object sender, EventArgs e)
         {
-            (new AboutForm(this._pluginFiles)).Show(this);
+            (new AboutForm(Core.PluginFiles)).Show(this);
         }
 
         private void RunStepThroughMenuItem_Click(object sender, EventArgs e)

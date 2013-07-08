@@ -9,6 +9,23 @@ namespace CentipedeInterfaces
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Add multiple keys to a dictionary, all with the same value
+        /// </summary>
+        /// <typeparam name="TKey">Type of the keys</typeparam>
+        /// <typeparam name="TValue">Type of the values</typeparam>
+        /// <param name="dictionary">Dictionary to add items to</param>
+        /// <param name="keys">keys to set the value for</param>
+        /// <param name="value">value to set</param>
+        public static void AddKeysWithValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary,
+                                                          IEnumerable<TKey> keys,
+                                                          TValue value)
+        {
+            foreach (var key in keys)
+            {
+                dictionary.Add(key, value);
+            }
+        }
 
         public static XmlElement GetFirstElementByName(this XmlElement e, string name)
         {
@@ -21,6 +38,13 @@ namespace CentipedeInterfaces
             return DisplayTextAttribute.ToDisplayString(e);
         }
 
+        /// <summary>
+        /// Returns indexes of items matching predicate
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public static IEnumerable<int> IndexesWhere<T>(this IEnumerable<T> @this, Func<T, Boolean> predicate)
         {
             return from element in @this.Enumerate()
@@ -28,37 +52,50 @@ namespace CentipedeInterfaces
                    select element.Key;
         }
 
+        /// <summary>
+        /// returns IEnumerable of <see cref="KeyValuePair{int,T}" /> mapping the indices onto the value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="this"></param>
+        /// <returns></returns>
         public static IEnumerable<KeyValuePair<int, T>> Enumerate<T>(this IEnumerable<T> @this)
         {
-            return @this.Decorate((_, i) => i);
+            return @this.Select((item, index) => new KeyValuePair<int, T>(index, item));
         }
 
-        public static IEnumerable<KeyValuePair<TDecorator, TItem>> Decorate<TItem, TDecorator>(
+        /// <summary>
+        /// Calls Decorate
+        /// </summary>
+        /// <typeparam name="TItem"></typeparam>
+        /// <typeparam name="TDecorator"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="decorator"></param>
+        /// <returns></returns>
+        public static IEnumerable<Tuple<TDecorator, TItem>> Decorate<TItem, TDecorator>(
             this IEnumerable<TItem> @this, Func<TItem, TDecorator> decorator)
         {
-            return @this.Select(item => new KeyValuePair<TDecorator, TItem>(decorator(item), item));
+            return @this.Select(item => Tuple.Create(decorator(item), item));
         }
 
-        public static IEnumerable<KeyValuePair<TDecorator, TItem>> Decorate<TItem, TDecorator>(
+        public static IEnumerable<Tuple<TDecorator, TItem>> Decorate<TItem, TDecorator>(
             this IEnumerable<TItem> @this, 
             Func<TItem, int, TDecorator> decorator)
         {
-            return @this.Select((item, index) => new KeyValuePair<TDecorator, TItem>(decorator(item, index), item));
+            return @this.Select((item, index) => Tuple.Create(decorator(item, index), item));
         }
 
         public static IEnumerable<TItem> Undecorate<TItem, TDecorated>(this IEnumerable<KeyValuePair<TDecorated, TItem>> @this)
         {
             return @this.Select(pair => pair.Value);
         }
+        public static IEnumerable<TItem> Undecorate<TItem, TDecorated>(this IEnumerable<Tuple<TDecorated, TItem>> @this)
+        {
+            return @this.Select(pair => pair.Item2);
+        }
 
         public static Boolean MoveNext(this IEnumerator @this, int count)
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (!@this.MoveNext())
-                    return false;
-            }
-            return true;
+            return Enumerable.Range(0, count).Select(_ => @this.MoveNext()).All(b => b);
         }
 
         public static IEnumerable<T> Slice<T>(this IEnumerable<T> @this, int start = 0, int stop = -1, int step = 1)
