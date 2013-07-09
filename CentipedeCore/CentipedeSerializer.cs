@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using CentipedeInterfaces;
 using ResharperAnnotations;
@@ -28,7 +29,7 @@ namespace Centipede
 
         private static readonly Dictionary<TypeCode, Func<Stream, dynamic>> _Typereaders;
         private static readonly Dictionary<TypeCode, Action<Stream, dynamic>> _Typewriters;
-        private static List<Type> _registeredTypes;
+        private static readonly List<Type> _registeredTypes = new List<Type>();
 
         static CentipedeSerializer()
         {
@@ -75,9 +76,9 @@ namespace Centipede
                                           },
                                           (stream, o) => stream.WriteBytes((Byte[])BitConverter.GetBytes(o)));
             
-            RegisterSerializableType(typeof(ICollection));
-            RegisterSerializableType(typeof(IDictionary));
-            RegisterSerializableType(typeof(BigInteger));
+            //RegisterSerializableType(typeof(ICollection));
+            //RegisterSerializableType(typeof(IDictionary));
+            //RegisterSerializableType(typeof(BigInteger));
 
         }
 
@@ -237,7 +238,15 @@ namespace Centipede
         {
             var typeCode = GetTypeCode(graph);
             serializationStream.WriteBytes(BitConverter.GetBytes((int)typeCode));
-            _Typewriters[typeCode](serializationStream, graph);
+            Action<Stream, dynamic> writer;
+            if(_Typewriters.TryGetValue(typeCode, out writer))
+            {
+                writer(serializationStream, graph);
+            }
+            else
+            {
+                throw new SerializationException(string.Format("Cannot serialize type {0}", graph.GetType()));
+            }
             
             serializationStream.Flush();
         }
@@ -253,7 +262,6 @@ namespace Centipede
             {
                 return Type.GetTypeCode(o.GetType());
             }
-            
         }
     }
 
