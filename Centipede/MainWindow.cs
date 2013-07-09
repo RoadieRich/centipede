@@ -408,7 +408,9 @@ namespace Centipede
             this.AddToActionTab(typeof(AskBooleans));
             this.AddToActionTab(typeof(TestSerialize));
             this.AddToActionTab(typeof(TestDeserialize));
-
+            this.AddToActionTab(typeof(SubJobEntry));
+            this.AddToActionTab(typeof(SubJobExitPoint));
+            
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += this.UrlTextbox_KeyUp;
             this._urlTextbox.MergeIndex = this.NavigationToolbar.Items.Count - 2;
