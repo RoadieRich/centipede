@@ -1,6 +1,25 @@
-﻿h1,h2,h3 {
-    list-style-type: upper-latin;
+﻿h1, h2, h3
+{
+    font-family: sans-serif;
 }
-li {
-    
+h2:before
+{
+    content: counter(h2) ". ";
+}
+h2
+{
+    counter-increment: h2;
+    counter-reset: h3;
+}
+h3:before
+{
+    content: counter(h2) "." counter(h3, lower-alpha) ". ";
+}
+h3
+{
+    counter-increment: h3;
+}
+div
+{
+    counter-reset: none;
 }

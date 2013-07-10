@@ -87,7 +87,7 @@ namespace Centipede
             stream.WriteBytes(BitConverter.GetBytes(((DateTime)o).Ticks));
         }
 
-        private static void WriteString(Stream stream, [NotNull] String o)
+        internal static void WriteString(Stream stream, [NotNull] String o)
         {
             if (o == null)
             {
@@ -112,7 +112,7 @@ namespace Centipede
             return new Decimal(bits);
         }
 
-        private static String ReadString(Stream serializationStream)
+        internal static String ReadString(Stream serializationStream)
         {
             return Encoding.Unicode.GetString(serializationStream.ReadBytes(ReadInt32(serializationStream)).ToArray());
         }
@@ -263,6 +263,23 @@ namespace Centipede
                 return Type.GetTypeCode(o.GetType());
             }
         }
+    
+        public static void SerializeMessage(Stream stream, object sender, MessageEventArgs eventArgs)
+        {
+            WriteString(stream, sender.ToString());
+            WriteString(stream, eventArgs.Message);
+            stream.WriteByte((byte)eventArgs.Level);
+        }
+
+        public static MessageEventArgs DeserializeMessage(Stream stream, out String actionName)
+        {
+            actionName = ReadString(stream);
+            string message = ReadString(stream);
+            MessageLevel level = (MessageLevel)stream.ReadByte();
+
+            return new MessageEventArgs(message, level);
+        }
+
     }
 
     internal static class SerializerStreamExtensions

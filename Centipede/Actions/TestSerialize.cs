@@ -78,4 +78,5 @@ namespace Centipede.Actions
             Variables[OutVar] = CentipedeSerializer.Deserialize(stream);
         }
     }
+
 }
