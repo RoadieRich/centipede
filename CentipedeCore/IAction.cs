@@ -151,7 +151,7 @@ namespace CentipedeInterfaces
     /// 
     /// </summary>
     [Flags]
-    public enum MessageLevel
+    public enum MessageLevel : byte
     {
         /// <summary>
         /// Error

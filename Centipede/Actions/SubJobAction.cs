@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -38,6 +40,7 @@ namespace Centipede.Actions
         public String OutputVars = "";
 
         private NamedPipeServerStream _ServerStream;
+        private NamedPipeServerStream _messagePipe;
 
         protected override void DoAction()
         {
@@ -78,6 +81,12 @@ namespace Centipede.Actions
                 }
             }
 
+            this._messagePipe = new NamedPipeServerStream(@"CentipedeMessagePipe", PipeDirection.In); 
+            BackgroundWorker bgw = new BackgroundWorker();
+            bgw.DoWork += BgwOnDoWork;
+
+            bgw.RunWorkerAsync();
+
             bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(this._ServerStream);
 
             if (!subJobSuccess)
@@ -89,6 +98,28 @@ namespace Centipede.Actions
             {
                 Variables[outputVar] = CentipedeSerializer.Deserialize(this._ServerStream);
             }
+        }
+
+        private void BgwOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            _messagePipe.WaitForConnection();
+            try
+            {
+                while (true)
+                {
+                    string actionName;
+                    MessageEventArgs messageEventArgs = CentipedeSerializer.DeserializeMessage(_messagePipe,
+                                                                                               out actionName);
+
+                    messageEventArgs.Message = String.Format("Sub job message from {0}: {1}",
+                                                             actionName,
+                                                             messageEventArgs.Message);
+
+                    OnMessage(messageEventArgs);
+                }
+            }
+            catch (IOException)
+            { }
         }
 
         protected override void InitAction()
@@ -112,6 +143,7 @@ namespace Centipede.Actions
         private void CloseServerStream(object sender, JobCompletedEventArgs jobCompletedEventArgs)
         {
             _ServerStream.Close();
+            _messagePipe.Close();
         }
     }
 
@@ -133,9 +165,27 @@ namespace Centipede.Actions
             try
             {
                 GetCurrentCore().JobCompleted -= OnJobCompleted;
+
+                _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.Out);
+                
+
+                foreach (var action in GetCurrentCore().Job.Actions)
+                {
+                    action.MessageHandler += SubJobMessageHandler;
+
+                }
             }
             catch
             { }
+        }
+
+        private void SubJobMessageHandler(object sender, MessageEventArgs e)
+        {
+            if (!_messagePipe.IsConnected)
+            {
+                _messagePipe.Connect();
+            }
+            CentipedeSerializer.SerializeMessage(_messagePipe, sender, e);
         }
 
         protected override void CleanupAction()
@@ -155,6 +205,7 @@ namespace Centipede.Actions
                 catch (SerializationException e)
                 { }
                 ClientStream.Close();
+                _messagePipe.Close();
                 Application.Exit();
             }
         }
@@ -167,6 +218,8 @@ namespace Centipede.Actions
             Usage = "Comma-separated list of variables to set within the subjob",
             Literal = true)]
         public String InputVars = "";
+
+        private NamedPipeClientStream _messagePipe;
 
         protected override void DoAction()
         {
