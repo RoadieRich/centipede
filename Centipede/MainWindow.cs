@@ -945,9 +945,9 @@ namespace Centipede
             this.Dirty = false;
         }
 
-        private void ShowSaveDialogs()
+        private void ShowSaveDialogs(bool force=false)
         {
-            if (!this.Dirty)
+            if (!force && !this.Dirty)
             {
                 return;
             }
@@ -970,7 +970,7 @@ namespace Centipede
         {
             try
             {
-                this.ShowSaveDialogs();
+                this.ShowSaveDialogs(true);
             }
             catch (AbortOperationException)
             { }
