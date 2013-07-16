@@ -27,7 +27,7 @@ webpagefilename = $(setupoutputfolder)/index.html
 uploadlog = $(setupoutputfolder)/upload.log
 
 binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll \
-    $(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll
+    $(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll $(binfolder)/Tutorial/*
 pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksActions.dll \
     $(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/TextFile.dll \
     $(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/XMLActions.dll $(pluginsfolder)/PythonAction.dll \
