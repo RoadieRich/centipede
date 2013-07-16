@@ -253,6 +253,9 @@
     <Content Include="Tutorial\arguments.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Tutorial\style2.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tutorial\customactions.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
