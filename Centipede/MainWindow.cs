@@ -12,7 +12,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -956,7 +955,7 @@ namespace Centipede
                 this.SetJobProperties();
             }
 
-            this.SaveFileDialog.FileName = String.IsNullOrEmpty(this.Core.Job.FileName)
+            this.SaveFileDialog.FileName = !String.IsNullOrEmpty(this.Core.Job.FileName)
                                                ? this.Core.Job.FileName
                                                : this.Core.Job.Name;
 

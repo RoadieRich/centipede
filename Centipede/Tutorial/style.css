@@ -1,25 +1,5 @@
-﻿h1, h2, h3
-{
-    font-family: sans-serif;
-}
-h2:before
-{
-    content: counter(h2) ". ";
-}
-h2
-{
-    counter-increment: h2;
-    counter-reset: h3;
-}
-h3:before
-{
-    content: counter(h2) "." counter(h3, lower-alpha) ". ";
-}
-h3
-{
-    counter-increment: h3;
-}
-div
-{
-    counter-reset: none;
-}
+﻿h1,h2,h3{font-family:sans-serif;}
+h2:before{content:counter(h2)". ";}
+h2{counter-increment:h2;counter-reset:h3;}
+h3:before{content:counter(h3)". ";}
+h3{counter-increment:h3;padding-left:1em;}
