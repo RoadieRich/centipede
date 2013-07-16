@@ -6,3 +6,4 @@
 Fixing save as.
 Temporary fix to subjob actions.  <strong>Please ensure jobs are saved before testing.</strong>
 If you encounter unexpected errors with subjobs, please exit all copies of the application and try again.
+Expanding outline of tutorial files
