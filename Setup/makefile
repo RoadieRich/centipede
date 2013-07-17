@@ -35,7 +35,8 @@ pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksAc
 
 installersource = centipede-setup.iss
     
-setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi
+setupfiles = $(installersource) favourites.xml dotNetFx40_Full_x86_x64.exe IronPython-2.7.3.msi readme.txt license.txt \
+	images/* New\ Job.100p CentipedeAction/* Samples/*
 
 pagescript = create-webpage.py
 scriptengine = python
@@ -116,11 +117,9 @@ install: $(installerfilepath)
 	$(installerfilepath)
     
 help:
-	@echo 'all (default)'
-	@echo '    Compiles, generates the webpage, and uploads.'
 	@echo 'Available targets:'
 	@echo
-	@echo 'installer'
+	@echo 'installer (default)' 
 	@echo '    Compliles the installer executable'
 	@echo 'webpage'
 	@echo '    Generates the download webpage with md5 and sha1 checksums'
