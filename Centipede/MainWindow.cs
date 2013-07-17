@@ -734,8 +734,15 @@ namespace Centipede
 
         private void ActionDisplayControl_Deleted(object sender, CentipedeEventArgs e)
         {
-            var adc = (ActionDisplayControl)sender;
-            this.Core.RemoveAction(adc.ThisAction);
+            IAction action = ((ActionDisplayControl)sender).ThisAction;
+
+            if (MessageBox.Show(string.Format("Are you sure you want to delete {0}?", action),
+                                "Delete Action",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                this.Core.RemoveAction(action);
+            }
         }
 
         private void DoLoad(string fileName)
@@ -748,15 +755,15 @@ namespace Centipede
             }
             catch (PluginNotFoundException e)
             {
-                MessageBox.Show(string.Format("Cannot load action {0}. {1}", e.ActionName, e.Message),
+                MessageBox.Show(string.Format("Cannot load action {0}. {1}\nAttempting to run the job will fail.", e.ActionName, e.Message),
                                 "Error loading job",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                                MessageBoxIcon.Exclamation);
             }
 
             if (this._unloadablePlugins)
             {
-                MessageBox.Show("Some plugins could not be loaded",
+                MessageBox.Show("Some plugins could not be loaded.\nAttempting to run the job will fail.",
                                 "Warning",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Exclamation);
