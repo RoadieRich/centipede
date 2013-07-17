@@ -32,6 +32,8 @@ AlwaysShowDirOnReadyPage=True
 UninstallDisplayIcon={app}\Centipede.exe
 ShowLanguageDialog=auto
 ChangesAssociations=Yes
+LicenseFile={#SetupDir}\License.txt
+InfoBeforeFile={#SetupDir}\readme.txt
 
 [Types]
 Name: "Complete";	Description: "Install all components"
