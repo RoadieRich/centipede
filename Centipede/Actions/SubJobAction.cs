@@ -5,13 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Threading;
 using System.Windows.Forms;
 using CentipedeInterfaces;
-using ResharperAnnotations;
-using Timer = System.Threading.Timer;
+using System.Threading;
 
 
 namespace Centipede.Actions
@@ -49,8 +46,6 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
-            Timeout timeout = new Timeout(1000);
-            EventHandler ontimeout = delegate { throw new ActionException("The pipe timed out", this); };
             this._process = new Process
                             {
                                 StartInfo =
@@ -64,54 +59,70 @@ namespace Centipede.Actions
 
             this._process.Start();
 
-            this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut);
+            this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 100);
             
+            BackgroundWorker bgw = new BackgroundWorker();
+            bgw.DoWork += BgwOnDoWork;
+
+            bgw.RunWorkerAsync();
 
             try
             {
-                using(new Timeout(1000, ontimeout))
-                    this._ServerStream.WaitForConnection();
+                this._ServerStream.WaitForConnection();
 
                 var variables = this.InputVars.Split(',').Select(s => s.Trim()).ToList();
 
-                foreach (var variable in variables)
+                //send number of variables
+
+                CentipedeSerializer.Serialize(_ServerStream, variables.Count);
+                
+                try
                 {
-                    object o = Variables[variable];
-                    try
+                    foreach (var variable in variables)
                     {
-                        using(new Timeout(1000, ontimeout))
+                        object o = Variables[variable];
+                        try
+                        {
                             CentipedeSerializer.Serialize(this._ServerStream, o);
-                    }
-                    catch (SerializationException e)
-                    {
-                        throw new FatalActionException(
-                            string.Format("Cannot send variable {0} to subjob, type {1} is not supported.",
-                                          variable,
-                                          o.GetType()),
-                            e,
-                            this);
-                    }
-                }
-
-                this._messagePipe = new NamedPipeServerStream(@"CentipedeMessagePipe", PipeDirection.In);
-                BackgroundWorker bgw = new BackgroundWorker();
-                bgw.DoWork += BgwOnDoWork;
-
-                bgw.RunWorkerAsync();
-                using (new Timeout(60 * 5 * 1000, ontimeout))
-                {
-                    bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(this._ServerStream);
-
-                    if (!subJobSuccess)
-                    {
-                        throw new ActionException("Subjob was not completed", this);
+                        }
+                        catch (SerializationException e)
+                        {
+                            throw new FatalActionException(
+                                string.Format("Cannot send variable {0} to subjob, type {1} is not supported.",
+                                              variable,
+                                              o.GetType()),
+                                e,
+                                this);
+                        }
                     }
                 }
-                foreach (var outputVar in OutputVars.Split(',').Select(s => s.Trim()))
+                catch (IOException e)
                 {
-                    using (new Timeout(1000, ontimeout))
-                        Variables[outputVar] = CentipedeSerializer.Deserialize(this._ServerStream);
                     
+                }
+
+
+                
+                
+                bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(this._ServerStream);
+
+                if (!subJobSuccess)
+                {
+                    throw new ActionException("Subjob was not completed", this);
+                }
+            
+                var outputVars = OutputVars.Split(',').Select(s => s.Trim()).ToList();
+
+                int varsToRecieve = CentipedeSerializer.Deserialize<int>(this._ServerStream);
+
+                if (varsToRecieve != outputVars.Count)
+                {
+                    throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}", outputVars.Count, varsToRecieve));
+                }
+
+                foreach (var outputVar in outputVars)
+                {
+                    Variables[outputVar] = CentipedeSerializer.Deserialize(this._ServerStream);
                 }
             }
             catch (Exception e)
@@ -148,6 +159,7 @@ namespace Centipede.Actions
 
         private void BgwOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
+            _messagePipe = new NamedPipeServerStream(@"CentipedeMessagePipe", PipeDirection.InOut);
             _messagePipe.WaitForConnection();
             try
             {
@@ -192,6 +204,11 @@ namespace Centipede.Actions
             _ServerStream.Close();
             _messagePipe.Close();
         }
+
+        public override void Dispose()
+    {
+        this.CleanupAction();
+    }
     }
 
     public abstract class SubJobEntryExitPoint : Action
@@ -199,9 +216,15 @@ namespace Centipede.Actions
         protected SubJobEntryExitPoint(string name, IDictionary<string, object> variables, ICentipedeCore core)
             : base(name, variables, core)
         {
-            _ontimeout = delegate { throw new FatalActionException("The pipe timed out", this); };
-        }
 
+            this._ontimeout = (o, e) =>
+                              Form.ActiveForm.Invoke(new System.Action(delegate
+                                                                           {
+                                                                               throw new FatalActionException(
+                                                                                   "The pipe timed out", this);
+                                                                           }));
+        }
+        
         protected static NamedPipeClientStream ClientStream;
         protected EventHandler _ontimeout;
     }
@@ -215,8 +238,8 @@ namespace Centipede.Actions
             try
             {
                 GetCurrentCore().JobCompleted -= OnJobCompleted;
-
-                _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.Out);
+                ////MessageBox.Show("7");
+                _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.InOut);
                 
 
                 foreach (var action in GetCurrentCore().Job.Actions)
@@ -233,8 +256,10 @@ namespace Centipede.Actions
         {
             if (!_messagePipe.IsConnected)
             {
+                //MessageBox.Show("a");
                 _messagePipe.Connect();
             }
+            //MessageBox.Show("b");
             CentipedeSerializer.SerializeMessage(_messagePipe, sender, e);
         }
 
@@ -250,11 +275,14 @@ namespace Centipede.Actions
             {
                 try
                 {
+                    //MessageBox.Show("5");
                     CentipedeSerializer.Serialize(ClientStream, false);
                 }
                 catch (SerializationException e)
                 { }
+                //MessageBox.Show("6");
                 ClientStream.Close();
+                //MessageBox.Show("7");
                 _messagePipe.Close();
                 Application.Exit();
             }
@@ -274,15 +302,26 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
+            //MessageBox.Show("1");
             ClientStream = new NamedPipeClientStream(@".", SubJobAction.PipeName);
-            using(new Timeout(1000, _ontimeout))
-                ClientStream.Connect();
+            ClientStream.Connect();
+            //MessageBox.Show("2");
             try
             {
-                foreach (var variable in InputVars.Split(',').Select(s => s.Trim()))
+                int varsToReceive = (int)CentipedeSerializer.Deserialize(ClientStream);
+                //MessageBox.Show("3");
+                var enumerable = InputVars.Split(',').Select(s => s.Trim()).ToList();
+
+                if (varsToReceive != enumerable.Count)
                 {
-                    using (new Timeout(1000, this._ontimeout))
-                        Variables[variable] = CentipedeSerializer.Deserialize(ClientStream);
+                    throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}", enumerable.Count, varsToReceive), this);
+                }
+
+                int i = 0;
+                foreach (var variable in enumerable)
+                {
+                    //MessageBox.Show("4 " + (i++).ToString());
+                    Variables[variable] = CentipedeSerializer.Deserialize(ClientStream);
                 }
             }
             catch (ObjectDisposedException e)
@@ -309,72 +348,43 @@ namespace Centipede.Actions
         {
             CentipedeSerializer.Serialize(ClientStream, true);
             ClientStream.WaitForPipeDrain();
-            foreach (var variable in OutVars.Split(',').Select(s => s.Trim()))
+
+            var variables = this.OutVars.Split(',').Select(s => s.Trim()).ToList();
+            CentipedeSerializer.Serialize(ClientStream, variables.Count);
+            try
             {
-                object o = Variables[variable];
-                try
+                foreach (var variable in variables)
                 {
-                    using (new Timeout(1000, this._ontimeout))
+                    object o = Variables[variable];
+                    try
+                    {
                         CentipedeSerializer.Serialize(ClientStream, o);
-                }
-                catch (SerializationException e)
-                {
-                    throw new FatalActionException(
-                        string.Format("Cannot send variable {0} to parent job, type {1} is not supported.",
-                                      variable,
-                                      o.GetType()),
-                        e,
-                        this);
+                    }
+                    catch (SerializationException e)
+                    {
+                        throw new FatalActionException(
+                            string.Format("Cannot send variable {0} to parent job, type {1} is not supported.",
+                                          variable,
+                                          o.GetType()),
+                            e,
+                            this);
+                    }
                 }
             }
-            ClientStream.Close();
-
-            Application.Exit();
+            catch (IOException e)
+            { }
+            finally
+            {
+                ClientStream.Close();
+                Application.Exit();
+            }
         }
     }
 
     internal class Timeout : IDisposable
     {
-        private readonly int _milliseconds;
-        private Timer _timer;
-
-        public Timeout(int milliseconds)
-        {
-            _milliseconds = milliseconds;
-            this._timer = new Timer(this.Callback);
-        }
-        public Timeout(int milliseconds, EventHandler e) : this(milliseconds)
-        {
-            this.OnTimeout += e;
-            this.Start();
-        }
-
-        private const int _Infinite = System.Threading.Timeout.Infinite;
-
-        public void Start()
-        {
-            this._timer.Change(this._milliseconds, _Infinite);
-        }
-
-        public void Stop()
-        {
-            this._timer.Change(_Infinite, _Infinite);
-        }
-
-        private void Callback(object state)
-        {
-            var handler = this.OnTimeout;
-            if (handler != null)
-            {
-                handler.Invoke(this, null);
-            }
-        }
-
-        public event EventHandler OnTimeout;
         public void Dispose()
         {
-            this.Stop();
-            this._timer.Dispose();
         }
     }
 }

@@ -23,7 +23,28 @@ namespace Centipede
             }
 
             var typeCode = ReadTypeCode(serializationStream);
-            return _Typereaders[typeCode](serializationStream);
+
+            var deserialize = _Typereaders[typeCode](serializationStream);
+
+            return deserialize;
+
+        }
+
+        public static T Deserialize<T>(Stream serializationStream)
+        {
+            if (serializationStream == null)
+            {
+                throw new ArgumentNullException("serializationStream");
+            }
+
+            var typeCode = ReadTypeCode(serializationStream);
+
+            if (GetTypeCode(default(T)) != typeCode)
+            {
+                throw new SerializationException("Invalid type");
+            }
+
+            return (T)(_Typereaders[typeCode](serializationStream));
 
         }
 
@@ -286,15 +307,27 @@ namespace Centipede
     {
         public static void WriteBytes(this Stream s, IEnumerable<byte> bytes)
         {
+            //var buffer = bytes as byte[] ?? bytes.ToArray();
+            //s.Write(buffer, 0, buffer.Length);
+
             foreach (var b in bytes)
             {
                 s.WriteByte(b);
             }
+            s.Flush();
         }
 
         public static IEnumerable<byte> ReadBytes(this Stream s, int n)
         {
-            return Enumerable.Range(0, n).Select(_ => (Byte)s.ReadByte());
+            byte[] bytes = new byte[n];
+            for (int i = 0; i < n; i++)
+            {
+                yield return (byte)s.ReadByte();
+            }
+
+            //s.Read(bytes, 0, n);
+
+            //return bytes;
         }
     }
 }
