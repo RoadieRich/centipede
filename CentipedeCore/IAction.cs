@@ -9,7 +9,7 @@ using ResharperAnnotations;
 namespace CentipedeInterfaces
 {
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    public interface IAction
+    public interface IAction : IDisposable
     {
         /// <summary>
         /// Gets or sets the object that contains data associated with tje action.

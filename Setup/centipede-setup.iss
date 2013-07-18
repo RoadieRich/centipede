@@ -15,7 +15,7 @@ UninstallDisplayName={#AppName}
 Compression=zip
 MinVersion=0,5.01
 OnlyBelowVersion=0,6.2
-DisableStartupPrompt=False
+DisableStartupPrompt=true
 UsePreviousSetupType=False
 UsePreviousTasks=False
 UsePreviousLanguage=False
@@ -32,8 +32,8 @@ AlwaysShowDirOnReadyPage=True
 UninstallDisplayIcon={app}\Centipede.exe
 ShowLanguageDialog=auto
 ChangesAssociations=Yes
-LicenseFile={#SetupDir}\License.txt
-InfoBeforeFile={#SetupDir}\readme.txt
+;LicenseFile={#SetupDir}\License.txt
+;InfoBeforeFile={#SetupDir}\readme.txt
 
 [Types]
 Name: "Complete";	Description: "Install all components"
