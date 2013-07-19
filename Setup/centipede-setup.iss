@@ -16,9 +16,9 @@ Compression=zip
 MinVersion=0,5.01
 OnlyBelowVersion=0,6.2
 DisableStartupPrompt=true
-UsePreviousSetupType=False
-UsePreviousTasks=False
-UsePreviousLanguage=False
+UsePreviousSetupType=true
+UsePreviousTasks=true
+UsePreviousLanguage=true
 FlatComponentsList=False
 ShowTasksTreeLines=True
 OutputBaseFilename={#OutputFileBaseName}
@@ -119,6 +119,7 @@ Source: "{#SetupDir}\Samples\*"; DestDir: "{code:GetExampleDir}"; Components: Ce
 Name: "{group}\Centipede"; Filename: "{app}\Centipede.exe"; Flags: useapppaths; IconFilename: "{app}\Centipede.exe"
 Name: "{group}\Uninstall Centipede"; Filename: "{uninstallexe}"; IconFilename: "{uninstallexe}"
 Name: "{group}\Centipede Help Community"; Filename: "http://getsatisfaction.com/centipede"
+Name: "{group}\Centipede Tutiorial"; Filename: "{app}\Tutorial\Tutorial.htm"
 
 [Run]
 Filename: "{app}\Resources\dotNetFx40_Full_x86_x64.exe"; Flags: waituntilterminated; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
@@ -195,7 +196,6 @@ procedure RegisterPreviousData(PreviousDataKey: Integer);
 begin
     SetPreviousData(PreviousDataKey, 'SdkDir', SdkDirPage.Values[0]);
     SetPreviousData(PreviousDataKey, 'ExampleDir', ExamplesDirPage.Values[0]);
-	
 end;
 
 function GetSdkDestDir(param: String): String;

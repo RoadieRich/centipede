@@ -11,7 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -43,6 +45,7 @@ using ResharperAnnotations;
 
 namespace Centipede
 {
+    [ComVisible(true)]
     public partial class MainWindow : Form
     {
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
@@ -67,6 +70,11 @@ namespace Centipede
             this.SetUserProperties();
 
             this.WebBrowser.DocumentText = Resources.WelcomeScreen;
+
+            this.WebBrowser.ObjectForScripting = new ShowTutorialObject(WebBrowser);
+
+            this.WebBrowser.AllowNavigation = true;
+
 
             //Visible = true;
 
@@ -95,6 +103,25 @@ namespace Centipede
 
             this.Core.Tag = this;
         }
+
+        [ComVisible(true)]
+        public class ShowTutorialObject
+        {
+            [NotNull]
+            private readonly WebBrowser _webBrowser;
+
+            public ShowTutorialObject(WebBrowser webBrowser)
+            {
+                _webBrowser = webBrowser;
+            }
+
+            public void ShowTutorial()
+            {
+                string appDir = Path.GetDirectoryName(Application.ExecutablePath);
+                _webBrowser.Navigate(Path.Combine(appDir, "Tutorial", "Tutorial.htm"));
+            }
+        }
+
 
         public override String Text
         {
