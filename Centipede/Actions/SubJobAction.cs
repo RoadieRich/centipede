@@ -68,7 +68,17 @@ namespace Centipede.Actions
 
             try
             {
-                this._ServerStream.WaitForConnection();
+                Stopwatch timeout = new Stopwatch();
+                timeout.Start();
+                while (!this._ServerStream.IsConnected)
+                {
+                    if (timeout.ElapsedMilliseconds > 5000)
+                    {
+                        throw new FatalActionException(
+                            "Subjob did not start in time, or did not have a subjob entry action", this);
+                    }
+                    Thread.Sleep(10);
+                }
 
                 var variables = this.InputVars.Split(',').Select(s => s.Trim()).ToList();
 
