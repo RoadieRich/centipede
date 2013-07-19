@@ -445,7 +445,7 @@ EXHIBIT A -Mozilla Public License.
  
      The Original Code is ______________________________________.
  
-     The Initial Developer of the Original Code is ________________________.
+     The Initial Developer of the Original Code is Rich Lovely.
      Portions created by ______________________ are Copyright (C) ______
      _______________________. All Rights Reserved.
  

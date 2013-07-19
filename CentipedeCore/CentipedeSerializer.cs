@@ -300,34 +300,34 @@ namespace Centipede
 
             return new MessageEventArgs(message, level);
         }
-
     }
 
     internal static class SerializerStreamExtensions
     {
-        public static void WriteBytes(this Stream s, IEnumerable<byte> bytes)
+        public static void WriteBytes(this Stream s, byte[] bytes)
         {
-            //var buffer = bytes as byte[] ?? bytes.ToArray();
-            //s.Write(buffer, 0, buffer.Length);
+            s.Write(bytes, 0, bytes.Length);
 
-            foreach (var b in bytes)
-            {
-                s.WriteByte(b);
-            }
+            //foreach (var b in bytes)
+            //{
+            //    s.WriteByte(b);
+            //}
+            
             s.Flush();
         }
 
         public static IEnumerable<byte> ReadBytes(this Stream s, int n)
         {
             byte[] bytes = new byte[n];
-            for (int i = 0; i < n; i++)
-            {
-                yield return (byte)s.ReadByte();
-            }
+            
+            //for (int i = 0; i < n; i++)
+            //{
+            //    yield return (byte)s.ReadByte();
+            //}
 
-            //s.Read(bytes, 0, n);
+            s.Read(bytes, 0, n);
 
-            //return bytes;
+            return bytes;
         }
     }
 }
