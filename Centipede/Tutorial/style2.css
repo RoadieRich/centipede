@@ -1,6 +1,7 @@
 ﻿body{font-family:Sans-Serif;}
-h1,h2,h3{font-family:sans-serif;}
+/*h1,h2,h3{font-family:sans-serif;}*/
 h1:before{content:counter(h1)". ";}
 h1{counter-increment:h1;counter-reset:h2;}
 h2:before{content:counter(h2)". ";}
 h2{counter-increment:h2;padding-left:1em;}
+img.screenshot{display:block;}
