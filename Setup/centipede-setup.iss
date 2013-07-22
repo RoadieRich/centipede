@@ -36,10 +36,10 @@ ChangesAssociations=Yes
 ;InfoBeforeFile={#SetupDir}\readme.txt
 
 [Types]
-Name: "Complete";	Description: "Install all components"
-Name: "Minimal";	Description: "Install only required items"
-Name: "Custom";	Description: "Customise the installation";	Flags: iscustom
-Name: "CompleteSDK";	Description: "Install all components and SDK"
+Name: "Complete"; Description: "Install all components"
+Name: "Minimal"; Description: "Install only required items"
+Name: "Custom"; Description: "Customise the installation"; Flags: iscustom
+Name: "CompleteSDK"; Description: "Install all components and SDK"
 
 [Components]
 Name: "Centipede"; Description: "The Centipede application (required)"; Types: Complete Custom Minimal CompleteSDK; Flags: fixed
@@ -62,13 +62,13 @@ Name: "{app}\Plugins"; Components: Centipede
 Name: "{app}\Plugins\Resources"; Components: Centipede
 
 ; SDK items
-Name: "{code:GetSdkDestDir}";	Components: SDK
-Name: "{code:GetSdkDestDir}\CentipedeAction";	Components: SDK
-Name: "{code:GetSdkDestDir}\CentipedeAction\Resources";	Components: SDK
-Name: "{code:GetSdkDestDir}\CentipedeAction\Properties";	Components: SDK
+Name: "{code:GetSdkDestDir}"; Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction"; Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction\Resources"; Components: SDK
+Name: "{code:GetSdkDestDir}\CentipedeAction\Properties"; Components: SDK
 
 ; Example job folder
-Name: "{code:GetExampleDir}";	Components: ExampleJobs
+Name: "{code:GetExampleDir}"; Components: ExampleJobs
 
 [Files]
 ; Dependencies
@@ -85,6 +85,7 @@ Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plu
 Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\Resources\CentipedeFile.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 
+; item for the Explorer New menu
 Source: "{#SetupDir}\New Job.100p"; DestDir: "{win}\SHELLNEW"; Components: Centipede
 
 ; Tutorial
@@ -127,142 +128,14 @@ Filename: "msiexec.exe"; Parameters: "/i ""{app}\Resources\IronPython-2.7.3.msi"
 Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede
 
 [Registry]
-Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION";	ValueType: dword;	ValueName: "centipede.exe";	ValueData: "{code:GetIEEmulationValue}";	Flags: createvalueifdoesntexist uninsdeletevalue; Components: Centipede
+Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "centipede.exe"; ValueData: "{code:GetIEEmulationValue}"; Flags: createvalueifdoesntexist uninsdeletevalue; Components: Centipede
 Root: "HKCR"; Subkey: ".100p"; ValueType: string; ValueName: ""; ValueData: "CentipedeJob"; Flags: uninsdeletekey
 Root: "HKCR"; Subkey: ".100p\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{win}\SHELLNEW\New Job.100p"
 Root: "HKCR"; Subkey: "CentipedeJob"; ValueType: string; ValueName: ""; ValueData: "Centipede Job"; Flags: uninsdeletekey
 Root: "HKCR"; Subkey: "CentipedeJob\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\CentipedeFile.ico"
 Root: "HKCR"; Subkey: "CentipedeJob\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" ""%1"""
 Root: "HKCR"; Subkey: "CentipedeJob\shell\run"; ValueType: string; ValueName: ""; ValueData: "&Run";
-Root: "HKCR"; Subkey: "CentipedeJob\shell\run\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" /r ""%1"""  
+Root: "HKCR"; Subkey: "CentipedeJob\shell\run\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" /r ""%1"""
 
 [Code]
-var
-    SdkDirPage: TInputDirWizardPage;
-    ExamplesDirPage: TInputDirWizardPage;
-	
-procedure InitializeWizard;
-begin
-    { Taken from CodeDlg.iss example script }
-    { Create custom pages to show during install }
-    SdkDirPage := CreateInputDirPage(wpSelectComponents,
-        '{#AppName} SDK Directory', '',
-        'Please select a location for the {#AppName} sdk.', False, '');
-    SdkDirPage.Add('');
-    SdkDirPage.Values[0] := GetPreviousData('SdkDir', ExpandConstant('{userdocs}\{#appname}SDK'));
-	
-	ExamplesDirPage := CreateInputDirPage(wpSelectComponents,
-        '{#AppName} Example Jobs location Directory', '',
-        'Please select a location for the {#AppName} example jobs.', False, '');
-    ExamplesDirPage.Add('');
-    ExamplesDirPage.Values[0] := GetPreviousData('ExamplesDir', ExpandConstant('{userdocs}'));
-end;
-
-procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
-var
-  mRes : integer;
-begin
-  { Ask to remove favourites file }
-  case CurUninstallStep of
-    usUninstall:
-      begin
-        mRes := MsgBox('Do you want to remove your Favourites file?', 
-                       mbConfirmation, 
-                       MB_YESNO or MB_DEFBUTTON2)
-        if mRes = IDYES then
-          begin
-            DeleteFile(GetPreviousData('SdkDir', ExpandConstant('{userappdata}\Centipede\favourites.xml')));
-          end
-        else
-      end;
-  end;
-end;
-
-
-function ShouldSkipPage(PageID: Integer): Boolean;
-begin
-    Result := False;
-    // skip sdk path request if sdk isn't installed
-    if PageID = SdkDirPage.ID then
-        Result := not IsComponentSelected('SDK');
-		
-	// skip example jobs page if example jobhs not selected to install
-	if PageID = ExamplesDirPage.ID then
-		Result := not IsComponentSelected('ExampleJobs');
-end;
-
-// This is needed only if you use GetPreviousData above.
-procedure RegisterPreviousData(PreviousDataKey: Integer);
-begin
-    SetPreviousData(PreviousDataKey, 'SdkDir', SdkDirPage.Values[0]);
-    SetPreviousData(PreviousDataKey, 'ExampleDir', ExamplesDirPage.Values[0]);
-end;
-
-function GetSdkDestDir(param: String): String;
-begin
-    { Return the selected DataDir }
-    Result := SdkDirPage.Values[0];
-end;
-
-function GetExampleDir(param: String): String;
-begin
-    { Return the selected DataDir }
-    Result := ExamplesDirPage.Values[0];
-end;
-
-
-function FrameworkIsNotInstalled: Boolean;
-begin
-    Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\.NETFramework\policy\v4.0');
-end;
-
-function IronPythonNotInstalled: Boolean;
-begin
-    Result := not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\IronPython\2.7');
-end;
-
-procedure Explode(var Dest: TArrayOfString;	Text: String; Separator: String);
-var
-	i: Integer;
-begin
-	i := 0;
-	repeat
-		SetArrayLength(Dest, i+1);
-		if Pos(Separator,Text) > 0 then	begin
-			Dest[i] := Copy(Text, 1, Pos(Separator, Text)-1);
-			Text := Copy(Text, Pos(Separator,Text) + Length(Separator), Length(Text));
-			i := i + 1;
-		end 
-		else begin
-			 Dest[i] := Text;
-			 Text := '';
-		end;
-	until Length(Text)=0;
-end;
-
-function GetIEVersion: Longint;
-var
-    versionString : String;
-    versionParts : TArrayOfString;
-begin
-    if not RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Internet Explorer', 
-							   'version', versionString) then begin
-        Result := 3
-	end
-    else begin
-        Explode(versionParts, versionString, '.');
-        Result := StrToInt(versionParts[0]);
-    end;
-end;
-
-function GetIEEmulationValue(Param: String): String;
-begin
-    Result := inttostr(GetIEVersion * 1000)
-end;
-
-procedure BackupFavourites;
-begin
-    FileCopy(ExpandConstant('{userappdata}\Centipede\favourites.xml'),
-             ExpandConstant('{userappdata}\Centipede\favourites.xml.old'),
-             False);
-end;
+#include SetupDir + "\code.pas"
