@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Windows.Forms;
 using CentipedeInterfaces;
 using System.Threading;
 
@@ -58,8 +59,8 @@ namespace Centipede.Actions
 
             this._process.Start();
 
-            this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 100);
-
+            this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 100, PipeTransmissionMode.Byte);
+            
             BackgroundWorker bgw = new BackgroundWorker();
             bgw.DoWork += BgwOnDoWork;
 
@@ -67,18 +68,9 @@ namespace Centipede.Actions
 
             try
             {
-                Stopwatch timeout = new Stopwatch();
-                timeout.Start();
-                while (!this._ServerStream.IsConnected)
-                {
-                    if (timeout.ElapsedMilliseconds > 5000)
-                    {
-                        throw new FatalActionException(
-                            "Subjob did not start in time, or did not have a subjob entry action", this);
-                    }
-                    Thread.Sleep(10);
-                }
 
+                this._ServerStream.WaitForConnection();
+                
                 var variables = this.InputVars.Split(',').Select(s => s.Trim()).ToList();
 
                 //send number of variables
@@ -161,6 +153,7 @@ namespace Centipede.Actions
                         if (!this._process.WaitForExit(10000))
                         {
                             this._process.Kill();
+                            this._process = null;
                         }
                     }
                 }
