@@ -3,5 +3,7 @@
 h1:before{content:counter(h1)". ";}
 h1{counter-increment:h1;counter-reset:h2;}
 h2:before{content:counter(h2)". ";}
-h2{counter-increment:h2;padding-left:1em;}
+h2{counter-increment:h2}
 img.screenshot{display:block;}
+tt{background:#eee;border:solid 1px #999;font-family:consolas,courier new,monospace;font-size: .9em;font-weight:bold}
+i{font-style:italic;background:#eee;border:solid 1px #999;}
