@@ -45,7 +45,7 @@ namespace PyAction
             Usage = @"Next action if condition returns true (otherwise, proceed normally)",
             DisplayName = @"Next Action if True"
             )]
-        public Action NextIfTrue;
+        public IAction NextIfTrue;
 
         private Boolean _result;
 
@@ -82,7 +82,7 @@ namespace PyAction
             AfterLoadEvent instanceOnAfterLoad = null;
             instanceOnAfterLoad = delegate
                                       {
-                                          NextIfTrue = (Action)GetCurrentCore().Job.Actions[index];
+                                          NextIfTrue = GetCurrentCore().Job.Actions[index];
                                           GetCurrentCore().AfterLoad -= instanceOnAfterLoad;
                                           ((ActionDisplayControl)Tag).UpdateControls();
                                       };
