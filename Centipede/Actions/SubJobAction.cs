@@ -6,7 +6,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using CentipedeInterfaces;
 using System.Threading;
 
@@ -60,7 +59,7 @@ namespace Centipede.Actions
             this._process.Start();
 
             this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 100);
-            
+
             BackgroundWorker bgw = new BackgroundWorker();
             bgw.DoWork += BgwOnDoWork;
 
@@ -85,7 +84,7 @@ namespace Centipede.Actions
                 //send number of variables
 
                 CentipedeSerializer.Serialize(_ServerStream, variables.Count);
-                
+
                 try
                 {
                     foreach (var variable in variables)
@@ -108,26 +107,32 @@ namespace Centipede.Actions
                 }
                 catch (IOException e)
                 {
-                    
+                    OnMessage(new MessageEventArgs
+                              {
+                                  Message = e.Message,
+                                  Level = MessageLevel.Debug
+                              });
                 }
 
 
-                
-                
+
+
                 bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(this._ServerStream);
 
                 if (!subJobSuccess)
                 {
                     throw new ActionException("Subjob was not completed", this);
                 }
-            
+
                 var outputVars = OutputVars.Split(',').Select(s => s.Trim()).ToList();
 
                 int varsToRecieve = CentipedeSerializer.Deserialize<int>(this._ServerStream);
 
                 if (varsToRecieve != outputVars.Count)
                 {
-                    throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}", outputVars.Count, varsToRecieve));
+                    throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}",
+                                                                 outputVars.Count,
+                                                                 varsToRecieve));
                 }
 
                 foreach (var outputVar in outputVars)
@@ -145,24 +150,27 @@ namespace Centipede.Actions
             }
             finally
             {
-                this._ServerStream.Close();
-                this._messagePipe.Close();
-                if (!this._process.HasExited)
+                try
                 {
-                    try
+                    this._ServerStream.Close();
+                    this._messagePipe.Close();
+                    if (!this._process.HasExited)
                     {
                         this._process.CloseMainWindow();
                         this._process.Close();
-                        if (!this._process.WaitForExit(2000))
+                        if (!this._process.WaitForExit(10000))
                         {
-                            _process.Kill();
+                            this._process.Kill();
                         }
-
                     }
-                    catch (InvalidOperationException)
-                    { }
-                    catch (Win32Exception)
-                    { }
+                }
+                catch (Exception e)
+                {
+                    OnMessage(new MessageEventArgs
+                              {
+                                  Message = e.Message,
+                                  Level = MessageLevel.Debug
+                              });
                 }
             }
         }
@@ -216,27 +224,18 @@ namespace Centipede.Actions
         }
 
         public override void Dispose()
-    {
-        this.CleanupAction();
-    }
+        {
+            this.CleanupAction();
+        }
     }
 
     public abstract class SubJobEntryExitPoint : Action
     {
         protected SubJobEntryExitPoint(string name, IDictionary<string, object> variables, ICentipedeCore core)
             : base(name, variables, core)
-        {
+        { }
 
-            this._ontimeout = (o, e) =>
-                              Form.ActiveForm.Invoke(new System.Action(delegate
-                                                                           {
-                                                                               throw new FatalActionException(
-                                                                                   "The pipe timed out", this);
-                                                                           }));
-        }
-        
         protected static NamedPipeClientStream ClientStream;
-        protected EventHandler _ontimeout;
     }
 
     [ActionCategory("Flow Control", DisplayName = "Subjob Entry")]
@@ -245,21 +244,16 @@ namespace Centipede.Actions
         protected override void InitAction()
         {
             base.InitAction();
-            try
+            GetCurrentCore().JobCompleted -= OnJobCompleted;
+            ////MessageBox.Show("7");
+            _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.InOut);
+
+
+            foreach (var action in GetCurrentCore().Job.Actions)
             {
-                GetCurrentCore().JobCompleted -= OnJobCompleted;
-                ////MessageBox.Show("7");
-                _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.InOut);
-                
+                action.MessageHandler += SubJobMessageHandler;
 
-                foreach (var action in GetCurrentCore().Job.Actions)
-                {
-                    action.MessageHandler += SubJobMessageHandler;
-
-                }
             }
-            catch
-            { }
         }
 
         private void SubJobMessageHandler(object sender, MessageEventArgs e)
@@ -283,18 +277,10 @@ namespace Centipede.Actions
         {
             if (!jobCompletedEventArgs.Completed)
             {
-                try
-                {
-                    //MessageBox.Show("5");
-                    CentipedeSerializer.Serialize(ClientStream, false);
-                }
-                catch (SerializationException e)
-                { }
-                //MessageBox.Show("6");
+                CentipedeSerializer.Serialize(ClientStream, false);
                 ClientStream.Close();
-                //MessageBox.Show("7");
                 _messagePipe.Close();
-                Application.Exit();
+                System.Windows.Forms.Application.Exit();
             }
         }
 
@@ -312,14 +298,11 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
-            //MessageBox.Show("1");
             ClientStream = new NamedPipeClientStream(@".", SubJobAction.PipeName);
             ClientStream.Connect();
-            //MessageBox.Show("2");
             try
             {
                 int varsToReceive = (int)CentipedeSerializer.Deserialize(ClientStream);
-                //MessageBox.Show("3");
                 var enumerable = InputVars.Split(',').Select(s => s.Trim()).ToList();
 
                 if (varsToReceive != enumerable.Count)
@@ -330,7 +313,6 @@ namespace Centipede.Actions
                 int i = 0;
                 foreach (var variable in enumerable)
                 {
-                    //MessageBox.Show("4 " + (i++).ToString());
                     Variables[variable] = CentipedeSerializer.Deserialize(ClientStream);
                 }
             }
@@ -382,19 +364,19 @@ namespace Centipede.Actions
                 }
             }
             catch (IOException e)
-            { }
+            {
+                OnMessage(new MessageEventArgs
+                          {
+                              Message = string.Format("Sending variables to parent raised IOException: {0}", e.Message),
+                              Level = MessageLevel.Debug
+                          });
+
+            }
             finally
             {
                 ClientStream.Close();
-                Application.Exit();
+                System.Windows.Forms.Application.Exit();
             }
-        }
-    }
-
-    internal class Timeout : IDisposable
-    {
-        public void Dispose()
-        {
         }
     }
 }
