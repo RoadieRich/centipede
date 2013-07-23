@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CentipedeJob>
+  <Metadata>
+    <Name>Tutorial - Hello World</Name>
+    <Author>
+      <Name></Name>
+      <Contact></Contact>
+    </Author>
+    <Info Url="" />
+  </Metadata>
+  <Actions>
+    <Centipede.Actions.AskValues Comment="" Title="What is your name?" Prompt="Please enter the following values" VariablesToSet="Name:Your name" Evaluate="False" Assembly="Centipede.exe" />
+    <Centipede.Actions.ShowMessageBox Comment="" Title="Message" MessageText="Hello {Name}" Assembly="Centipede.exe" />
+  </Actions>
+</CentipedeJob>
