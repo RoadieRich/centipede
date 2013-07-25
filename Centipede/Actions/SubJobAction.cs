@@ -140,6 +140,10 @@ namespace Centipede.Actions
                     Variables[outputVar] = CentipedeSerializer.Deserialize(ss);
                 }
             }
+            catch (ActionException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 OnMessage(new MessageEventArgs
