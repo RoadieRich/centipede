@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using CentipedeInterfaces;
-using System.Threading;
 
 
 namespace Centipede.Actions
@@ -25,7 +25,8 @@ namespace Centipede.Actions
             }
         }
 
-        public static readonly string PipeName = "CentipedePipe";
+        public static readonly string PipeName = @"CentipedePipe";
+        public static readonly int PortNumber = 9876;
 
         [ActionArgument(DisplayName = "Job Filename")]
         public String JobFileName = "";
@@ -40,7 +41,7 @@ namespace Centipede.Actions
             Literal = true)]
         public String OutputVars = "";
 
-        private NamedPipeServerStream _ServerStream;
+        private Socket _ServerStream;
         private NamedPipeServerStream _messagePipe;
         private Process _process;
 
@@ -59,23 +60,30 @@ namespace Centipede.Actions
 
             this._process.Start();
 
-            this._ServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut, 100, PipeTransmissionMode.Byte);
+            this._ServerStream = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            _ServerStream.Bind(new IPEndPoint(IPAddress.Loopback, SubJobAction.PortNumber));
             
             BackgroundWorker bgw = new BackgroundWorker();
             bgw.DoWork += BgwOnDoWork;
 
             bgw.RunWorkerAsync();
 
+            Socket connection = null;
             try
             {
+                _ServerStream.Listen(0);
 
-                this._ServerStream.WaitForConnection();
-                
+                connection = this._ServerStream.Accept();
+
+                SocketStream ss = new SocketStream(connection);
+
                 var variables = this.InputVars.Split(',').Select(s => s.Trim()).ToList();
 
                 //send number of variables
 
-                CentipedeSerializer.Serialize(_ServerStream, variables.Count);
+
+
+                CentipedeSerializer.Serialize(ss, variables.Count);
 
                 try
                 {
@@ -84,7 +92,7 @@ namespace Centipede.Actions
                         object o = Variables[variable];
                         try
                         {
-                            CentipedeSerializer.Serialize(this._ServerStream, o);
+                            CentipedeSerializer.Serialize(ss, o);
                         }
                         catch (SerializationException e)
                         {
@@ -109,7 +117,7 @@ namespace Centipede.Actions
 
 
 
-                bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(this._ServerStream);
+                bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(ss);
 
                 if (!subJobSuccess)
                 {
@@ -118,7 +126,7 @@ namespace Centipede.Actions
 
                 var outputVars = OutputVars.Split(',').Select(s => s.Trim()).ToList();
 
-                int varsToRecieve = CentipedeSerializer.Deserialize<int>(this._ServerStream);
+                int varsToRecieve = CentipedeSerializer.Deserialize<int>(ss);
 
                 if (varsToRecieve != outputVars.Count)
                 {
@@ -129,7 +137,7 @@ namespace Centipede.Actions
 
                 foreach (var outputVar in outputVars)
                 {
-                    Variables[outputVar] = CentipedeSerializer.Deserialize(this._ServerStream);
+                    Variables[outputVar] = CentipedeSerializer.Deserialize(ss);
                 }
             }
             catch (Exception e)
@@ -145,6 +153,10 @@ namespace Centipede.Actions
                 try
                 {
                     this._ServerStream.Close();
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
                     this._messagePipe.Close();
                     if (!this._process.HasExited)
                     {
@@ -222,13 +234,71 @@ namespace Centipede.Actions
         }
     }
 
+    public class SocketStream : Stream
+    {
+        private Socket _socket;
+
+        public SocketStream(Socket socket)
+        {
+            this._socket = socket;
+        }
+
+
+        public override void Flush()
+        { }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return 0;
+        }
+
+        public override void SetLength(long value)
+        { }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return _socket.Receive(buffer, offset, count, SocketFlags.None);
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            _socket.Send(buffer, offset, count, SocketFlags.None);
+        }
+
+        public override bool CanRead
+        {
+            get { return _socket.Connected; }
+        }
+
+        public override bool CanSeek
+        {
+            get { return false; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return _socket.Connected; }
+        }
+
+        public override long Length
+        {
+            get { throw new InvalidOperationException(); }
+        }
+
+        public override long Position
+        {
+            get { throw new InvalidOperationException(); }
+            set { throw new InvalidOperationException(); }
+        }
+    }
+
     public abstract class SubJobEntryExitPoint : Action
     {
         protected SubJobEntryExitPoint(string name, IDictionary<string, object> variables, ICentipedeCore core)
             : base(name, variables, core)
         { }
 
-        protected static NamedPipeClientStream ClientStream;
+        protected static SocketStream ClientStream;
     }
 
     [ActionCategory("Flow Control", DisplayName = "Subjob Entry")]
@@ -279,8 +349,7 @@ namespace Centipede.Actions
 
         public SubJobEntry(IDictionary<string, object> variables, ICentipedeCore core)
             : base("SubJob Entry", variables, core)
-        {
-        }
+        { }
 
         [ActionArgument(DisplayName = "Input Variables",
             Usage = "Comma-separated list of variables to set within the subjob",
@@ -291,8 +360,10 @@ namespace Centipede.Actions
 
         protected override void DoAction()
         {
-            ClientStream = new NamedPipeClientStream(@".", SubJobAction.PipeName);
-            ClientStream.Connect();
+
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect(IPAddress.Loopback, SubJobAction.PortNumber);
+            ClientStream = new SocketStream(socket);
             try
             {
                 int varsToReceive = (int)CentipedeSerializer.Deserialize(ClientStream);
@@ -332,7 +403,7 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
             CentipedeSerializer.Serialize(ClientStream, true);
-            ClientStream.WaitForPipeDrain();
+            //ClientStream.WaitForPipeDrain();
 
             var variables = this.OutVars.Split(',').Select(s => s.Trim()).ToList();
             CentipedeSerializer.Serialize(ClientStream, variables.Count);
