@@ -3,9 +3,5 @@
 # 
 # Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
-Fixing save as.
-Temporary fix to subjob actions, by reverting to previous code with weaker error handling.  <strong>Please ensure jobs are saved before testing.</strong>
+Updating subjob actions for improved robustness.
 If you encounter unexpected errors with subjobs, please exit all copies of the application and try again.
-Expanding outline of tutorial files
-Adding confirmation to delete actions
-The installer now has licence and readme pages.
