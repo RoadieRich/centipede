@@ -105,18 +105,11 @@ namespace Centipede.Actions
                         }
                     }
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    OnMessage(new MessageEventArgs
-                              {
-                                  Message = e.Message,
-                                  Level = MessageLevel.Debug
-                              });
+                    throw new ActionException(e, this);
                 }
-
-
-
-
+                
                 bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(ss);
 
                 if (!subJobSuccess)
@@ -128,6 +121,14 @@ namespace Centipede.Actions
 
                 int varsToRecieve = CentipedeSerializer.Deserialize<int>(ss);
 
+                List<object> received = new List<object>(varsToRecieve);
+
+                for (int i = 0; i < varsToRecieve; i++)
+                {
+                    received.Add(CentipedeSerializer.Deserialize(ss));
+                }
+
+
                 if (varsToRecieve != outputVars.Count)
                 {
                     throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}",
@@ -135,22 +136,10 @@ namespace Centipede.Actions
                                                                  varsToRecieve));
                 }
 
-                foreach (var outputVar in outputVars)
+                foreach (var tuple in outputVars.Zip(received, Tuple.Create))
                 {
-                    Variables[outputVar] = CentipedeSerializer.Deserialize(ss);
+                    Variables[tuple.Item1] = tuple.Item2;
                 }
-            }
-            catch (ActionException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                OnMessage(new MessageEventArgs
-                          {
-                              Level = MessageLevel.Error,
-                              Message = e.Message
-                          });
             }
             finally
             {
@@ -373,16 +362,25 @@ namespace Centipede.Actions
                 int varsToReceive = (int)CentipedeSerializer.Deserialize(ClientStream);
                 var enumerable = InputVars.Split(',').Select(s => s.Trim()).ToList();
 
-                if (varsToReceive != enumerable.Count)
+
+
+                var received = new List<object>(varsToReceive);
+                for (int i = 0; i < varsToReceive; i++)
                 {
-                    throw new FatalActionException(string.Format("Wrong number of varialbes, expected {0}, got {1}", enumerable.Count, varsToReceive), this);
+                    received.Add(CentipedeSerializer.Deserialize(ClientStream));
                 }
 
-                int i = 0;
-                foreach (var variable in enumerable)
+                if (varsToReceive != enumerable.Count)
                 {
-                    Variables[variable] = CentipedeSerializer.Deserialize(ClientStream);
+                    throw new FatalActionException(string.Format("Wrong number of variables, expected {0}, got {1}", enumerable.Count, varsToReceive), this);
                 }
+
+                foreach (var tuple in enumerable.Zip(received, Tuple.Create))
+                {
+                    Variables[tuple.Item1] = tuple.Item2;
+                }
+
+                
             }
             catch (ObjectDisposedException e)
             {
