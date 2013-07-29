@@ -1,16 +1,16 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+﻿<!DOCTYPE html>
 <html>
   <head>
     <title>Flow Control - Centipede Tutorial</title>
     <link rel="stylesheet" type="text/css" href="style2.css"/>
-  </head>
+    <style type="text/css" media="scr"></style>
+</head>
   <body>
     <h1 style="counter-reset: h1 5;">Flow Control</h1>
     <p>
       Sometimes you will find that certain actions only need to be done sometimes, or might need to be done multiple 
       times.  This is where flow control comes in.
     </p>
-    
     <h2 id="Variables">Variables</h2>
     <p>
       Whether to execute an action, or the number of times to do so, is controlled by variables.  You have already 
@@ -22,17 +22,17 @@
       Variables are created automatically whenever you store a value, and you can 
       overwrite that value as many times as you need to.</p>
     <h3>Variable Action</h3>
-    <img src="http://placehold.it/500x150&text=Variable+Action"/>
+    <img src="http://placehold.it/500x150&text=Variable+Action" alt="Variable Action"/>
     <p>
       The easiest way of creating or modifying a variable is to use a <i>Variable Action</i>.  This requires an 
       <i>expression</i> and a <i>variable name</i> to store it.</p>
     <p>
-      The simplest expression is a &quot;literal&quot;, for example, <code>0</code> or <code>"Hello world!"</code>,
-      but it can be more complex, involving any combination of variables and literals, for example, <code>(4 / 3.0) * 
-      3.142 * radius ** 3</code>, or even function calls: <code>math.sqrt(math.pow(a, 2) + math.pow(b, 2))</code>.
+      The simplest expression is a "literal", for example, <kbd>0</kbd> or <kbd>"Hello world!"</kbd>,
+      but it can be more complex, involving any combination of variables and literals, for example, <kbd>(4 / 3.0) * 
+      3.142 * radius ** 3</kbd>, or even function calls: <kbd>math.sqrt(math.pow(a, 2) + math.pow(b, 2))</kbd>.
     </p>
-    <h2 id="branching">Branching</h2>
-    <img src="http://placehold.it/500x150&text=Branch+Action"/>
+    <h2 id="branching" onclick="return branching_onclick()">Branching</h2>
+    <img src="http://placehold.it/500x150&text=Branch+Action" alt="Branch Action" />
     <p>
       When Centipedde encounters a Branch Action, it executes an expression, and decides which action to execute next
       depending on the result.
@@ -43,61 +43,48 @@
       if one type of value is expected (e.g. a true or false boolean), and a different type is provided, it will 
       automatically try to convert it.  In a branch action, the result of the expression is expected to be boolean. 
       Luckily, most python values can be converted to a boolean using a few simple rules:
-      <ul>
-        <li>
-          The following values are false:
-          <ul>
-            <li>Any number equal to 0</li>
-            <li>The empty string <code>""</code></li>
-            <li>An empty sequence</li>
-            <li><code>None</code></li>
-          </ul>
-        </li>
-        <li>All other values of builtin types are True.</li>
-      </ul>
-      
     </p>
-    
+    <ul>
+      <li>
+        The following values are false:
+        <ul>
+          <li>Any number equal to 0</li>
+          <li>The empty string <kbd>""</kbd></li>
+          <li>An empty sequence</li>
+          <li><kbd>None</kbd></li>
+        </ul>
+      </li>
+      <li>All other values of builtin types are True.</li>
+    </ul>
+    <p>
+      If the expression is True, the action set in <i>Next Action if True</i> will be executed next.  Otherwise, flow
+      will continue with the next action normally.
+    </p>
     <h2 id="exercise">Exercise: Stepping a loop with incrementing variable</h2>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar ultrices. 
-      Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed rhoncus 
-      fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. Etiam eget 
-      sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia vehicula. Morbi 
-      quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris ligula mauris, porta 
-      a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis vehicula non. Vestibulum 
-      viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-    </p>
-    <p>
-      Proin malesuada lorem odio, eu mollis ante hendrerit in. Aenean purus sem, rhoncus sed consequat non, 
-      facilisis eget turpis. Maecenas blandit purus metus, a bibendum lorem varius nec. Sed pretium lorem 
-      facilisis sem tristique vulputate. Cras ac viverra massa. Vestibulum molestie nisi sagittis blandit porta. 
-      Ut vehicula tellus sit amet nulla viverra, in tempus sapien lacinia. Integer bibendum, ipsum a mollis 
-      pellentesque, urna eros iaculis arcu, vel luctus mi risus quis nisi. Aliquam erat volutpat. Cras euismod 
-      laoreet magna, consequat tincidunt elit.
-    </p>
-    <p>
-      Curabitur luctus nibh vestibulum massa volutpat suscipit. Curabitur bibendum ac sem sed volutpat. Nulla 
-      tellus justo, placerat eu venenatis eget, vehicula vitae diam. Donec semper mollis magna, et pellentesque 
-      sem commodo quis. Nulla nisi lectus, ultricies volutpat malesuada nec, commodo convallis est. Phasellus a 
-      libero vel enim venenatis vulputate. Proin sit amet eros libero. Pellentesque habitant morbi tristique 
-      senectus et netus et malesuada fames ac turpis egestas. Praesent egestas sapien sit amet velit interdum, 
-      quis faucibus nibh congue. Pellentesque bibendum non metus eu viverra.
-    </p>
-    <p>
-      Nullam pellentesque, risus sit amet tristique condimentum, felis metus iaculis nibh, id fringilla orci ante 
-      id purus. Cras volutpat, velit consequat hendrerit dignissim, mauris diam elementum lacus, quis consectetur 
-      ligula leo eget sem. Quisque vel dui ac risus bibendum euismod at sed dui. Ut laoreet, odio eget tempus 
-      pulvinar, odio felis ultrices dolor, a fermentum dolor purus quis eros. Sed at turpis metus. Cras 
-      ullamcorper gravida urna, et bibendum dui commodo eget. Vestibulum sit amet accumsan mi. Cras blandit ante 
-      vitae urna porttitor placerat. Duis pellentesque rhoncus rhoncus.
-    </p>
-    <p>
-      Aenean eleifend erat in mauris aliquam laoreet. Donec eu blandit quam, ac euismod mauris. Mauris eget quam 
-      aliquam lorem elementum interdum in eget ante. Nam fermentum tortor sapien. Duis luctus lorem sit amet 
-      cursus viverra. Ut euismod tempus lectus id dapibus. Nam sit amet nulla quis eros fringilla bibendum. Duis 
-      sit amet arcu eu ipsum dapibus bibendum. Maecenas mi dolor, vestibulum vitae pellentesque a, ultrices eget 
-      nulla.
-    </p>
+    <ol>
+      <li>Add a variable action, use it to set a variable called <kbd>i</kbd> to 
+        <kbd>0</kbd>.</li>
+      <li>Add a message box action, use it to display the value of <kbd>i</kbd>.</li>
+      <li>Add another variable action, use it increase <kbd>i</kbd> using the expression 
+        <kbd>i + 1</kbd>.</li>
+      <li>Use a branch action to check <kbd>i &lt; 10</kbd>, and to loop back to the 
+        messagebox action if it is true</li>
+      <li>How many times does the message box appear? Why?</li>
+      <li>Set the branch action to loop back to the first Variable Action. Try running 
+        now. Use Run &gt; Abort to stop.</li>
+      <li>Create a new job. Add two variables, <kbd>i</kbd> equal to <kbd>1</kbd> and 
+        <kbd>n</kbd> equal to <kbd>0</kbd>.</li>
+      <li>Use two more variable actions to set <kbd>i</kbd> to <kbd>i * 2</kbd>, and to 
+        set <kbd>n</kbd> to <kbd>n+1</kbd>.</li>
+      <li>Use a branch action to loop until <kbd>i</kbd> is more than 1000.  What value will <kbd>n</kbd> 
+        have afterwards?</li>
+      <li>Use a messagebox to display <kbd>n</kbd> to check.</li>
+      <li>
+        <ol type="a">
+          <li></li>
+          <li></li>
+        </ol>
+      </li>
+    </ol>
   </body>
 </html>
