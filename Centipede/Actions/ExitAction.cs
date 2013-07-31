@@ -6,7 +6,7 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("Flow Control", DisplayName = "Exit Centipede", iconName = "exit")]
+    [ActionCategory("Flow Control", DisplayName = "Exit Centipede", IconName = "exit")]
     class ExitAction:Action
     {
         /// <summary>

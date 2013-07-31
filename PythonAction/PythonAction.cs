@@ -16,7 +16,7 @@ namespace PyAction
 {
 
     [ActionCategory("Other Actions",
-            iconName = @"pycon",
+            IconName = @"pycon",
             DisplayName = "Python Action",
             DisplayControl = @"PythonDisplayControl"
             )]
@@ -118,7 +118,7 @@ namespace PyAction
     }
 
     [ActionCategory("Other Actions",
-            iconName = @"pycon",
+            IconName = @"pycon",
             DisplayName = "Import Python Module")]
     public class Import : Action
     {

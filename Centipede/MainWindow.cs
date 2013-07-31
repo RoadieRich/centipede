@@ -563,7 +563,7 @@ namespace Centipede
                         item = CentipedeJob.ToolStripItemFromFilename(jobFilename);
                         item.Click += this.FavouriteItem_Click;
                     }
-                    catch (InvalidOperationException e)
+                    catch (InvalidOperationException)
                     {
                         item = new ToolStripMenuItem
                                {
