@@ -20,7 +20,7 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Destination Variable", Literal = true)]
+        [ActionArgument(DisplayName = "Destination Variable", Literal = true)]
         public String OutVar = "serialized";
 
 
@@ -58,10 +58,10 @@ namespace Centipede.Actions
         { }
 
 
-        [ActionArgument(displayName = "Variable to Deserialize", Literal = true, DisplayOrder = 1)]
+        [ActionArgument(DisplayName = "Variable to Deserialize", Literal = true, DisplayOrder = 1)]
         public String InVar = "serialized";
         
-        [ActionArgument(displayName = "Destination Variable", Literal = true, DisplayOrder=2)]
+        [ActionArgument(DisplayName = "Destination Variable", Literal = true, DisplayOrder=2)]
         public String OutVar = "deserialized";
 
 

@@ -167,7 +167,7 @@ namespace Centipede
         public Dictionary<FileInfo, List<Type>> PluginFiles
         {
             get { return this._pluginFiles; }
-            protected set { this._pluginFiles = value; }
+            private set { this._pluginFiles = value; }
         }
 
         public IPythonEngine PythonEngine
