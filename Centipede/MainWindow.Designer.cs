@@ -14,7 +14,7 @@ namespace Centipede
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainToolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.SplitContainer1 = new System.Windows.Forms.SplitContainer();
             this.SplitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -34,7 +34,6 @@ namespace Centipede
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this._dataSet = new Centipede.JobDataSet();
             this.MessageFilterToolStrip = new System.Windows.Forms.ToolStrip();
@@ -73,6 +72,7 @@ namespace Centipede
             this.HelpIndexMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpSearchMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.HelpOpenTutorialMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpPythonReferenceooMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -90,7 +90,8 @@ namespace Centipede
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HelpOpenTutorialMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.MainToolStripContainer.SuspendLayout();
@@ -296,8 +297,8 @@ namespace Centipede
             this.MessageDataGridView.AllowUserToAddRows = false;
             this.MessageDataGridView.AllowUserToDeleteRows = false;
             this.MessageDataGridView.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.MessageDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.MessageDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.MessageDataGridView.AutoGenerateColumns = false;
             this.MessageDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.MessageDataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
@@ -329,12 +330,6 @@ namespace Centipede
             this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
             resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
             this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
-            // 
-            // actionDataGridViewTextBoxColumn
-            // 
-            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
-            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
-            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
             // 
             // messagesBindingSource
             // 
@@ -599,6 +594,12 @@ namespace Centipede
             this.HelpMenuSeparator1.Name = "HelpMenuSeparator1";
             resources.ApplyResources(this.HelpMenuSeparator1, "HelpMenuSeparator1");
             // 
+            // HelpOpenTutorialMenuItem
+            // 
+            this.HelpOpenTutorialMenuItem.Name = "HelpOpenTutorialMenuItem";
+            resources.ApplyResources(this.HelpOpenTutorialMenuItem, "HelpOpenTutorialMenuItem");
+            this.HelpOpenTutorialMenuItem.Click += new System.EventHandler(this.HelpOpenTutorialMenuItem_Click);
+            // 
             // HelpPythonReferenceooMenuItem
             // 
             this.HelpPythonReferenceooMenuItem.Name = "HelpPythonReferenceooMenuItem";
@@ -700,11 +701,17 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn2, "dataGridViewTextBoxColumn2");
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
-            // HelpOpenTutorialMenuItem
+            // dataGridViewTextBoxColumn3
             // 
-            this.HelpOpenTutorialMenuItem.Name = "HelpOpenTutorialMenuItem";
-            resources.ApplyResources(this.HelpOpenTutorialMenuItem, "HelpOpenTutorialMenuItem");
-            this.HelpOpenTutorialMenuItem.Click += new System.EventHandler(this.HelpOpenTutorialMenuItem_Click);
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "Action";
+            resources.ApplyResources(this.dataGridViewTextBoxColumn3, "dataGridViewTextBoxColumn3");
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            // 
+            // actionDataGridViewTextBoxColumn
+            // 
+            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
+            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
+            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
             // 
             // MainWindow
             // 
@@ -842,6 +849,7 @@ namespace Centipede
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripMenuItem HelpOpenTutorialMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
     }
 }
 

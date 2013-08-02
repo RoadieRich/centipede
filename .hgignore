@@ -23,3 +23,4 @@ TestProject1/*.XML
 *.resources.dll
 Setup/*.log
 Setup/Output/*
+Centipede/Tutorial/backups/
