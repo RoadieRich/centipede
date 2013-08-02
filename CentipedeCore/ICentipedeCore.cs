@@ -118,6 +118,7 @@ namespace CentipedeInterfaces
         object Tag { get; set; }
 
         Dictionary<FileInfo, List<Type>> PluginFiles { get; }
+        List<String> Arguments { get; }
         void LoadActionPlugins();
     }
 
