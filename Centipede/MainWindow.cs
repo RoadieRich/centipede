@@ -626,6 +626,7 @@ namespace Centipede
             else
             {
                 catListView = this.GenerateNewTabPage(catAttribute.category);
+                catListView.ShowItemToolTips = true;
             }
 
             var af = new ActionFactory(catAttribute, pluginType, this.Core);
@@ -1252,6 +1253,7 @@ namespace Centipede
             string appDir = Path.GetDirectoryName(Application.ExecutablePath);
             WebBrowser.Navigate(Path.Combine(appDir, "Tutorial","Tutorial.htm"));
         }
+
     }
 
     internal class ActionFactoryComparer : IComparer
