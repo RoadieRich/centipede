@@ -33,7 +33,6 @@ namespace Centipede
             this.MessageDataGridView = new System.Windows.Forms.DataGridView();
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this._dataSet = new Centipede.JobDataSet();
             this.MessageFilterToolStrip = new System.Windows.Forms.ToolStrip();
@@ -91,6 +90,9 @@ namespace Centipede
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
@@ -264,7 +266,7 @@ namespace Centipede
             // 
             resources.ApplyResources(this.RunTabs, "RunTabs");
             this.RunTabs.Controls.Add(this.OutputTab);
-            this.RunTabs.Controls.Add(this.VarsTab);
+            //this.RunTabs.Controls.Add(this.VarsTab);
             this.RunTabs.Name = "RunTabs";
             this.RunTabs.SelectedIndex = 0;
             // 
@@ -324,12 +326,6 @@ namespace Centipede
             this.messageDataGridViewTextBoxColumn.DataPropertyName = "Message";
             resources.ApplyResources(this.messageDataGridViewTextBoxColumn, "messageDataGridViewTextBoxColumn");
             this.messageDataGridViewTextBoxColumn.Name = "messageDataGridViewTextBoxColumn";
-            // 
-            // levelDataGridViewTextBoxColumn
-            // 
-            this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
-            resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
-            this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
             // 
             // messagesBindingSource
             // 
@@ -707,6 +703,24 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn3, "dataGridViewTextBoxColumn3");
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "Level";
+            resources.ApplyResources(this.dataGridViewTextBoxColumn4, "dataGridViewTextBoxColumn4");
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.DataPropertyName = "Action";
+            resources.ApplyResources(this.dataGridViewTextBoxColumn5, "dataGridViewTextBoxColumn5");
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            // 
+            // levelDataGridViewTextBoxColumn
+            // 
+            this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
+            resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
+            this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
+            // 
             // actionDataGridViewTextBoxColumn
             // 
             this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
@@ -850,6 +864,8 @@ namespace Centipede
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripMenuItem HelpOpenTutorialMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
     }
 }
 
