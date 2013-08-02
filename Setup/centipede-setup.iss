@@ -133,9 +133,9 @@ Root: "HKCR"; Subkey: ".100p"; ValueType: string; ValueName: ""; ValueData: "Cen
 Root: "HKCR"; Subkey: ".100p\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{win}\SHELLNEW\New Job.100p"
 Root: "HKCR"; Subkey: "CentipedeJob"; ValueType: string; ValueName: ""; ValueData: "Centipede Job"; Flags: uninsdeletekey
 Root: "HKCR"; Subkey: "CentipedeJob\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\CentipedeFile.ico"
-Root: "HKCR"; Subkey: "CentipedeJob\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" ""%1"""
+Root: "HKCR"; Subkey: "CentipedeJob\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" ""%1"" ""%2"" ""%3"" ""%4"" ""%5"" ""%6"" ""%7"" ""%8"" ""%9"""
 Root: "HKCR"; Subkey: "CentipedeJob\shell\run"; ValueType: string; ValueName: ""; ValueData: "&Run";
-Root: "HKCR"; Subkey: "CentipedeJob\shell\run\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" /r ""%1"""
+Root: "HKCR"; Subkey: "CentipedeJob\shell\run\command"; ValueType: string; ValueName: ""; ValueData: """{app}\Centipede.exe"" /r ""%1"" ""%2"" ""%3"" ""%4"" ""%5"" ""%6"" ""%7"" ""%8"" ""%9"""
 
 [Code]
 #include SetupDir + "\code.pas"

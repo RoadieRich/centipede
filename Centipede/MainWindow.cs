@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -115,6 +114,7 @@ namespace Centipede
                 _webBrowser = webBrowser;
             }
 
+            [PublicAPI]
             public void ShowTutorial()
             {
                 string appDir = Path.GetDirectoryName(Application.ExecutablePath);
@@ -436,6 +436,7 @@ namespace Centipede
             this.AddToActionTab(typeof(TestDeserialize));
             this.AddToActionTab(typeof(SubJobEntry));
             this.AddToActionTab(typeof(SubJobExitPoint));
+            this.AddToActionTab(typeof(GetArguments));
             
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += this.UrlTextbox_KeyUp;

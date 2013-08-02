@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Centipede2.vsmdi = Centipede2.vsmdi
 		Local.testsettings = Local.testsettings
+		packages\repositories.config = packages\repositories.config
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject

@@ -31,7 +31,7 @@ namespace Centipede
             this.Variables = this.PythonEngine.GetScope();
 
             this.Job = new CentipedeJob();
-            this._arguments = arguments;
+            this._arguments = arguments.Where(String.IsNullOrWhiteSpace).ToList();
         }
 
         #endregion Constructors
@@ -138,8 +138,7 @@ namespace Centipede
 
         #region Fields
 
-        [UsedImplicitly]
-        private List<string> _arguments;
+        private readonly List<string> _arguments;
 
         private volatile Object _abortRequested = false;
 
@@ -169,6 +168,8 @@ namespace Centipede
             get { return this._pluginFiles; }
             private set { this._pluginFiles = value; }
         }
+
+        public List<string> Arguments { get { return _arguments; } }
 
         public IPythonEngine PythonEngine
         {

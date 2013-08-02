@@ -39,7 +39,7 @@ namespace CentipedeDropHandler
     {
         public static string AsArgumentList(this IEnumerable<String> list)
         {
-            return String.Join(" ", list.Select(s => String.Format("\"{0}\"", s)));
+            return String.Join(" ", new []{"/r"}.Concat(list.Select(s => String.Format("\"{0}\"", s))));
         }
     }
 }
