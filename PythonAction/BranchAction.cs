@@ -76,11 +76,15 @@ namespace PyAction
         [Localizable(false)]
         protected override void PopulateMembersFromXml(XPathNavigator element)
         {
+            
             Comment = element.SelectSingleNode("@Comment").Value;
             ConditionSource = element.Value;
             int index = int.Parse(element.SelectSingleNode("@Target").Value);
+            
             AfterLoadEvent instanceOnAfterLoad = null;
-            instanceOnAfterLoad = delegate
+
+            /// Target can be saved as "-1" if the target does not exist
+            if (index != -1) instanceOnAfterLoad = delegate
                                       {
                                           NextIfTrue = GetCurrentCore().Job.Actions[index];
                                           GetCurrentCore().AfterLoad -= instanceOnAfterLoad;
