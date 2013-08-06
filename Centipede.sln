@@ -1,15 +1,34 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Centipede", "Centipede\Centipede.csproj", "{3985334B-E51C-4F9A-A80A-B419E1AEF523}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D34FC450-055E-4C4E-8293-C324EF5216FD} = {D34FC450-055E-4C4E-8293-C324EF5216FD}
+		{AA2CF479-1D03-4764-B206-594B76DFA970} = {AA2CF479-1D03-4764-B206-594B76DFA970}
+		{A67D27AC-3393-42F7-9FE8-179751FCE732} = {A67D27AC-3393-42F7-9FE8-179751FCE732}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Action", "Action\Action.csproj", "{AA2CF479-1D03-4764-B206-594B76DFA970}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D34FC450-055E-4C4E-8293-C324EF5216FD} = {D34FC450-055E-4C4E-8293-C324EF5216FD}
+		{A67D27AC-3393-42F7-9FE8-179751FCE732} = {A67D27AC-3393-42F7-9FE8-179751FCE732}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonAction", "PythonAction\PythonAction.csproj", "{CC08418D-2B00-4BF5-B5B1-8BF7E9404CF0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D34FC450-055E-4C4E-8293-C324EF5216FD} = {D34FC450-055E-4C4E-8293-C324EF5216FD}
+		{A67D27AC-3393-42F7-9FE8-179751FCE732} = {A67D27AC-3393-42F7-9FE8-179751FCE732}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonEngine", "PythonEngine\PythonEngine.csproj", "{A67D27AC-3393-42F7-9FE8-179751FCE732}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D34FC450-055E-4C4E-8293-C324EF5216FD} = {D34FC450-055E-4C4E-8293-C324EF5216FD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextFile", "TextFile\TextFile.csproj", "{B459DEA6-5248-421F-9056-A477A80A74F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D34FC450-055E-4C4E-8293-C324EF5216FD} = {D34FC450-055E-4C4E-8293-C324EF5216FD}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{23C0F54A-5762-410F-95FE-FE2A76EF2CDE}"
 	ProjectSection(SolutionItems) = preProject
