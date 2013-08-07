@@ -13,7 +13,7 @@
 #                                    #
 ######################################
 
-iscc = /cygdrive/c/Program\ Files/Inno\ Setup\ 5/ISCC
+iscc = "$$PROGRAMFILES/Inno Setup 5/ISCC"
 
 binfolder = ../bin/Debug
 
@@ -28,10 +28,7 @@ uploadlog = $(setupoutputfolder)/upload.log
 
 binfolderfiles = $(binfolder)/Action.dll $(binfolder)/Centipede.exe $(binfolder)/CentipedeInterfaces.dll \
     $(binfolder)/SciLexer.dll $(binfolder)/SciLexer64.dll $(binfolder)/Tutorial/*
-pluginfiles = $(pluginsfolder)/CentipedeAction.dll $(pluginsfolder)/SolidworksActions.dll \
-    $(pluginsfolder)/Microsoft.Scripting.Core.dll $(pluginsfolder)/TextFile.dll \
-    $(pluginsfolder)/OfficeActions.dll $(pluginsfolder)/XMLActions.dll $(pluginsfolder)/PythonAction.dll \
-    $(pluginsfolder)/ShellActions.dll
+pluginfiles = $(pluginsfolder)/*
 
 installersource = centipede-setup.iss
     
@@ -55,7 +52,7 @@ uploadtool = /usr/bin/sftp
 
 #assumes sftp is set up for unattended login to this account
 webuser = www-data
-server = ps-der-hg1
+server = 172.25.2.16
 
 
 installer: $(installerfilepath)
@@ -86,7 +83,9 @@ $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 upload.log: $(installerfilepath) $(webpagefilename)
 	@date >> upload.log
 	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath) /var/www/"
+	@echo "Done." >> upload.log
 	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename) /var/www/"
+	@echo "Done." >> upload.log
 
 notify.log: upload.log
 	@date >> notify.log

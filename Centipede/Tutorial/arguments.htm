@@ -1,112 +1,101 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-  <head>
+<head>
     <title>Action Arguments - Centipede Tutorial</title>
-    <link rel="stylesheet" type="text/css" href="style2.css"/>
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="style2.css" />
+</head>
+<body>
     <h1 style="counter-reset: h1 2;">Arguments</h1>
     <p>
-      Most actions have one or more arguments, an argument is a piece of data provided as input to that action.
+        Most actions have one or more arguments, an argument is a piece of data provided as input to that action.
     </p>
     <p>
-      The arguments of each action are displayed in the action editor panel, the action editor can be toggled between 
+        The arguments of each action are displayed in the action editor panel, the action editor can be toggled between 
       expanded state, which shows the arguments, or collapsed state, which hides the arguments. 
     </p>
     <p>
-      In addition to the arguments, each action has a space for a helpful comment, which is visible even when the 
+        In addition to the arguments, each action has a space for a helpful comment, which is visible even when the 
       action is collapsed.
     </p>
 
     <h2 id="literal_vs_interpolated">Literal vs Interpolated</h2>
     <p>
-      Some arguments can accept expressions, if an argument accepts expressions it is identified by a yellow tint to 
+        Some arguments can accept expressions, if an argument accepts expressions it is identified by a yellow tint to 
       the background. Literal arguments do not accept expressions, these have a white background.
     </p>
     <p>
-      Centipede scans action arguments for expressions, and the expression is replaced with its result, so that
+        Centipede scans action arguments for expressions, and the expression is replaced with its result, so that
       it is possible to construct the inputs to an action using the results from another, through Centipede variables
     </p>
     <p>
-      Expressions are enclosed by curly braces, and can be inserted within text, for example:
+        Expressions are enclosed by curly braces, and can be inserted within text, for example:
     </p>
-      <ul>
+    <ul>
         <li>
-          <kbd>Five times nine is {5 * 9}</kbd>
+            <kbd>Five times nine is {5 * 9}</kbd>
         </li>
         <li>
-          <kbd>millimetreValue = {inchValue * 25.4}</kbd>
+            <kbd>millimetreValue = {inchValue * 25.4}</kbd>
         </li>
-      </ul>
+    </ul>
     <p>
-      Expressions may include Centipede variable names and valid math functions expressed using Python notation. 
+        Expressions may include Centipede variable names and valid math functions expressed using Python notation. 
     </p>
     <h2 id="exercise">Exercise: Hello World Message Box</h2>
     <p>
-      This exercise builds on the following topics, covered in the tutorial so far:
+        This exercise builds on the following topics, covered in the tutorial so far:
     </p>
     <ul>
-      <li>
-        Adding Actions
-      </li>
-      <li>
-        Arguments
-      </li>
+        <li>Adding Actions
+        </li>
+        <li>Arguments
+        </li>
     </ul>
     <p>
-      The exercise demonstrates how to ask for user input, and then uses that input in another action.
+        The exercise demonstrates how to ask for user input, and then uses that input in another action.
     </p>
     <h3>Instructions</h3>
     <ol>
-      <li>
-        Start a new Centipede job, and select the <b>User Interface</b> tab of the action toolbox.
-      </li>
-      <li>
-        Drag the action <b>Ask for Input (Text or Numeric)</b> into the action edtor panel above, or double click it.
-      </li>
-      <li>
-        Expand the action by clicking on the '+' button.
+        <li>Start a new Centipede job, and select the <b>User Interface</b> tab of the action toolbox.
+        </li>
+        <li>Drag the action <b>Ask for Input (Text or Numeric)</b> into the action edtor panel above, or double click it.
+        </li>
+        <li>Expand the action by clicking on the '+' button.
         <ul>
-          <li>
-            Type <kbd>What is your name?</kbd> into the <b>Title</b> argument.
-          </li>
-          <li>
-            Leave the default text <kbd>Please enter the following values</kbd> in the <b>Prompt</b> argument.
-          </li>
-          <li>
-            Type <kbd>Name:Your name</kbd> into the <b>Variables</b> argument.
-          </li>
+            <li>Type <kbd>What is your name?</kbd> into the <b>Title</b> argument.
+            </li>
+            <li>Leave the default text <kbd>Please enter the following values</kbd> in the <b>Prompt</b> argument.
+            </li>
+            <li>Type <kbd>Name:Your name</kbd> into the <b>Variables</b> argument.
+            </li>
         </ul>
-      </li>
-      <li>
-        Add the <b>Show message box</b> action under the <b>Ask for Input</b> action.
-      </li>
-      <li>
-        Expand the action and set the following arguments:
+        </li>
+        <li>Add the <b>Show message box</b> action under the <b>Ask for Input</b> action.
+        </li>
+        <li>Expand the action and set the following arguments:
         <ul>
-          <li>
-            <b>Message</b> = <kbd>Hello {Name}</kbd>
-          </li>
+            <li>
+                <b>Message</b> = <kbd>Hello {Name}</kbd>
+            </li>
         </ul>
-      </li>
-      <li>
-        Finally, click the <b>Run</b> button, or choose <b>Run</b> from the Centipede menu bar to run the job.
-      </li>
+        </li>
+        <li>Finally, click the <b>Run</b> button, or choose <b>Run</b> from the Centipede menu bar to run the job.
+        </li>
     </ol>
     <p>
-      Centipede should prompt you to enter your name, and whatever value you enter appears in the next action.
+        Centipede should prompt you to enter your name, and whatever value you enter appears in the next action.
     </p>
     <p>
-      In the output window, inspect the messages and the Variables tabs to understand what happened.
+        In the output window, inspect the messages and the Variables tabs to understand what happened.
     </p>
     <p>
-      Now run it again, and try entering a math expression like <kbd>2 + 2</kbd> as your name.
+        Now run it again, and try entering a math expression like <kbd>2 + 2</kbd> as your name.
     </p>
     <p>
-      Next, change the <b>Evaluate user input</b> argument so that it is checked, and run the job again with a math expression.
+        Next, change the <b>Evaluate user input</b> argument so that it is checked, and run the job again with a math expression.
     </p>
     <p>
-      Inspect the output window and variables tab, and notice the different behaviour.
+        Inspect the output window and variables tab, and notice the different behaviour.
     </p>
-  </body>
+</body>
 </html>

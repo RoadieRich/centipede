@@ -81,7 +81,7 @@ Source: "{#BinaryDir}\CentipedeInterfaces.dll"; DestDir: "{app}"; Flags: ignorev
 Source: "{#BinaryDir}\PythonEngine.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\IronPython.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\IronPython.Modules.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
-Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Centipede
+;Source: "{#BinaryDir}\Plugins\Microsoft.Scripting.Core.dll"; DestDir: "{app}\Plugins"; Components: Centipede
 Source: "{#BinaryDir}\Action.dll"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 Source: "{#BinaryDir}\Resources\CentipedeFile.ico"; DestDir: "{app}"; Flags: ignoreversion; Components: Centipede
 
