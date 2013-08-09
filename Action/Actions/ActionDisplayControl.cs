@@ -398,6 +398,9 @@ namespace Centipede.Actions
         /// </summary>
         public event DeletedEventHandler Deleted;
 
+        public event ActionEvent MoveUp;
+        public event ActionEvent MoveDown;
+        
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -416,7 +419,6 @@ namespace Centipede.Actions
             {
                 handler(this, CentipedeEventArgs.Empty);
             }
-
         }
 
         /// <summary>
@@ -446,6 +448,24 @@ namespace Centipede.Actions
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public delegate void DeletedEventHandler(object sender, CentipedeEventArgs e);
+
+        private void moveUpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var handler = MoveUp;
+            if (handler != null)
+            {
+                handler(this, new ActionEventArgs {Action = ThisAction});
+            }
+        }
+
+        private void moveDownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var handler = MoveDown;
+            if (handler != null)
+            {
+                handler(this, new ActionEventArgs {Action = ThisAction});
+            }
+        }
 
 
     }

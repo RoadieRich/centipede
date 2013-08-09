@@ -6,3 +6,4 @@
 Updating subjob actions for improved robustness.
 If you encounter unexpected errors with subjobs, please exit all copies of the application and try again.
 Expanded tutorials.  There are still missing topics, but we're working on it.
+Added ability to reorder actions through the right click menu.

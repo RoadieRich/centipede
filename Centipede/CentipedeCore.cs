@@ -429,7 +429,7 @@ namespace Centipede
                 default:
                 {
                     IAction prevAction = job.Actions[index - 1];
-                    IAction nextAction = job.Actions[index];
+                    IAction nextAction = prevAction.Next;
                     prevAction.Next = action;
                     action.Next = nextAction;
                     job.Actions.Insert(index, action);

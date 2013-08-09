@@ -307,7 +307,7 @@ namespace Centipede.Actions
 
             foreach (var action in GetCurrentCore().Job.Actions)
             {
-                action.MessageHandler += SubJobMessageHandler;
+                action.SetMessageHandler(SubJobMessageHandler);
 
             }
         }

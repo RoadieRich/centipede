@@ -69,14 +69,10 @@ namespace CentipedeInterfaces
         /// <summary>
         /// 
         /// </summary>
-        event MessageEvent MessageHandler;
-
-        /// <summary>
-        /// 
-        /// </summary>
         event AskEvent AskHandler;
-
+        
         IEnumerable<Expression> FindPythonExpressions(string text);
+        void SetMessageHandler(MessageEvent actionMessageHandler);
     }
     /// <summary>
     /// 
