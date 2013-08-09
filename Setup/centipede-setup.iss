@@ -126,6 +126,7 @@ Name: "{group}\Centipede Tutiorial"; Filename: "{app}\Tutorial\Tutorial.htm"
 Filename: "{app}\Resources\dotNetFx40_Full_x86_x64.exe"; Flags: waituntilterminated; StatusMsg: "Installing the .NET framework"; Components: Centipede; Check: FrameworkIsNotInstalled
 Filename: "msiexec.exe"; Parameters: "/i ""{app}\Resources\IronPython-2.7.3.msi"" /qb"; WorkingDir: "{app}\Resources"; Flags: shellexec waituntilterminated; StatusMsg: "Installing IronPython 2.7"; Components: Centipede; Check: IronPythonNotInstalled
 Filename: "{app}\Centipede.exe"; Flags: nowait postinstall; Description: "Start Centipede"; StatusMsg: "Starting Centipede"; Components: Centipede
+Filename: "cmd"; Parameters: "/c ""del /s /q {localappdata}\Chemineer\*"""; Flags: nowait shellexec unchecked postinstall runhidden; Description: "Restore Factory Defaults. This will delete your favourites as well."
 
 [Registry]
 Root: "HKLM"; Subkey: "SOFTWARE\Microsoft\Internet Explorer\Main\Feature Control\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "centipede.exe"; ValueData: "{code:GetIEEmulationValue}"; Flags: createvalueifdoesntexist uninsdeletevalue; Components: Centipede
