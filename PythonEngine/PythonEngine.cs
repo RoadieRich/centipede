@@ -68,7 +68,7 @@ namespace PythonEngine
         {
             try
             {
-                PythonByteCode compiled = (PythonByteCode)Compile(code, SourceCodeType.Statements);
+                PythonByteCode compiled = (PythonByteCode)Compile(code, SourceCodeType.AutoDetect);
                 //CompiledCode compiled = source.Compile();
                 compiled.Execute(scope);
             }

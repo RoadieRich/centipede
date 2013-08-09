@@ -65,8 +65,8 @@ namespace Centipede
             this._pendingUpdate = null;
             //Visible = false;
 
-            this.InitializeComponent();
-            this.SetUserProperties();
+            InitializeComponent();
+            SetUserProperties();
 
             this.WebBrowser.DocumentText = Resources.WelcomeScreen;
 
@@ -77,7 +77,7 @@ namespace Centipede
 
             //Visible = true;
 
-            this.Core = centipedeCore;
+            Core = centipedeCore;
 
             ActionFactory.MessageHandler = this.Action_MessageHandler;
 
@@ -746,19 +746,66 @@ namespace Centipede
             {
                 adc = new ActionDisplayControl(action);
             }
-            action.MessageHandler += this.Action_MessageHandler;
+
+            action.SetMessageHandler(this.Action_MessageHandler);
+           //action.MessageHandler += this.Action_MessageHandler;
+            
+            
             adc.Deleted += this.ActionDisplayControl_Deleted;
+
+            adc.MoveUp += this.ActionDisplayControl_MoveUp;
+            adc.MoveDown += this.ActionDisplayControl_MoveDown;
+
             adc.DragEnter += this.ActionContainer_DragEnter;
             adc.DragDrop += this.ActionContainer_DragDrop;
-            this.ActionContainer.Controls.Add(adc, 0, e.Index);
+
+            this.ActionContainer.Visible = false;
+
+            var controlsAfter = ActionContainer.Controls.OfType<Control>().Skip(e.Index).ToList();
+            
+            ActionContainer.Controls.RemoveRange(controlsAfter);
+
+            this.ActionContainer.Controls.Add(adc);
+
+            ActionContainer.Controls.AddRange(controlsAfter);
+
+
             this.ActionContainer.ScrollControlIntoView(adc);
-            this.ActionContainer.SetRow(adc, e.Index);
+            this.ActionContainer.Visible = true;
             this.Dirty = true;
 
             if (!e.LoadedSuccessfully)
             {
                 this._unloadablePlugins = true;
             }
+        }
+
+        private void ActionDisplayControl_MoveDown(object sender, ActionEventArgs e)
+        {
+
+            if (e.Action == Core.Job.Actions.Last())
+            {
+                return;
+            }
+
+            int oldIndex = Core.Job.Actions.IndexOf(e.Action);
+
+            Core.RemoveAction(e.Action);
+            Core.AddAction(e.Action, oldIndex + 1);
+
+        }
+
+        private void ActionDisplayControl_MoveUp(object sender, ActionEventArgs e)
+        {
+            if (e.Action == Core.Job.Actions.First())
+            {
+                return;
+            }
+            
+            int oldIndex = Core.Job.Actions.IndexOf(e.Action);
+
+            Core.RemoveAction(e.Action);
+            Core.AddAction(e.Action, oldIndex - 1);
         }
 
         private void ActionDisplayControl_Deleted(object sender, CentipedeEventArgs e)

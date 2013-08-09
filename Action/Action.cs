@@ -305,6 +305,14 @@ namespace Centipede
             return pythonExpressions;
         }
 
+        public void SetMessageHandler(MessageEvent actionMessageHandler)
+        {
+            if (!_messageEvents.Contains(actionMessageHandler))
+            {
+                this.MessageHandler += actionMessageHandler;
+            }
+        }
+
         private bool Throws<TException>(System.Action action) where TException : Exception
         {
             TException exception;
@@ -623,7 +631,13 @@ namespace Centipede
         /// <summary>
         /// Raised when the action needs to pass a message to the user
         /// </summary>
-        public event MessageEvent MessageHandler;
+        protected event MessageEvent MessageHandler
+        {
+            add { _messageEvents.Add(value); }
+            remove { _messageEvents.Remove(value); }
+        }
+        
+        List<MessageEvent> _messageEvents = new List<MessageEvent>();
 
         /// <summary>
         /// Raise <see cref="MessageEvent"/> with the given <see cref="MessageEventArgs"/>
@@ -632,10 +646,9 @@ namespace Centipede
         [PublicAPI]
         protected void OnMessage(MessageEventArgs e)
         {
-            MessageEvent @event = MessageHandler;
-            if (@event != null)
+            foreach (var messageEvent in _messageEvents)
             {
-                @event(this, e);
+                messageEvent(this, e);
             }
         }
 
