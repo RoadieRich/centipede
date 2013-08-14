@@ -205,7 +205,7 @@ namespace Centipede
             {
                 Invoke(action);
             }
-            catch (Exception e)
+            catch (Exception)
             { }
         }
 
@@ -437,6 +437,7 @@ namespace Centipede
             this.AddToActionTab(typeof(SubJobEntry));
             this.AddToActionTab(typeof(SubJobExitPoint));
             this.AddToActionTab(typeof(GetArguments));
+            this.AddToActionTab(typeof (HaltJob));
             
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += this.UrlTextbox_KeyUp;

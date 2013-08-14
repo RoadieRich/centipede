@@ -60,6 +60,9 @@ namespace Centipede.Actions.Properties {
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
         public static System.Drawing.Icon missing {
             get {
                 object obj = ResourceManager.GetObject("missing", resourceCulture);

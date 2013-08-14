@@ -61,11 +61,7 @@ namespace CentipedeInterfaces
         /// </param>
         void AddToXmlElement(XmlElement rootElement);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        void Dispose();
-
+        
         /// <summary>
         /// 
         /// </summary>
