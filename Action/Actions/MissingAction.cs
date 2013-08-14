@@ -9,15 +9,32 @@ using CentipedeInterfaces;
 namespace Centipede.Actions
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     [ActionCategory("", DisplayControl = "MissingActionDisplayControl", IconName = "missing")]
     public class MissingAction : Action
     {
+        /// <summary>
+        /// Create an action to represent an action from a plugin the user doesn't have installed
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="variables"></param>
+        /// <param name="core"></param>
         public MissingAction(string name, IDictionary<string, object> variables, ICentipedeCore core)
             : base(name, variables, core)
         { }
 
         internal Dictionary<string, object> Fields = new Dictionary<string, object>();
 
+
+        /// <summary>
+        /// Perform the action
+        /// </summary>
+        /// <exception cref="ActionException">
+        /// the action cannot be completed
+        /// </exception>
+        /// <exception cref="FatalActionException">The job needs to halt</exception>
         protected override void DoAction()
         {
             throw new FatalActionException("Cannot run action from missing plugin", this);
@@ -27,6 +44,14 @@ namespace Centipede.Actions
         private string _element;
         private string _name;
 
+        /// <summary>
+        /// Populate members from the given Xml Element.
+        /// </summary>
+        /// <remarks>
+        /// Should be implemented if <see cref="Action.AddToXmlElement" /> is
+        /// non-trivially overridden.
+        /// </remarks>
+        /// <param name="element">The XmlElement describing the action</param>
         protected override void PopulateMembersFromXml(XPathNavigator element)
         {
 
@@ -55,6 +80,12 @@ namespace Centipede.Actions
             return (XmlNode)element.UnderlyingObject;
         }
 
+        /// <summary>
+        /// Append xml code for the action to the given parent element
+        /// </summary>
+        /// <param name="rootElement">
+        /// The parent element to add the action to
+        /// </param>
         public override void AddToXmlElement(XmlElement rootElement)
         {
             XmlDocument doc = rootElement.OwnerDocument;

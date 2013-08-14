@@ -305,6 +305,10 @@ namespace Centipede
             return pythonExpressions;
         }
 
+        /// <summary>
+        /// Set message handler, ensuring each handler is only set once
+        /// </summary>
+        /// <param name="actionMessageHandler">Handler to add</param>
         public void SetMessageHandler(MessageEvent actionMessageHandler)
         {
             if (!_messageEvents.Contains(actionMessageHandler))

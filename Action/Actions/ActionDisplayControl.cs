@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Centipede.Properties;
 using CentipedeInterfaces;
 using ResharperAnnotations;
 
@@ -80,12 +79,12 @@ namespace Centipede.Actions
 
             Image image = null;
 
-            if (!String.IsNullOrEmpty(categoryAttribute.iconName))
+            if (!String.IsNullOrEmpty(categoryAttribute.IconName))
             {
                 Type t = actionType.Assembly.GetType(actionType.Namespace + @".Properties.Resources");
                 if (t != null)
                 {
-                    var icon = t.GetProperty(categoryAttribute.iconName, typeof (Icon)).GetValue(t, null) as Icon;
+                    var icon = t.GetProperty(categoryAttribute.IconName, typeof (Icon)).GetValue(t, null) as Icon;
                     if (icon != null)
                     {
                         image = icon.ToBitmap();
@@ -95,6 +94,9 @@ namespace Centipede.Actions
             return image;
         }
 
+        /// <summary>
+        /// Populate Attribute table with controls for <see cref="ThisAction"/>'s arguments
+        /// </summary>
         protected void GenerateArguments()
         {
             Type actionType = ThisAction.GetType();
@@ -114,6 +116,11 @@ namespace Centipede.Actions
             }
         }
 
+        /// <summary>
+        /// Create label and value control for argument <paramref name="arg"/>
+        /// </summary>
+        /// <param name="arg">A <see cref="FieldAndPropertyWrapper"/>for the given argument</param>
+        /// <returns>An array of <see cref="Control"/>s containing {<see cref="Label">label</see>, control}.</returns>
         protected Control[] GenerateFieldControls(FieldAndPropertyWrapper arg)
         {
             ActionArgumentAttribute attrData = arg.GetArgumentAttribute();
@@ -276,7 +283,7 @@ namespace Centipede.Actions
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(this, String.Format(Resources.ActionDisplayControl_attrValue_TextChanged_Invalid_Value_entered_message,
+                    MessageBox.Show(this, String.Format("Invalid Value entered in {0}.{1}: {2}",
                                                   ThisAction.Name, argInfo.DisplayName, attrValue.Text));
                 }
             }
@@ -388,6 +395,9 @@ namespace Centipede.Actions
         /// </summary>
         public static EventHandler SetDirty;
 
+        /// <summary>
+        /// For designer support only
+        /// </summary>
         protected ActionDisplayControl()
         {
             this.InitializeComponent();
@@ -398,7 +408,13 @@ namespace Centipede.Actions
         /// </summary>
         public event DeletedEventHandler Deleted;
 
+        /// <summary>
+        /// Raised when the <see cref="ActionDisplayControl"/> is requested to move up
+        /// </summary>
         public event ActionEvent MoveUp;
+        /// <summary>
+        /// Raised when the <see cref="ActionDisplayControl"/> is requested to move down
+        /// </summary>
         public event ActionEvent MoveDown;
         
         private void CommentTextBox_TextChanged(object sender, EventArgs e)

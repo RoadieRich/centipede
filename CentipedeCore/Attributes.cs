@@ -30,7 +30,8 @@ namespace CentipedeInterfaces
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     [CLSCompliant(false)]
     public sealed class ActionArgumentAttribute : BaseCentipedeAttribute
-    { // ReSharper disable CSharpWarnings::CS0612
+    {
+        // ReSharper disable CSharpWarnings::CS0612
 
         /// <summary>
         /// 
@@ -41,8 +42,8 @@ namespace CentipedeInterfaces
 
         public String DisplayControl
         {
-            get { return displayControl; }
-            set { displayControl = value; }
+            get { return _displayControl; }
+            set { _displayControl = value; }
         }
 
 
@@ -51,7 +52,13 @@ namespace CentipedeInterfaces
         /// </summary>
         [CanBeNull]
         [Obsolete]
-        public String displayName;
+        public String displayName
+        {
+        
+            get { return _displayControl; }
+            set { _displayControl = value; }
+            
+        }
 
         /// <summary>
         /// </summary>
@@ -60,10 +67,10 @@ namespace CentipedeInterfaces
         {
             get
             {
-                GetI18n(ref this.displayName);
-                return this.displayName;
+                GetI18n(ref this._displayName);
+                return this._displayName;
             }
-            set { this.displayName = value; }
+            set { this._displayName = value; }
         }
 
         /// <summary>
@@ -71,8 +78,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string OnChangedHandlerName
         {
-            get { return this.onChangedHandlerName; }
-            set { this.onChangedHandlerName = value; }
+            get { return this._onChangedHandlerName; }
+            set { this._onChangedHandlerName = value; }
         }
 
         /// <summary>
@@ -80,8 +87,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string OnLeaveHandlerName
         {
-            get { return this.onLeaveHandlerName; }
-            set { this.onLeaveHandlerName = value; }
+            get { return this._onLeaveHandlerName; }
+            set { this._onLeaveHandlerName = value; }
         }
 
         /// <summary>
@@ -89,8 +96,8 @@ namespace CentipedeInterfaces
         [CanBeNull]
         public string SetterMethodName
         {
-            get { return this.setterMethodName; }
-            set { this.setterMethodName = value; }
+            get { return this._setterMethodName; }
+            set { this._setterMethodName = value; }
         }
 
         /// <summary>
@@ -100,10 +107,10 @@ namespace CentipedeInterfaces
         {
             get
             {
-                GetI18n(ref this.usage);
-                return this.usage;
+                GetI18n(ref this._usage);
+                return this._usage;
             }
-            set { this.usage = value; }
+            set { this._usage = value; }
         }
 
         /// <summary>
@@ -124,25 +131,56 @@ namespace CentipedeInterfaces
         /// </summary>
         [CanBeNull]
         [Obsolete]
-        public string onChangedHandlerName;
+        public string onChangedHandlerName
+        {
+            get { return _onChangedHandlerName; }
+            set { _onChangedHandlerName = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [NotNull, Obsolete]
+        public string onLeaveHandlerName
+        {
+            get { return _onLeaveHandlerName; }
+            set { _onLeaveHandlerName = value; }
+        }
 
         /// <summary>
         /// </summary>
         [CanBeNull]
         [Obsolete]
-        public String onLeaveHandlerName;
+        public string setterMethodName
+        {
+            get { return _setterMethodName; }
+            set { _setterMethodName = value; }
+        }
 
         /// <summary>
         /// </summary>
         [CanBeNull]
         [Obsolete]
-        public string setterMethodName;
+        public string usage
+        {
+            get { return _usage; }
+            set { _usage = value; }
+        }
 
         /// <summary>
         /// </summary>
-        [CanBeNull]
-        [Obsolete]
-        public String usage;
+        private String _onLeaveHandlerName;
+
+        /// <summary>
+        /// </summary>
+        private string _setterMethodName;
+
+        /// <summary>
+        /// </summary>
+        private String _usage;
+
+        private string _displayControl;
+        private string _displayName;
+        private string _onChangedHandlerName;
     }
 
     /// <summary>
@@ -165,14 +203,12 @@ namespace CentipedeInterfaces
         /// <summary>
         ///     name of a custom display control used to display the action on thr Actions listview
         /// </summary>
-        [Obsolete]
-        public String displayControl;
+        private String _displayControl;
 
         /// <summary>
         ///     The display name for the action, defaults to the classname
         /// </summary>
-        [Obsolete]
-        public String displayName;
+        private String _displayName;
 
         /// <summary>
         ///     helptext for the action, displayed as a tooltip
@@ -192,8 +228,8 @@ namespace CentipedeInterfaces
         /// </summary>
         public String IconName
         {
-            get { return iconName; }
-            set { iconName = value; }
+            get { return this._iconName; }
+            set { _iconName = value; }
         }
 
 
@@ -224,8 +260,8 @@ namespace CentipedeInterfaces
         private string _usage;
         private string _helpText;
 
-        [Obsolete("Use IconName")]
-        public string iconName;
+        
+        private string _iconName;
 
         /// <summary>
         ///     Marks a class as an Action, to be displayed in the GUI listbox
@@ -242,16 +278,44 @@ namespace CentipedeInterfaces
         {
             get
             {
-                GetI18n(ref this.displayName);
-                return displayName;
+                GetI18n(ref this._displayName);
+                return this._displayName;
             }
-            set { displayName = value; }
+            set { this._displayName = value; }
         }
 
         public string DisplayControl
         {
-            get { return displayControl; }
-            set { displayControl = value; }
+            get { return this._displayControl; }
+            set { this._displayControl = value; }
+        }
+
+        [Obsolete("Use IconName")]
+        public string iconName
+        {
+            get { return _iconName; }
+            set { _iconName = value; }
+        }
+
+        /// <summary>
+        ///     name of a custom display control used to display the action on thr Actions listview
+        /// </summary>
+        [Obsolete]
+        public string displayControl
+        {
+            get { return _displayControl; }
+            set { _displayControl = value; }
+        }
+
+        /// <summary>
+        ///     The display name for the action, defaults to the classname
+        /// </summary>
+        /// 
+        [Obsolete]
+        public string displayName
+        {
+            get { return _displayName; }
+            set { _displayName = value; }
         }
     }
 

@@ -31,7 +31,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -107,6 +107,7 @@
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Actions\AskValues.cs" />
     <Compile Include="Actions\GetArguments.cs" />
+    <Compile Include="Actions\HaltJob.cs" />
     <Compile Include="Actions\MultipleChoice.cs" />
     <Compile Include="Actions\DemoAction.cs" />
     <Compile Include="Actions\ExitAction.cs" />
@@ -249,6 +250,7 @@
     <None Include="Tutorial\Tutorial - Hello World.100p" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\halt.ico" />
     <Content Include="Tutorial\actions.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -277,7 +279,7 @@
     <Content Include="Tutorial\Tutorial.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Tutorial\userinput.htm">
+    <Content Include="Tutorial\userinteraction.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Centipede.rc" />

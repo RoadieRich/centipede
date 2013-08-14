@@ -264,6 +264,12 @@ namespace Centipede.Actions
         private Panel TopPanel;
         private Panel BottomPanel;
         private Splitter splitter1;
+
+        /// <summary>
+        /// Contains <see>
+        ///              <cref>ThisAction.Comment</cref>
+        ///          </see>
+        /// </summary>
         protected internal TextBox CommentTextBox;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem moveUpToolStripMenuItem;

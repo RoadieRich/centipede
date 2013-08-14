@@ -1,0 +1,58 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <title>User Input - Centipede Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="style2.css" />
+</head>
+<body>
+    <h1 style="counter-reset: h1 4;">User Interaction</h1>
+    <p>
+        Centipede supports four ways of interacting with the user by default: getting four different types of values, and
+        displaying a messagebox.
+    </p>
+    <h2 id="askforinput">Asking For Input</h2>
+    <p>All Ask for Input actions share some arguments, which have the same function in each:</p>
+    <dl>
+        <dt><i>Title</i></dt>
+        <dd>Displayed in the title bar of the form.</dd>
+        <dt><i>Prompt</i></dt>
+        <dd>Displayed at the top of the form, above the input boxes.</dd>
+    </dl>
+    <h3>Text or Numeric</h3>
+    <p>
+        This action supports setting variables either to the exact text entered by the user, or treating the text as python expressions and evaluating it.
+        Note that this <em>can</em> result in a type other than a string or a number, for instance, if the user enters <kbd>[1,2,3]</kbd>, which will 
+        return a list.  This behaviour is controlled by the <i>Evaluate</i> checkbox: if it is checked, input will be evaluated.
+    </p>
+    <p>
+        <i id="variables">Variables</i> takes a list of comma separated variable names, with optional labels.  The syntax is 
+        <kbd>variable1 : label for variable1, variable2 : label for variable2</kbd> (etc). The spaces after the commas and around 
+        the colons are optional, but recommended for readability.
+    </p>
+    <h3>True / False</h3>
+    <p>
+        This operates almost identically to Text or Numeric ask for input action, except it only allows the user to set <kbd>True</kbd> or <kbd>False</kbd>.
+    </p>
+    <h3>Multiple Choice</h3>
+    <p>
+        This requires a comma separated list of values to choose from, and will give you the index and/or the name of the selected option.  
+        The <i>Radio Button</i> checkbox toggles between displaying radio buttons or a dropdown menu.
+    </p>
+    <h3>File Browser</h3>
+    <p>
+        This displays a form with a single input box and a button to show the standard windows "open" dialog. <i>Filter</i> is used to control 
+        which file extensions are shown, and uses the syntax <kbd>Text to display |*.extension</kbd>.  For instance, to only list Centipede job
+        files, which have the extension <kbd>.100p</kbd>, you could use <kbd>Centipede Jobs (*.100p) |*.100p</kbd>.
+    </p>
+    <h2 id="exercise">Exercise: Ask for input</h2>
+    <h2>Show Messagebox</h2>
+    <p>
+        <i>Show Messagebox</i> shows a messagebox.  If I need to tell you how to use this action, please consider asking your manager if other 
+        duties may be more appropriate.
+    </p>
+    
+    
+    
+
+</body>
+</html>
