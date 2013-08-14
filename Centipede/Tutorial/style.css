@@ -1,21 +1,88 @@
-﻿h1, h2, h3 {
+﻿body {
     font-family: sans-serif;
 }
+.contents h1:before {
+    content:none;
+}
+.contents h2:before {
+    content: counter(h2)". ";
+}
 
-    h2:before {
-        content: counter(h2)". ";
-    }
-
-h2 {
+.contents h2 {
     counter-increment: h2;
     counter-reset: h3;
 }
 
-h3:before {
+.contents h3:before {
     content: counter(h3)". ";
 }
 
-h3 {
+.contents h3 {
     counter-increment: h3;
     padding-left: 1em;
+}
+
+h1:before {
+    content: counter(h1)". ";
+}
+
+h1 {
+    counter-increment: h1;
+    counter-reset: h2;
+}
+
+h2:before {
+    content: counter(h2)". ";
+}
+
+h2 {
+    counter-increment: h2;
+}
+
+.contents h1:before {
+    content:none;
+}
+.contents h2:before {
+    content: counter(h2)". ";
+}
+
+.contents h2 {
+    counter-increment: h2;
+    counter-reset: h3;
+}
+
+.contents h3:before {
+    content: counter(h3)". ";
+}
+
+.contents h3 {
+    counter-increment: h3;
+    padding-left: 1em;
+}
+
+img.screenshot {
+    display: block;
+}
+
+kbd {
+    background: #eee;
+    border: solid 1px #ccc;
+/* ReSharper disable InvalidValue */
+    font:  consolas,courier new,monospace .9em;
+/* ReSharper restore InvalidValue */
+    padding: 0 2px;
+}
+
+i {
+    background: #eee;
+    border: solid 1px #ccc;
+    padding: 0 2px;
+}
+
+.planned {
+    font-weight: bold;
+    background-color: #ff9;
+    border: solid 1px #f00;
+    text-align: center;
+    margin: 0 2em;
 }
