@@ -1,4 +1,4 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Custom Actions - Centipede Tutorial</title>
@@ -6,36 +6,128 @@
 </head>
 <body>
     <h1 style="counter-reset: h1 7;">Custom Actions</h1>
-    <p class="planned">To Do.</p>
+    <p>
+        Sometimes, you will want to do something that doesn't have an existing plugin, or is too complex to be expressed
+        using the available actions.  This is where custom actions come in
+    </p>
+    <!----------------------------------------------------------------------------------------------------------------------->
     <h2 id="pythonactions">Python Actions</h2>
-    <!--
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar 
-    ultrices. Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed 
-    rhoncus fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. 
-    Etiam eget sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia 
-    vehicula. Morbi quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris 
-    ligula mauris, porta a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis 
-    vehicula non. Vestibulum viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-  -->
-    <h2 id="exercise">Exercise: Getting data from ODBC database in Python Action</h2>
-    <!--
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar 
-    ultrices. Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed 
-    rhoncus fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. 
-    Etiam eget sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia 
-    vehicula. Morbi quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris 
-    ligula mauris, porta a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis 
-    vehicula non. Vestibulum viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-  -->
+    <p>
+        A lot of the under-the-surface processing in centipede uses the 
+        <a href="http://python.org">python programming language</a>.  The Python Action allows you to use large blocks
+        of python within a centipede job.  As one of the main design philosophies of python is that it is "batteries 
+        included", i.e. it contains modules to do most things you might need to, this is extremely powerful.  With the
+        ability to use the .net infrastructure added to IronPython (the version centipede includes), it is even more 
+        powerful.
+    </p>
+    <p>
+        For more information on writing python code, please consult either the 
+        <a href="http://http://docs.python.org/2/">python documentation</a> (which is also available as a help file in the
+        IronPython folder on the start menu) or a tutorial such as 
+        <a href="http://learnpythonthehardway.org/book/">Learn Python The Hard Way</a>.
+    </p>
+    <!----------------------------------------------------------------------------------------------------------------------->
+    <h2 id="exercise1">Exercise 1: Writing Python Functions</h2>
+    <p>
+        One immediate benefit of python actions is that they allow you to define your own functions to use elsewhere
+        in the job.
+    </p>
+    <ol>
+        <li>
+            <p>Create a python action, change its comment to "Create some functions"</p>
+        </li>
+        <li>
+            <p>
+                Let's define a function to add two numbers together.  Copy this into the <i>source</i> field:
+            <pre>
+def add(a,b):
+    return a + b</pre>
+        </li>
+        <li>
+            <p>Create a messagebox action to show you the result of calling the function.</p>
+        </li>
+        <li>
+            <p>Set the message to <kbd>3 + 4 is {add(3, 4)}</kbd>.</p>
+        </li>
+        <li>
+            <p>Next, lets write a slightly more complex function, to calculate the volume of a cylinder.</p>
+            <p>
+                The volume of a cylinder is <i>V = &pi; r&sup2; h</i>.
+                We have two options for pi: either adding our own value to the code, or using a builtin constant. 
+                We're going to go with the latter, to introduce another topic: importing modules.
+            </p>
+            <p>
+                <kbd>PI</kbd> is defined within the <kbd>math</kbd> module  You import modules using the 
+                <kbd>import</kbd> keyword, as follows:
+                <pre>
+import math
+
+def volume(radius, height):
+    return math.pi * math.pow(radius, 2) * height</pre>
+                The <kbd>math</kbd> module also contains common mathematical functions like <kbd>sqrt</kbd> (square root), 
+                <kbd>pow</kbd> (raise the first argument to the power of the second) and <kbd>log</kbd> (calculate 
+                logarithm), trigonometric functions like <kbd>sin</kbd> and <kbd>cos</kbd>, and the constants 
+                <kbd>e</kbd> (2.718) and <kbd>pi</kbd>.
+            </p>
+            <p>
+                Add this to the souce area.  It is considered good practice when writing python code to put 
+                imports at the very top of the code, but it doesn't really matter in this case.
+            </p>
+        </li>
+        <li>
+            <p>
+                Change the messagebox action to display the volume of a sphere with radius 2 and height 3, 
+                calculated using the function we just added.
+            </p>
+        </li>
+    </ol>
+    <!----------------------------------------------------------------------------------------------------------------------->
+    <h2 id="exercise2">Exercise 2: ODBC connections using the .Net infrastructure</h2>
+    <p class="planned">Todo.</p>
+    <!----------------------------------------------------------------------------------------------------------------------->
     <h2 id="writingplugins">Writing your own plugins</h2>
-    <!--
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar 
-    ultrices. Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed 
-    rhoncus fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. 
-    Etiam eget sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia 
-    vehicula. Morbi quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris 
-    ligula mauris, porta a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis 
-    vehicula non. Vestibulum viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-  -->
+    <p>
+        The Centipede installer includes an option for the Centipede SDK.  It includes an example Visual Studio project 
+        with all the required references, and requires a minimum of Visual Studio Express 2010.
+    </p>
+    <p>
+        A plugin is simply a dll file containing one or more public classes, derived from <kbd>Centipede.Action</kbd>
+        and marked with the <kbd>ActionCategory</kbd> attribute.  The solution contains a sample class that demonstrates 
+        this.  Each class is one action, and will be displayed on a tab with the name passed into the 
+        <kbd>ActionCategoryAttribute</kbd> contructor.  Other properties of that constructor control how the action is
+        displayed in the tab. 
+    </p>
+    <p>
+        Within the action class, one method is required to be implemented, <kbd>void DoAction()</kbd>. This method will
+        do the bulk of what is required by the action.  There are two other methods that can be overridden,
+        <kbd>void InitAction()</kbd> and <kbd>void CleanupAction()</kbd>.  They are more useful if you are writing
+        an abstract parent class, and can be used to, for example, ensure that application interfaces are loaded, and 
+        variables are correctly transfered to and from the variables, which are accessed using the property 
+        <kbd>Action.Variables</kbd>, which is typed <kbd>IDictionary&lt;string, object&gt;</kbd>.
+    </p>
+    <p>
+        An action's arguments are public fields (or properties) of the class, marked with <kbd>ActionArgumentAttribute</kbd>.
+        This is also demonstrated in the example project.
+    </p>
+    <p>
+        You can send messages to the output pane using <kbd>Action.Message(string, params object[])</kbd> or 
+        <kbd>Action.Warning(string, params object[])</kbd> methods, or the more generic 
+        <kbd>Action.OnMessage(MessageLevel, string, params object[])</kbd> or 
+        <kbd>Action.OnMessage(MessageEventArgs)</kbd>.  All three methods support standard string formatting
+        options in the same manner as <kbd>String.Format</kbd>.
+    </p>
+    <p>
+        Within an action's methods, string interpolation is handled using the <kbd>ParseStringForVariable(string)</kbd>
+        method.  You can also access the Centipede Core directly using the <kbd>GetCurrentCore()</kbd> method, which
+        returns an <kbd>ICentipedeCore</kbd>, and the Python interpretter can then be accessed using the
+        <kbd>ICentipedeCore.PythonEngine</kbd> property.
+    </p>
+    <p>
+        Other useful overrides include <kbd>Complexity</kbd>, which governs the advancement of the progress bar, and 
+        <kbd>PopulateMembersFromXml</kbd> and <kbd>PopulateXmlElement</kbd>, which can be used to customise how an 
+        action is added to the .100p xml-formatted job file.  Take a look at a saved Python Action for an example of
+        a customised save format.
+    </p>
+
 </body>
 </html>

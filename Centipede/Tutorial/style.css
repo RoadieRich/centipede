@@ -79,6 +79,14 @@ i {
     padding: 0 2px;
 }
 
+pre {
+    background: #eee;
+    border: solid 1px #ccc;
+/* ReSharper disable InvalidValue */
+    font:  consolas,courier new,monospace .9em;
+/* ReSharper restore InvalidValue */
+}
+
 .planned {
     font-weight: bold;
     background-color: #ff9;

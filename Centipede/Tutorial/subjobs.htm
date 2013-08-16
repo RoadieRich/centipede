@@ -6,26 +6,30 @@
 </head>
 <body>
     <h1 style="counter-reset: h1 6;">Subjobs</h1>
-    <p class="planned">To Do</p>
+    <p>A subjob is a job that can be run from within another.  </p>
     <h2 id="creating">Creating</h2>
-    <!--
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar 
-      ultrices. Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed 
-      rhoncus fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. 
-      Etiam eget sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia 
-      vehicula. Morbi quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris 
-      ligula mauris, porta a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis 
-      vehicula non. Vestibulum viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-    -->
+    <p>
+        A subjob is simply a centipede job containing a <i>Subjob Entry</i> action and one or more 
+        <i>Subjob Exit</i> actions.  
+    </p>
+    <h3>Subjob Entry</h3>
+    <p>
+        The subjob entry action has an input for a list of variables to receive from the parent job.  When it is
+        executed, it will recieve the values, and assign them in the subjob.
+    </p>
+    <p>
+        Note that the variable names do not have to be the same in parent and subjobs, only the order they are listed.
+    </p>
+    <h3>Exit Subjob</h3>
+    <p>
+        This action returns values to the parent job, then halts the job and exits the subjob centipede process.
+    </p>
     <h2 id="running">Running</h2>
-    <!--
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ultrices mauris eu nisi pulvinar 
-      ultrices. Cras nibh tellus, mollis a urna sit amet, volutpat dictum felis. Cras feugiat varius laoreet. Sed 
-      rhoncus fringilla fermentum. Vestibulum dignissim turpis eu nibh malesuada, eget viverra nunc hendrerit. 
-      Etiam eget sapien scelerisque, convallis leo eget, dictum arcu. Fusce laoreet lacus sit amet orci lacinia 
-      vehicula. Morbi quis consequat lacus. Etiam pharetra nisi vel rhoncus porta. Fusce id gravida dolor. Mauris 
-      ligula mauris, porta a orci ut, tristique laoreet dui. Maecenas egestas nisi risus, in feugiat turpis 
-      vehicula non. Vestibulum viverra consectetur tempor. Morbi scelerisque magna mattis commodo ultrices.
-    -->
+    <p>
+        To run a subjob, you need to add the <i>Run Subjob</i> action to your job.  As mentioned above, the names used 
+        for input and output variables should match those in the parent job, the order decides what gets assigned to 
+        which name in the subjob.  You also need to specify a filename.  Note that unlike most filename inputs, this is
+        a literal field.
+    </p>
 </body>
 </html>
