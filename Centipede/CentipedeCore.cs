@@ -12,7 +12,6 @@ using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
 using PythonEngine;
-using ResharperAnnotations;
 using PyEngine = PythonEngine.PythonEngine;
 
 //  LINQ
@@ -105,6 +104,7 @@ namespace Centipede
         }
 
         public event JobCompletedEvent JobCompleted;
+        public event EventHandler Exiting;
 
         private void OnJobCompleted(bool completed)
         {
@@ -155,6 +155,15 @@ namespace Centipede
         public IAction CurrentAction { get; set; }
 
         public CentipedeJob Job { get; set; }
+
+        public void Exit()
+        {
+            var handler = Exiting;
+            if (handler != null)
+            {
+                handler(this, new EventArgs());
+            }
+        }
 
         /// <summary>
         ///     Dictionary of Variables for use by actions
@@ -217,7 +226,7 @@ namespace Centipede
                 {
                     continue;
                 }
-                
+
                 this.PluginFiles.Add(fi, actionTypeList);
 
                 var customDataTypes = from type in typesInFile
@@ -409,33 +418,32 @@ namespace Centipede
         {
             switch (index)
             {
-                case -1:
-                    if (job.Actions.Count > 0)
-                    {
-                        IAction last = job.Actions[job.Actions.Count - 1];
+            case -1: //at end
+                if (job.Actions.Any())
+                {
+                    job.Actions.Last().Next = action;
+                }
+                job.Actions.Add(action);
 
-                        last.Next = action;
-                    }
-                    job.Actions.Add(action);
-                    index = this.Job.Actions.Count - 1;
-                    break;
-                case 0:
-                {
-                    IAction oldFirst = job.Actions[0];
-                    job.Actions.Insert(0, action);
-                    action.Next = oldFirst;
-                }
-                    break;
-                default:
-                {
-                    IAction prevAction = job.Actions[index - 1];
-                    IAction nextAction = prevAction.Next;
-                    prevAction.Next = action;
-                    action.Next = nextAction;
-                    job.Actions.Insert(index, action);
-                }
-                    break;
+               // index = this.Job.Actions.IndexOf(action);
+
+                break;
+            case 0: //first
+                IAction oldFirst = job.Actions.FirstOrDefault();
+                job.Actions.Insert(0, action);
+                action.Next = oldFirst;
+                break;
+
+            default:
+                IAction prevAction = job.Actions[index - 1];
+                IAction nextAction = prevAction.Next;
+                prevAction.Next = action;
+                action.Next = nextAction;
+                job.Actions.Insert(index, action);
+                break;
             }
+
+            //index = this.Job.Actions.IndexOf(action);
             this.OnActionAdded(new ActionEventArgs
                                {
                                    Action = action,
