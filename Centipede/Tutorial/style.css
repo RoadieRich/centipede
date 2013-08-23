@@ -1,9 +1,11 @@
 ﻿body {
     font-family: sans-serif;
 }
+
 .contents h1:before {
-    content:none;
+    content: none;
 }
+
 .contents h2:before {
     content: counter(h2)". ";
 }
@@ -39,37 +41,16 @@ h2 {
     counter-increment: h2;
 }
 
-.contents h1:before {
-    content:none;
-}
-.contents h2:before {
-    content: counter(h2)". ";
-}
-
-.contents h2 {
-    counter-increment: h2;
-    counter-reset: h3;
-}
-
-.contents h3:before {
-    content: counter(h3)". ";
-}
-
-.contents h3 {
-    counter-increment: h3;
-    padding-left: 1em;
-}
-
 img.screenshot {
     display: block;
 }
 
 kbd {
     background: #eee;
-    border: solid 1px #ccc;
-/* ReSharper disable InvalidValue */
-    font:  consolas,courier new,monospace .9em;
-/* ReSharper restore InvalidValue */
+    border: solid 1px #ccc; 
+    /* ReSharper disable InvalidValue */
+    font: consolas,courier new,monospace .9em; 
+    /* ReSharper restore InvalidValue */
     padding: 0 2px;
 }
 
@@ -81,10 +62,10 @@ i {
 
 pre {
     background: #eee;
-    border: solid 1px #ccc;
-/* ReSharper disable InvalidValue */
-    font:  consolas,courier new,monospace .9em;
-/* ReSharper restore InvalidValue */
+    border: solid 1px #ccc; 
+    /* ReSharper disable InvalidValue */
+    font: consolas,courier new,monospace .9em; 
+    /* ReSharper restore InvalidValue */
 }
 
 .planned {

@@ -26,11 +26,7 @@ namespace Centipede.Actions
         /// </exception>
         protected override void DoAction()
         {
-            Form form = (Form)GetCurrentCore().Tag;
-            if (form.InvokeRequired)
-            {
-                form.Invoke(new System.Action(form.Close));
-            }
+            GetCurrentCore().Exit();
         }
 
         public override int Complexity
