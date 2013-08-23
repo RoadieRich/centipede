@@ -55,7 +55,11 @@ namespace CentipedeInterfaces
         /// 
         /// </summary>
         event JobCompletedEvent JobCompleted;
-     
+
+        event EventHandler Exiting;
+
+        void Exit();
+
         /// <summary>
         ///     Dictionary of Variables for use by actions.  As much as I'd like to make types more intuitive,
         ///     I can't figure a way of doing it easily.

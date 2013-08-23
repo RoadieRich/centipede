@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using ScintillaNET;
 
@@ -15,40 +16,34 @@ namespace PyAction
         }
 
         public PythonDisplayControl(PythonAction action)
-                : base(action, false)
+            : base(action, false)
         {
             InitializeComponent();
 
-            var scintilla = new Scintilla
-                            {
-                                ConfigurationManager = { Language = @"python" },
-                                Dock = DockStyle.Fill,
-                                Margins = { Margin0 = { Width = 20 } },
-                                 Text = action.Source,
-                                Scrolling = { ScrollBars=ScrollBars.Vertical }
-                            };
-            
+            Scintilla scintilla = new Scintilla
+                                  {
+                                      ConfigurationManager = {Language = @"python"},
+                                      Dock = DockStyle.Fill,
+
+                                      Margins = {Margin0 = {Width = 20}},
+                                      Text = action.Source,
+                                      Scrolling = {ScrollBars = ScrollBars.Vertical}
+                                  };
             scintilla.TextChanged += sourceControl_TextChanged;
             scintilla.TextChanged += SetDirty;
-            
+
             AttributeTable.Controls.Add(scintilla);
             AttributeTable.SetColumnSpan(scintilla, 2);
-            
+
         }
 
         private new PythonAction ThisAction
         {
-            get
-            {
-                return base.ThisAction as PythonAction;
-            }
-            set
-            {
-                base.ThisAction = value;
-            }
+            get { return base.ThisAction as PythonAction; }
+            set { base.ThisAction = value; }
         }
 
-        void sourceControl_TextChanged(object sender, EventArgs e)
+        private void sourceControl_TextChanged(object sender, EventArgs e)
         {
             var source = sender as Scintilla;
             if (source != null)

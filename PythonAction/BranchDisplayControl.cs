@@ -6,6 +6,7 @@ using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
 using ScintillaNET;
+using ScintillaNET.Configuration;
 using Action = Centipede.Action;
 using ResharperAnnotations;
 
@@ -45,15 +46,13 @@ namespace PyAction
             AttributeTable.Controls.Add(actionComboLabel);
             AttributeTable.Controls.Add(_actionCombo);
 
-            _conditionControl = new Scintilla
+            _conditionControl = new Scintilla()
                                 {
-                                    ConfigurationManager =
-                                    {
-                                        Language = @"python"
-                                    },
+                                    ConfigurationManager = {Language = @"python"},
+
                                     Height = 20,
                                     AcceptsReturn = false,
-                                    Text = ThisAction.ConditionSource,
+                                    Text = this.ThisAction.ConditionSource,
                                     Dock = DockStyle.Fill,
                                     Scrolling =
                                     {
@@ -64,7 +63,7 @@ namespace PyAction
 
             _conditionControl.TextChanged += (sender, e) =>
                                              {
-                                                 Scintilla scintilla = sender as Scintilla;
+                                                 var scintilla = sender as Scintilla;
                                                  if (scintilla == null)
                                                  {
                                                      throw new ArgumentException();
