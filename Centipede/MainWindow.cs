@@ -203,7 +203,12 @@ namespace Centipede
 
             try
             {
-                Invoke(action);
+                if(InvokeRequired)
+                    Invoke(action);
+                else
+                {
+                    action();
+                }
             }
             catch (Exception)
             { }
@@ -424,7 +429,13 @@ namespace Centipede
 
             //this.UIActTab.Tag = this.UIActListBox;
 
-            this.AddToActionTab(typeof(DemoAction));
+            if (this.ShowDemoAction)
+            {
+                this.AddToActionTab(typeof(DemoAction));
+                this.AddToActionTab(typeof(TestSerialize));
+                this.AddToActionTab(typeof(TestDeserialize));
+            
+            }
             this.AddToActionTab(typeof(GetFileNameAction));
             this.AddToActionTab(typeof(ShowMessageBox));
             this.AddToActionTab(typeof(AskValues));
@@ -432,8 +443,6 @@ namespace Centipede
             this.AddToActionTab(typeof(SubJobAction));
             this.AddToActionTab(typeof(MultipleChoice));
             this.AddToActionTab(typeof(AskBooleans));
-            this.AddToActionTab(typeof(TestSerialize));
-            this.AddToActionTab(typeof(TestDeserialize));
             this.AddToActionTab(typeof(SubJobEntry));
             this.AddToActionTab(typeof(SubJobExitPoint));
             this.AddToActionTab(typeof(GetArguments));
@@ -472,6 +481,7 @@ namespace Centipede
             this.Core.ActionRemoved += this.Core_ActionRemoved;
             this.Core.AfterLoad += this.Core_AfterLoad;
             this.Core.StartRun += this.Core_StartRun;
+            this.Core.Exiting += this.Core_Exiting;
 
             //Core.Variables.OnUpdate += VariablesOnOnUpdate;
 
@@ -490,6 +500,20 @@ namespace Centipede
 
             ActionDisplayControl.SetDirty = delegate { this.Dirty = true; };
         }
+
+        private void Core_Exiting(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new System.Action(this.Close));
+            }
+            else
+            {
+                this.Close();
+            }
+        }
+
+        public bool ShowDemoAction { get; set; }
 
         private void UpdateFromFaveFile()
         {
@@ -726,17 +750,18 @@ namespace Centipede
             IAction action = e.Action;
             Type actionType = action.GetType();
             var actionAttribute = actionType.GetCustomAttributes(true)[0] as ActionCategoryAttribute;
-            ActionDisplayControl adc;
+            ActionDisplayControl adc = null;
             if (actionAttribute != null && actionAttribute.DisplayControl != null)
             {
                 Type customADCType = actionType.Assembly.GetType(string.Format(@"{0}.{1}",
                                                                                actionType.Namespace,
-                                                                               actionAttribute.DisplayControl));
-                ConstructorInfo constructor = customADCType.GetConstructor(new[] { actionType });
+                                                                               actionAttribute
+                                                                                   .DisplayControl));
+                ConstructorInfo constructor = customADCType.GetConstructor(new[] {actionType});
 
                 if (constructor != null)
                 {
-                    adc = (ActionDisplayControl)constructor.Invoke(new object[] { action });
+                    adc = (ActionDisplayControl) constructor.Invoke(new object[] {action});
                 }
                 else
                 {
@@ -749,9 +774,9 @@ namespace Centipede
             }
 
             action.SetMessageHandler(this.Action_MessageHandler);
-           //action.MessageHandler += this.Action_MessageHandler;
-            
-            
+            //action.MessageHandler += this.Action_MessageHandler;
+
+
             adc.Deleted += this.ActionDisplayControl_Deleted;
 
             adc.MoveUp += this.ActionDisplayControl_MoveUp;
@@ -760,19 +785,37 @@ namespace Centipede
             adc.DragEnter += this.ActionContainer_DragEnter;
             adc.DragDrop += this.ActionContainer_DragDrop;
 
-            this.ActionContainer.Visible = false;
 
-            var controlsAfter = ActionContainer.Controls.OfType<Control>().Skip(e.Index).ToList();
-            
-            ActionContainer.Controls.RemoveRange(controlsAfter);
+            //this.ActionContainer.Visible = false;
 
-            this.ActionContainer.Controls.Add(adc);
+            if (e.Index == -1)
+            {
+                //insert item at end
+                this.ActionContainer.Controls.Add(adc);
+            }
+            else
+            {
+                /* 
+                 * insert item in correct place.
+                 * For some reason TableLayoutPanelControlCollection.Add(Control, int) doesn't always work
+                 * quite as expected.  This is the work around:
+                 * remove all items after the insertion point, add the new control, re-add controls.
+                 */
+                
+                var actionContainerControls = this.ActionContainer.Controls;
+                List<Control> controlsAfter = actionContainerControls.OfType<Control>().Skip(e.Index).ToList();
 
-            ActionContainer.Controls.AddRange(controlsAfter);
+                actionContainerControls.RemoveRange(controlsAfter);
+                actionContainerControls.Add(adc, -1, e.Index);
 
+                actionContainerControls.AddRange(controlsAfter);
+                
+            }
 
             this.ActionContainer.ScrollControlIntoView(adc);
+
             this.ActionContainer.Visible = true;
+
             this.Dirty = true;
 
             if (!e.LoadedSuccessfully)
