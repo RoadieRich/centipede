@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
 using Centipede;
 using CentipedeInterfaces;
+using Microsoft.Win32;
 using PythonEngine;
 using System.Linq;
 using Action = Centipede.Action;
@@ -135,15 +138,60 @@ namespace PyAction
 
             try
             {
-                foreach (var module in Modules.Split(','))
+                foreach (var module in Modules.Split(',').Select(s => s.Trim()))
                 {
-                    engine.ImportModule(module.Trim());
+                    try
+                    {
+                        engine.ImportModule(module);
+                    }
+                    catch (Exception e)
+                    {
+                        if (module == "os")
+                        {
+                            //workaround for os module not included in embedded ironpython
+                            string pythonLibDir = @"c:/program files (x86)/ironpython 2.7/lib";
+                            if (!Directory.Exists(pythonLibDir))
+                            {
+                                var activeForm = Form.ActiveForm ?? (Form)this.GetCurrentCore().Tag;
+                                pythonLibDir = (string) activeForm.Invoke(new Func<string>(this.GetPythonLibDir));
+                                if (String.IsNullOrEmpty(pythonLibDir))
+                                {
+                                    throw new FatalActionException("Could not find Python Lib folder", this);
+                                }
+                                engine.ImportModule("sys");
+                                engine.Execute(string.Format("sys.path.append('{0}')\n",
+                                                             pythonLibDir));
+                                engine.ImportModule("os");
+
+
+                            }
+                        }
+                    }
                 }
             }
             catch (PythonException e)
             {
                 throw new ActionException(e, this);
             }
+        }
+
+        private string GetPythonLibDir()
+        {
+            var dialog = new FolderBrowserDialog()
+                         {
+                             SelectedPath=@"c:/program files (x86)/ironpython 2.7/lib",
+                             
+                             Description =
+                                 "Cannot find your IronPython Lib directory.\n" +
+                                 "Please select it before continuing.",
+                             ShowNewFolderButton = false
+                         };
+
+
+            var result = dialog.ShowDialog();
+            if (result == DialogResult.Cancel)
+                return null;
+            return dialog.SelectedPath;
         }
     }
 }
