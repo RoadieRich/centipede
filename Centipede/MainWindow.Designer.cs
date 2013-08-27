@@ -33,12 +33,12 @@ namespace Centipede
             this.MessageDataGridView = new System.Windows.Forms.DataGridView();
             this.timestampDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.messagesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this._dataSet = new Centipede.JobDataSet();
             this.MessageFilterToolStrip = new System.Windows.Forms.ToolStrip();
             this.OutputClear = new System.Windows.Forms.ToolStripButton();
-            this.VarsTab = new System.Windows.Forms.TabPage();
-            this.VarDataGridView = new System.Windows.Forms.DataGridView();
             this.RunButton = new System.Windows.Forms.Button();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.MainMenuStrip_ = new System.Windows.Forms.MenuStrip();
@@ -76,11 +76,12 @@ namespace Centipede
             this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.HelpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.VarsTab = new System.Windows.Forms.TabPage();
+            this.VarDataGridView = new System.Windows.Forms.DataGridView();
             this.MiniToolStrip = new System.Windows.Forms.MenuStrip();
             this.ActionIcons = new System.Windows.Forms.ImageList(this.components);
             this.BackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.GetFileNameDialogue = new System.Windows.Forms.OpenFileDialog();
             this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -92,8 +93,6 @@ namespace Centipede
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.levelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.actionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.MainToolStripContainer.SuspendLayout();
@@ -122,9 +121,9 @@ namespace Centipede
             ((System.ComponentModel.ISupportInitialize)(this.messagesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._dataSet)).BeginInit();
             this.MessageFilterToolStrip.SuspendLayout();
+            this.MainMenuStrip_.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
-            this.MainMenuStrip_.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainToolStripContainer
@@ -195,7 +194,6 @@ namespace Centipede
             // WebBrowser
             // 
             resources.ApplyResources(this.WebBrowser, "WebBrowser");
-            this.WebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.WebBrowser.Name = "WebBrowser";
             this.WebBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.WebBrowser_Navigating);
             // 
@@ -213,6 +211,7 @@ namespace Centipede
             // NavigationBackButton
             // 
             this.NavigationBackButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.NavigationBackButton.Image = global::Centipede.Properties.Resources.back;
             resources.ApplyResources(this.NavigationBackButton, "NavigationBackButton");
             this.NavigationBackButton.Name = "NavigationBackButton";
             this.NavigationBackButton.Click += new System.EventHandler(this.NavigationBackButton_Click);
@@ -220,8 +219,9 @@ namespace Centipede
             // NavigationForwardButton
             // 
             this.NavigationForwardButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.NavigationForwardButton.Name = "NavigationForwardButton";
+            this.NavigationForwardButton.Image = global::Centipede.Properties.Resources.forward;
             resources.ApplyResources(this.NavigationForwardButton, "NavigationForwardButton");
+            this.NavigationForwardButton.Name = "NavigationForwardButton";
             this.NavigationForwardButton.Click += new System.EventHandler(this.NavigationForwardButton_Click);
             // 
             // NavigationRefresh
@@ -266,7 +266,6 @@ namespace Centipede
             // 
             resources.ApplyResources(this.RunTabs, "RunTabs");
             this.RunTabs.Controls.Add(this.OutputTab);
-            //this.RunTabs.Controls.Add(this.VarsTab);
             this.RunTabs.Name = "RunTabs";
             this.RunTabs.SelectedIndex = 0;
             // 
@@ -327,6 +326,18 @@ namespace Centipede
             resources.ApplyResources(this.messageDataGridViewTextBoxColumn, "messageDataGridViewTextBoxColumn");
             this.messageDataGridViewTextBoxColumn.Name = "messageDataGridViewTextBoxColumn";
             // 
+            // levelDataGridViewTextBoxColumn
+            // 
+            this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
+            resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
+            this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
+            // 
+            // actionDataGridViewTextBoxColumn
+            // 
+            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
+            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
+            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
+            // 
             // messagesBindingSource
             // 
             this.messagesBindingSource.DataMember = "Messages";
@@ -352,28 +363,6 @@ namespace Centipede
             resources.ApplyResources(this.OutputClear, "OutputClear");
             this.OutputClear.Name = "OutputClear";
             this.OutputClear.Click += new System.EventHandler(this.OutputClear_Click);
-            // 
-            // VarsTab
-            // 
-            this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
-            this.VarsTab.Controls.Add(this.VarDataGridView);
-            resources.ApplyResources(this.VarsTab, "VarsTab");
-            this.VarsTab.Name = "VarsTab";
-            // 
-            // VarDataGridView
-            // 
-            this.VarDataGridView.AllowUserToAddRows = false;
-            this.VarDataGridView.AllowUserToDeleteRows = false;
-            this.VarDataGridView.AllowUserToResizeRows = false;
-            this.VarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.VarDataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VarDataGridView.ColumnHeadersVisible = false;
-            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
-            this.VarDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.VarDataGridView.Name = "VarDataGridView";
-            this.VarDataGridView.ReadOnly = true;
-            this.VarDataGridView.RowHeadersVisible = false;
             // 
             // RunButton
             // 
@@ -619,6 +608,28 @@ namespace Centipede
             resources.ApplyResources(this.HelpAboutMenuItem, "HelpAboutMenuItem");
             this.HelpAboutMenuItem.Click += new System.EventHandler(this.HelpAboutMenuItem_Click);
             // 
+            // VarsTab
+            // 
+            this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
+            this.VarsTab.Controls.Add(this.VarDataGridView);
+            resources.ApplyResources(this.VarsTab, "VarsTab");
+            this.VarsTab.Name = "VarsTab";
+            // 
+            // VarDataGridView
+            // 
+            this.VarDataGridView.AllowUserToAddRows = false;
+            this.VarDataGridView.AllowUserToDeleteRows = false;
+            this.VarDataGridView.AllowUserToResizeRows = false;
+            this.VarDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.VarDataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            this.VarDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.VarDataGridView.ColumnHeadersVisible = false;
+            resources.ApplyResources(this.VarDataGridView, "VarDataGridView");
+            this.VarDataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.VarDataGridView.Name = "VarDataGridView";
+            this.VarDataGridView.ReadOnly = true;
+            this.VarDataGridView.RowHeadersVisible = false;
+            // 
             // MiniToolStrip
             // 
             resources.ApplyResources(this.MiniToolStrip, "MiniToolStrip");
@@ -642,11 +653,6 @@ namespace Centipede
             // 
             resources.ApplyResources(this.SaveFileDialog, "SaveFileDialog");
             this.SaveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.SaveFileDialog_FileOk);
-            // 
-            // GetFileNameDialogue
-            // 
-            this.GetFileNameDialogue.AddExtension = false;
-            resources.ApplyResources(this.GetFileNameDialogue, "GetFileNameDialogue");
             // 
             // OpenFileDialog
             // 
@@ -715,18 +721,6 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn5, "dataGridViewTextBoxColumn5");
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
-            // levelDataGridViewTextBoxColumn
-            // 
-            this.levelDataGridViewTextBoxColumn.DataPropertyName = "Level";
-            resources.ApplyResources(this.levelDataGridViewTextBoxColumn, "levelDataGridViewTextBoxColumn");
-            this.levelDataGridViewTextBoxColumn.Name = "levelDataGridViewTextBoxColumn";
-            // 
-            // actionDataGridViewTextBoxColumn
-            // 
-            this.actionDataGridViewTextBoxColumn.DataPropertyName = "Action";
-            resources.ApplyResources(this.actionDataGridViewTextBoxColumn, "actionDataGridViewTextBoxColumn");
-            this.actionDataGridViewTextBoxColumn.Name = "actionDataGridViewTextBoxColumn";
-            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -779,10 +773,10 @@ namespace Centipede
             ((System.ComponentModel.ISupportInitialize)(this._dataSet)).EndInit();
             this.MessageFilterToolStrip.ResumeLayout(false);
             this.MessageFilterToolStrip.PerformLayout();
-            this.VarsTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.MainMenuStrip_.ResumeLayout(false);
             this.MainMenuStrip_.PerformLayout();
+            this.VarsTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -790,7 +784,6 @@ namespace Centipede
         #endregion
 
         private System.Windows.Forms.SaveFileDialog SaveFileDialog;
-        internal System.Windows.Forms.OpenFileDialog GetFileNameDialogue;
         private System.Windows.Forms.OpenFileDialog OpenFileDialog;
         private System.Windows.Forms.BindingSource messagesBindingSource;
         private System.Windows.Forms.ToolStripContainer MainToolStripContainer;
