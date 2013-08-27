@@ -7,14 +7,13 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")]
-    class GetFileNameAction : Action
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")
+    ]
+    internal class GetFileNameAction : Action
     {
         public GetFileNameAction(IDictionary<string, object> variables, ICentipedeCore c)
             : base("Ask for Input (File Browser)", variables, c)
-        {
-            
-        }
+        { }
 
         [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
         public string Title = "Choose File";
@@ -22,12 +21,12 @@ namespace Centipede.Actions
         [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
         public String Prompt = "";
 
-        [ActionArgument(DisplayName = "Variable", 
-                        Usage = "(Required) Name of variable to store the chosen filename")]
+        [ActionArgument(DisplayName = "Variable",
+            Usage = "(Required) Name of variable to store the chosen filename")]
         public String DestinationVariable = "Filename";
 
         [ActionArgument(DisplayName = "Filter",
-                        Usage = "(Optional) Filter the browse dialog to only show certain file types")]
+            Usage = "(Optional) Filter the browse dialog to only show certain file types")]
         public String Filter = "All Files (*.*)|*.*";
 
         private OpenFileDialog _dialog;
@@ -38,94 +37,100 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
 
-            string myTitle = ParseStringForVariable(Title); 
+            string myTitle = ParseStringForVariable(Title);
             string myPrompt = ParseStringForVariable(Prompt);
-            string myDestinationVariable = ParseStringForVariable(DestinationVariable);
-            string myFilter = ParseStringForVariable(Filter); 
+            string myDestinationVariable = DestinationVariable;
+            string myFilter = ParseStringForVariable(Filter);
 
             if (String.IsNullOrEmpty(myDestinationVariable))
             {
                 throw new ActionException("No variable name provided", this);
             }
-                        
-            this._form = new Form
-            {
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                StartPosition = FormStartPosition.CenterParent,
-                MinimizeBox = false,
-                MaximizeBox = false,
-                SizeGripStyle = SizeGripStyle.Hide,
-                ShowIcon = false,
-                ShowInTaskbar = false,
-                Text = myTitle
-            };
 
-            object oldFilename;
-            bool hasOldFilename = Variables.TryGetValue(myDestinationVariable, out oldFilename);
+            this._form = new Form
+                         {
+                             AutoSize = true,
+                             AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                             StartPosition = FormStartPosition.CenterParent,
+                             MinimizeBox = false,
+                             MaximizeBox = false,
+                             SizeGripStyle = SizeGripStyle.Hide,
+                             ShowIcon = false,
+                             ShowInTaskbar = false,
+                             Text = myTitle
+                         };
+
+            object obj;
+
+            string oldFilename = Variables.TryGetValue(myDestinationVariable, out obj)
+                                     ? (obj as string) ?? ""
+                                     : "";
 
             this._dialog = new OpenFileDialog
-            {
-                Title = String.IsNullOrEmpty(myTitle) ? "Open File" : myTitle,
-                Filter = String.IsNullOrEmpty(myFilter) ? "All Files (*.*)|*.*" : myFilter
-            };
+                           {
+                               Title = String.IsNullOrEmpty(myTitle) ? "Open File" : myTitle,
+                               Filter =
+                                   String.IsNullOrEmpty(myFilter)
+                                       ? "All Files (*.*)|*.*"
+                                       : myFilter
+                           };
 
             _dialog.FileOk += GetFileNameDialogue_FileOk;
 
-            TableLayoutPanel tableLayoutPanel = new TableLayoutPanel
-                                                {
-                                                    Dock = DockStyle.Fill,
-                                                    AutoSize = true,
-                                                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                                    ColumnCount = 2,
-                                                    ColumnStyles =
-                                                    {
-                                                        new ColumnStyle(),
-                                                        new ColumnStyle(SizeType.AutoSize)
-                                                    },
-                                                    Padding = new Padding
-                                                              {
-                                                                  All = 10
-                                                              }
-                                                };
+            var tableLayoutPanel = new TableLayoutPanel
+                                   {
+                                       Dock = DockStyle.Fill,
+                                       AutoSize = true,
+                                       AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                                       ColumnCount = 2,
+                                       ColumnStyles =
+                                       {
+                                           new ColumnStyle(),
+                                           new ColumnStyle(SizeType.AutoSize)
+                                       },
+                                       Padding = new Padding
+                                                 {
+                                                     All = 10
+                                                 }
+                                   };
 
             this._tableLayoutPanel = tableLayoutPanel;
 
             if (!String.IsNullOrEmpty(myPrompt))
             {
-                Label label = new Label
-                {
-                    Text = myPrompt,
-                    AutoSize = true
-                };
+                var label = new Label
+                            {
+                                Text = myPrompt,
+                                AutoSize = true
+                            };
                 this._tableLayoutPanel.Controls.Add(label);
                 this._tableLayoutPanel.SetColumnSpan(label, 2);
             }
 
             _tb = new TextBox
-            {
-                Text = (string) oldFilename,
-                Width = 300
-                //AutoSize = true
-            };
+                  {
+                      Text = oldFilename,
+                      Width = 300
+                      //AutoSize = true
+                  };
 
-            Button btn = new Button
-            {
-                Text = "Browse...",
-                AutoSize = true
-            };
+            var btn = new Button
+                      {
+                          Text = "Browse...",
+                          AutoSize = true
+                      };
 
             btn.Click += btnBrowse_Click;
 
-            this._tableLayoutPanel.Controls.Add(_tb); 
-            this._tableLayoutPanel.Controls.Add(btn); 
+            this._tableLayoutPanel.Controls.Add(_tb);
+            this._tableLayoutPanel.Controls.Add(btn);
 
-            Button btnOK = new Button
-            {
-                Text = "OK",
-                DialogResult = DialogResult.OK,
-                Dock = DockStyle.Fill
-            };
+            var btnOK = new Button
+                        {
+                            Text = "OK",
+                            DialogResult = DialogResult.OK,
+                            Dock = DockStyle.Fill
+                        };
 
             this._form.AcceptButton = btnOK;
 
@@ -136,22 +141,22 @@ namespace Centipede.Actions
 
             _form.FormClosing += FormClosing;
 
-            var form = (Form)GetCurrentCore().Tag;
-            DialogResult result =
-                (DialogResult)form.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
-                                  form);
+
+            var form = Form.ActiveForm ?? ((Form) this.GetCurrentCore().Tag);
+            var result =
+                (DialogResult) form.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
+                                           form);
 
             switch (result)
             {
-                case DialogResult.OK:
-                    //Save
-                    Variables[myDestinationVariable] = _tb.Text;
-                    break;
+            case DialogResult.OK:
+                //Save
+                Variables[myDestinationVariable] = _tb.Text;
+                break;
 
-                case DialogResult.Cancel:
-                    throw new FatalActionException("User input cancelled", this);
+            default:
+                throw new FatalActionException("User input cancelled", this);
             }
-
         }
 
         private void GetFileNameDialogue_FileOk(object sender, CancelEventArgs e)
@@ -167,16 +172,23 @@ namespace Centipede.Actions
 
         //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        private void FormClosing(object sender, FormClosingEventArgs a)
+        private void FormClosing(object sender, FormClosingEventArgs e)
         {
-            switch (_form.DialogResult)
+            var form = (Form) sender;
+            if (form.DialogResult == DialogResult.OK)
             {
-                case DialogResult.OK:
-                    break;
-                case DialogResult.Cancel:
-                    DialogResult result = MessageBox.Show("Cancelling user input will abort the current job.  Retry?", "Centipede", MessageBoxButtons.RetryCancel, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Retry) a.Cancel = true;
-                    break;
+                return;
+            }
+            
+            DialogResult result =
+                MessageBox.Show("Cancelling user input will abort the current job.  Retry?",
+                                "Centipede",
+                                MessageBoxButtons.RetryCancel,
+                                MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Retry)
+            {
+                e.Cancel = true;
             }
         }
     }

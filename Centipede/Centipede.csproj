@@ -247,10 +247,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\back.png" />
     <None Include="Tutorial\Tutorial - Hello World.100p" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\halt.ico" />
+    <None Include="Resources\back.bmp" />
+    <None Include="Resources\forward.png" />
     <Content Include="Tutorial\actions.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

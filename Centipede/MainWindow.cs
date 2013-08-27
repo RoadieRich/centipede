@@ -363,22 +363,19 @@ namespace Centipede
 
         private void Core_JobCompleted(object sender, JobCompletedEventArgs e)
         {
-            String message;
-            MessageBoxIcon icon;
-            if (e.Completed)
-            {
-                message = Resources.MainWindow_CompletedHandler_Job_finished_successfully_;
-                icon = MessageBoxIcon.Information;
-            }
-            else
-            {
-                message = Resources.MainWindow_CompletedHandler_Job_did_not_finish_;
-                icon = MessageBoxIcon.Error;
-            }
-            MessageBox.Show(message, Resources.MainWindow_CompletedHandler_Finished, MessageBoxButtons.OK, icon);
             this._stepping = false;
             this._steppingMutex = null;
             this.RunButton.Text = Resources.MainWindow_CompletedHandler_Run;
+            
+            if (e.Completed)
+            {
+                return;
+            }
+
+            MessageBox.Show(Resources.MainWindow_CompletedHandler_Job_did_not_finish_,
+                            Resources.MainWindow_CompletedHandler_Finished,
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
         }
 
         private void TabPageListView_ItemActivate(object sender, EventArgs e)
