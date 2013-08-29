@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using CentipedeInterfaces;
+using CentipedeInterfaces.Extensions;
 using ResharperAnnotations;
 
 namespace Centipede

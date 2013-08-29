@@ -42,6 +42,11 @@ namespace Centipede.Actions
             this.StatusIconBox = new System.Windows.Forms.PictureBox();
             this.ActionContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ActMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.StatusTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.ArgumentTooltips = new System.Windows.Forms.ToolTip(this.components);
@@ -49,9 +54,6 @@ namespace Centipede.Actions
             this.TopPanel = new System.Windows.Forms.Panel();
             this.BottomPanel = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.moveUpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.moveDownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).BeginInit();
             this.ActionContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ActionIcon)).BeginInit();
@@ -97,7 +99,7 @@ namespace Centipede.Actions
             this.AttributeTable.Name = "AttributeTable";
             this.AttributeTable.RowCount = 1;
             this.AttributeTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.AttributeTable.Size = new System.Drawing.Size(250, 24);
+            this.AttributeTable.Size = new System.Drawing.Size(250, 10);
             this.AttributeTable.TabIndex = 2;
             this.AttributeTable.Visible = false;
             // 
@@ -127,18 +129,51 @@ namespace Centipede.Actions
             this.ActMenuDelete,
             this.toolStripSeparator1,
             this.moveUpToolStripMenuItem,
-            this.moveDownToolStripMenuItem});
+            this.moveDownToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.copyToolStripMenuItem});
             this.ActionContextMenu.Name = "ActionContextMenu";
             this.ActionContextMenu.ShowImageMargin = false;
-            this.ActionContextMenu.Size = new System.Drawing.Size(128, 98);
+            this.ActionContextMenu.Size = new System.Drawing.Size(114, 104);
             // 
             // ActMenuDelete
             // 
             this.ActMenuDelete.Name = "ActMenuDelete";
             this.ActMenuDelete.ShortcutKeyDisplayString = "";
-            this.ActMenuDelete.Size = new System.Drawing.Size(127, 22);
+            this.ActMenuDelete.Size = new System.Drawing.Size(113, 22);
             this.ActMenuDelete.Text = "&Delete";
             this.ActMenuDelete.Click += new System.EventHandler(this.ActMenuDelete_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(110, 6);
+            // 
+            // moveUpToolStripMenuItem
+            // 
+            this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
+            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.moveUpToolStripMenuItem.Text = "Move Up";
+            this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpToolStripMenuItem_Click);
+            // 
+            // moveDownToolStripMenuItem
+            // 
+            this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
+            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.moveDownToolStripMenuItem.Text = "Move Down";
+            this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(110, 6);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // CommentTextBox
             // 
@@ -183,7 +218,7 @@ namespace Centipede.Actions
             this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BottomPanel.Location = new System.Drawing.Point(0, 57);
             this.BottomPanel.Name = "BottomPanel";
-            this.BottomPanel.Size = new System.Drawing.Size(250, 24);
+            this.BottomPanel.Size = new System.Drawing.Size(250, 10);
             this.BottomPanel.TabIndex = 0;
             // 
             // splitter1
@@ -195,25 +230,6 @@ namespace Centipede.Actions
             this.splitter1.TabIndex = 8;
             this.splitter1.TabStop = false;
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(124, 6);
-            // 
-            // moveUpToolStripMenuItem
-            // 
-            this.moveUpToolStripMenuItem.Name = "moveUpToolStripMenuItem";
-            this.moveUpToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.moveUpToolStripMenuItem.Text = "Move Up";
-            this.moveUpToolStripMenuItem.Click += new System.EventHandler(this.moveUpToolStripMenuItem_Click);
-            // 
-            // moveDownToolStripMenuItem
-            // 
-            this.moveDownToolStripMenuItem.Name = "moveDownToolStripMenuItem";
-            this.moveDownToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.moveDownToolStripMenuItem.Text = "Move Down";
-            this.moveDownToolStripMenuItem.Click += new System.EventHandler(this.moveDownToolStripMenuItem_Click);
-            // 
             // ActionDisplayControl
             // 
             this.AllowDrop = true;
@@ -222,13 +238,12 @@ namespace Centipede.Actions
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ContextMenuStrip = this.ActionContextMenu;
             this.Controls.Add(this.BottomPanel);
             this.Controls.Add(this.TopPanel);
             this.Controls.Add(this.splitter1);
             this.MinimumSize = new System.Drawing.Size(250, 4);
             this.Name = "ActionDisplayControl";
-            this.Size = new System.Drawing.Size(250, 81);
+            this.Size = new System.Drawing.Size(250, 67);
             this.Load += new System.EventHandler(this.ActionDisplayControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.StatusIconBox)).EndInit();
             this.ActionContextMenu.ResumeLayout(false);
@@ -274,5 +289,7 @@ namespace Centipede.Actions
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem moveUpToolStripMenuItem;
         private ToolStripMenuItem moveDownToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem copyToolStripMenuItem;
     }
 }

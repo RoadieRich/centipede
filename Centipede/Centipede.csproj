@@ -121,6 +121,7 @@
     <Compile Include="Actions\SubJobAction.cs" />
     <Compile Include="Actions\TestSerialize.cs" />
     <Compile Include="CentipedeCore.cs" />
+    <Compile Include="ClipboardHandler.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="AboutForm.cs">
       <SubType>Form</SubType>
