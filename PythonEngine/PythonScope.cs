@@ -211,10 +211,16 @@ namespace PythonEngine
         /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.IDictionary"/> object is read-only. </exception>
         public void Clear()
         {
-            foreach (var keyValuePair in Scope.GetItems())
+            var varsToKeep = new HashSet<string> {"sys", "math"};
+            var varsToRemove = from v in this.Scope.GetItems()
+                               where !varsToKeep.Contains(v.Key)
+                               where !(v.Key.StartsWith("__") && v.Key.EndsWith("__"))
+                               select v.Key;
+
+            foreach (var variable in varsToRemove)
             {
-                this.Scope.RemoveVariable(keyValuePair.Key);
-                this.OnVariableChanged(keyValuePair.Key, PythonVariableChangedAction.Delete);
+                this.Scope.RemoveVariable(variable);
+                this.OnVariableChanged(variable, PythonVariableChangedAction.Delete);
             }
             //this.Scope.GetItems().ToList().ForEach(kvp => this.Scope.RemoveVariable(kvp.Key));
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
+using CentipedeInterfaces.Extensions;
 using ResharperAnnotations;
 
 

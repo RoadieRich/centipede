@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml;
 
 
-namespace CentipedeInterfaces
+namespace CentipedeInterfaces.Extensions
 {
     public static class Extensions
     {
@@ -30,7 +30,13 @@ namespace CentipedeInterfaces
         public static XmlElement GetFirstElementByName(this XmlElement e, string name)
         {
             XmlNodeList elementsByTagName = e.GetElementsByTagName(name);
-            return (XmlElement)elementsByTagName[0];
+            return elementsByTagName[0] as XmlElement;
+        }
+
+        public static XmlElement GetFirstElementByName(this XmlDocument e, string name)
+        {
+            XmlNodeList elementsByTagName = e.GetElementsByTagName(name);
+            return elementsByTagName[0] as XmlElement;
         }
 
         public static String AsText(this MessageLevel e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -484,7 +485,7 @@ namespace Centipede
 
         public void Clear()
         {
-            ((IDictionary<String, Object>)this.Variables).Clear();
+            ((IDictionary)this.Variables).Clear();
             while (this.Job.Actions.Count > 0)
             {
                 this.RemoveAction(this.Job.Actions.First());
@@ -588,7 +589,7 @@ namespace Centipede
 
             foreach (XmlElement actionElement in it)
             {
-                AddAction(job, Action.FromXml(actionElement, this.Variables, this));
+                AddAction(job, Action.FromXml(actionElement, this));
             }
 
             this.Job = job;

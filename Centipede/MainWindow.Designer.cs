@@ -76,6 +76,7 @@ namespace Centipede
             this.visitGetSatisfactionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.HelpAboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ActMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.VarsTab = new System.Windows.Forms.TabPage();
             this.VarDataGridView = new System.Windows.Forms.DataGridView();
             this.MiniToolStrip = new System.Windows.Forms.MenuStrip();
@@ -93,6 +94,8 @@ namespace Centipede
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ActionContainerMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ActionContainerMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.MainToolStripContainer.SuspendLayout();
@@ -124,6 +127,7 @@ namespace Centipede
             this.MainMenuStrip_.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
+            this.ActionContainerMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainToolStripContainer
@@ -250,9 +254,11 @@ namespace Centipede
             this.ActionContainer.AllowDrop = true;
             resources.ApplyResources(this.ActionContainer, "ActionContainer");
             this.ActionContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.ActionContainer.ContextMenuStrip = this.ActionContainerMenu;
             this.ActionContainer.Name = "ActionContainer";
             this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
             this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
+            this.ActionContainer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ActionContainer_MouseClick);
             // 
             // AddActionTabs
             // 
@@ -608,6 +614,12 @@ namespace Centipede
             resources.ApplyResources(this.HelpAboutMenuItem, "HelpAboutMenuItem");
             this.HelpAboutMenuItem.Click += new System.EventHandler(this.HelpAboutMenuItem_Click);
             // 
+            // ActMenuDelete
+            // 
+            this.ActMenuDelete.Name = "ActMenuDelete";
+            resources.ApplyResources(this.ActMenuDelete, "ActMenuDelete");
+            this.ActMenuDelete.Click += new System.EventHandler(this.ActionDisplayControl_Delete);
+            // 
             // VarsTab
             // 
             this.VarsTab.BackColor = System.Drawing.SystemColors.Window;
@@ -721,6 +733,20 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn5, "dataGridViewTextBoxColumn5");
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
+            // ActionContainerMenu
+            // 
+            this.ActionContainerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ActionContainerMenuPaste});
+            this.ActionContainerMenu.Name = "ActionContainerMenu";
+            resources.ApplyResources(this.ActionContainerMenu, "ActionContainerMenu");
+            this.ActionContainerMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ActionContainerMenu_Opening);
+            // 
+            // ActionContainerMenuPaste
+            // 
+            this.ActionContainerMenuPaste.Name = "ActionContainerMenuPaste";
+            resources.ApplyResources(this.ActionContainerMenuPaste, "ActionContainerMenuPaste");
+            this.ActionContainerMenuPaste.Click += new System.EventHandler(this.ActionContainerMenu_Paste_Click);
+            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -777,6 +803,7 @@ namespace Centipede
             this.MainMenuStrip_.PerformLayout();
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
+            this.ActionContainerMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -859,6 +886,9 @@ namespace Centipede
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
+        private System.Windows.Forms.ContextMenuStrip ActionContainerMenu;
+        private System.Windows.Forms.ToolStripMenuItem ActionContainerMenuPaste;
     }
 }
 

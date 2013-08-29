@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml.XPath;
 using Centipede.Actions;
 using CentipedeInterfaces;
+using CentipedeInterfaces.Extensions;
 using PythonEngine;
 using ResharperAnnotations;
 
@@ -35,6 +36,18 @@ namespace Centipede
         {
             Name = name;
             Variables = variables;
+            _core = core;
+        }
+
+        /// <summary>
+        /// Construct a new action
+        /// </summary>
+        /// <param name="name">name of the action</param>
+        /// <param name="core">The <see cref="ICentipedeCore">CentipedeCore</see> that will execute the <see cref="CentipedeJob">job</see> this action is a part of.</param>
+        protected Action(String name, ICentipedeCore core)
+        {
+            Name = name;
+            Variables = core.Variables;
             _core = core;
         }
 
@@ -520,12 +533,11 @@ namespace Centipede
         /// <returns>
         /// 
         /// </returns>
-        public static Action FromXml(XmlElement element, IDictionary<String, Object> variables, ICentipedeCore core)
+        public static Action FromXml(XmlElement element, ICentipedeCore core)
         {
-
-            return FromXml(element.CreateNavigator(), variables, core);
+            return FromXml(element.CreateNavigator(), core);
         }
-
+        
         /// <summary>
         /// Loads an action from an XmlElement
         /// </summary>
@@ -535,7 +547,7 @@ namespace Centipede
         /// </param>
         /// <param name="core"></param>
         /// <returns></returns>
-        public static Action FromXml([NotNull]XPathNavigator element, IDictionary<String,Object> variables, ICentipedeCore core)
+        public static Action FromXml([NotNull]XPathNavigator element, ICentipedeCore core)
         {
 
             //This is probably broken somewhere.
@@ -574,14 +586,14 @@ namespace Centipede
                     ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
                     if (constructorInfo != null)
                     {
-                        instance = (Action)constructorInfo.Invoke(new object[] { variables, core });
+                        instance = (Action)constructorInfo.Invoke(new object[] { core.Variables, core });
                     }
                 }
             }
 
             if(instance == null)
             {
-                instance = new MissingAction(element.LocalName, variables, core);
+                instance = new MissingAction(element.LocalName, core.Variables, core);
             }
         
 

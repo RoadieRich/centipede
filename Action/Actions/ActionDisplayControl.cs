@@ -416,6 +416,11 @@ namespace Centipede.Actions
         /// Raised when the <see cref="ActionDisplayControl"/> is requested to move down
         /// </summary>
         public event ActionEvent MoveDown;
+
+        /// <summary>
+        /// Raised when the <see cref="ActionDisplayControl"/> is requested to copy to clipboard
+        /// </summary>
+        public event ActionEvent Copy;
         
         private void CommentTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -480,6 +485,15 @@ namespace Centipede.Actions
             if (handler != null)
             {
                 handler(this, new ActionEventArgs {Action = ThisAction});
+            }
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var handler = Copy;
+            if (handler != null)
+            {
+                handler(this, new ActionEventArgs() {Action = ThisAction});
             }
         }
 

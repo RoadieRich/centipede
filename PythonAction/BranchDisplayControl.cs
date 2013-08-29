@@ -5,6 +5,7 @@ using Centipede;
 using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
+using CentipedeInterfaces.Extensions;
 using ScintillaNET;
 using ScintillaNET.Configuration;
 using Action = Centipede.Action;

@@ -20,6 +20,7 @@ using System.Xml;
 using Centipede.Actions;
 using Centipede.Properties;
 using CentipedeInterfaces;
+using CentipedeInterfaces.Extensions;
 using PythonEngine;
 using ResharperAnnotations;
 
@@ -48,7 +49,7 @@ namespace Centipede
     public partial class MainWindow : Form
     {
         private readonly FavouriteJobs _favouriteJobsDataStore = new FavouriteJobs();
-        
+
         [UsedImplicitly]
         private List<string> _arguments;
 
@@ -203,7 +204,7 @@ namespace Centipede
 
             try
             {
-                if(InvokeRequired)
+                if (InvokeRequired)
                     Invoke(action);
                 else
                 {
@@ -366,7 +367,7 @@ namespace Centipede
             this._stepping = false;
             this._steppingMutex = null;
             this.RunButton.Text = Resources.MainWindow_CompletedHandler_Run;
-            
+
             if (e.Completed)
             {
                 return;
@@ -431,7 +432,7 @@ namespace Centipede
                 this.AddToActionTab(typeof(DemoAction));
                 this.AddToActionTab(typeof(TestSerialize));
                 this.AddToActionTab(typeof(TestDeserialize));
-            
+
             }
             this.AddToActionTab(typeof(GetFileNameAction));
             this.AddToActionTab(typeof(ShowMessageBox));
@@ -443,8 +444,8 @@ namespace Centipede
             this.AddToActionTab(typeof(SubJobEntry));
             this.AddToActionTab(typeof(SubJobExitPoint));
             this.AddToActionTab(typeof(GetArguments));
-            this.AddToActionTab(typeof (HaltJob));
-            
+            this.AddToActionTab(typeof(HaltJob));
+
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += this.UrlTextbox_KeyUp;
             this._urlTextbox.MergeIndex = this.NavigationToolbar.Items.Count - 2;
@@ -625,7 +626,7 @@ namespace Centipede
         {
             Core.LoadActionPlugins();
 
-            foreach (var action in Core.PluginFiles.SelectMany(kvp=>kvp.Value))
+            foreach (var action in Core.PluginFiles.SelectMany(kvp => kvp.Value))
             {
                 this.AddToActionTab(action);
             }
@@ -754,11 +755,11 @@ namespace Centipede
                                                                                actionType.Namespace,
                                                                                actionAttribute
                                                                                    .DisplayControl));
-                ConstructorInfo constructor = customADCType.GetConstructor(new[] {actionType});
+                ConstructorInfo constructor = customADCType.GetConstructor(new[] { actionType });
 
                 if (constructor != null)
                 {
-                    adc = (ActionDisplayControl) constructor.Invoke(new object[] {action});
+                    adc = (ActionDisplayControl)constructor.Invoke(new object[] { action });
                 }
                 else
                 {
@@ -773,16 +774,11 @@ namespace Centipede
             action.SetMessageHandler(this.Action_MessageHandler);
             //action.MessageHandler += this.Action_MessageHandler;
 
-
-            adc.Deleted += this.ActionDisplayControl_Deleted;
-
-            adc.MoveUp += this.ActionDisplayControl_MoveUp;
-            adc.MoveDown += this.ActionDisplayControl_MoveDown;
-
             adc.DragEnter += this.ActionContainer_DragEnter;
             adc.DragDrop += this.ActionContainer_DragDrop;
 
-
+            CreateADCContextMenu(adc);
+            
             //this.ActionContainer.Visible = false;
 
             if (e.Index == -1)
@@ -798,7 +794,7 @@ namespace Centipede
                  * quite as expected.  This is the work around:
                  * remove all items after the insertion point, add the new control, re-add controls.
                  */
-                
+
                 var actionContainerControls = this.ActionContainer.Controls;
                 List<Control> controlsAfter = actionContainerControls.OfType<Control>().Skip(e.Index).ToList();
 
@@ -806,7 +802,7 @@ namespace Centipede
                 actionContainerControls.Add(adc, -1, e.Index);
 
                 actionContainerControls.AddRange(controlsAfter);
-                
+
             }
 
             this.ActionContainer.ScrollControlIntoView(adc);
@@ -821,37 +817,119 @@ namespace Centipede
             }
         }
 
-        private void ActionDisplayControl_MoveDown(object sender, ActionEventArgs e)
+        private void CreateADCContextMenu(ActionDisplayControl adc)
         {
+            var resources = new ComponentResourceManager(typeof(MainWindow));
 
-            if (e.Action == Core.Job.Actions.Last())
-            {
-                return;
-            }
-
-            int oldIndex = Core.Job.Actions.IndexOf(e.Action);
-
-            Core.RemoveAction(e.Action);
-            Core.AddAction(e.Action, oldIndex + 1);
-
-        }
-
-        private void ActionDisplayControl_MoveUp(object sender, ActionEventArgs e)
-        {
-            if (e.Action == Core.Job.Actions.First())
-            {
-                return;
-            }
+            ToolStripMenuItem delete = new ToolStripMenuItem("Delete"),
+                              moveUp = new ToolStripMenuItem("Move Up"),
+                              moveDown = new ToolStripMenuItem("Move Down"),
+                              cut = new ToolStripMenuItem("Cut"),
+                              copy = new ToolStripMenuItem("Copy"),
+                              paste = new ToolStripMenuItem("Paste");
             
-            int oldIndex = Core.Job.Actions.IndexOf(e.Action);
+            ToolStripSeparator sep1 = new ToolStripSeparator(), sep2 = new ToolStripSeparator();
 
-            Core.RemoveAction(e.Action);
-            Core.AddAction(e.Action, oldIndex - 1);
+            
+            delete.Click += this.ActionDisplayControl_Delete;
+            moveUp.Click += this.ActionDisplayControl_MoveUp;
+            moveDown.Click += this.ActionDisplayControl_MoveDown;
+            cut.Click += this.ActionDisplayControl_Cut;
+            copy.Click += this.ActionDisplayControl_Copy;
+            paste.Click += this.ActionDisplayControl_Paste;
+
+            var menu = new ContextMenuStrip
+                       {
+                           Tag = adc,
+                           Items = {
+                                       delete,
+                                       sep1,
+                                       moveUp,
+                                       moveDown,
+                                       sep2,
+                                       cut,
+                                       copy,
+                                       paste
+                                   }
+                       };
+
+            menu.Opening += (sender, args) => paste.Enabled = ClipboardHandler.DataIsValid();
+
+            adc.ContextMenuStrip = menu;
+
         }
 
-        private void ActionDisplayControl_Deleted(object sender, CentipedeEventArgs e)
+        private void ActionDisplayControl_Cut(object sender, EventArgs e)
         {
-            IAction action = ((ActionDisplayControl)sender).ThisAction;
+
+            ToolStripItem menuItem = (ToolStripItem)sender;
+
+            var adc = (ActionDisplayControl)menuItem.GetCurrentParent().Tag;
+            IAction action = adc.ThisAction;
+
+            ClipboardHandler.ToClipboard(action);
+            Core.RemoveAction(action);
+        }
+        
+        private void ActionDisplayControl_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right || e.Clicks != 1)
+            {
+                return;
+            }
+
+            var adc = (ActionDisplayControl) sender;
+            adc.ContextMenuStrip.Tag = adc;
+            adc.ContextMenuStrip.Show();
+        }
+
+        private void ActionDisplayControl_Copy(object sender, EventArgs e)
+        {
+
+            ToolStripItem menuItem = (ToolStripItem) sender;
+
+            var adc = (ActionDisplayControl) menuItem.GetCurrentParent().Tag;
+            ClipboardHandler.ToClipboard(adc.ThisAction);
+
+        }
+
+        private void ActionDisplayControl_MoveDown(object sender, EventArgs e)
+        {
+            var action = ((ActionDisplayControl)sender).ThisAction;
+            if (action == Core.Job.Actions.Last())
+            {
+                return;
+            }
+
+            int oldIndex = Core.Job.Actions.IndexOf(action);
+
+            Core.RemoveAction(action);
+            Core.AddAction(action, oldIndex + 1);
+
+        }
+
+        private void ActionDisplayControl_MoveUp(object sender, EventArgs e)
+        {
+
+            var adc = (ActionDisplayControl)((ToolStripMenuItem)sender).GetCurrentParent().Tag;
+            var action = adc.ThisAction;
+
+            if (action == Core.Job.Actions.First())
+            {
+                return;
+            }
+
+            int oldIndex = Core.Job.Actions.IndexOf(action);
+
+            Core.RemoveAction(action);
+            Core.AddAction(action, oldIndex - 1);
+        }
+
+        private void ActionDisplayControl_Delete(object sender, EventArgs e)
+        {
+
+            var adc = (ActionDisplayControl)((ToolStripMenuItem)sender).GetCurrentParent().Tag;
+            IAction action = adc.ThisAction;
 
             if (MessageBox.Show(string.Format("Are you sure you want to delete {0}?", action),
                                 "Delete Action",
@@ -1068,7 +1146,7 @@ namespace Centipede
             this.Dirty = false;
         }
 
-        private void ShowSaveDialogs(bool force=false)
+        private void ShowSaveDialogs(bool force = false)
         {
             if (!force && !this.Dirty)
             {
@@ -1340,9 +1418,71 @@ namespace Centipede
         private void HelpOpenTutorialMenuItem_Click(object sender, EventArgs e)
         {
             string appDir = Path.GetDirectoryName(Application.ExecutablePath);
-            WebBrowser.Navigate(Path.Combine(appDir, "Tutorial","Tutorial.htm"));
+            WebBrowser.Navigate(Path.Combine(appDir, "Tutorial", "Tutorial.htm"));
         }
 
+        private void ActionDisplayControl_Paste(object sender, EventArgs e)
+        {
+            var adc = (ActionDisplayControl)((ToolStripMenuItem)sender).GetCurrentParent().Tag;
+            int index = Core.Job.Actions.IndexOf(adc.ThisAction);
+
+            try
+            {
+                IEnumerable<IAction> actions = ClipboardHandler.FromClipboard(this.Core);
+                if (actions == null || !actions.Any())
+                { 
+                    throw new ApplicationException();
+                }
+
+                foreach (var action in actions.Reverse())
+                {
+                    Core.AddAction(action, index);
+                }
+            }
+            catch (ApplicationException)
+            {
+                MessageBox.Show("Invalid clipboard contents.  Could not paste.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        }
+
+        private void ActionContainerMenu_Paste_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                IEnumerable<IAction> actions = ClipboardHandler.FromClipboard(this.Core);
+                if (actions == null || !actions.Any())
+                {
+                    throw new ApplicationException();
+                }
+
+                foreach (var action in actions)
+                {
+                    Core.AddAction(action);
+                }
+            }
+            catch (ApplicationException)
+            {
+                MessageBox.Show("Invalid clipboard contents.  Could not paste.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ActionContainer_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button != MouseButtons.Right || e.Clicks != 1)
+            {
+                return;
+            }
+
+            var tlp = (TableLayoutPanel) sender;
+            tlp.ContextMenuStrip.Show();
+
+        }
+
+        private void ActionContainerMenu_Opening(object sender, CancelEventArgs e)
+        {
+            ActionContainerMenuPaste.Enabled = ClipboardHandler.DataIsValid();
+        }
     }
 
     internal class ActionFactoryComparer : IComparer

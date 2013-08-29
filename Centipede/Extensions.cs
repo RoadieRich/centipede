@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Xml;
 using CentipedeInterfaces;
 
 
@@ -32,6 +33,19 @@ namespace Centipede
                 return pivotVal;
             }
         }
+
+        public static XmlElement CreateChildElement(this XmlNode node, string name)
+        {
+            var doc = node as XmlDocument ?? node.OwnerDocument;
+            
+            XmlElement element = doc.CreateElement(name);
+
+            node.AppendChild(element);
+
+            return element;
+
+        }
+
 
         public static void RemoveRange(this IList list, IEnumerable items)
         {
