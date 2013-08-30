@@ -376,13 +376,13 @@
     <value>17, 93</value>
   </metadata>
   <data name="ActionContainerMenuPaste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>102, 22</value>
   </data>
   <data name="ActionContainerMenuPaste.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
   <data name="ActionContainerMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 48</value>
+    <value>103, 26</value>
   </data>
   <data name="&gt;&gt;ActionContainerMenu.Name" xml:space="preserve">
     <value>ActionContainerMenu</value>
@@ -936,7 +936,7 @@
     <value>Ctrl+N</value>
   </data>
   <data name="FileNewMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FileNewMenuItem.Text" xml:space="preserve">
     <value>&amp;New</value>
@@ -964,13 +964,13 @@
     <value>Ctrl+O</value>
   </data>
   <data name="FileOpenMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FileOpenMenuItem.Text" xml:space="preserve">
     <value>&amp;Open</value>
   </data>
   <data name="FileMenuSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>143, 6</value>
   </data>
   <data name="FileSaveMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -995,19 +995,19 @@
     <value>Ctrl+S</value>
   </data>
   <data name="FileSaveMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FileSaveMenuItem.Text" xml:space="preserve">
     <value>&amp;Save</value>
   </data>
   <data name="FileSaveAsMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FileSaveAsMenuItem.Text" xml:space="preserve">
     <value>Save &amp;As</value>
   </data>
   <data name="FileMenuSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>143, 6</value>
   </data>
   <data name="FilePrintMenuItem.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1034,7 +1034,7 @@
     <value>Ctrl+P</value>
   </data>
   <data name="FilePrintMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FilePrintMenuItem.Text" xml:space="preserve">
     <value>&amp;Print</value>
@@ -1059,13 +1059,13 @@
     <value>Magenta</value>
   </data>
   <data name="FilePrintPreviewMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FilePrintPreviewMenuItem.Text" xml:space="preserve">
     <value>Print Pre&amp;view</value>
   </data>
   <data name="FileMenuSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>143, 6</value>
   </data>
   <data name="FilePropertiesMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1084,16 +1084,16 @@
 </value>
   </data>
   <data name="FilePropertiesMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FilePropertiesMenuItem.Text" xml:space="preserve">
     <value>Properties</value>
   </data>
   <data name="FileMenuSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>143, 6</value>
   </data>
   <data name="FileExitMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="FileExitMenuItem.Text" xml:space="preserve">
     <value>E&amp;xit</value>
@@ -1364,25 +1364,25 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAS
-        BQAAAk1TRnQBSQFMAgEBAgEAAXwBAAF8AQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
-        AwABEAMAAQEBAAEgBgABECYAAwQBBgMTARoDGAEhAxgBIQMSARgDBAEF5AADGQEjA1sBwwNwAfgE/wNw
+        BQAAAk1TRnQBSQFMAgEBAgEAAYQBAAGEAQABEAEAARABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        AwABEAMAAQEBAAEgBgABECYAAwQBBgMTARoDGAEhAxgBIQMSARgDBAEF5AADGQEjA1sBwwNvAfgE/wNv
         AfgDXAHNAzIBUAMEAQbgAANXAbgBswH1Av8BgQHjAv8BgQHZAv8BgQHTAv8BoAHmAv8DXAHPAxQBHOAA
         A2IB9gGBAe0C/wGBAegC/wGBAeAC/wHVAfYC/wGBAdAC/wNqAfkDHAEo1AADBAEGAxIBGQMYASEE/wGB
         Ae0C/wGBAe0C/wGBAecC/wGBAd4C/wGBAdYG/wMnATsDFwEgAxEBFwMEAQUIAAOBAf8DgQH/A4EB/wOB
-        Af8DgQH/A4EB/wwAA4EB/wOBAf+QAAMZASMDWQHCA3AB+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A3AB+ANc
+        Af8DgQH/A4EB/wwAA4EB/wOBAf+QAAMZASMDWQHCA28B+Aj/AYEB7QL/AYEB7QL/Ab4B9xL/A28B+ANc
         Ac0DMgFQAwQBBhAAA4EB/xQAA4EB/wOBAf+QAANYAbkBzAG6AaUB/wGIAoEB/wOBBf8BgQHtAv8BgQHt
         Av8BgQHtAv8BgQHrAv8BgQHjAv8BgQHbAv8BgQHSAv8BgQHLAv8BnQHkAv8DXAHPAxUBHRAAA4EB/xQA
         A4EB/wOBAf+QAANiAfYBoQKBAf8BjwKBAf8BhAKBAf8B8QHuAeoB/wGbAfQC/wGBAe0C/wGBAe0C/wGB
         Ae0C/wGBAeoC/wGBAeIC/wGBAdkC/wGBAdEC/wGBAcwC/wNqAfkDHQEpEAADgQH/FAADgQH/A4EB/5AA
         BP8BpAKBAf8BmQKBAf8BjQKBAf8BowGOAYEB/wHwAe4B6g3/Ae0B/QL/AYUB7QL/AYEB4AL/AYEB2AL/
-        AYEBzwb/Ax0BKhAAA4EB/xQAA4EB/wOBAf+QAANeAfUBsgGCAYEB/wGiAoEB/wGWAoEB/wGLAoEB/wOB
-        Af8DgQH/A4EB/wOBAf8BrAGcAYkB/wHtAf0C/wGBAecC/wGBAd8C/wGBAdkC/wNwAfgDGAEhBAADgQH/
+        AYEBzwb/Ax0BKhAAA4EB/xQAA4EB/wOBAf+QAANcAfUBsgGCAYEB/wGiAoEB/wGWAoEB/wGLAoEB/wOB
+        Af8DgQH/A4EB/wOBAf8BrAGcAYkB/wHtAf0C/wGBAecC/wGBAd8C/wGBAdkC/wNvAfgDGAEhBAADgQH/
         A4EB/wOBAf8DgQH/DAADgQH/A4EB/wOBAf8DgQH/A4EB/wOBAf+IAANWAbYB3AHCAaIB/wGtAoEB/wGg
         AoEB/wGUAoEB/wGJAoEB/wOBAf8DgQH/A4EB/wOBBf8BgQHsAv8BgQHmAv8BrAHvAv8DWwHEAwgBCygA
-        A4EB/wOBAf+UAANXAbgDbQH3EP8ByQG+AbEB/wOBAf8DgQn/A14B9QNXAbgDGgElFAADgQH/FAADgQH/
+        A4EB/wOBAf+UAANXAbgDbQH3EP8ByQG+AbEB/wOBAf8DgQn/A1wB9QNXAbgDGgElFAADgQH/FAADgQH/
         A4EB/6AABP8BmwKBAf8BkAKBAf8BhQKBAf8DgQH/A4EF/wMdASkgAAOBAf8YAAOBAf8DgQH/A4EB/wOB
-        Af+UAANeAfUBpgKBAf8B6AHfAdMB/wGOAoEB/wGCAoEB/wOBAf8DcAH4AxgBIeAAA1YBtgHYAcABowH/
-        AagCgQH/AZcCgQH/AZMCgQH/AcQBtwGoAf8DWwHEAwgBC+QAA1cBuANtAfcE/wNeAfUDWAG5AxoBJdQA
+        Af+UAANcAfUBpgKBAf8B6AHfAdMB/wGOAoEB/wGCAoEB/wOBAf8DbwH4AxgBIeAAA1YBtgHYAcABowH/
+        AagCgQH/AZcCgQH/AZMCgQH/AcQBtwGoAf8DWwHEAwgBC+QAA1cBuANtAfcE/wNcAfUDWAG5AxoBJdQA
         AUIBTQE+BwABPgMAASgDAAFAAwABEAMAAQEBAAEBBQABgBcAA/8BAAH4AR8C/wQAAfABDwL/BAAB8AEP
         Av8EAAHwAQ8C/wQAAYABAQGBAc8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAH3Ac8GAAGHAQMGAAH/Ac8EAAGA
         AQEB9wHPBAAB8AEPAfcB4QQAAfABDwL/BAAB8AEPAv8EAAH4AR8C/wQACw==
@@ -1541,6 +1541,12 @@
   </data>
   <data name="&gt;&gt;NavigationRefresh.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ActionContainerMenuPaste.Name" xml:space="preserve">
+    <value>ActionContainerMenuPaste</value>
+  </data>
+  <data name="&gt;&gt;ActionContainerMenuPaste.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timestampDataGridViewTextBoxColumn.Name" xml:space="preserve">
     <value>timestampDataGridViewTextBoxColumn</value>
@@ -1847,12 +1853,6 @@
   </data>
   <data name="&gt;&gt;dataGridViewTextBoxColumn5.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ActionContainerMenuPaste.Name" xml:space="preserve">
-    <value>ActionContainerMenuPaste</value>
-  </data>
-  <data name="&gt;&gt;ActionContainerMenuPaste.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainWindow</value>

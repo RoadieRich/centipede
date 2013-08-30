@@ -117,6 +117,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Actions\SetWebpage.cs" />
     <Compile Include="Actions\ShowMessageBox.cs" />
     <Compile Include="Actions\SubJobAction.cs" />
     <Compile Include="Actions\TestSerialize.cs" />
@@ -255,6 +256,7 @@
     <None Include="Resources\halt.ico" />
     <None Include="Resources\back.bmp" />
     <None Include="Resources\forward.png" />
+    <None Include="Resources\setwebbrowser.ico" />
     <Content Include="Tutorial\actions.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -211,19 +211,18 @@ namespace Centipede.Actions
         protected override void CleanupAction()
         {
             base.CleanupAction();
-            _ServerStream.Close();
-            _messagePipe.Close();
+            this.CloseStreams();
         }
 
         private void CloseServerStream(object sender, JobCompletedEventArgs jobCompletedEventArgs)
         {
-            _ServerStream.Close();
-            _messagePipe.Close();
+            this.CloseStreams();
         }
 
-        public override void Dispose()
+        private void CloseStreams()
         {
-            this.CleanupAction();
+            this._ServerStream.Close();
+            this._messagePipe.Close();
         }
     }
 

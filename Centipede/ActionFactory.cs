@@ -42,13 +42,28 @@ namespace Centipede
         public IAction Generate()
         {
             Type[][] ctorTypeSigs = new[]
-                                    {
-                                        new[] { typeof(IDictionary<String, Object>), typeof(ICentipedeCore) },
-                                        new[] { typeof(Dictionary<String, Object>), typeof(ICentipedeCore) },
+                               {
+                                        new[] {typeof (ICentipedeCore)},
                                         new[]
-                                        { typeof(string), typeof(IDictionary<String, Object>), typeof(ICentipedeCore) },
+                                        {
+                                            typeof (IDictionary<String, Object>),
+                                            typeof (ICentipedeCore)
+                                        },
                                         new[]
-                                        { typeof(string), typeof(Dictionary<String, Object>), typeof(ICentipedeCore) }
+                                        {
+                                            typeof (Dictionary<String, Object>),
+                                            typeof (ICentipedeCore)
+                                        },
+                                        new[]
+                                        {
+                                            typeof (string), typeof (IDictionary<String, Object>),
+                                            typeof (ICentipedeCore)
+                                        },
+                                        new[]
+                                        {
+                                            typeof (string), typeof (Dictionary<String, Object>),
+                                            typeof (ICentipedeCore)
+                                        }
                                     };
 
             var ctors = from types in ctorTypeSigs
@@ -67,20 +82,26 @@ namespace Centipede
             }
 
             object[] parameters;
-            if (constructorInfo.ArgCount == 2)
+
+
+            switch (constructorInfo.ArgCount)
             {
-                parameters = new object[] { this._core.Variables, this._core };
-            }
-            else
-            {
-                parameters = new object[] { "", this._core.Variables, this._core };
+            case 1:
+                parameters = new object[] {this._core};
+                break;
+            case 2:
+                parameters = new object[] {this._core.Variables, this._core};
+                break;
+            default:
+                parameters = new object[] {"", this._core.Variables, this._core};
                 MessageHandler(this,
-                             new MessageEventArgs
-                             {
-                                 Level = MessageLevel.Debug,
-                                 Message =
-                                     "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
-                             });
+                               new MessageEventArgs
+                               {
+                                   Level = MessageLevel.Debug,
+                                   Message =
+                                       "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
+                               });
+                break;
             }
             return (IAction)constructorInfo.Ctor.Invoke(parameters);
         }

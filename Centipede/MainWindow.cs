@@ -63,6 +63,7 @@ namespace Centipede
 
         public MainWindow(ICentipedeCore centipedeCore, List<string> arguments = null)
         {
+            Current = this;
             this._pendingUpdate = null;
             //Visible = false;
 
@@ -427,25 +428,6 @@ namespace Centipede
 
             //this.UIActTab.Tag = this.UIActListBox;
 
-            if (this.ShowDemoAction)
-            {
-                this.AddToActionTab(typeof(DemoAction));
-                this.AddToActionTab(typeof(TestSerialize));
-                this.AddToActionTab(typeof(TestDeserialize));
-
-            }
-            this.AddToActionTab(typeof(GetFileNameAction));
-            this.AddToActionTab(typeof(ShowMessageBox));
-            this.AddToActionTab(typeof(AskValues));
-            this.AddToActionTab(typeof(ExitAction));
-            this.AddToActionTab(typeof(SubJobAction));
-            this.AddToActionTab(typeof(MultipleChoice));
-            this.AddToActionTab(typeof(AskBooleans));
-            this.AddToActionTab(typeof(SubJobEntry));
-            this.AddToActionTab(typeof(SubJobExitPoint));
-            this.AddToActionTab(typeof(GetArguments));
-            this.AddToActionTab(typeof(HaltJob));
-
             this._urlTextbox = new ToolStripSpringTextBox();
             this._urlTextbox.KeyUp += this.UrlTextbox_KeyUp;
             this._urlTextbox.MergeIndex = this.NavigationToolbar.Items.Count - 2;
@@ -454,14 +436,8 @@ namespace Centipede
 
             this.NavigationToolbar.Stretch = true;
 
+            this.AddBuiltinActions();
             this.GetActionPlugins();
-
-            //this.VarDataGridView.DataSource = (this.Core.Variables);
-
-            //this.VarDataGridView.Columns.Add
-
-            //this._dataSet.Variables.VariablesRowChanged += Variables_VariablesRowChanged;
-            //this._dataSet.Variables.RowDeleted += DataStore_Variables_RowDeleted;
 
             foreach (RowStyle s in this.ActionContainer.RowStyles)
             {
@@ -497,6 +473,28 @@ namespace Centipede
             this.Dirty = false;
 
             ActionDisplayControl.SetDirty = delegate { this.Dirty = true; };
+        }
+
+        private void AddBuiltinActions()
+        {
+            if (this.ShowDemoAction)
+            {
+                this.AddToActionTab(typeof (DemoAction));
+                this.AddToActionTab(typeof (TestSerialize));
+                this.AddToActionTab(typeof (TestDeserialize));
+            }
+            this.AddToActionTab(typeof (GetFileNameAction));
+            this.AddToActionTab(typeof (ShowMessageBox));
+            this.AddToActionTab(typeof (AskValues));
+            this.AddToActionTab(typeof (ExitAction));
+            this.AddToActionTab(typeof (SubJobAction));
+            this.AddToActionTab(typeof (MultipleChoice));
+            this.AddToActionTab(typeof (AskBooleans));
+            this.AddToActionTab(typeof (SubJobEntry));
+            this.AddToActionTab(typeof (SubJobExitPoint));
+            this.AddToActionTab(typeof (GetArguments));
+            this.AddToActionTab(typeof (HaltJob));
+            this.AddToActionTab(typeof (SetWebpage));
         }
 
         private void Core_Exiting(object sender, EventArgs e)
@@ -861,10 +859,7 @@ namespace Centipede
 
         private void ActionDisplayControl_Cut(object sender, EventArgs e)
         {
-
-            ToolStripItem menuItem = (ToolStripItem)sender;
-
-            var adc = (ActionDisplayControl)menuItem.GetCurrentParent().Tag;
+            var adc = GetADCFromContextMenuItem(sender);
             IAction action = adc.ThisAction;
 
             ClipboardHandler.ToClipboard(action);
@@ -878,24 +873,21 @@ namespace Centipede
                 return;
             }
 
-            var adc = (ActionDisplayControl) sender;
+            var adc = GetADCFromContextMenuItem(sender);
             adc.ContextMenuStrip.Tag = adc;
             adc.ContextMenuStrip.Show();
         }
 
         private void ActionDisplayControl_Copy(object sender, EventArgs e)
         {
-
-            ToolStripItem menuItem = (ToolStripItem) sender;
-
-            var adc = (ActionDisplayControl) menuItem.GetCurrentParent().Tag;
+            var adc = GetADCFromContextMenuItem(sender);
             ClipboardHandler.ToClipboard(adc.ThisAction);
 
         }
 
         private void ActionDisplayControl_MoveDown(object sender, EventArgs e)
         {
-            var action = ((ActionDisplayControl)sender).ThisAction;
+            var action = GetADCFromContextMenuItem(sender).ThisAction;
             if (action == Core.Job.Actions.Last())
             {
                 return;
@@ -911,7 +903,7 @@ namespace Centipede
         private void ActionDisplayControl_MoveUp(object sender, EventArgs e)
         {
 
-            var adc = (ActionDisplayControl)((ToolStripMenuItem)sender).GetCurrentParent().Tag;
+            var adc = GetADCFromContextMenuItem(sender);
             var action = adc.ThisAction;
 
             if (action == Core.Job.Actions.First())
@@ -925,10 +917,17 @@ namespace Centipede
             Core.AddAction(action, oldIndex - 1);
         }
 
+        private static ActionDisplayControl GetADCFromContextMenuItem(object sender)
+        {
+            var toolStripMenuItem = (ToolStripMenuItem) sender;
+            var parentToolStrip = toolStripMenuItem.GetCurrentParent();
+            return (ActionDisplayControl) parentToolStrip.Tag;
+        }
+
         private void ActionDisplayControl_Delete(object sender, EventArgs e)
         {
 
-            var adc = (ActionDisplayControl)((ToolStripMenuItem)sender).GetCurrentParent().Tag;
+            var adc = GetADCFromContextMenuItem(sender);
             IAction action = adc.ThisAction;
 
             if (MessageBox.Show(string.Format("Are you sure you want to delete {0}?", action),
@@ -1420,6 +1419,8 @@ namespace Centipede
             string appDir = Path.GetDirectoryName(Application.ExecutablePath);
             WebBrowser.Navigate(Path.Combine(appDir, "Tutorial", "Tutorial.htm"));
         }
+
+        internal static MainWindow Current { get; private set; }
 
         private void ActionDisplayControl_Paste(object sender, EventArgs e)
         {
