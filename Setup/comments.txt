@@ -3,7 +3,7 @@
 # 
 # Lines are wrapped with <li></li> tags, but otherwise any html is fine.
 
-Fixed bug with loaded jobs displaying actions in wrong order
-Fixed bug with reordering actions
-Fixed bug with <code>__builtins__</code> being deleted when loading new job
 Added copy and paste support
+Fixed bug with reordering actions using move up/move down
+Added Set Webpage action to change page displayed in help panel
+Fixed bug with Set Webpage and addresses containing spaces

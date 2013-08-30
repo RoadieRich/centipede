@@ -32,12 +32,6 @@ namespace TextFile
         {
             Variables[this.FileVar] = this.FileStream;
         }
-
-        public override void Dispose()
-        {
-            
-        }
-
     }
 
     [ActionCategory("Text File Actions")]

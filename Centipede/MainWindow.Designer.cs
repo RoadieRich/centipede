@@ -26,6 +26,8 @@ namespace Centipede
             this.NavigationRefresh = new System.Windows.Forms.ToolStripButton();
             this.SplitContainer3 = new System.Windows.Forms.SplitContainer();
             this.ActionContainer = new System.Windows.Forms.TableLayoutPanel();
+            this.ActionContainerMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ActionContainerMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.AddActionTabs = new System.Windows.Forms.TabControl();
             this.RunTabs = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
@@ -94,8 +96,6 @@ namespace Centipede
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ActionContainerMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ActionContainerMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.MainToolStripContainer.ContentPanel.SuspendLayout();
             this.MainToolStripContainer.TopToolStripPanel.SuspendLayout();
             this.MainToolStripContainer.SuspendLayout();
@@ -115,6 +115,7 @@ namespace Centipede
             this.SplitContainer3.Panel1.SuspendLayout();
             this.SplitContainer3.Panel2.SuspendLayout();
             this.SplitContainer3.SuspendLayout();
+            this.ActionContainerMenu.SuspendLayout();
             this.RunTabs.SuspendLayout();
             this.OutputTab.SuspendLayout();
             this.OutputToolStripContainer.ContentPanel.SuspendLayout();
@@ -127,7 +128,6 @@ namespace Centipede
             this.MainMenuStrip_.SuspendLayout();
             this.VarsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).BeginInit();
-            this.ActionContainerMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // MainToolStripContainer
@@ -259,6 +259,20 @@ namespace Centipede
             this.ActionContainer.DragDrop += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragDrop);
             this.ActionContainer.DragEnter += new System.Windows.Forms.DragEventHandler(this.ActionContainer_DragEnter);
             this.ActionContainer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ActionContainer_MouseClick);
+            // 
+            // ActionContainerMenu
+            // 
+            this.ActionContainerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ActionContainerMenuPaste});
+            this.ActionContainerMenu.Name = "ActionContainerMenu";
+            resources.ApplyResources(this.ActionContainerMenu, "ActionContainerMenu");
+            this.ActionContainerMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ActionContainerMenu_Opening);
+            // 
+            // ActionContainerMenuPaste
+            // 
+            this.ActionContainerMenuPaste.Name = "ActionContainerMenuPaste";
+            resources.ApplyResources(this.ActionContainerMenuPaste, "ActionContainerMenuPaste");
+            this.ActionContainerMenuPaste.Click += new System.EventHandler(this.ActionContainerMenu_Paste_Click);
             // 
             // AddActionTabs
             // 
@@ -733,20 +747,6 @@ namespace Centipede
             resources.ApplyResources(this.dataGridViewTextBoxColumn5, "dataGridViewTextBoxColumn5");
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             // 
-            // ActionContainerMenu
-            // 
-            this.ActionContainerMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ActionContainerMenuPaste});
-            this.ActionContainerMenu.Name = "ActionContainerMenu";
-            resources.ApplyResources(this.ActionContainerMenu, "ActionContainerMenu");
-            this.ActionContainerMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ActionContainerMenu_Opening);
-            // 
-            // ActionContainerMenuPaste
-            // 
-            this.ActionContainerMenuPaste.Name = "ActionContainerMenuPaste";
-            resources.ApplyResources(this.ActionContainerMenuPaste, "ActionContainerMenuPaste");
-            this.ActionContainerMenuPaste.Click += new System.EventHandler(this.ActionContainerMenu_Paste_Click);
-            // 
             // MainWindow
             // 
             resources.ApplyResources(this, "$this");
@@ -787,6 +787,7 @@ namespace Centipede
             this.SplitContainer3.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.SplitContainer3)).EndInit();
             this.SplitContainer3.ResumeLayout(false);
+            this.ActionContainerMenu.ResumeLayout(false);
             this.RunTabs.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
             this.OutputToolStripContainer.ContentPanel.ResumeLayout(false);
@@ -803,7 +804,6 @@ namespace Centipede
             this.MainMenuStrip_.PerformLayout();
             this.VarsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VarDataGridView)).EndInit();
-            this.ActionContainerMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -855,7 +855,6 @@ namespace Centipede
         private System.Windows.Forms.SplitContainer SplitContainer3;
         private System.Windows.Forms.TableLayoutPanel ActionContainer;
         private System.Windows.Forms.ToolStripContainer NaviagtionToolStripContainer;
-        private System.Windows.Forms.WebBrowser WebBrowser;
         private System.Windows.Forms.ToolStrip NavigationToolbar;
         private System.Windows.Forms.ToolStripButton NavigationBackButton;
         private System.Windows.Forms.ToolStripButton NavigationForwardButton;
@@ -889,6 +888,7 @@ namespace Centipede
         private System.Windows.Forms.ToolStripMenuItem ActMenuDelete;
         private System.Windows.Forms.ContextMenuStrip ActionContainerMenu;
         private System.Windows.Forms.ToolStripMenuItem ActionContainerMenuPaste;
+        internal System.Windows.Forms.WebBrowser WebBrowser;
     }
 }
 

@@ -15,7 +15,7 @@ namespace Centipede
 
         public static void ToClipboard(IAction action)
         {
-            ToClipboard(new[]{action});
+            ToClipboard(Enumerable.Repeat(action, 1));
         }
         
         public static void ToClipboard(IEnumerable<IAction> actions)
@@ -32,7 +32,7 @@ namespace Centipede
             Clipboard.SetData(DataFormats.Text, sw.ToString());
         }
         
-        public static IEnumerable<IAction> FromClipboard(ICentipedeCore core)
+        public static List<IAction> FromClipboard(ICentipedeCore core)
         {
             var data = (string)Clipboard.GetData(DataFormats.Text);
             var doc = new XmlDocument();
@@ -42,13 +42,9 @@ namespace Centipede
             {
                 throw new ApplicationException();
             }
-            return FromClipboardImpl(core, clipBoardElement);
-        }
-
-        private static IEnumerable<IAction> FromClipboardImpl(ICentipedeCore core, XmlNode clipBoardElement)
-        {
             return clipBoardElement.ChildNodes.OfType<XmlElement>()
-                                   .Select(element => Action.FromXml(element, core));
+                                   .Select(element => (IAction)Action.FromXml(element, core))
+                                   .ToList();
         }
 
         public static bool DataIsValid()

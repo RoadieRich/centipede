@@ -83,6 +83,16 @@ namespace Centipede.Actions.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon setwebbrowser {
+            get {
+                object obj = ResourceManager.GetObject("setwebbrowser", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon ui {
             get {
                 object obj = ResourceManager.GetObject("ui", resourceCulture);
