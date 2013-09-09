@@ -54,8 +54,11 @@ uploadtool = /usr/bin/sftp
 webuser = www-data
 server = 172.25.2.16
 
-
 installer: $(installerfilepath)
+$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
+	$(iscc) $(installersource)
+
+
 
 updatecomments:
 ifdef updateCommand
@@ -67,26 +70,33 @@ endif
 #    @hg update
 
 webpage: updatecomments $(webpagefilename)
-	
-upload: upload.log
-
-notify: notify.log
-	
-#upload.log: upload_installer upload_webpage
-
-$(installerfilepath): $(binfolderfiles) $(pluginfiles) $(setupfiles)
-	$(iscc) $(installersource)
-	
 $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 	$(scriptengine) $(pagescript) $(installerfilepath) $(webpagefilename) $(commentsarg) 
 
+upload: upload.log
 upload.log: $(installerfilepath) $(webpagefilename)
-	@date >> upload.log
-	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(installerfilepath) /var/www/"
-	@echo "Done." >> upload.log
-	$(uploadtool) -b - $(webuser)@$(server) >> upload.log <<< "put $(webpagefilename) /var/www/"
-	@echo "Done." >> upload.log
+	@cp upload.log upload.log.tmp
+	@date >> upload.log.tmp
+	-@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(installerfilepath) /var/www/" \
+    && @echo "Done." >> upload.log.tmp \
+    || $(UPLOADMESSAGE)
+	@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(webpagefilename) /var/www/" \
+    && @echo "Done." >> upload.log.tmp 
+	@mv upload.log.tmp upload.log
 
+UPLOADMESSAGE = echo "";\
+echo "You might not have unattended sftp login set up."; \
+echo "Instead, you can use the following commands from a cygwin prompt:";\
+echo "";\
+echo " sftp root@$(server)";\
+echo " (enter password when prompted)";\
+echo " put $(installerfilepath) /var/www/";\
+echo " put $(webpagefilename) /var/www/";\
+echo " quit (or ctrl-D)";\
+echo ""
+   
+
+notify: notify.log
 notify.log: upload.log
 	@date >> notify.log
     
