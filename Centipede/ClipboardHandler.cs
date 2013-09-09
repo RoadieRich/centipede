@@ -28,10 +28,12 @@ namespace Centipede
             }
             
             var sw = new StringWriter();
-            xmlDoc.WriteContentTo(XmlWriter.Create(sw));
+            var writer = XmlWriter.Create(sw);
+            xmlDoc.WriteContentTo(writer);
+            writer.Flush();
             Clipboard.SetData(DataFormats.Text, sw.ToString());
         }
-        
+
         public static List<IAction> FromClipboard(ICentipedeCore core)
         {
             var data = (string)Clipboard.GetData(DataFormats.Text);

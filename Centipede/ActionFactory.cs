@@ -38,81 +38,82 @@ namespace Centipede
 
         private readonly Type _actionType;
         private readonly ICentipedeCore _core;
-
+       
         public IAction Generate()
         {
-            Type[][] ctorTypeSigs = new[]
-                               {
-                                        new[] {typeof (ICentipedeCore)},
-                                        new[]
-                                        {
-                                            typeof (IDictionary<String, Object>),
-                                            typeof (ICentipedeCore)
-                                        },
-                                        new[]
-                                        {
-                                            typeof (Dictionary<String, Object>),
-                                            typeof (ICentipedeCore)
-                                        },
-                                        new[]
-                                        {
-                                            typeof (string), typeof (IDictionary<String, Object>),
-                                            typeof (ICentipedeCore)
-                                        },
-                                        new[]
-                                        {
-                                            typeof (string), typeof (Dictionary<String, Object>),
-                                            typeof (ICentipedeCore)
-                                        }
-                                    };
+            var ctorParams = new List<object[]>
+                             {
+                                 new object[] {this._core},
+                                 new object[]
+                                 {
+                                     this._core.Variables,
+                                     this._core
+                                 },
+                                 new object[]
+                                 {
+                                     this._actionType.Name,
+                                     this._core
+                                 },
+                                 new object[]
+                                 {
+                                     this._actionType.Name,
+                                     this._core.Variables,
+                                     this._core
+                                 }
+                             };
 
-            var ctors = from types in ctorTypeSigs
-                        let ctor = this._actionType.GetConstructor(types)
-                        where ctor != null
-                        select new
-                               {
-                                   Ctor = ctor,
-                                   ArgCount = types.Length
-                               };
+            ActionCtorWithArgs actionCtor = ctorParams.Select(this.Selector).FirstOrDefault(c => c.Valid);
 
-            var constructorInfo = ctors.FirstOrDefault();
-            if (constructorInfo == null)
+            if (actionCtor == null)
             {
                 throw new ActionException("Invalid Type");
             }
 
-            object[] parameters;
-
-
-            switch (constructorInfo.ArgCount)
+            if (actionCtor.HasOldSig)
             {
-            case 1:
-                parameters = new object[] {this._core};
-                break;
-            case 2:
-                parameters = new object[] {this._core.Variables, this._core};
-                break;
-            default:
-                parameters = new object[] {"", this._core.Variables, this._core};
                 MessageHandler(this,
                                new MessageEventArgs
                                {
                                    Level = MessageLevel.Debug,
                                    Message =
-                                       "Constructor Type signature contains \"string name\" parameter. Please contact plugin developer"
+                                       "Constructor Type signature contains obsolete \"string name\" parameter. " +
+                                       "Please contact plugin developer."
                                });
-                break;
             }
-            return (IAction)constructorInfo.Ctor.Invoke(parameters);
+            return actionCtor.Invoke();
+        }
+
+        private ActionCtorWithArgs Selector(object[] args)
+        {
+            var argTypes = args.Select(o => o.GetType()).ToArray();
+            return new ActionCtorWithArgs(this._actionType.GetConstructor(argTypes), args);
+        }
+
+        internal class ActionCtorWithArgs
+        {
+            public ActionCtorWithArgs(ConstructorInfo ctor, object[] args)
+            {
+                this._ctor = ctor;
+                this._args = args;
+            }
+
+            private readonly ConstructorInfo _ctor;
+            private readonly object[] _args;
+
+            public bool HasOldSig
+            {
+                get { return this._args.OfType<String>().Any(); }
+            }
+
+            public bool Valid
+            {
+                get { return this._ctor != null; }
+            }
+
+            public IAction Invoke()
+            {
+                return (IAction)this._ctor.Invoke(this._args);
+            }
         }
     }
-
-    //internal static class Exts
-    //{
-    //    public static T Invoke<T>(this ConstructorInfo constructorInfo, params object[] parameters)
-    //    {
-    //        return (T)constructorInfo.Invoke(parameters);
-    //    }
-    //}
-
 }
