@@ -138,32 +138,34 @@ namespace PyAction
             {
                 foreach (var module in Modules.Split(',').Select(s => s.Trim()))
                 {
-                    try
+                    if (module == "os")
+                    {
+                        //workaround for os module not included in embedded ironpython
+                        string pythonLibDir =
+                            Path.Combine(
+                                         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                                         "ironpython 2.7",
+                                         "lib"); //default install location
+
+                        if (!Directory.Exists(pythonLibDir))
+                        {
+                            var activeForm = Form.ActiveForm ?? (Form) this.GetCurrentCore().Tag;
+                            pythonLibDir =
+                                (string) activeForm.Invoke(new Func<string>(this.GetPythonLibDir));
+                            if (String.IsNullOrEmpty(pythonLibDir))
+                            {
+                                throw new FatalActionException("Could not find Python Lib folder",
+                                                               this);
+                            }
+                            engine.ImportModule("sys");
+                            engine.Execute(string.Format("sys.path.append('{0}')\n",
+                                                         pythonLibDir));
+                            engine.ImportModule("os");
+                        }
+                    }
+                    else
                     {
                         engine.ImportModule(module);
-                    }
-                    catch (Exception e)
-                    {
-                        if (module == "os")
-                        {
-                            //workaround for os module not included in embedded ironpython
-                            string pythonLibDir = @"c:/program files (x86)/ironpython 2.7/lib";
-                            if (!Directory.Exists(pythonLibDir))
-                            {
-                                var activeForm = Form.ActiveForm ?? (Form)this.GetCurrentCore().Tag;
-                                pythonLibDir = (string) activeForm.Invoke(new Func<string>(this.GetPythonLibDir));
-                                if (String.IsNullOrEmpty(pythonLibDir))
-                                {
-                                    throw new FatalActionException("Could not find Python Lib folder", this);
-                                }
-                                engine.ImportModule("sys");
-                                engine.Execute(string.Format("sys.path.append('{0}')\n",
-                                                             pythonLibDir));
-                                engine.ImportModule("os");
-
-
-                            }
-                        }
                     }
                 }
             }
