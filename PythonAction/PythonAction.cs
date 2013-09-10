@@ -17,17 +17,17 @@ namespace PyAction
 {
 
     [ActionCategory("Other Actions",
-            IconName = @"pycon",
-            DisplayName = "Python Action",
-            DisplayControl = @"PythonDisplayControl"
-            )]
+        IconName = @"pycon",
+        DisplayName = "Python Action",
+        DisplayControl = @"PythonDisplayControl"
+        )]
     // ReSharper disable ClassNeverInstantiated.Global
     public class PythonAction : Action
-            // ReSharper restore ClassNeverInstantiated.Global
+        // ReSharper restore ClassNeverInstantiated.Global
     {
 
         public PythonAction(IDictionary<string, object> variables, ICentipedeCore c)
-                : base("Python Action", variables, c)
+            : base("Python Action", variables, c)
         {
             _source = "";
         }
@@ -36,10 +36,7 @@ namespace PyAction
         public String Source
         {
             // ReSharper disable MemberCanBePrivate.Global
-            get
-            {
-                return _source;
-            }
+            get { return _source; }
             set
             {
                 _source = value;
@@ -47,8 +44,8 @@ namespace PyAction
                 int count =
                     value.Split(Environment.NewLine.ToCharArray()).
                           Count(
-                              s => !String.IsNullOrWhiteSpace(s)
-                                   || !s.TrimStart().StartsWith(@"#"));
+                                s => !String.IsNullOrWhiteSpace(s)
+                                     || !s.TrimStart().StartsWith(@"#"));
                 _complexity = count;
 
             }
@@ -85,10 +82,7 @@ namespace PyAction
 
         public override int Complexity
         {
-            get
-            {
-                return _complexity;
-            }
+            get { return _complexity; }
         }
 
         [Localizable(false)]
@@ -119,15 +113,15 @@ namespace PyAction
     }
 
     [ActionCategory("Other Actions",
-            IconName = @"pycon",
-            DisplayName = "Import Python Module")]
+        IconName = @"pycon",
+        DisplayName = "Import Python Module")]
     public class Import : Action
     {
         public Import(IDictionary<string, object> variables, ICentipedeCore core)
             : base("Import module", variables, core)
         { }
 
-        [ActionArgument(Literal=true)]
+        [ActionArgument(Literal = true)]
         public string Modules = "";
 
         protected override void DoAction()
@@ -139,29 +133,8 @@ namespace PyAction
                 foreach (var module in Modules.Split(',').Select(s => s.Trim()))
                 {
                     if (module == "os")
-                    {
-                        //workaround for os module not included in embedded ironpython
-                        string pythonLibDir =
-                            Path.Combine(
-                                         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                                         "ironpython 2.7",
-                                         "lib"); //default install location
-
-                        if (!Directory.Exists(pythonLibDir))
-                        {
-                            var activeForm = Form.ActiveForm ?? (Form) this.GetCurrentCore().Tag;
-                            pythonLibDir =
-                                (string) activeForm.Invoke(new Func<string>(this.GetPythonLibDir));
-                            if (String.IsNullOrEmpty(pythonLibDir))
-                            {
-                                throw new FatalActionException("Could not find Python Lib folder",
-                                                               this);
-                            }
-                            engine.ImportModule("sys");
-                            engine.Execute(string.Format("sys.path.append('{0}')\n",
-                                                         pythonLibDir));
-                            engine.ImportModule("os");
-                        }
+                    {   //workaround for os module not included in embedded ironpython
+                        this.OsModuleWorkaround();
                     }
                     else
                     {
@@ -175,23 +148,39 @@ namespace PyAction
             }
         }
 
+        private void OsModuleWorkaround()
+        {
+            IPythonEngine engine = GetCurrentCore().PythonEngine;
+            var progFilesX68 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            string pythonLibDir = Path.Combine(progFilesX68, "ironpython 2.7", "lib");
+
+            if (!Directory.Exists(pythonLibDir))
+            {
+                var activeForm = Form.ActiveForm ?? (Form) this.GetCurrentCore().Tag;
+                pythonLibDir =
+                    (string) activeForm.Invoke(new Func<string>(this.GetPythonLibDir));
+                if (String.IsNullOrEmpty(pythonLibDir))
+                {
+                    throw new FatalActionException("Could not find Python Lib folder", this);
+                }
+            }
+            engine.ImportModule("sys");
+            engine.Execute(string.Format("sys.path.append('{0}')\n", pythonLibDir));
+            engine.ImportModule("os");
+
+        }
+
         private string GetPythonLibDir()
         {
-            var dialog = new FolderBrowserDialog()
+            var dialog = new FolderBrowserDialog
                          {
-                             SelectedPath=@"c:/program files (x86)/ironpython 2.7/lib",
-                             
-                             Description =
-                                 "Cannot find your IronPython Lib directory.\n" +
-                                 "Please select it before continuing.",
+                             SelectedPath = @"c:/program files (x86)/ironpython 2.7/lib",
+                             Description = "Cannot find your IronPython Lib directory.\n" +
+                                           "Please select it before continuing.",
                              ShowNewFolderButton = false
                          };
 
-
-            var result = dialog.ShowDialog();
-            if (result == DialogResult.Cancel)
-                return null;
-            return dialog.SelectedPath;
+            return dialog.ShowDialog() == DialogResult.OK ? dialog.SelectedPath : null;
         }
     }
 }
