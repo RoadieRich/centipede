@@ -41,9 +41,10 @@ namespace Centipede.Actions
             Literal = true)]
         public String OutputVars = "";
 
-        private Socket _ServerStream;
+        private Socket _serverStream;
         private NamedPipeServerStream _messagePipe;
         private Process _process;
+        private BackgroundWorker _bgw;
 
         protected override void DoAction()
         {
@@ -60,28 +61,32 @@ namespace Centipede.Actions
 
             this._process.Start();
 
-            this._ServerStream = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-            _ServerStream.Bind(new IPEndPoint(IPAddress.Loopback, SubJobAction.PortNumber));
-            
-            BackgroundWorker bgw = new BackgroundWorker();
-            bgw.DoWork += BgwOnDoWork;
+            this._serverStream = new Socket(AddressFamily.InterNetwork,
+                                            SocketType.Stream,
+                                            ProtocolType.IP);
+            this._serverStream.Bind(new IPEndPoint(IPAddress.Loopback, PortNumber));
 
-            bgw.RunWorkerAsync();
+            this._bgw = new BackgroundWorker();
+            this._bgw.WorkerSupportsCancellation = true;
+            this._bgw.DoWork += BgwOnDoWork;
+
+            this._bgw.RunWorkerAsync();
+
 
             Socket connection = null;
             try
             {
-                this._ServerStream.Listen(0);
+                this._serverStream.Listen(0);
 
-                connection = this._ServerStream.Accept();
+                connection = this._serverStream.Accept();
 
-                SocketStream ss = new SocketStream(connection);
+                var ss = new SocketStream(connection);
 
 
                 if (!String.IsNullOrWhiteSpace(this.InputVars))
                 {
-                    List<string> variables = this.InputVars.Split(',').Select(s => s.Trim()).ToList();
-
+                    List<string> variables =
+                        this.InputVars.Split(',').Select(s => s.Trim()).ToList();
 
                     //send number of variables
                     CentipedeSerializer.Serialize(ss, variables.Count);
@@ -114,37 +119,37 @@ namespace Centipede.Actions
                 }
                 else
                 {
-
                     //no variables to send
                     CentipedeSerializer.Serialize(ss, 0);
                 }
 
-                bool subJobSuccess = (bool)CentipedeSerializer.Deserialize(ss);
+                var subJobSuccess = (bool) CentipedeSerializer.Deserialize(ss);
 
                 if (!subJobSuccess)
                 {
                     throw new ActionException("Subjob was not completed", this);
                 }
-                
-                int varsToRecieve = CentipedeSerializer.Deserialize<int>(ss);
+
+
+                //recieve vars, if any
+                var varsToRecieve = CentipedeSerializer.Deserialize<int>(ss);
+
+                var received = new List<object>(varsToRecieve);
+
+                for (int i = 0; i < varsToRecieve; i++)
+                {
+                    received.Add(CentipedeSerializer.Deserialize(ss));
+                }
 
                 if (!String.IsNullOrWhiteSpace(this.OutputVars))
                 {
-                    List<string> outputVars = this.OutputVars.Split(',').Select(s => s.Trim()).ToList();
-
-
-                    List<object> received = new List<object>(varsToRecieve);
-
-                    for (int i = 0; i < varsToRecieve; i++)
-                    {
-                        received.Add(CentipedeSerializer.Deserialize(ss));
-                    }
-
+                    List<string> outputVars =
+                        this.OutputVars.Split(',').Select(s => s.Trim()).ToList();
 
                     if (varsToRecieve != outputVars.Count)
                     {
                         throw new FatalActionException(
-                            string.Format("Wrong number of varialbes, expected {0}, got {1}",
+                            string.Format("Wrong number of variables, expected {0}, got {1}",
                                           outputVars.Count,
                                           varsToRecieve));
                     }
@@ -158,9 +163,10 @@ namespace Centipede.Actions
                 {
                     if (varsToRecieve != 0)
                     {
-                        throw new FatalActionException(
-                            string.Format("Wrong number of varialbes, expected 0, got {0}",
-                                          varsToRecieve));
+                        throw new ActionException(
+                            string.Format("Recieved {0} {1} from subjob, was not expecting any.",
+                                          varsToRecieve,
+                                          "variable".Pluralize(varsToRecieve)));
                     }
                 }
             }
@@ -168,7 +174,7 @@ namespace Centipede.Actions
             {
                 try
                 {
-                    this._ServerStream.Close();
+                    this._serverStream.Close();
                     if (connection != null)
                     {
                         connection.Close();
@@ -188,25 +194,29 @@ namespace Centipede.Actions
                 catch (Exception e)
                 {
                     this.OnMessage(new MessageEventArgs
-                              {
-                                  Message = e.Message,
-                                  Level = MessageLevel.Debug
-                              });
+                                   {
+                                       Message = e.Message,
+                                       Level = MessageLevel.Debug
+                                   });
                 }
             }
         }
 
-        private void BgwOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        private void BgwOnDoWork(object sender, DoWorkEventArgs e)
         {
             _messagePipe = new NamedPipeServerStream(@"CentipedeMessagePipe", PipeDirection.InOut);
             _messagePipe.WaitForConnection();
+
+            var bgw = (BackgroundWorker) sender;
+
             try
             {
-                while (true)
+                while (!bgw.CancellationPending)
                 {
                     string actionName;
-                    MessageEventArgs messageEventArgs = CentipedeSerializer.DeserializeMessage(_messagePipe,
-                                                                                               out actionName);
+                    MessageEventArgs messageEventArgs =
+                        CentipedeSerializer.DeserializeMessage(_messagePipe,
+                                                               out actionName);
 
                     messageEventArgs.Message = String.Format("Sub job message from {0}: {1}",
                                                              actionName,
@@ -216,19 +226,16 @@ namespace Centipede.Actions
                 }
             }
             catch (IOException)
-            { }
+            {
+                e.Cancel = true;
+                bgw.CancelAsync();
+            }
         }
 
         protected override void InitAction()
         {
             base.InitAction();
-
-            try
-            {
-                GetCurrentCore().JobCompleted -= CloseServerStream;
-            }
-            catch
-            { }
+            GetCurrentCore().JobCompleted -= CloseServerStream;
         }
 
         protected override void CleanupAction()
@@ -244,14 +251,31 @@ namespace Centipede.Actions
 
         private void CloseStreams()
         {
-            this._ServerStream.Close();
-            this._messagePipe.Close();
+            if (this._bgw != null)
+            {
+                this._bgw.CancelAsync();
+                this._bgw = null;
+            }
+
+            if (this._serverStream != null)
+            {
+                this._serverStream.Close();
+                this._serverStream = null;
+            }
+
+            if (this._messagePipe != null)
+            {
+                this._messagePipe.Close();
+                this._messagePipe = null;
+            }
         }
     }
 
     public abstract class SubJobEntryExitPoint : Action
     {
-        protected SubJobEntryExitPoint(string name, IDictionary<string, object> variables, ICentipedeCore core)
+        protected SubJobEntryExitPoint(string name,
+                                       IDictionary<string, object> variables,
+                                       ICentipedeCore core)
             : base(name, variables, core)
         { }
 
@@ -266,8 +290,10 @@ namespace Centipede.Actions
             base.InitAction();
             GetCurrentCore().JobCompleted -= OnJobCompleted;
 
-            _messagePipe = new NamedPipeClientStream(@".", @"CentipedeMessagePipe", PipeDirection.InOut);
-            
+            _messagePipe = new NamedPipeClientStream(@".",
+                                                     @"CentipedeMessagePipe",
+                                                     PipeDirection.InOut);
+
             foreach (var action in GetCurrentCore().Job.Actions)
             {
                 action.SetMessageHandler(SubJobMessageHandler);
@@ -296,10 +322,10 @@ namespace Centipede.Actions
             if (!jobCompletedEventArgs.Completed)
             {
                 CentipedeSerializer.Serialize(ClientStream, false);
-                ClientStream.Close();
-                _messagePipe.Close();
-                System.Windows.Forms.Application.Exit();
             }
+            ClientStream.Close();
+            _messagePipe.Close();
+            System.Windows.Forms.Application.Exit();
         }
 
         public SubJobEntry(IDictionary<string, object> variables, ICentipedeCore core)
@@ -316,44 +342,50 @@ namespace Centipede.Actions
         protected override void DoAction()
         {
 
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Connect(IPAddress.Loopback, SubJobAction.PortNumber);
             ClientStream = new SocketStream(socket);
             try
             {
-                int varsToReceive = (int)CentipedeSerializer.Deserialize(ClientStream);
 
+                //recieve vars, if any
+                var varsToReceive = CentipedeSerializer.Deserialize<int>(ClientStream);
+
+                var received = new List<object>(varsToReceive);
+                for (int i = 0; i < varsToReceive; i++)
+                {
+                    received.Add(CentipedeSerializer.Deserialize(ClientStream));
+                }
 
                 if (!String.IsNullOrWhiteSpace(this.InputVars))
                 {
 
                     var enumerable = InputVars.Split(',').Select(s => s.Trim()).ToList();
 
-
-
-                    var received = new List<object>(varsToReceive);
-                    for (int i = 0; i < varsToReceive; i++)
-                    {
-                        received.Add(CentipedeSerializer.Deserialize(ClientStream));
-                    }
-
                     if (varsToReceive != enumerable.Count)
                     {
-                        throw new FatalActionException(string.Format("Wrong number of variables, expected {0}, got {1}", enumerable.Count, varsToReceive), this);
+                        throw new FatalActionException(
+                            string.Format("Wrong number of variables, expected {0}, got {1}",
+                                          enumerable.Count,
+                                          varsToReceive),
+                            this);
                     }
 
                     foreach (var tuple in enumerable.Zip(received, Tuple.Create))
                     {
                         Variables[tuple.Item1] = tuple.Item2;
                     }
-
-                    
                 }
                 else
                 {
                     if (varsToReceive != 0)
                     {
-                        throw new FatalActionException(string.Format("Wrong number of variables, expected 0, got {0}", varsToReceive), this);
+                        throw new ActionException(
+                            string.Format(
+                                          "Recieved {0} {1} from parent job, was not expecting any.",
+                                          varsToReceive,
+                                          "variable".Pluralize(varsToReceive)),
+                            this);
                     }
                 }
             }
@@ -376,7 +408,6 @@ namespace Centipede.Actions
             Literal = true)]
         public String OutVars = "";
 
-
         protected override void DoAction()
         {
             CentipedeSerializer.Serialize(ClientStream, true);
@@ -397,31 +428,28 @@ namespace Centipede.Actions
                         }
                         catch (SerializationException e)
                         {
-                            throw new FatalActionException(
+                            var message =
                                 string.Format(
                                               "Cannot send variable {0} to parent job, type {1} is not supported.",
                                               variable,
-                                              o.GetType()),
-                                e,
-                                this);
+                                              o.GetType());
+
+                            throw new FatalActionException(message, e, this);
                         }
                     }
                 }
                 else
                 {
-                    CentipedeSerializer.Serialize(ClientStream, 0); 
+                    CentipedeSerializer.Serialize(ClientStream, 0);
                 }
             }
-            catch
-                (IOException
-                    e)
+            catch (IOException e)
             {
                 OnMessage(new MessageEventArgs
                           {
-                              Message =
-                                  string.Format(
-                                                "Sending variables to parent raised IOException: {0}",
-                                                e.Message),
+                              Message = string.Format(
+                                                      "Sending variables to parent raised IOException: {0}",
+                                                      e.Message),
                               Level = MessageLevel.Debug
                           });
 
@@ -429,7 +457,6 @@ namespace Centipede.Actions
             finally
             {
                 ClientStream.Close();
-                System.Windows.Forms.Application.Exit();
             }
         }
     }

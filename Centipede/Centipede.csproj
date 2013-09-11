@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="Actions\SetWebpage.cs" />
     <Compile Include="Actions\ShowMessageBox.cs" />
+    <Compile Include="Actions\SocketStream.cs" />
     <Compile Include="Actions\SubJobAction.cs" />
     <Compile Include="Actions\TestSerialize.cs" />
     <Compile Include="CentipedeCore.cs" />

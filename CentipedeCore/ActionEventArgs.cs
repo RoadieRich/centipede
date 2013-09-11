@@ -3,7 +3,7 @@
 
 namespace CentipedeInterfaces
 {
-    public class ActionEventArgs
+    public class ActionEventArgs : EventArgs
     {
         public ActionEventArgs()
         {

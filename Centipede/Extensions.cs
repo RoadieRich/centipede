@@ -34,6 +34,26 @@ namespace Centipede
             }
         }
 
+        public static string Pluralize(this int i, string s)
+        {
+            return s.Pluralize(i);
+        }
+
+        public static string Pluralize(this string s, int i)
+        {
+            if (i == 1)
+                return s;
+            if (s.EndsWith("y", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return s.Substring(0, s.Length - 1) + "ies";
+            }
+            if (s.EndsWith("s"))
+            {
+                return s + "es";
+            }
+            return s + "s";
+        }
+
         public static XmlElement CreateChildElement(this XmlNode node, string name)
         {
             var doc = node as XmlDocument ?? node.OwnerDocument;
