@@ -248,6 +248,7 @@ namespace Centipede
             {
                 action.Dispose();
             }
+            _resetEvent.Dispose();
         }
 
         /// <summary>

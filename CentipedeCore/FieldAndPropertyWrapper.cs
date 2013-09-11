@@ -13,7 +13,7 @@ namespace CentipedeInterfaces
     /// Wrapper to allow uniform access to <see cref="T:System.Reflection.FieldInfo"/> and <see cref="T:System.Reflection.PropertyInfo"/>.
     /// Designed to be used with casts, rather than constructors.
     /// </summary>
-    public class FieldAndPropertyWrapper : IDisposable, IEquatable<FieldAndPropertyWrapper>
+    public sealed class FieldAndPropertyWrapper : IDisposable, IEquatable<FieldAndPropertyWrapper>
     {
         /// <summary>
         /// Creates a new <see cref="FieldAndPropertyWrapper"/>

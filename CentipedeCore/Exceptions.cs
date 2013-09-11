@@ -9,6 +9,7 @@ namespace CentipedeInterfaces
     /// <summary>
     /// Thrown when an action raises an exception
     /// </summary>
+    [Serializable]
     public class ActionException : Exception
     {
         /// <summary>
@@ -72,6 +73,7 @@ namespace CentipedeInterfaces
     }
 
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    [Serializable]
     public class FatalActionException : ActionException
     {
         /// <summary>
