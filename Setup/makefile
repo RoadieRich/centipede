@@ -76,23 +76,26 @@ $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 upload: upload.log
 upload.log: $(installerfilepath) $(webpagefilename)
 	@date >> upload.log.tmp
-	-@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(installerfilepath) /var/www/" \
-    && echo "Done." >> upload.log.tmp || $(UPLOADMESSAGE)
-	@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(webpagefilename) /var/www/" \
-    && echo "Done." >> upload.log.tmp 
-	cat upload.log.tmp >> upload.log
+	-@echo "Uploading installer" \
+	&& $(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(installerfilepath) /var/www/" \
+	&& echo "Done." | tee upload.log.tmp \
+	|| ($(echoUploadErrorHelp))
+	@echo "Uploading weboage" \
+	&& $(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(webpagefilename) /var/www/" \
+	&& echo "Done." | tee upload.log.tmp 
+	@cat upload.log.tmp >> upload.log
+	@echo "Done."
 
-UPLOADMESSAGE = echo "";\
+echoUploadErrorHelp = (echo "Uploading failed."; \
 echo "You might not have unattended sftp login set up."; \
-echo "Instead, you can use the following commands from a cygwin prompt:";\
-echo "";\
-echo " sftp root@$(server)";\
-echo " (enter password when prompted)";\
-echo " put $(installerfilepath) /var/www/";\
-echo " put $(webpagefilename) /var/www/";\
-echo " quit (or ctrl-D)";\
-echo ""
-   
+echo "Instead, you can use the following commands from a cygwin prompt:"; \
+echo ""; \
+echo " sftp root@$(server)"; \
+echo " (enter password when prompted)"; \
+echo " put $(installerfilepath) /var/www/"; \
+echo " put $(webpagefilename) /var/www/"; \
+echo " quit (or ctrl-D)"; \
+echo "")
 
 notify: notify.log
 notify.log: upload.log
@@ -127,7 +130,7 @@ help:
 	@echo 'Available targets:'
 	@echo
 	@echo 'installer (default)' 
-	@echo '    Compliles the installer executable'
+	@echo '    Compiles the installer executable'
 	@echo 'webpage'
 	@echo '    Generates the download webpage with md5 and sha1 checksums'
 	@echo 'upload'
