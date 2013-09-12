@@ -8,3 +8,5 @@ Fixed bug with reordering actions using move up/move down
 Added Set Webpage action to change page displayed in help panel
 Fixed bug with Set Webpage and addresses containing spaces
 Fixed bug with cut/copy not putting data on clipboard
+Possible fix for "closed pipe" bug.
+Back end maintenence update
