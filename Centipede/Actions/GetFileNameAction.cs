@@ -9,17 +9,14 @@ namespace Centipede.Actions
 {
     [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")
     ]
-    internal class GetFileNameAction : Action
+    internal class GetFileNameAction : UIAction
     {
-        public GetFileNameAction(IDictionary<string, object> variables, ICentipedeCore c)
-            : base("Ask for Input (File Browser)", variables, c)
-        { }
-
-        [ActionArgument(Usage = "(Optional) Text to display in the titlebar of the popup form")]
-        public string Title = "Choose File";
-
-        [ActionArgument(Usage = "(Optional) Message to display in the popup form")]
-        public String Prompt = "";
+        public GetFileNameAction(ICentipedeCore c)
+            : base("Ask for Input (File Browser)", c)
+        {
+            this.Title = "Choose File";
+            this.Prompt = "";
+        }
 
         [ActionArgument(DisplayName = "Variable",
             Usage = "(Required) Name of variable to store the chosen filename")]
@@ -34,78 +31,30 @@ namespace Centipede.Actions
         private Form _form;
         private TextBox _tb;
 
-        protected override void DoAction()
+        protected override IEnumerable<Control[]> GetControls()
         {
-
-            string myTitle = ParseStringForVariable(Title);
-            string myPrompt = ParseStringForVariable(Prompt);
-            string myDestinationVariable = DestinationVariable;
             string myFilter = ParseStringForVariable(Filter);
-
-            if (String.IsNullOrEmpty(myDestinationVariable))
+            if (String.IsNullOrEmpty(this.DestinationVariable))
             {
                 throw new ActionException("No variable name provided", this);
             }
 
-            this._form = new Form
-                         {
-                             AutoSize = true,
-                             AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                             StartPosition = FormStartPosition.CenterParent,
-                             MinimizeBox = false,
-                             MaximizeBox = false,
-                             SizeGripStyle = SizeGripStyle.Hide,
-                             ShowIcon = false,
-                             ShowInTaskbar = false,
-                             Text = myTitle
-                         };
-
             object obj;
-
-            string oldFilename = Variables.TryGetValue(myDestinationVariable, out obj)
+            string oldFilename = this.Variables.TryGetValue(this.DestinationVariable, out obj)
                                      ? (obj as string) ?? ""
                                      : "";
 
             this._dialog = new OpenFileDialog
                            {
-                               Title = String.IsNullOrEmpty(myTitle) ? "Open File" : myTitle,
-                               Filter =
-                                   String.IsNullOrEmpty(myFilter)
-                                       ? "All Files (*.*)|*.*"
-                                       : myFilter
+                               Title = String.IsNullOrEmpty(Title)
+                                           ? "Open File"
+                                           : this.ParseStringForVariable(Title),
+                               Filter = String.IsNullOrEmpty(myFilter)
+                                            ? "All Files (*.*)|*.*"
+                                            : myFilter
                            };
 
             _dialog.FileOk += GetFileNameDialogue_FileOk;
-
-            var tableLayoutPanel = new TableLayoutPanel
-                                   {
-                                       Dock = DockStyle.Fill,
-                                       AutoSize = true,
-                                       AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                                       ColumnCount = 2,
-                                       ColumnStyles =
-                                       {
-                                           new ColumnStyle(),
-                                           new ColumnStyle(SizeType.AutoSize)
-                                       },
-                                       Padding = new Padding
-                                                 {
-                                                     All = 10
-                                                 }
-                                   };
-
-            this._tableLayoutPanel = tableLayoutPanel;
-
-            if (!String.IsNullOrEmpty(myPrompt))
-            {
-                var label = new Label
-                            {
-                                Text = myPrompt,
-                                AutoSize = true
-                            };
-                this._tableLayoutPanel.Controls.Add(label);
-                this._tableLayoutPanel.SetColumnSpan(label, 2);
-            }
 
             _tb = new TextBox
                   {
@@ -122,36 +71,18 @@ namespace Centipede.Actions
 
             btn.Click += btnBrowse_Click;
 
-            this._tableLayoutPanel.Controls.Add(_tb);
-            this._tableLayoutPanel.Controls.Add(btn);
+            return new[] {new Control[] {_tb, btn}};
 
-            var btnOK = new Button
-                        {
-                            Text = "OK",
-                            DialogResult = DialogResult.OK,
-                            Dock = DockStyle.Fill
-                        };
+        }
 
-            this._form.AcceptButton = btnOK;
+        protected override void FormClosed(object sender, FormClosedEventArgs e)
+        {
 
-            this._tableLayoutPanel.Controls.Add(btnOK);
-            this._tableLayoutPanel.SetColumnSpan(btnOK, 2);
-
-            this._form.Controls.Add(this._tableLayoutPanel);
-
-            _form.FormClosing += FormClosing;
-
-
-            var form = Form.ActiveForm ?? ((Form) this.GetCurrentCore().Tag);
-            var result =
-                (DialogResult) form.Invoke(new Func<Form, DialogResult>(this._form.ShowDialog),
-                                           form);
-
-            switch (result)
+            switch (((Form) sender).DialogResult)
             {
             case DialogResult.OK:
                 //Save
-                Variables[myDestinationVariable] = _tb.Text;
+                Variables[this.DestinationVariable] = _tb.Text;
                 break;
 
             default:
@@ -168,28 +99,6 @@ namespace Centipede.Actions
         {
             _dialog.FileName = _tb.Text;
             _dialog.ShowDialog();
-        }
-
-        //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-        private void FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var form = (Form) sender;
-            if (form.DialogResult == DialogResult.OK)
-            {
-                return;
-            }
-            
-            DialogResult result =
-                MessageBox.Show("Cancelling user input will abort the current job.  Retry?",
-                                "Centipede",
-                                MessageBoxButtons.RetryCancel,
-                                MessageBoxIcon.Warning);
-
-            if (result == DialogResult.Retry)
-            {
-                e.Cancel = true;
-            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Xml;
 using CentipedeInterfaces;
+using ResharperAnnotations;
 
 
 [assembly: CLSCompliant(true)]
@@ -34,24 +35,53 @@ namespace Centipede
             }
         }
 
-        public static string Pluralize(this int i, string s)
+        public static string Pluralize(this int n, [NotNull]string word)
         {
-            return s.Pluralize(i);
+            return word.Pluralize(n);
         }
 
-        public static string Pluralize(this string s, int i)
+        /// <summary>
+        /// returns "correct" pluralization of noun <paramref name="word"/>, given <paramref name="n"/> items
+        /// </summary>
+        /// <param name="word">Noun to pluralize</param>
+        /// <param name="n">Number of items</param>
+        /// <returns><paramref name="word"/>, "correctly" pluralized</returns>
+        /// <remarks>This is far more complex </remarks>
+        public static string Pluralize([NotNull] this string word, int n)
         {
-            if (i == 1)
-                return s;
-            if (s.EndsWith("y", StringComparison.InvariantCultureIgnoreCase))
+            if (n == 1)
+                return word;
+
+            Func<string,string> addS = w => w + "s";
+
+            Func<string, Func<string, string>, Tuple<String, Func<string, string>>> t = Tuple.Create;
+            var endings = new List<Tuple<string, Func<string, string>>>
+                          {
+                              t("ay", addS),
+                              t("ey", addS),
+                              t("iy", addS),
+                              t("oy", addS),
+                              t("uy", addS),
+                              t("y", w => w.Substring(0, word.Length - 1) + "ies"),
+                              t("us", w => w.Substring(0, word.Length - 2) + "i"),
+                              t("s", w => w + "es"),
+                              t("sheep", w => w)
+                          };
+
+
+            return endings.Where(tup => word.EndsWith(tup.Item1))
+                          .Select(tup => tup.Item2(word))       
+                          .FirstOrDefault() ?? addS(word);
+
+            if (word.EndsWith("y", StringComparison.InvariantCultureIgnoreCase))
             {
-                return s.Substring(0, s.Length - 1) + "ies";
+                return word.Substring(0, word.Length - 1) + "ies";
             }
-            if (s.EndsWith("s"))
+            if (word.EndsWith("s"))
             {
-                return s + "es";
+                return word + "es";
             }
-            return s + "s";
+            return word + "s";
         }
 
         public static XmlElement CreateChildElement(this XmlNode node, string name)
