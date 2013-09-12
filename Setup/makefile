@@ -75,14 +75,12 @@ $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 
 upload: upload.log
 upload.log: $(installerfilepath) $(webpagefilename)
-	@cp upload.log upload.log.tmp
 	@date >> upload.log.tmp
 	-@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(installerfilepath) /var/www/" \
-    && @echo "Done." >> upload.log.tmp \
-    || $(UPLOADMESSAGE)
+    && echo "Done." >> upload.log.tmp || $(UPLOADMESSAGE)
 	@$(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(webpagefilename) /var/www/" \
-    && @echo "Done." >> upload.log.tmp 
-	@mv upload.log.tmp upload.log
+    && echo "Done." >> upload.log.tmp 
+	cat upload.log.tmp >> upload.log
 
 UPLOADMESSAGE = echo "";\
 echo "You might not have unattended sftp login set up."; \
