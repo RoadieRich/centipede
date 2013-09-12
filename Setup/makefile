@@ -13,7 +13,7 @@
 #                                    #
 ######################################
 
-iscc = "$$PROGRAMFILES/Inno Setup 5/ISCC"
+iscc = "$$ProgramFiles(x86)/Inno Setup 5/ISCC"
 
 binfolder = ../bin/Debug
 
@@ -44,7 +44,7 @@ ifndef comment
     commentsarg = -f comments.txt
 else
     commentsarg = -c "$(comment)"
-    updateCommand = @touch comments.txt
+    updateCommand = touch comments.txt
 endif
 
 uploadscript = sftp-upload.sftpc
@@ -75,16 +75,16 @@ $(webpagefilename): $(pagescript) $(installerfilepath) index.htm comments.txt
 
 upload: upload.log
 upload.log: $(installerfilepath) $(webpagefilename)
-	@date >> upload.log.tmp
-	-@echo "Uploading installer" \
+	date >> upload.log.tmp
+	-echo "Uploading installer" \
 	&& $(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(installerfilepath) /var/www/" \
 	&& echo "Done." | tee upload.log.tmp \
 	|| ($(echoUploadErrorHelp))
-	@echo "Uploading weboage" \
+	echo "Uploading webpage" \
 	&& $(uploadtool) -b - $(webuser)@$(server) >> upload.log.tmp <<< "put $(webpagefilename) /var/www/" \
 	&& echo "Done." | tee upload.log.tmp 
-	@cat upload.log.tmp >> upload.log
-	@echo "Done."
+	cat upload.log.tmp >> upload.log
+	echo "Done."
 
 echoUploadErrorHelp = (echo "Uploading failed."; \
 echo "You might not have unattended sftp login set up."; \
@@ -99,29 +99,29 @@ echo "")
 
 notify: notify.log
 notify.log: upload.log
-	@date >> notify.log
+	date >> notify.log
     
 checksum: checksum.log
-	@tail -3 checksum.log
+	tail -3 checksum.log
     
 checksum.log: upload.log $(installerfilepath)
-	@date >> checksum.log
-	@echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
-	@echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
+	date >> checksum.log
+	echo 'local sha1:  ' `sha1sum $(installerfilepath) | awk '{print $$1}'` >> checksum.log
+	echo 'Server sha1: ' `ssh $(webuser)@$(server) -C 'sha1sum $(installerfilename)' | awk '{print $$1}' ` >> checksum.log
 
 view logs:
-	@echo Upload:
-	@tail -6 upload.log
-	@echo
-	@echo Notify:
-	@tail -1 notify.log
-	@echo
-	@echo Checksum:
-	@tail -3 checksum.log
+	echo Upload:
+	tail -6 upload.log
+	echo
+	echo Notify:
+	tail -1 notify.log
+	echo
+	echo Checksum:
+	tail -3 checksum.log
 
 clean:
-	@rm -rf $(setupoutputfolder) 
-	@#rm upload.log notify.log
+	rm -rf $(setupoutputfolder) 
+	#rm upload.log notify.log
     
 install: $(installerfilepath)
 	$(installerfilepath)
