@@ -552,8 +552,13 @@ namespace Centipede
 
             //This is probably broken somewhere.
 
-            Type[] constructorArgumentTypes = new[] { typeof(IDictionary<String, Object>), typeof(ICentipedeCore) };
-
+            IEnumerable<object[]> ctorArgs = new List<object[]>
+                                             {
+                                                 new object[] {core},
+                                                 new object[] {core.Variables, core},
+                                                 new object[] {"", core},
+                                                 new object[] {"", core.Variables, core},
+                                             };
             Assembly asm;
 
             //if action is not a plugin:
@@ -579,14 +584,21 @@ namespace Centipede
 
             if (asm != null)
             {
-                Type t = asm.GetType(element.LocalName);
+                Type actionType = asm.GetType(element.LocalName);
 
-                if (t != null)
+                if (actionType != null)
                 {
-                    ConstructorInfo constructorInfo = t.GetConstructor(constructorArgumentTypes);
-                    if (constructorInfo != null)
+                    var ctor = (from types in ctorArgs
+                                select new
+                                       {
+                                           Ctor =
+                                    actionType.GetConstructor(types.Select(t => t.GetType())
+                                                                   .ToArray()),
+                                           Args = types
+                                       }).FirstOrDefault(o => o.Ctor != null);
+                    if (ctor != null)
                     {
-                        instance = (Action)constructorInfo.Invoke(new object[] { core.Variables, core });
+                        instance = (Action)ctor.Ctor.Invoke(ctor.Args);
                     }
                 }
             }
