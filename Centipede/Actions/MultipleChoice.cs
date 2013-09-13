@@ -94,7 +94,7 @@ namespace Centipede.Actions
         {
             if (((Form) sender).DialogResult != DialogResult.OK)
             {
-                throw new FatalActionException("User input cancelled", this);
+                return;
             }
             // Save choice
 

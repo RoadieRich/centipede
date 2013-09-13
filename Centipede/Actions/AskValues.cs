@@ -126,6 +126,11 @@ namespace Centipede.Actions
 
             var showDialog = new Func<Form, DialogResult>(form.ShowDialog);
             var result = (DialogResult)mainform.Invoke(showDialog, mainform);
+
+            if (result == DialogResult.Cancel)
+            {
+                throw new FatalActionException("User cancelled input", this);
+            }
         }
 
         protected abstract IEnumerable<Control[]> GetControls();
@@ -163,18 +168,13 @@ namespace Centipede.Actions
             var form = (Form) sender;
 
             DialogResult result = form.DialogResult;
-            switch (result)
+            if (result == DialogResult.OK)
             {
-            case DialogResult.OK:
-                foreach (TextBox tb in _controls.Select(a => a[1]).OfType<TextBox>())
+                foreach (TextBox tb in this._controls.Select(a => a[1]).OfType<TextBox>())
                 {
-                    dynamic tryEvaluate = Evaluate ? TryEvaluate(tb.Text) : tb.Text;
-                    Variables[(string) tb.Tag] = tryEvaluate;
+                    dynamic tryEvaluate = this.Evaluate ? this.TryEvaluate(tb.Text) : tb.Text;
+                    this.Variables[(string) tb.Tag] = tryEvaluate;
                 }
-                break;
-
-            case DialogResult.Cancel:
-                throw new FatalActionException("User input cancelled", this);
             }
         }
 
@@ -353,17 +353,12 @@ namespace Centipede.Actions
         {
             var form = (Form) sender;
             DialogResult result = form.DialogResult;
-            switch (result)
+            if (result == DialogResult.OK)
             {
-            case DialogResult.OK:
-                foreach (var checkBox in _controls.Select(a => a[1]).OfType<CheckBox>())
+                foreach (var checkBox in this._controls.Select(a => a[1]).OfType<CheckBox>())
                 {
-                    Variables[(string) checkBox.Tag] = checkBox.Checked;
+                    this.Variables[(string) checkBox.Tag] = checkBox.Checked;
                 }
-                break;
-
-            case DialogResult.Cancel:
-                throw new FatalActionException("User input cancelled", this);
             }
         }
     }
