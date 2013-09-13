@@ -130,13 +130,12 @@ namespace Centipede.Actions
 
         protected abstract IEnumerable<Control[]> GetControls();
 
-        protected virtual void FormClosed(object sender, FormClosedEventArgs e)
-        { }
+        protected abstract void FormClosed(object sender, FormClosedEventArgs e);
     }
 
 
     [ActionCategory("User Interface", DisplayName = "Ask for Input (Text or Numeric)", IconName="ui")]
-    class AskValues : UIAction
+    public class AskValues : UIAction
     {
         /// <summary>
         /// 
@@ -187,7 +186,7 @@ namespace Centipede.Actions
                 var evaluated = engine.Evaluate(str);
                 return evaluated;
             }
-            catch (PythonParseException)
+            catch (PythonException)
             {
                 return str;
             }
@@ -258,7 +257,7 @@ namespace Centipede.Actions
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     [ActionCategory("User Interface", DisplayName = "Ask for Input (True / False)", IconName = "ui")]
-    class AskBooleans : UIAction
+    public class AskBooleans : UIAction
     {
         /// <summary>
         /// 

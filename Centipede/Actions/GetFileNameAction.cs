@@ -7,9 +7,8 @@ using CentipedeInterfaces;
 
 namespace Centipede.Actions
 {
-    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")
-    ]
-    internal class GetFileNameAction : UIAction
+    [ActionCategory("User Interface", DisplayName = "Ask for Input (File Browser)", IconName = "ui")]
+    public class GetFileNameAction : UIAction
     {
         public GetFileNameAction(ICentipedeCore c)
             : base("Ask for Input (File Browser)", c)
