@@ -13,7 +13,7 @@
 #                                    #
 ######################################
 
-iscc = "$$ProgramFiles(x86)/Inno Setup 5/ISCC"
+iscc = "c:/program files (x86)/Inno Setup 5/ISCC"
 
 binfolder = ../bin/Debug
 
