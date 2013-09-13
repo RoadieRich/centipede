@@ -26,8 +26,6 @@ namespace Centipede.Actions
         public String Filter = "All Files (*.*)|*.*";
 
         private OpenFileDialog _dialog;
-        private TableLayoutPanel _tableLayoutPanel;
-        private Form _form;
         private TextBox _tb;
 
         protected override IEnumerable<Control[]> GetControls()
@@ -76,16 +74,10 @@ namespace Centipede.Actions
 
         protected override void FormClosed(object sender, FormClosedEventArgs e)
         {
-
-            switch (((Form) sender).DialogResult)
+            if (((Form) sender).DialogResult == DialogResult.OK)
             {
-            case DialogResult.OK:
                 //Save
-                Variables[this.DestinationVariable] = _tb.Text;
-                break;
-
-            default:
-                throw new FatalActionException("User input cancelled", this);
+                this.Variables[this.DestinationVariable] = this._tb.Text;
             }
         }
 

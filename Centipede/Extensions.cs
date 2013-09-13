@@ -73,6 +73,7 @@ namespace Centipede
                           .Select(tup => tup.Item2(word))       
                           .FirstOrDefault() ?? addS(word);
 
+/*
             if (word.EndsWith("y", StringComparison.InvariantCultureIgnoreCase))
             {
                 return word.Substring(0, word.Length - 1) + "ies";
@@ -82,6 +83,7 @@ namespace Centipede
                 return word + "es";
             }
             return word + "s";
+*/
         }
 
         public static XmlElement CreateChildElement(this XmlNode node, string name)
