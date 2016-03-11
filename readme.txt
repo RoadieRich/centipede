@@ -1,13 +1,3 @@
-Conventions:
+Centipede is a tool for breaking big jobs up into lots of small steps. 
 
-Action Arguments similar to "Variable Name" are always Literal.
-
-
-Known bugs:
-
-Removed variables are still listed on Variables tab
-https://getsatisfaction.com/centipede/topics/variables_datagridview
-
-Occasional "Index Out Of Bounds" errors during job run.  Does not effect completion of action - just click "ignore".
-
-Some ActionDisplayControls not showing action icons correctly 
+It was created with the intention of being a graphical way to allow users with little programming experience to automate repetitive tasks, using plug-ins to interact with applications via interoperability and COM+ libraries.
